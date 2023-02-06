@@ -46,6 +46,12 @@ export function Menu() {
             Klasės
           </NavLink>
         </li>
+        &nbsp;|&nbsp;
+        <li>
+          <NavLink to="/programs" className="Link">
+            Programos
+          </NavLink>
+        </li>
       </ul>
     </nav>
   );
