@@ -7,7 +7,7 @@ public class HelloDTO {
    private String answer;
 
     public HelloDTO() {
-        this.answer =  "Hello from server !!!";
+        this.answer =  "Hello from the server !!!";
     }
 
     public String getAnswer() {
