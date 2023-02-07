@@ -1,8 +1,10 @@
 package lt.techin.Schedule.hello;
 
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import jakarta.validation.Valid;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -16,7 +18,21 @@ public class HelloController {
     @ResponseBody
     public ResponseEntity<HelloDTO> getAnswer() {
         var response = new HelloDTO();
-
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping(value = "/sup")
+    @ResponseBody
+    public String getAnswerString() {
+        HelloDTO response = new HelloDTO();
+        return response.getAnswer();
+    }
+
+    @GetMapping("/stuff")
+    public String checkPersonInfo(@Valid HelloDTO helloDTO, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return "/sup";
+        }
+        return "/hello";
     }
 }
