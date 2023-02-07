@@ -9,18 +9,18 @@ public enum LessonTime {
     NINTH("9", new float[]{15.40f, 16.25f}), TENTH("10", new float[]{16.35f, 17.20f}),
     ELEVENTH("11", new float[]{17.30f, 18.15f}), TWELFTH("12", new float[]{18.25f, 19.10f});
 
-    private final int lessonNumber;
+    private final int lessonName;
     private final float lessonStart;
     private final float lessonEnd;
 
     LessonTime(String s, float[] floatArr) {
-        lessonNumber = Integer.parseInt(s);
+        lessonName = Integer.parseInt(s);
         lessonStart = floatArr[0];
         lessonEnd = floatArr[1];
     }
 
-    public int getLessonNumber() {
-        return lessonNumber;
+    public int getLessonName() {
+        return lessonName;
     }
 
     public float getLessonStart() {
@@ -30,4 +30,18 @@ public enum LessonTime {
     public float getLessonEnd() {
         return lessonEnd;
     }
+
+    //Constant names
+    public static final int LESSON_NAME_1 = 1;
+    public static final int LESSON_NAME_2 = 2;
+    public static final int LESSON_NAME_3 = 3;
+    public static final int LESSON_NAME_4 = 4;
+    public static final int LESSON_NAME_5 = 5;
+    public static final int LESSON_NAME_6 = 6;
+    public static final int LESSON_NAME_7 = 7;
+    public static final int LESSON_NAME_8 = 8;
+    public static final int LESSON_NAME_9 = 9;
+    public static final int LESSON_NAME_10 = 10;
+    public static final int LESSON_NAME_11 = 11;
+    public static final int LESSON_NAME_12 = 12;
 }
