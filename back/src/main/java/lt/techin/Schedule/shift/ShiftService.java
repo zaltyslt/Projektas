@@ -3,6 +3,8 @@ package lt.techin.Schedule.shift;
 
 public class ShiftService {
 
+    private ShiftDTO shiftDatabase;
+
     public LessonTime chooseEnumFromData (int name) {
         return switch (name) {
             case LessonTime.LESSON_NAME_1 -> LessonTime.FIRST;
