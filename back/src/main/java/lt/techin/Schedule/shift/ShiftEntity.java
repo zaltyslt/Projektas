@@ -1,6 +1,7 @@
 package lt.techin.Schedule.shift;
 
 import jakarta.persistence.*;
+import lt.techin.Schedule.tools.TextValid;
 
 import java.util.Objects;
 
@@ -10,7 +11,8 @@ public class ShiftEntity {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "id", nullable = false)
     private Long id;
-    
+
+    @TextValid(textMaximumLength = 30)
     private String name;
     private LessonTime shiftStartingLesson;
     private LessonTime shiftEndingLesson;
