@@ -34,7 +34,6 @@ public class TextValidator implements ConstraintValidator<TextValid, CharSequenc
         this.validSymbolsPattern = Pattern.compile("^[A-Za-z0-9-,.'\\s]{1," + textMaximumLength + "}$");
     }
 
-
     //In a case Annotation check isn't enough
     public static boolean isTextValid (CharSequence textToCheck, int textMaximumLength) {
         Pattern validSymbolsPattern = Pattern.compile("^[A-Za-z0-9-,.'\\s]{1," + textMaximumLength + "}$");
