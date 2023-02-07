@@ -10,7 +10,7 @@ public class ShiftEntity {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "id", nullable = false)
     private Long id;
-
+    
     private String name;
     private LessonTime shiftStartingLesson;
     private LessonTime shiftEndingLesson;
