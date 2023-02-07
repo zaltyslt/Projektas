@@ -4,7 +4,7 @@ import lt.techin.Schedule.tools.TextValidator;
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
 
-public class TextValidatorTest {
+public class TextValidatorTests {
 
     @Test
     public void testValidator() {
