@@ -18,6 +18,8 @@ public @interface TextValid {
 
     String message() default "{Text.invalid}";
 
+    int textMaximumLength() default 50;
+
     Class<?>[] groups() default { };
 
     Class<? extends Payload>[] payload() default { };

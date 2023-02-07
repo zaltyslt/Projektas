@@ -6,7 +6,7 @@ import lt.techin.Schedule.tools.TextValid;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class HelloDTO {
-    @TextValid
+    @TextValid(textMaximumLength = 40)
     private String answer;
 
     public HelloDTO() {
