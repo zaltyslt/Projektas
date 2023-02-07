@@ -3,7 +3,6 @@ package lt.techin.Schedule.tools;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
-import java.net.StandardSocketOptions;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
