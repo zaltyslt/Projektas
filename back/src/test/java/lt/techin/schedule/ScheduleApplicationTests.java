@@ -1,4 +1,4 @@
-package lt.techin.Schedule;
+package lt.techin.schedule;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

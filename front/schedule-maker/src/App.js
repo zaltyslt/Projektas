@@ -8,13 +8,13 @@ import { SubjectList } from "./pages/subjects/SubjectList";
 import { TeacherList } from "./pages/teachers/TeacherList";
 import { GroupList } from "./pages/groups/GroupList";
 import { ProgramList } from "./pages/programs/ProgramList";
+import { CreateRoom } from "./pages/rooms/CreateRoom";
 
 function App() {
   return (
     <div className="App">
       <HashRouter>
         <Menu />
-
         <Routes>
           <Route path="/"></Route>
           <Route path="/teachers" element={<TeacherList />}></Route>
@@ -22,7 +22,9 @@ function App() {
           <Route path="/modules" element={<ModuleList />}></Route>
           <Route path="/subjects" element={<SubjectList />}></Route>
           <Route path="/shifts" element={<ShiftList />}></Route>
-          <Route path="/rooms" element={<RoomList />}></Route>
+          {/* KLASIŲ PATHAI */}
+          <Route path='/rooms' element={<RoomList />}></Route>
+          <Route path='/create' element={<CreateRoom />}></Route>
           <Route path="/programs" element={<ProgramList />}></Route>
         </Routes>
       </HashRouter>
