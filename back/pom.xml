@@ -25,6 +25,7 @@
 
 		<tomcat7-maven-plugin.version>2.2</tomcat7-maven-plugin.version>
 		<flyway-maven-plugin.version>9.11.0</flyway-maven-plugin.version>
+		<junit-jupiter-version>5.8.1</junit-jupiter-version>
 
 		<maven.compiler.source.version>17</maven.compiler.source.version>
 		<maven.compiler.target.version>17</maven.compiler.target.version>
@@ -72,13 +73,6 @@
 			<version>1.6.14</version>
 		</dependency>
 
-<!--		Junit dependency for change-->
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.8.1</version>
-			<scope>test</scope>
-		</dependency>
 
 
 		<dependency>
@@ -102,6 +96,7 @@
                             2.1.210
                         -->
 		</dependency>
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-maven-plugin</artifactId>
@@ -116,6 +111,12 @@
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-web</artifactId>
 			<version>6.0.3</version>
+		</dependency>
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-engine</artifactId>
+			<version>${junit-jupiter-version}</version>
+			<scope>test</scope>
 		</dependency>
 
 
