@@ -17,6 +17,7 @@ public class Module {
     private Long id;
     private Integer number;
     private String name;
+    private boolean deleted = false;
 
     @CreatedDate
     private LocalDateTime createdDate;
@@ -38,8 +39,7 @@ public class Module {
     public Module() {
     }
 
-    public Long getId() {
-        return id;
+    public Long getId() { return id;
     }
 
     public void setId(Long id) {
@@ -78,16 +78,24 @@ public class Module {
         this.modifiedDate = modifiedDate;
     }
 
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Module module = (Module) o;
-        return Objects.equals(id, module.id) && Objects.equals(number, module.number) && Objects.equals(name, module.name) && Objects.equals(createdDate, module.createdDate) && Objects.equals(modifiedDate, module.modifiedDate);
+        return deleted == module.deleted && Objects.equals(id, module.id) && Objects.equals(number, module.number) && Objects.equals(name, module.name) && Objects.equals(createdDate, module.createdDate) && Objects.equals(modifiedDate, module.modifiedDate);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, number, name, createdDate, modifiedDate);
+        return Objects.hash(id, number, name, deleted, createdDate, modifiedDate);
     }
 }
