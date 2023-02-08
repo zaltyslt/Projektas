@@ -1,5 +1,8 @@
 package lt.techin.schedule.subject;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -67,10 +70,16 @@ public class SubjectController {
 
     @GetMapping("/paged")
     @ResponseBody
-    public List<SubjectEntityDto> findSubjectsPaged(@RequestParam int page, @RequestParam int pageSize) {
-        return subjectService.findAllPaged(page, pageSize, false).stream()
+    public ResponseEntity<List<SubjectEntityDto>> findSubjectsPaged(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int pageSize) {
+        Page<Subject> pagedSubjects = subjectService.findAllPaged(page, pageSize, false);
+        int totalPageCount = pagedSubjects.getTotalPages();
+        List<SubjectEntityDto> subjects = pagedSubjects.stream()
                 .map(SubjectMapper::toSubjectEntityDto)
                 .collect(toList());
+
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.set("totalCount", Integer.toString(totalPageCount));
+        return ResponseEntity.ok().headers(httpHeaders).body(subjects);
     }
 
 }
