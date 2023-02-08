@@ -1,8 +1,8 @@
 package lt.techin.Schedule;
 
 import lt.techin.Schedule.tools.TextValidator;
-import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class TextValidatorTests {
 
