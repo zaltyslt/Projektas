@@ -31,7 +31,7 @@ public class HelloController {
     @GetMapping("/stuff")
     public String checkPersonInfo(@Valid HelloDTO helloDTO, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return "/sup";
+            return "/sup" + bindingResult.getErrorCount() + " " + bindingResult.getAllErrors().get(0);
         }
         return "/hello";
     }

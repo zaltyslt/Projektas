@@ -1,7 +1,5 @@
 package lt.techin.Schedule.hello;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import lt.techin.Schedule.tools.TextValid;
 
 import java.util.Objects;
 

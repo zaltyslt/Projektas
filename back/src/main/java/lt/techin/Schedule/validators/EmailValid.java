@@ -1,4 +1,4 @@
-package lt.techin.Schedule.tools;
+package lt.techin.Schedule.validators;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
@@ -12,13 +12,15 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 @Target({ FIELD })
 @Retention(RUNTIME)
-@Constraint(validatedBy = TextValidator.class)
+@Constraint(validatedBy = EmailValidator.class)
 @Documented
-public @interface TextValid {
+public @interface EmailValid {
 
-    String message() default "{Text.invalid}";
+    String message() default "{Email.invalid}";
 
-    int textMaximumLength() default 50;
+    int nameMaximumLength() default 35;
+
+    int addressMaximumLength() default 35;
 
     Class<?>[] groups() default { };
 
