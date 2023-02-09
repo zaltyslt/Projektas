@@ -5,6 +5,7 @@ import {
   MDBPagination,
   MDBPaginationItem,
   MDBPaginationLink,
+  MDBBtn,
 } from "mdb-react-ui-kit";
 import { useEffect, useState } from "react";
 
@@ -16,20 +17,44 @@ export function SubjectList() {
   const [totalCount, setTotalCount] = useState(0);
 
   useEffect(() => {
-    fetch("/api/v1/subjects/paged?page=" + currentPage + "&pageSize=" + pageSize)
+    fetch(
+      "/api/v1/subjects/paged?page=" + currentPage + "&pageSize=" + pageSize
+    )
       .then((response) => {
         setTotalCount(response.headers.get("totalCount"));
-        
-        return response.json()})
+
+        return response.json();
+      })
       .then((jsonResponse) => setSubjects(jsonResponse));
   }, [currentPage, pageSize]);
 
   const changePage = (value) => {
     setCurrentPage(value);
-  }
+  };
+
+  const forward = () => {
+    setCurrentPage((prevValue) => {
+      if (prevValue === totalCount - 1) {
+        return prevValue;
+      } else {
+        return prevValue + 1;
+      }
+    });
+  };
+
+  const back = () => {
+    setCurrentPage((prevValue) => {
+      if (prevValue === 0) {
+        return 0;
+      } else {
+        return prevValue - 1;
+      }
+    });
+  };
 
   return (
     <div>
+      <MDBBtn>Sukurti naują</MDBBtn>
       <h3>Dalykų sąrašas</h3>
       <MDBTable hover>
         <MDBTableHead className="table-primary">
@@ -51,19 +76,24 @@ export function SubjectList() {
       </MDBTable>
       <MDBPagination>
         <MDBPaginationItem>
-          <MDBPaginationLink href="#">Previous</MDBPaginationLink>
+          <MDBPaginationLink onClick={() => changePage(0)}>
+            Pirmas
+          </MDBPaginationLink>
         </MDBPaginationItem>
         <MDBPaginationItem>
-          <MDBPaginationLink href="#">1</MDBPaginationLink>
+          <MDBPaginationLink aria-label="Previous" onClick={back}>
+            <span aria-hidden="true">«</span>
+          </MDBPaginationLink>
         </MDBPaginationItem>
         <MDBPaginationItem>
-          <MDBPaginationLink onClick={(e) => changePage(2)}>...</MDBPaginationLink>
+          <MDBPaginationLink aria-label="Next" onClick={forward}>
+            <span aria-hidden="true">»</span>
+          </MDBPaginationLink>
         </MDBPaginationItem>
         <MDBPaginationItem>
-          <MDBPaginationLink>{totalCount}</MDBPaginationLink>
-        </MDBPaginationItem>
-        <MDBPaginationItem>
-          <MDBPaginationLink href="#">Next</MDBPaginationLink>
+          <MDBPaginationLink onClick={() => changePage(totalCount - 1)}>
+            Paskutinis
+          </MDBPaginationLink>
         </MDBPaginationItem>
       </MDBPagination>
     </div>
