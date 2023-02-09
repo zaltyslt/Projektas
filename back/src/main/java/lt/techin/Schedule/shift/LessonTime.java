@@ -31,17 +31,21 @@ public enum LessonTime {
         return lessonEnd;
     }
 
-    //Constant names
-    public static final int LESSON_NAME_1 = 1;
-    public static final int LESSON_NAME_2 = 2;
-    public static final int LESSON_NAME_3 = 3;
-    public static final int LESSON_NAME_4 = 4;
-    public static final int LESSON_NAME_5 = 5;
-    public static final int LESSON_NAME_6 = 6;
-    public static final int LESSON_NAME_7 = 7;
-    public static final int LESSON_NAME_8 = 8;
-    public static final int LESSON_NAME_9 = 9;
-    public static final int LESSON_NAME_10 = 10;
-    public static final int LESSON_NAME_11 = 11;
-    public static final int LESSON_NAME_12 = 12;
+    public static LessonTime getLessonTimeByInt (int name) {
+        return switch (name) {
+            case 1 -> FIRST;
+            case 2 -> SECOND;
+            case 3 -> THIRD;
+            case 4 -> FOURTH;
+            case 5 -> FIFTH;
+            case 6 -> SIXTH;
+            case 7 -> SEVENTH;
+            case 8 -> EIGHTH;
+            case 9 -> NINTH;
+            case 10 -> TENTH;
+            case 11 -> ELEVENTH;
+            case 12 -> TWELFTH;
+            default -> null;
+        };
+    }
 }

@@ -1,0 +1,34 @@
+spring:
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+  jackson:
+  flyway:
+    enabled: false
+  jpa:
+    hibernate:
+      ddl-auto: none
+    generate-ddl: true
+  datasource:
+    url: "jdbc:h2:file:/data/sampledata"
+    username: ""
+    password: ""
+  h2:
+    console:
+      enabled: true
+logging:
+  level:
+    lt:
+      techin: DEBUG
+    org:
+      springframework: INFO
+      hibernate:
+        SQL: DEBUG
+        type: TRACE
+      type:
+        descriptor:
+          sql:
+            BasicBinder: INFO
+
+application:
+  version: 0.2
