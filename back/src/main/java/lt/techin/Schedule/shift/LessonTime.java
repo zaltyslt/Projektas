@@ -1,5 +1,7 @@
 package lt.techin.Schedule.shift;
 
+import java.text.DecimalFormat;
+
 public enum LessonTime {
 
     FIRST("1", new float[]{8.00f, 8.55f}), SECOND("2", new float[]{8.55f, 9.40f}),
@@ -13,6 +15,8 @@ public enum LessonTime {
     private final float lessonStart;
     private final float lessonEnd;
 
+    DecimalFormat df = new DecimalFormat("0.00");
+
     LessonTime(String s, float[] floatArr) {
         lessonName = Integer.parseInt(s);
         lessonStart = floatArr[0];
@@ -23,12 +27,12 @@ public enum LessonTime {
         return lessonName;
     }
 
-    public float getLessonStart() {
-        return lessonStart;
+    public String getLessonStart() {
+        return df.format(lessonStart);
     }
 
-    public float getLessonEnd() {
-        return lessonEnd;
+    public String getLessonEnd() {
+        return df.format(lessonEnd);
     }
 
     public static LessonTime getLessonTimeByInt (int name) {

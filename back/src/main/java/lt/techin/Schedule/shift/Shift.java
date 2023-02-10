@@ -15,15 +15,18 @@ public class Shift {
     @TextValid(textMaximumLength = 30)
     private String name;
 
-    private float shiftStartingTime;
-    private float shiftEndingTime;
+    @TextValid(textMaximumLength = 6)
+    private String shiftStartingTime;
+
+    @TextValid(textMaximumLength = 6)
+    private String shiftEndingTime;
 
     private boolean isActive;
 
     public Shift() {
     }
 
-    public Shift(String name, float shiftStartingTime, float shiftEndingTime, boolean isActive) {
+    public Shift(String name, String shiftStartingTime, String shiftEndingTime, boolean isActive) {
         this.name = name;
         this.shiftStartingTime = shiftStartingTime;
         this.shiftEndingTime = shiftEndingTime;
@@ -42,40 +45,44 @@ public class Shift {
         this.name = name;
     }
 
-    public float getShiftStartingTime() {
+    public String getShiftStartingTime() {
         return shiftStartingTime;
+    }
+
+    public void setShiftStartingTime(String shiftStartingTime) {
+        this.shiftStartingTime = shiftStartingTime;
+    }
+
+    public String getShiftEndingTime() {
+        return shiftEndingTime;
+    }
+
+    public void setShiftEndingTime(String shiftEndingTime) {
+        this.shiftEndingTime = shiftEndingTime;
+    }
+
+    public String getShiftTime() {
+        return shiftStartingTime + "-" + shiftEndingTime;
     }
 
     public boolean getIsActive() {
         return isActive;
     }
 
-    public void setShiftStartingTime(float shiftStartingTime) {
-        this.shiftStartingTime = shiftStartingTime;
-    }
-
-    public float getShiftEndingTime() {
-        return shiftEndingTime;
-    }
-
-    public void setShiftEndingTime(float shiftEndingTime) {
-        this.shiftEndingTime = shiftEndingTime;
-    }
-
-    public void setIsActive (boolean isActive) {
-        this.isActive = isActive;
+    public void setIsActive(boolean active) {
+        isActive = active;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Shift shift)) return false;
-        return Float.compare(shift.shiftStartingTime, shiftStartingTime) == 0 && Float.compare(shift.shiftEndingTime, shiftEndingTime) == 0 && id.equals(shift.id) && Objects.equals(name, shift.name);
+        return isActive == shift.isActive && id.equals(shift.id) && Objects.equals(name, shift.name) && Objects.equals(shiftStartingTime, shift.shiftStartingTime) && Objects.equals(shiftEndingTime, shift.shiftEndingTime);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, shiftStartingTime, shiftEndingTime);
+        return Objects.hash(id, name, shiftStartingTime, shiftEndingTime, isActive);
     }
 
     @Override
@@ -83,8 +90,9 @@ public class Shift {
         return "Shift{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", shiftStartingTime=" + shiftStartingTime +
-                ", shiftEndingTime=" + shiftEndingTime +
+                ", shiftStartingTime='" + shiftStartingTime + '\'' +
+                ", shiftEndingTime='" + shiftEndingTime + '\'' +
+                ", isActive=" + isActive +
                 '}';
     }
 }

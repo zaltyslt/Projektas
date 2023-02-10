@@ -3,6 +3,10 @@ package lt.techin.Schedule.shift;
 
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 @Service
 public class ShiftService {
 
@@ -16,8 +20,11 @@ public class ShiftService {
         shiftDatabase.save(shift);
     }
 
-    public void getShifts() {
-
+    public List<Shift> getActiveShifts() {
+        return shiftDatabase.findAll().stream().filter(Shift::getIsActive).collect(Collectors.toList());
     }
 
+    public List<Shift> getInactiveShifts() {
+        return shiftDatabase.findAll().stream().filter(s -> !s.getIsActive()).collect(Collectors.toList());
+    }
 }
