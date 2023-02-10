@@ -4,22 +4,32 @@ import java.util.Objects;
 
 public class ModuleDto {
 
-    private Integer number;
+    private Long id;
+    private String number;
     private String name;
 
     public ModuleDto() {
     }
 
-    public ModuleDto(Integer number, String name) {
+    public ModuleDto(Long id, String number, String name) {
+        this.id = id;
         this.number = number;
         this.name = name;
     }
 
-    public Integer getNumber() {
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getNumber() {
         return number;
     }
 
-    public void setNumber(Integer number) {
+    public void setNumber(String number) {
         this.number = number;
     }
 
@@ -36,18 +46,19 @@ public class ModuleDto {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ModuleDto moduleDto = (ModuleDto) o;
-        return Objects.equals(number, moduleDto.number) && Objects.equals(name, moduleDto.name);
+        return Objects.equals(id, moduleDto.id) && Objects.equals(number, moduleDto.number) && Objects.equals(name, moduleDto.name);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(number, name);
+        return Objects.hash(id, number, name);
     }
 
     @Override
     public String toString() {
         return "ModuleDto{" +
-                "number=" + number +
+                "id=" + id +
+                ", number='" + number + '\'' +
                 ", name='" + name + '\'' +
                 '}';
     }

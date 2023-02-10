@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
@@ -15,15 +14,17 @@ public class Module {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 
     private Long id;
-    private Integer number;
+    private String number;
     private String name;
-    private boolean deleted = false;
+
 
     @CreatedDate
     private LocalDateTime createdDate;
 
     @LastModifiedDate
     private LocalDateTime modifiedDate;
+
+    private boolean deleted = false;
 
     @PrePersist
     public void prePersist() {
@@ -46,11 +47,11 @@ public class Module {
         this.id = id;
     }
 
-    public Integer getNumber() {
+    public String getNumber() {
         return number;
     }
 
-    public void setNumber(Integer number) {
+    public void setNumber(String number) {
         this.number = number;
     }
 
@@ -96,6 +97,6 @@ public class Module {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, number, name, deleted, createdDate, modifiedDate);
+        return Objects.hash(id, number, name, createdDate, modifiedDate, deleted);
     }
 }
