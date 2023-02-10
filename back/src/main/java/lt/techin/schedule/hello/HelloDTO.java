@@ -1,13 +1,16 @@
 package lt.techin.schedule.hello;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import jakarta.validation.constraints.NotBlank;
+import lt.techin.Schedule.tools.TextValid;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class HelloDTO {
-   private String answer;
+    @TextValid(textMaximumLength = 40)
+    private String answer;
 
     public HelloDTO() {
-        this.answer =  "Hello from server !!!";
+        this.answer =  "Hello from the server !!!";
     }
 
     public String getAnswer() {
