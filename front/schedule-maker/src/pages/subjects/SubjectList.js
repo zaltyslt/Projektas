@@ -1,124 +1,115 @@
 import {
-  MDBTable,
-  MDBTableHead,
-  MDBTableBody,
-  MDBPagination,
-  MDBPaginationItem,
-  MDBPaginationLink,
-  MDBBtn,
-  MDBContainer,
-  MDBRow,
-  MDBCol,
-} from "mdb-react-ui-kit";
+  Button,
+  Grid,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableFooter,
+  TableHead,
+  TablePagination,
+  TableRow,
+} from "@mui/material";
+import { Container } from "@mui/system";
+
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 export function SubjectList() {
   const [subjects, setSubjects] = useState([]);
 
-  const [currentPage, setCurrentPage] = useState(0);
-  const [pageSize, setPageSize] = useState(10);
-  const [totalCount, setTotalCount] = useState(0);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
 
   useEffect(() => {
-    fetch(
-      "/api/v1/subjects/paged?page=" + currentPage + "&pageSize=" + pageSize
-    )
-      .then((response) => {
-        setTotalCount(response.headers.get("totalCount"));
+    fetch("api/v1/subjects")
+      .then((response) => response.json())
+      .then(setSubjects);
+  }, []);
 
-        return response.json();
-      })
-      .then((jsonResponse) => setSubjects(jsonResponse));
-  }, [currentPage, pageSize]);
+  const emptyRows =
+    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - subjects.length) : 0;
 
-  const changePage = (value) => {
-    setCurrentPage(value);
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
   };
 
-  const forward = () => {
-    setCurrentPage((prevValue) => {
-      if (prevValue === totalCount - 1) {
-        return prevValue;
-      } else {
-        return prevValue + 1;
-      }
-    });
-  };
-
-  const back = () => {
-    setCurrentPage((prevValue) => {
-      if (prevValue === 0) {
-        return 0;
-      } else {
-        return prevValue - 1;
-      }
-    });
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
   };
 
   return (
     <div>
-      <MDBContainer>
-        <MDBRow className="mb-3">
-          <MDBCol size="auto" className="me-auto">
+      <Container maxWidth="lg">
+        <Grid container rowSpacing={3}>
+          <Grid item sm={12}>
             <h3>Dalykų sąrašas</h3>
-          </MDBCol>
-          <MDBCol size="auto">
-            <Link to="/createSubject">
-              <MDBBtn>Sukurti naują</MDBBtn>
+          </Grid>
+          <Grid item sm={4}>
+            <Link to="/subjects/create">
+              <Button variant="contained">Pridėti naują</Button>
             </Link>
-          </MDBCol>
-        </MDBRow>
-        <header></header>
-      </MDBContainer>
-      <MDBContainer>
-        <MDBTable hover>
-          <MDBTableHead className="table-primary">
-            <tr>
-              <th scope="col">#</th>
-              <th scope="col">Dalyko pavadinimas</th>
-              <th scope="col">Modulio pavadinimas</th>
-            </tr>
-          </MDBTableHead>
-          <MDBTableBody>
-            {subjects.map((subject, index) => (
-              <tr key={subject.id}>
-                <th scope="row">{index + 1}</th>
-                <td>{subject.name}</td>
-                <td>{subject.module}</td>
-              </tr>
-            ))}
-          </MDBTableBody>
-        </MDBTable>
-        <MDBPagination>
-          <MDBPaginationItem>
-            <MDBPaginationLink onClick={() => changePage(0)}>
-              Pirmas
-            </MDBPaginationLink>
-          </MDBPaginationItem>
-          <MDBPaginationItem>
-            <MDBPaginationLink aria-label="Previous" onClick={back}>
-              <span aria-hidden="true">«</span>
-            </MDBPaginationLink>
-          </MDBPaginationItem>
-          <MDBPaginationItem disabled>
-            <MDBPaginationLink>
-              <span aria-hidden="true">{currentPage + 1}</span>
-            </MDBPaginationLink>
-          </MDBPaginationItem>
+          </Grid>
+        </Grid>
 
-          <MDBPaginationItem>
-            <MDBPaginationLink aria-label="Next" onClick={forward}>
-              <span aria-hidden="true">»</span>
-            </MDBPaginationLink>
-          </MDBPaginationItem>
-          <MDBPaginationItem>
-            <MDBPaginationLink onClick={() => changePage(totalCount - 1)}>
-              Paskutinis
-            </MDBPaginationLink>
-          </MDBPaginationItem>
-        </MDBPagination>
-      </MDBContainer>
+        <TableContainer component={Paper}>
+          <Table aria-label="custom pagination table">
+            <TableHead>
+              <TableRow>
+                <TableCell>Dalyko pavadinimas</TableCell>
+                <TableCell>Modulio pavadinimas</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {(rowsPerPage > 0
+                ? subjects.slice(
+                    page * rowsPerPage,
+                    page * rowsPerPage + rowsPerPage
+                  )
+                : subjects
+              ).map((subject) => (
+                <TableRow key={subject.id}>
+                  <TableCell component="th" scope="row">
+                    <Link to={"/subjects/view/" + subject.id}>
+                     {subject.name}
+                    </Link>
+                   
+                  </TableCell>
+                  <TableCell>{subject.description}</TableCell>
+                </TableRow>
+              ))}
+
+              {emptyRows > 0 && (
+                <TableRow style={{ height: 53 * emptyRows }}>
+                  <TableCell colSpan={6} />
+                </TableRow>
+              )}
+            </TableBody>
+            <TableFooter>
+              <TableRow>
+                <TablePagination
+                  labelRowsPerPage="Rodyti po"
+                  rowsPerPageOptions={[10, 20, { label: "Visi", value: -1 }]}
+                  colSpan={3}
+                  count={subjects.length}
+                  page={page}
+                  SelectProps={{
+                    inputProps: {
+                      "aria-label": "Rodyti po",
+                    },
+                    native: true,
+                  }}
+                  onPageChange={handleChangePage}
+                  rowsPerPage={rowsPerPage}
+                  onRowsPerPageChange={handleChangeRowsPerPage}
+                ></TablePagination>
+              </TableRow>
+            </TableFooter>
+          </Table>
+        </TableContainer>
+      </Container>
     </div>
   );
 }

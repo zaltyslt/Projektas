@@ -2,7 +2,7 @@ package lt.techin.schedule.hello;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.validation.constraints.NotBlank;
-import lt.techin.Schedule.tools.TextValid;
+import lt.techin.schedule.tools.TextValid;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class HelloDTO {

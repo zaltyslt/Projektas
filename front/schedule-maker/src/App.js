@@ -9,6 +9,8 @@ import { TeacherList } from "./pages/teachers/TeacherList";
 import { GroupList } from "./pages/groups/GroupList";
 import { ProgramList } from "./pages/programs/ProgramList";
 import { CreateSubject } from "./pages/subjects/CreateSubject";
+import { ViewSubject } from "./pages/subjects/ViewSubject";
+import { EditSubject } from "./pages/subjects/EditSubject"
 
 function App() {
   return (
@@ -26,7 +28,9 @@ function App() {
           <Route path="/rooms" element={<RoomList />}></Route>
           <Route path="/programs" element={<ProgramList />}></Route>
 
-          <Route path="/createSubject" element={<CreateSubject />} />
+          <Route path="/subjects/create" element={<CreateSubject />} />
+          <Route path="/subjects/view/:id" element={<ViewSubject />}></Route>
+          <Route path="/subjects/edit/:id" element={<EditSubject />}></Route>
         </Routes>
       </HashRouter>
     </div>
