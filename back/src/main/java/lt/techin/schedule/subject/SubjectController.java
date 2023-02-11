@@ -39,6 +39,11 @@ public class SubjectController {
         return responseEntity;
     }
 
+    @GetMapping(value = "/deleted", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public List<SubjectEntityDto> getDeletedSubjects() {
+        return subjectService.getAll(true).stream().map(SubjectMapper::toSubjectEntityDto).collect(toList());
+    }
+
     @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<SubjectDto> createSubject(@RequestBody SubjectDto subjectDto) {
         var createdSubject = subjectService.create(toSubject(subjectDto));

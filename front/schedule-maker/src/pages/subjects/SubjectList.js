@@ -1,5 +1,8 @@
 import {
   Button,
+  Checkbox,
+  FormControlLabel,
+  FormGroup,
   Grid,
   Paper,
   Table,
@@ -10,6 +13,7 @@ import {
   TableHead,
   TablePagination,
   TableRow,
+  TextField,
 } from "@mui/material";
 import { Container } from "@mui/system";
 
@@ -18,14 +22,27 @@ import { Link } from "react-router-dom";
 
 export function SubjectList() {
   const [subjects, setSubjects] = useState([]);
+  const [filteredSubjects, setFilteredSubjects] = useState([]);
+  const [deletedSubjects, setDeletedSubjects] = useState([]);
 
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [isChecked, setChecked] = useState(false);
 
   useEffect(() => {
     fetch("api/v1/subjects")
       .then((response) => response.json())
-      .then(setSubjects);
+      .then((data) => {
+        setSubjects(data);
+        return data;
+      })
+      .then((data) => setFilteredSubjects(data));
+  }, []);
+
+  useEffect(() => {
+    fetch("api/v1/subjects/deleted")
+      .then((response) => response.json())
+      .then(setDeletedSubjects);
   }, []);
 
   const emptyRows =
@@ -40,6 +57,22 @@ export function SubjectList() {
     setPage(0);
   };
 
+  const handleSearch = (event) => {
+    if (event.length === 0) {
+      setFilteredSubjects(subjects);
+    } else {
+      const filtered = subjects.filter((subject) => {
+        const subjectName = subject.name.toLowerCase();
+        const subjectDescription = subject.description.toLowerCase();
+        return (
+          subjectName.includes(event.toLowerCase()) ||
+          subjectDescription.includes(event.toLowerCase())
+        );
+      });
+      setFilteredSubjects(filtered);
+    }
+  };
+
   return (
     <div>
       <Container maxWidth="lg">
@@ -51,6 +84,17 @@ export function SubjectList() {
             <Link to="/subjects/create">
               <Button variant="contained">Pridėti naują</Button>
             </Link>
+          </Grid>
+
+          <Grid item lg={12}>
+            <TextField
+              fullWidth
+              variant="outlined"
+              name="search-form"
+              label="Paieška"
+              id="search-form"
+              onChange={(e) => handleSearch(e.target.value)}
+            ></TextField>
           </Grid>
         </Grid>
 
@@ -64,18 +108,17 @@ export function SubjectList() {
             </TableHead>
             <TableBody>
               {(rowsPerPage > 0
-                ? subjects.slice(
+                ? filteredSubjects.slice(
                     page * rowsPerPage,
                     page * rowsPerPage + rowsPerPage
                   )
-                : subjects
+                : filteredSubjects
               ).map((subject) => (
                 <TableRow key={subject.id}>
                   <TableCell component="th" scope="row">
                     <Link to={"/subjects/view/" + subject.id}>
-                     {subject.name}
+                      {subject.name}
                     </Link>
-                   
                   </TableCell>
                   <TableCell>{subject.description}</TableCell>
                 </TableRow>
@@ -93,7 +136,7 @@ export function SubjectList() {
                   labelRowsPerPage="Rodyti po"
                   rowsPerPageOptions={[10, 20, { label: "Visi", value: -1 }]}
                   colSpan={3}
-                  count={subjects.length}
+                  count={filteredSubjects.length}
                   page={page}
                   SelectProps={{
                     inputProps: {
@@ -109,6 +152,70 @@ export function SubjectList() {
             </TableFooter>
           </Table>
         </TableContainer>
+
+        <FormGroup>
+          <FormControlLabel
+            control={<Checkbox />}
+            label="Ištrinti dalykai"
+            onChange={(e) => e.target.checked ? setChecked(true) : setChecked(false)}
+          />
+        </FormGroup>
+        {isChecked && 
+          <TableContainer component={Paper}>
+          <Table aria-label="custom pagination table">
+            <TableHead>
+              <TableRow>
+                <TableCell>Dalyko pavadinimas</TableCell>
+                <TableCell>Modulio pavadinimas</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {(rowsPerPage > 0
+                ? deletedSubjects.slice(
+                    page * rowsPerPage,
+                    page * rowsPerPage + rowsPerPage
+                  )
+                : deletedSubjects
+              ).map((subject) => (
+                <TableRow key={subject.id}>
+                  <TableCell component="th" scope="row">
+                    <Link to={"/subjects/view/" + subject.id}>
+                      {subject.name}
+                    </Link>
+                  </TableCell>
+                  <TableCell>{subject.description}</TableCell>
+                </TableRow>
+              ))}
+
+              {emptyRows > 0 && (
+                <TableRow style={{ height: 53 * emptyRows }}>
+                  <TableCell colSpan={6} />
+                </TableRow>
+              )}
+            </TableBody>
+            <TableFooter>
+              <TableRow>
+                <TablePagination
+                  labelRowsPerPage="Rodyti po"
+                  rowsPerPageOptions={[10, 20, { label: "Visi", value: -1 }]}
+                  colSpan={3}
+                  count={deletedSubjects.length}
+                  page={page}
+                  SelectProps={{
+                    inputProps: {
+                      "aria-label": "Rodyti po",
+                    },
+                    native: true,
+                  }}
+                  onPageChange={handleChangePage}
+                  rowsPerPage={rowsPerPage}
+                  onRowsPerPageChange={handleChangeRowsPerPage}
+                ></TablePagination>
+              </TableRow>
+            </TableFooter>
+          </Table>
+        </TableContainer>
+        }
       </Container>
     </div>
   );
