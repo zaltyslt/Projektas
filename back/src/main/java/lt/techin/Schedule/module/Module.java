@@ -1,6 +1,10 @@
 package lt.techin.Schedule.module;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.Filter;
+import org.hibernate.annotations.FilterDef;
+import org.hibernate.annotations.ParamDef;
+import org.hibernate.annotations.SQLDelete;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
@@ -8,6 +12,9 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
+@SQLDelete(sql = "UPDATE subject SET deleted = true WHERE id=?")
+@FilterDef(name = "deletedSubjectFilter", parameters = @ParamDef(name = "isDeleted", type = org.hibernate.type.descriptor.java.BooleanJavaType.class))
+@Filter(name = "deletedSubjectFilter", condition = "deleted = :isDeleted")
 public class Module {
 
     @Id

@@ -1,5 +1,7 @@
 package lt.techin.Schedule.module;
 
+import org.springframework.data.domain.Page;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -29,11 +31,10 @@ public class ModuleController {
     @GetMapping(value = "/{moduleId}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Module> getModule(@PathVariable Long moduleId) {
         var moduleOptional = moduleService.getById(moduleId);
-        var responseEntity = moduleOptional.map(module -> ok(module)).orElseGet(()-> ResponseEntity.notFound().build());
-        return responseEntity;
+        return moduleOptional.map(ResponseEntity::ok).orElseGet(()-> ResponseEntity.notFound().build());
     }
 
-    @PostMapping(value = "/create", consumes = {MediaType.APPLICATION_JSON_VALUE})
+    @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<ModuleDto> createModule(@RequestBody ModuleDto moduleDto) {
         var createdModule = moduleService.create(toModule(moduleDto));
         return ok(toModuleDto(createdModule));
@@ -56,8 +57,21 @@ public class ModuleController {
         }
     }
 
+    @PatchMapping("/restore/{moduleId}")
+    public ResponseEntity<ModuleDto>  restoreModule(@PathVariable Long moduleId) {
+        var restoredModule = moduleService.restoreModule(moduleId);
+        return ok(toModuleDto(restoredModule));
+    }
 
+    @GetMapping("/paged")
+    @ResponseBody
+    public ResponseEntity<List<ModuleEntityDto>> findModulesPaged(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int pageSize) {
+        Page<Module> pagedModules = moduleService.findAllPaged(page, pageSize, false);
+        int totalPageCount = pagedModules.getTotalPages();
+        List<ModuleEntityDto> modules = pagedModules.stream().map(ModuleMapper::toModuleEntityDto).collect(toList());
 
-
-
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.set("totalCount", Integer.toString(totalPageCount));
+        return ResponseEntity.ok().headers(httpHeaders).body(modules);
+    }
 }

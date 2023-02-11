@@ -5,6 +5,10 @@ import org.hibernate.Filter;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,7 +32,9 @@ public class ModuleService {
         Filter filter = session.enableFilter("deletedModuleFilter");
         filter.setParameter("isDeleted", isDeleted);
         List<Module> modules = moduleRepository.findAll();
-        return moduleRepository.findAll();
+        session.disableFilter("deletedModuleFilter");
+        return modules;
+
     }
 
     public Optional<Module> getById(Long id) {
@@ -64,4 +70,18 @@ public class ModuleService {
         }
     }
 
+    private Pageable pageable(int page, int pageSize, String sortField, Sort.Direction sortDirection) {
+        return PageRequest.of(page, pageSize, sortDirection, sortField);
+    }
+
+    public Page<Module> findAllPaged(int page, int pageSize, boolean isDeleted) {
+        Pageable pageable = PageRequest.of(page, pageSize);
+
+        Session session = entityManager.unwrap(Session.class);
+        Filter filter = session.enableFilter("deletedModuleFilter");
+        filter.setParameter("isDeleted", isDeleted);
+        Page<Module> modules = moduleRepository.findAll(pageable);
+        session.disableFilter("deletedModuleFilter");
+        return modules;
+    }
 }

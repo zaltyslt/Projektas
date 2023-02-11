@@ -28,9 +28,9 @@ function App() {
           <Route path="/rooms" element={<RoomList />}></Route>
           <Route path="/programs" element={<ProgramList />}></Route>
 
-          <Route path="/modules/create" element={<CreateModule />} />
+          {/* <Route path="/modules/create" element={<CreateModule />} />
           <Route path="/modules/view/:id" element={<ViewModule />}></Route>
-          <Route path="/modules/edit/:id" element={<EditModule />}></Route>
+          <Route path="/modules/edit/:id" element={<EditModule />}></Route> */}
         </Routes>
       </HashRouter>
     </div>
