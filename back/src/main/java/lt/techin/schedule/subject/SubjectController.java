@@ -68,6 +68,7 @@ public class SubjectController {
         return ok(toSubjectDto(restoredSubject));
     }
 
+//    Not used at demo v1
     @GetMapping("/paged")
     @ResponseBody
     public ResponseEntity<List<SubjectEntityDto>> findSubjectsPaged(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int pageSize) {

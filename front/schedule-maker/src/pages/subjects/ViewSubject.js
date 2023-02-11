@@ -1,4 +1,4 @@
-import { Button, Paper } from "@mui/material";
+import { Button, Paper, Grid } from "@mui/material";
 import { Container, Stack } from "@mui/system";
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
@@ -16,34 +16,42 @@ export function ViewSubject() {
   return (
     <div>
       <Container>
-        <Paper variant="outlined">
-          <article>
+        <Grid container rowSpacing={4}>
+          <Grid item lg={10}>
             <header>
-              <h2>{subject.name}</h2>
+              <h1>{subject.name}</h1>
+              <h5>Paskutinį kartą redaguota: {subject.modifiedDate}</h5>
             </header>
-            <section>
-              <h4>Modulis</h4>
-            </section>
-            <section>
-              <h4>Aprašymas</h4>
-              <p>{subject.description}</p>
-            </section>
-            <section>
-                <h4>Pageidaujamos klasės</h4>
-            </section>
-          </article>
-        </Paper>
-        <Stack direction="row" spacing={2}>
-           <Link to={"/subjects/edit/" + subject.id}>
-           <Button variant="contained">
-            Redaguoti
-          </Button>
-           </Link> 
+          </Grid>
+
+          <Grid item lg={12}>
+            <h4>Modulis</h4>
+            <p></p>
+          </Grid>
+
+          <Grid item lg={12}>
+            <h4>Aprašymas</h4>
+            <p>{subject.description}</p>
+          </Grid>
+
+          <Grid item lg={12}>
+            <h4>Pageidaujamos klasės</h4>
+            <p></p>
+          </Grid>
+
+          <Grid item lg={12}>
+            <Stack direction="row" spacing={2}>
+              <Link to={"/subjects/edit/" + subject.id}>
+                <Button variant="contained">Redaguoti</Button>
+              </Link>
+
+              <Link to="/subjects">
+                <Button variant="contained">Grįžti</Button>
+              </Link>
+            </Stack>
+          </Grid>
           
-          <Link to="/subjects">
-            <Button variant="contained">Grįžti</Button>
-          </Link>
-        </Stack>
+        </Grid>
       </Container>
     </div>
   );

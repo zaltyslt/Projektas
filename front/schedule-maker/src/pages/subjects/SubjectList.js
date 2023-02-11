@@ -44,10 +44,10 @@ export function SubjectList() {
     <div>
       <Container maxWidth="lg">
         <Grid container rowSpacing={3}>
-          <Grid item sm={12}>
+          <Grid item lg={10}>
             <h3>Dalykų sąrašas</h3>
           </Grid>
-          <Grid item sm={4}>
+          <Grid item lg={2}>
             <Link to="/subjects/create">
               <Button variant="contained">Pridėti naują</Button>
             </Link>
