@@ -1,4 +1,4 @@
-package lt.techin.Schedule.hello;
+package lt.techin.schedule.hello;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.validation.constraints.NotBlank;

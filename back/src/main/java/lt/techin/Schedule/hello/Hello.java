@@ -1,4 +1,4 @@
-package lt.techin.Schedule.hello;
+package lt.techin.schedule.hello;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lt.techin.Schedule.tools.TextValid;

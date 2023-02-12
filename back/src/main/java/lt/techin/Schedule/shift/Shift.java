@@ -1,4 +1,4 @@
-package lt.techin.Schedule.shift;
+package lt.techin.schedule.shift;
 
 import jakarta.persistence.*;
 import lt.techin.Schedule.tools.TextValid;

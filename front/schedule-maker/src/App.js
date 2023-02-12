@@ -25,11 +25,8 @@ function App() {
           <Route path="/modules" element={<ModuleList />}></Route>
           <Route path="/subjects" element={<SubjectList />}></Route>
           <Route path="/shifts" element={<ShiftList />}></Route>
-          <Route path="/add-shift/:shiftID" element={<AddShift/>} ></Route>
-
-          {/* <Route path="/subjects/edit/:id" element={<EditSubject />}></Route> */}
-
-          <Route path="/view-shift" element={<ViewShift/>} ></Route>
+          <Route exact path="/add-shift" element={<AddShift/>} ></Route>
+          <Route path="/view-shift/:id" element={<ViewShift/>} ></Route>
           <Route path="/rooms" element={<RoomList />}></Route>
           <Route path="/programs" element={<ProgramList />}></Route>
          

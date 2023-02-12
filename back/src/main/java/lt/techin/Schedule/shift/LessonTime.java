@@ -1,4 +1,4 @@
-package lt.techin.Schedule.shift;
+package lt.techin.schedule.shift;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;

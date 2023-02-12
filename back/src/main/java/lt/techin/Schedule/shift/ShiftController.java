@@ -1,4 +1,4 @@
-package lt.techin.Schedule.shift;
+package lt.techin.schedule.shift;
 
 import jakarta.validation.Valid;
 import org.springframework.validation.BindingResult;
@@ -31,14 +31,19 @@ public class ShiftController {
         return shiftDatabase.findAll().get(0);
     }
 
-    @GetMapping("get-active")
+    @GetMapping("/get-active")
     public List<Shift> getActiveShifts() {
         return shiftService.getActiveShifts();
     }
 
-    @GetMapping("get-inactive")
+    @GetMapping("/get-inactive")
     public List<Shift> getInactiveShifts() {
         return shiftService.getInactiveShifts();
+    }
+
+    @GetMapping("/view-shift/{shiftID}")
+    public Shift getShift(@PathVariable Long shiftID) {
+        return shiftService.getShiftByID(shiftID);
     }
 
     @GetMapping("/add")
