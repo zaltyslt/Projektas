@@ -31,7 +31,8 @@ public class ModuleController {
     @GetMapping(value = "/{moduleId}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Module> getModule(@PathVariable Long moduleId) {
         var moduleOptional = moduleService.getById(moduleId);
-        return moduleOptional.map(ResponseEntity::ok).orElseGet(()-> ResponseEntity.notFound().build());
+        var responseEntity = moduleOptional.map(module -> ok(module)).orElseGet(() -> ResponseEntity.notFound().build());
+        return responseEntity;
     }
 
     @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE})
@@ -43,7 +44,7 @@ public class ModuleController {
     @PatchMapping("/{moduleId}")
     public ResponseEntity<ModuleDto> updateModule(@PathVariable Long moduleId,
                                                   @RequestBody ModuleDto moduleDto) {
-        var updatedModule = moduleService.update(moduleId, toModule(moduleDto));
+        var updatedModule = moduleService.updateModule(moduleId, toModule(moduleDto));
         return ok(toModuleDto(updatedModule));
     }
 

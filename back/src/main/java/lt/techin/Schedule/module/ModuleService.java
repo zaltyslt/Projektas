@@ -45,7 +45,7 @@ public class ModuleService {
         return moduleRepository.save(module);
     }
 
-    public Module update(Long id, Module module) {
+    public Module updateModule(Long id, Module module) {
         var existingModule = moduleRepository.findById(id).orElseThrow();
         if (existingModule != null) {
             existingModule.setNumber(module.getNumber());

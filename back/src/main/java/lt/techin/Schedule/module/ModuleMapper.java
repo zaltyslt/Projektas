@@ -4,7 +4,6 @@ public class ModuleMapper {
 
     public static ModuleDto toModuleDto(Module module) {
         var moduleDto = new ModuleDto();
-        moduleDto.setId(module.getId());
         moduleDto.setNumber(module.getNumber());
         moduleDto.setName(module.getName());
         return moduleDto;
@@ -21,7 +20,6 @@ public class ModuleMapper {
 
     public static Module toModule(ModuleDto moduleDto) {
         var module = new Module();
-        module.setId(moduleDto.getId());
         module.setNumber(moduleDto.getNumber());
         module.setName(moduleDto.getName());
         return module;
