@@ -29,6 +29,8 @@ function App() {
           <Route path="/view-shift" element={<ViewShift/>} ></Route>
           <Route path="/rooms" element={<RoomList />}></Route>
           <Route path="/programs" element={<ProgramList />}></Route>
+          <Route path="/subjects/edit/:id" element={<EditSubject />}></Route>
+
         </Routes>
       </HashRouter>
     </div>
