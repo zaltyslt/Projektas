@@ -3,9 +3,9 @@ import { HashRouter, Routes, Route } from "react-router-dom";
 import { Menu } from "./components/Menu";
 import { RoomList } from "./pages/rooms/RoomList";
 import { ModuleList } from "./pages/modules/ModuleList";
-import { CreateList } from "./pages/modules/CreateModule";
-import { ViewList } from "./pages/modules/ViewModule";
-import { EditList } from "./pages/modules/EditModule";
+import { CreateModule } from "./pages/modules/CreateModule";
+import { ViewModule } from "./pages/modules/ViewModule";
+import { EditModule } from "./pages/modules/EditModule";
 import { ShiftList } from "./pages/shifts/ShiftList";
 import { SubjectList } from "./pages/subjects/SubjectList";
 import { TeacherList } from "./pages/teachers/TeacherList";
@@ -28,9 +28,9 @@ function App() {
           <Route path="/rooms" element={<RoomList />}></Route>
           <Route path="/programs" element={<ProgramList />}></Route>
 
-          {/* <Route path="/modules/create" element={<CreateModule />} />
+          <Route path="/modules/create" element={<CreateModule />} />
           <Route path="/modules/view/:id" element={<ViewModule />}></Route>
-          <Route path="/modules/edit/:id" element={<EditModule />}></Route> */}
+          <Route path="/modules/edit/:id" element={<EditModule />}></Route>
         </Routes>
       </HashRouter>
     </div>
