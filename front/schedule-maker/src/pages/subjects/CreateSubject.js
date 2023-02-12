@@ -2,6 +2,7 @@ import { Label } from "@mui/icons-material";
 import {
   Button,
   Container,
+  fabClasses,
   FormControl,
   Grid,
   InputLabel,
@@ -19,6 +20,7 @@ export function CreateSubject() {
   const [module, setModule] = useState("");
   const [description, setDescription] = useState("");
   const [room, setRoom] = useState([]);
+  const [formValid, setFormValid] = useState(false);
 
   const clear = () => {
     setName("");
@@ -34,6 +36,16 @@ export function CreateSubject() {
     setRoom(typeof value === "string" ? value.split(",") : value);
   };
 
+  const validation = () => {
+    console.log(name);
+    if (name === "") {
+      setFormValid(true);
+    } else {
+      setFormValid(false);
+      createSubject();
+    }
+  }
+
   const createSubject = () => {
     fetch("/api/v1/subjects", {
       method: "POST",
@@ -43,8 +55,6 @@ export function CreateSubject() {
       body: JSON.stringify({
         name,
         description,
-        module,
-        room,
       }),
     }).then(clear);
   };
@@ -57,9 +67,13 @@ export function CreateSubject() {
           <Grid item lg={10}>
             <TextField
               fullWidth
+              required
+              error={formValid}
+              helperText={formValid && "Dalyko pavadinimas yra privalomas."}
               variant="outlined"
               label="Dalyko pavadinimas"
               id="name"
+              name="name"
               value={name}
               onChange={(e) => setName(e.target.value)}
             ></TextField>
@@ -84,8 +98,8 @@ export function CreateSubject() {
                 label="Modulio pavadinimas"
                 labelId="module-label"
                 id="module"
-                value={module}
-                onChange={(e) => setModule(e.target.value)}
+                // value={module}
+                // onChange={(e) => setModule(e.target.value)}
               >
                 <MenuItem value="Pirmas modulis">Pirmas modulis</MenuItem>
                 <MenuItem value="Antras modulis">Antras modulis</MenuItem>
@@ -100,8 +114,8 @@ export function CreateSubject() {
                 multiple
                 labelId="room-label"
                 id="room"
-                value={room}
-                onChange={handleRoomInput}
+                // value={room}
+                // onChange={handleRoomInput}
                 input={<OutlinedInput label="Klasės" />}
               ></Select>
             </FormControl>
@@ -109,7 +123,7 @@ export function CreateSubject() {
 
           <Grid item lg={10}>
             <Stack direction="row" spacing={2}>
-              <Button variant="contained" onClick={createSubject}>
+              <Button variant="contained" onClick={validation}>
                 Išsaugoti
               </Button>
 
