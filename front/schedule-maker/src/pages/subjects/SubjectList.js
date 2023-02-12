@@ -30,6 +30,14 @@ export function SubjectList() {
   const [isChecked, setChecked] = useState(false);
 
   useEffect(() => {
+    fetchSubjects();
+  }, []);
+
+  useEffect(() => {
+    fetchDeletedSubjects();
+  }, []);
+
+  const fetchSubjects = () => {
     fetch("api/v1/subjects")
       .then((response) => response.json())
       .then((data) => {
@@ -37,13 +45,13 @@ export function SubjectList() {
         return data;
       })
       .then((data) => setFilteredSubjects(data));
-  }, []);
+  };
 
-  useEffect(() => {
+  const fetchDeletedSubjects = () => {
     fetch("api/v1/subjects/deleted")
       .then((response) => response.json())
       .then(setDeletedSubjects);
-  }, []);
+  };
 
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - subjects.length) : 0;
@@ -71,6 +79,17 @@ export function SubjectList() {
       });
       setFilteredSubjects(filtered);
     }
+  };
+
+  const handleRestore = (id) => {
+    fetch("/api/v1/subjects/restore/" + id, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then(fetchSubjects)
+      .then(fetchDeletedSubjects);
   };
 
   return (
@@ -157,65 +176,71 @@ export function SubjectList() {
           <FormControlLabel
             control={<Checkbox />}
             label="Ištrinti dalykai"
-            onChange={(e) => e.target.checked ? setChecked(true) : setChecked(false)}
+            onChange={(e) =>
+              e.target.checked ? setChecked(true) : setChecked(false)
+            }
           />
         </FormGroup>
-        {isChecked && 
+        {isChecked && (
           <TableContainer component={Paper}>
-          <Table aria-label="custom pagination table">
-            <TableHead>
-              <TableRow>
-                <TableCell>Dalyko pavadinimas</TableCell>
-                <TableCell>Modulio pavadinimas</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {(rowsPerPage > 0
-                ? deletedSubjects.slice(
-                    page * rowsPerPage,
-                    page * rowsPerPage + rowsPerPage
-                  )
-                : deletedSubjects
-              ).map((subject) => (
-                <TableRow key={subject.id}>
-                  <TableCell component="th" scope="row">
-                    <Link to={"/subjects/view/" + subject.id}>
+            <Table aria-label="custom pagination table">
+              <TableHead>
+                <TableRow>
+                  <TableCell colSpan={6}>Dalyko pavadinimas</TableCell>
+                  <TableCell colSpan={6}>Modulio pavadinimas</TableCell>
+                  <TableCell colSpan={2} align="center">Veiksmai</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {(rowsPerPage > 0
+                  ? deletedSubjects.slice(
+                      page * rowsPerPage,
+                      page * rowsPerPage + rowsPerPage
+                    )
+                  : deletedSubjects
+                ).map((subject) => (
+                  <TableRow key={subject.id}>
+                    <TableCell colSpan={6} component="th" scope="row">
                       {subject.name}
-                    </Link>
-                  </TableCell>
-                  <TableCell>{subject.description}</TableCell>
-                </TableRow>
-              ))}
+                    </TableCell>
+                    <TableCell colSpan={6}>{subject.description}</TableCell>
+                    <TableCell colSpan={2} align="center">
+                      <Button onClick={() => handleRestore(subject.id)}>
+                        Atstatyti
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
 
-              {emptyRows > 0 && (
-                <TableRow style={{ height: 53 * emptyRows }}>
-                  <TableCell colSpan={6} />
+                {emptyRows > 0 && (
+                  <TableRow style={{ height: 53 * emptyRows }}>
+                    <TableCell colSpan={6} />
+                  </TableRow>
+                )}
+              </TableBody>
+              <TableFooter>
+                <TableRow>
+                  <TablePagination
+                    labelRowsPerPage="Rodyti po"
+                    rowsPerPageOptions={[10, 20, { label: "Visi", value: -1 }]}
+                    colSpan={3}
+                    count={deletedSubjects.length}
+                    page={page}
+                    SelectProps={{
+                      inputProps: {
+                        "aria-label": "Rodyti po",
+                      },
+                      native: true,
+                    }}
+                    onPageChange={handleChangePage}
+                    rowsPerPage={rowsPerPage}
+                    onRowsPerPageChange={handleChangeRowsPerPage}
+                  ></TablePagination>
                 </TableRow>
-              )}
-            </TableBody>
-            <TableFooter>
-              <TableRow>
-                <TablePagination
-                  labelRowsPerPage="Rodyti po"
-                  rowsPerPageOptions={[10, 20, { label: "Visi", value: -1 }]}
-                  colSpan={3}
-                  count={deletedSubjects.length}
-                  page={page}
-                  SelectProps={{
-                    inputProps: {
-                      "aria-label": "Rodyti po",
-                    },
-                    native: true,
-                  }}
-                  onPageChange={handleChangePage}
-                  rowsPerPage={rowsPerPage}
-                  onRowsPerPageChange={handleChangeRowsPerPage}
-                ></TablePagination>
-              </TableRow>
-            </TableFooter>
-          </Table>
-        </TableContainer>
-        }
+              </TableFooter>
+            </Table>
+          </TableContainer>
+        )}
       </Container>
     </div>
   );
