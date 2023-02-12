@@ -120,7 +120,9 @@ export function ShiftList() {
                 activeShiftsToShow.map(shift => (
                     <tr id="shift" key={shift.id}>
                         <td id="shift-name">
-                        <Link to={{ pathname: "/view-shift", state: { shiftID: shift.id } }} 
+                        {/* <Link to={"/subjects/view/" + subject.id}>
+                        */}
+                        <Link to={"/view-shift/" + shift.id}
                             id="navigation-button"> 
                             {shift.name}
                         </Link>

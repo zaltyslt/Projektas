@@ -1,9 +1,11 @@
-import { HashRouter, Link, Routes, Route } from "react-router-dom";
+import {  Link, useParams } from "react-router-dom";
 
-export function ViewShift(props) {
+export function ViewShift() {
+    
+    const params = useParams();
 
     const func = (() => {
-        console.log(props.location.state.shiftID)
+        console.log(params)
         console.log("hehe")
     })
 
