@@ -72,7 +72,6 @@ export function ShiftList() {
         else {
             if ((currentPage + page) < amountOfItems / itemsPerPage + page) {
                 setCurrentPage(currentPage + 1);
-                console.log((currentPage + page) * itemsPerPage);
             }
         }
     });
