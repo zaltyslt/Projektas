@@ -1,0 +1,14 @@
+#shift-add {
+    border: 1px;
+    border-color: black;
+    border-style: solid;
+    margin: 2rem;
+}
+
+#error-text {
+    color: red;
+}
+
+#success-text {
+    color: rgb(110, 197, 110);
+}

@@ -1,10 +1,11 @@
 package lt.techin.Schedule.shift;
 
+import jakarta.validation.Valid;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 
 @RestController
@@ -59,8 +60,20 @@ public class ShiftController {
         return shiftDatabase.findAll();
     }
 
-    @PostMapping("/add")
-    public void addShift () {
+    @PostMapping("/add-shift")
+    public @ResponseBody Map<String, String> addShift (@RequestBody @Valid Shift shiftToAdd, BindingResult bindingResult) {
+
         System.out.println("Post mapping fired up!!");
+        System.out.println(shiftToAdd.getShiftTime() + " " + shiftToAdd.getName() + " " + shiftToAdd.getShiftStartingTime() + " " + shiftToAdd.getIsActive());
+
+        Map<String, String> response = new HashMap<>();
+
+        if (bindingResult.hasErrors()) {
+            List<ObjectError> errors = bindingResult.getAllErrors();
+            for (int x = 0; x < bindingResult.getAllErrors().size(); x++) {
+                response.put("message" + x, errors.get(x).getDefaultMessage());
+            }
+        }
+        return response;
     }
 }

@@ -31,7 +31,7 @@ public class TextValidator implements ConstraintValidator<TextValid, CharSequenc
     consisting of letters (uppercase or lowercase), digits, commas, dashes, dots or spaces.
     */
     private void buildPattern () {
-        this.validSymbolsPattern = Pattern.compile("^[A-Za-z0-9-,.'\\s]{1," + textMaximumLength + "}$");
+        this.validSymbolsPattern = Pattern.compile("^[A-Za-z0-9-,.':\\s]{1," + textMaximumLength + "}$");
     }
 
     //In a case Annotation check isn't enough

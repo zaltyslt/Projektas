@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { HashRouter, Routes, Route } from "react-router-dom";
+import { HashRouter, Link, Routes, Route } from "react-router-dom";
 import './ShiftList.css';
 
 export function ShiftList() {
@@ -115,18 +115,17 @@ export function ShiftList() {
                     <tr>
                         <td id="shift-header">Vardas</td>
                         <td id="shift-header">Pamainos laikas</td>
-                        <td id="shift-header">Redaguoti duomenis</td>
                     </tr>
             {activeShiftsToShow.length !== 0 ? 
                 activeShiftsToShow.map(shift => (
                     <tr id="shift" key={shift.id}>
-                        <td id="shift-name">{shift.name}</td>
-                        <td id="shift-start">{shift.shiftTime}</td>
-                        <td id="shift-button"> 
-                            <button>Redaguoti
-                                
-                            </button>
+                        <td id="shift-name">
+                        <Link to={{ pathname: "/view-shift", state: { shiftID: shift.id } }} 
+                            id="navigation-button"> 
+                            {shift.name}
+                        </Link>
                         </td>
+                        <td id="shift-start">{shift.shiftTime}</td>
                     </tr>
                 )):
                     <tr>
@@ -144,9 +143,10 @@ export function ShiftList() {
                 </tbody>
             </table>   
 
-            <button> Pridėti naują 
-                
+            <button> 
+                <Link to="/add-shift" id="navigation-button">Pridėti naują </Link>
             </button>
+
             <br></br>
             
             <input
