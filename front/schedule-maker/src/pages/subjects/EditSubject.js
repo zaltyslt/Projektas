@@ -1,45 +1,68 @@
-import { Button, FormControl, Grid, InputLabel, Menu, MenuItem, OutlinedInput, Select, TextField } from "@mui/material";
+import {
+  Button,
+  FormControl,
+  Grid,
+  InputLabel,
+  Menu,
+  MenuItem,
+  OutlinedInput,
+  Select,
+  TextField,
+} from "@mui/material";
 import { Container, Stack } from "@mui/system";
 import { useState, useEffect } from "react";
 import { Link, useHref, useParams } from "react-router-dom";
 
 export function EditSubject() {
-    const [subject, setSubject] = useState({
-        name: "", 
-        description: "",
-        module: "",
-        room: [],
+  const [subject, setSubject] = useState({
+    name: "",
+    description: "",
+    module: {},
+  });
+  const params = useParams();
+  const [modules, setModules] = useState([]);
+  const [module, setModule] = useState("");
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
+  const listUrl = useHref("/subjects");
+
+  useEffect(() => {
+    fetch("api/v1/subjects/" + params.id)
+      .then((response) => response.json())
+      .then((data) => {
+        setSubject(data);
+        setDescription(data.description);
+        setName(data.name);
+      });
+  }, []);
+
+  useEffect(() => {
+    fetch("api/v1/modules")
+      .then((response) => response.json())
+      .then(setModules);
+  }, []);
+
+  const deleteSubject = (id) => {
+    fetch("/api/v1/subjects/" + id, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }).then(() => (window.location = listUrl));
+  };
+
+  const handleEditSubject = () => {
+    fetch(`/api/v1/subjects/${params.id}?moduleId=${module}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name, 
+        description
+      }),
     });
-    const params = useParams();
-    const [modules, setModules] = useState([]);
-    const [module, setModule] = useState('');
-    const listUrl = useHref('/subjects');
-
-    useEffect(() => {
-        fetch("api/v1/subjects/" + params.id)
-          .then((response) => response.json())
-          .then(setSubject);
-      }, []);
-
-    useEffect(() => {
-        fetch("api/v1/modules")
-        .then((response) => response.json())
-        .then(setModules);
-    }, []);
-
-    const deleteSubject = (id) => {
-        fetch("/api/v1/subjects/" + id, {
-            method: "DELETE", 
-            headers: {
-                "Content-Type": "application/json"
-            } 
-        })
-        .then(() => window.location = listUrl);
-    };
-
-    const handleEditSubject = (id) => {
-      
-    }
+  };
 
   return (
     <Container>
@@ -53,7 +76,7 @@ export function EditSubject() {
               variant="outlined"
               label="Dalyko pavadinimas"
               id="name"
-              value={subject.name}
+              value={name}
               onChange={(e) => setName(e.target.value)}
             ></TextField>
           </Grid>
@@ -65,7 +88,7 @@ export function EditSubject() {
               variant="outlined"
               label="Dalyko aprašas"
               id="description"
-              value={subject.description}
+              value={description}
               onChange={(e) => setDescription(e.target.value)}
             ></TextField>
           </Grid>
@@ -81,7 +104,9 @@ export function EditSubject() {
                 onChange={(e) => setModule(e.target.value)}
               >
                 {modules.map((module) => (
-                  <MenuItem key={module.id} value={module.id}>{module.name}</MenuItem>
+                  <MenuItem key={module.id} value={module.id}>
+                    {module.name}
+                  </MenuItem>
                 ))}
               </Select>
             </FormControl>
@@ -103,11 +128,17 @@ export function EditSubject() {
 
           <Grid item lg={10}>
             <Stack direction="row" spacing={2}>
-              <Button variant="contained" onClick={() => handleEditSubject(subject.id)}>
+              <Button
+                variant="contained"
+                onClick={() => handleEditSubject(subject.id)}
+              >
                 Išsaugoti
               </Button>
 
-              <Button variant="contained" onClick={() => deleteSubject(subject.id)}>
+              <Button
+                variant="contained"
+                onClick={() => deleteSubject(subject.id)}
+              >
                 Ištrinti
               </Button>
 

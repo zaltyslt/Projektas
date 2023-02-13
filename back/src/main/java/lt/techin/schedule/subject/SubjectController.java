@@ -57,9 +57,15 @@ public class SubjectController {
     }
 
 
+//    @PatchMapping("/{subjectId}")
+//    public ResponseEntity<SubjectDto> updateSubject(@PathVariable Long subjectId, @RequestBody SubjectDto subjectDto) {
+//        var updatedSubject = subjectService.updateSubject(subjectId, toSubject(subjectDto));
+//        return ok(toSubjectDto(updatedSubject));
+//    }
+
     @PatchMapping("/{subjectId}")
-    public ResponseEntity<SubjectDto> updateSubject(@PathVariable Long subjectId, @RequestBody SubjectDto subjectDto) {
-        var updatedSubject = subjectService.updateSubject(subjectId, toSubject(subjectDto));
+    public ResponseEntity<SubjectDto> updateSubject(@PathVariable Long subjectId, @RequestParam Long moduleId, @RequestBody SubjectDto subjectDto) {
+        var updatedSubject = subjectService.updateSubject(subjectId, moduleId, toSubject(subjectDto));
         return ok(toSubjectDto(updatedSubject));
     }
 

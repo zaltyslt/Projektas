@@ -58,12 +58,24 @@ public class SubjectService {
         return subjectRepository.save(subject);
     }
 
-    public Subject updateSubject(Long id, Subject subject) {
-        var existingSubject = subjectRepository.findById(id).orElseThrow();
+//    public Subject updateSubject(Long id, Subject subject) {
+//        var existingSubject = subjectRepository.findById(id).orElseThrow();
+//
+//        existingSubject.setName(subject.getName());
+//        existingSubject.setDescription(subject.getDescription());
+//        existingSubject.setModule(subject.getModule());
+////        existingSubject.setRooms(subject.getRooms());
+//
+//        return subjectRepository.save(existingSubject);
+//    }
+
+    public Subject updateSubject(Long subjectId, Long moduleId, Subject subject) {
+        var existingSubject = subjectRepository.findById(subjectId).orElseThrow();
+        var existingModule = moduleRepository.findById(moduleId).orElseThrow();
 
         existingSubject.setName(subject.getName());
         existingSubject.setDescription(subject.getDescription());
-        existingSubject.setModule(subject.getModule());
+        existingSubject.setModule(existingModule);
 //        existingSubject.setRooms(subject.getRooms());
 
         return subjectRepository.save(existingSubject);
