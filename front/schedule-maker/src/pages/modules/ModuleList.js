@@ -29,15 +29,15 @@ export function ModuleList() {
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [isChecked, setChecked] = useState(false);
 
-  // useEffect(() => {
-  //   fetch("api/v1/modules")
-  //     .then((response) => response.json())
-  //     .then((data) => {
-  //       setModules(data);
-  //       return data;
-  //     })
-  //     .then((data) => setFilteredModules(data));
-  // }, []);
+  useEffect(() => {
+    fetch("api/v1/modules")
+      .then((response) => response.json())
+      .then((data) => {
+        setModules(data);
+        return data;
+      })
+      .then((data) => setFilteredModules(data));
+  }, []);
 
   // useEffect(() => {
   //   fetch("api/v1/modules/deleted")

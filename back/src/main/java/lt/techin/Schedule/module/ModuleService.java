@@ -1,5 +1,6 @@
 package lt.techin.Schedule.module;
 
+import jakarta.annotation.PostConstruct;
 import jakarta.persistence.EntityManager;
 import org.hibernate.Filter;
 import org.hibernate.Session;
@@ -11,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -83,5 +85,30 @@ public class ModuleService {
         Page<Module> modules = moduleRepository.findAll(pageable);
         session.disableFilter("deletedModuleFilter");
         return modules;
+    }
+
+    @PostConstruct
+    //FIXME for dev purpose
+    public void loadInitialModules() {
+        var initialModulesToAdd = List.of(
+                new ModuleDto("ABC", "Java"),
+                new ModuleDto("59A", "Spring Boot"),
+                new ModuleDto("TRA", "React")
+        );
+
+//        initialModulesToAdd.stream()
+//                .map(ModuleMapper::toModule)
+//                .forEach(moduleRepository::save);
+
+        List<ModuleDto> modules = new ArrayList<>();
+        modules.addAll(initialModulesToAdd);
+        for (int i = 0; i < 100; i++) {
+            var moduleDto = new ModuleDto();
+            modules.add(moduleDto);
+        }
+
+        modules.stream()
+                .map(ModuleMapper::toModule)
+                .forEach(moduleRepository::save);
     }
 }
