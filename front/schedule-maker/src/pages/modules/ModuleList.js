@@ -39,11 +39,11 @@ export function ModuleList() {
       .then((data) => setFilteredModules(data));
   }, []);
 
-  // useEffect(() => {
-  //   fetch("api/v1/modules/deleted")
-  //     .then((response) => response.json())
-  //     .then(setDeletedModules);
-  // }, []);
+  useEffect(() => {
+    fetch("api/v1/modules/deleted")
+      .then((response) => response.json())
+      .then(setDeletedModules);
+  }, []);
 
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - modules.length) : 0;

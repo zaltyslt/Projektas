@@ -5,20 +5,43 @@ import team1 from "./images/team1.jpg";
 
 export function App2() {
   const [serverResponse, setServerResponse] = useState([]);
+  const [showText, setShowText] = useState(false);
+  const [smt, setSmt] = useState(  JSON.parse(window.localStorage.getItem("active")) || 0 );
 
-  const fetchServerOnline = () => {
+  useEffect(() => {
+    setSmt(JSON.parse(window.localStorage.getItem("active")));
+  }, []);
+
+  useEffect(() => {
+    window.localStorage.setItem("active", smt);
+  }, [smt]);
+
+  useEffect(() => {
+    if (!showText) {
+      setShowText(true);
+      setTimeout(() => {
+        if (serverResponse.answer) {
+          console.log(serverResponse);
+          setShowText(true);
+          // window.alert(serverResponse.answer);
+        } else {
+          console.log(serverResponse);
+          setShowText(false);
+          // window.alert('No connection !!!');
+        }
+      }, 1000);
+    } else {
+      setShowText(false);
+      setSmt(0);
+    }
+  }, [serverResponse]);
+
+  const fetchServerOnline = async () => {
     fetch("/hello")
       .then((response) => response.json())
-      .then((response) => setServerResponse(response));
-     
-      if (serverResponse) {
-        window.alert(serverResponse.answer);
-    } else {
-      window.alert('No connection !!!');
-    }
-    
+      .then((responseJson) => setServerResponse(responseJson));
   };
-  
+
   return (
     <MDBContainer fluid>
       <div
@@ -36,16 +59,22 @@ export function App2() {
           <button
             type="button"
             className="btn btn-primary btn-rounded"
-            onClick={() => fetchServerOnline()}
+            onClick={fetchServerOnline}
           >
             Check server connection <i className="fas fa-download ms-1"></i>
           </button>
-          {/* <MDBBtn 
-            tag='a'href='https://mdbootstrap.com/docs/standard/getting-started/'             target='_blank'
-            role='button'
-          >
-            Check server connection
-          </MDBBtn> */}
+
+          <div id="serverResponse">{showText && serverResponse.answer}</div>
+          <div>
+            <p>Count = {smt} </p>
+            <button
+              type="button"
+              className="btn btn-primary btn-rounded"
+              onClick={() => setSmt(smt + 1)}
+            >
+              Check server connection <i className="fas fa-download ms-1"></i>
+            </button>
+          </div>
         </div>
       </div>
     </MDBContainer>
