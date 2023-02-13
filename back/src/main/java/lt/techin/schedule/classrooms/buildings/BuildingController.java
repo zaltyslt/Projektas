@@ -7,10 +7,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static java.util.stream.Collectors.toList;
 import static org.springframework.http.ResponseEntity.ok;
 
-@RestController
+@RestController("/api/v1/buildings")
 public class BuildingController {
     private final BuildingService buildingService;
 
@@ -18,20 +17,28 @@ public class BuildingController {
         this.buildingService = buildingService;
     }
 
-    @GetMapping(value = "/building", produces = {MediaType.APPLICATION_JSON_VALUE})
-    @ResponseBody
-    public ResponseEntity<BuildingDto> getBuilding() {
-        var response = new BuildingDto();
-        return ResponseEntity.ok(response);
+    //     pridejau i path /{id}, tam kad atitiktu adresa, ieskant /building
+    @GetMapping(value = "/building/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    // nereikia, @RestController jau turi sita ijunges defaultu
+//    @ResponseBody
+    public ResponseEntity<BuildingDto> getBuilding(@PathVariable Long id) {
+//        sitos eilutes nebereikia
+//        var response = new BuildingDto();
+//        pasirodo turi buildingmapper kas yra nice, tai ji ir naudojam kad grazintu DTO buildinga
+        return ResponseEntity.ok(BuildingMapper.toBuildingDto(buildingService.getBuildingById(id)));
     }
 
 
     @GetMapping(value = "/buildings", produces = {MediaType.APPLICATION_JSON_VALUE})
-    @ResponseBody
+//    @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE})
+    // nereikia, @RestController jau turi sita ijunges defaultu
+//    @ResponseBody
     public List<BuildingDto> getBuildings() {
         return buildingService.getAll().stream()
                 .map(BuildingMapper::toBuildingDto)
-                .collect(toList());
+//                .collect(toList());
+//                sitas yra trumpesnis variantas, grazina ta pati lista
+                .toList();
     }
 
     @PostMapping(value = "/createBuilding", consumes = {MediaType.APPLICATION_JSON_VALUE})

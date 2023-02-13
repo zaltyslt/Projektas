@@ -31,9 +31,14 @@ public class ClassroomService {
         if (existingClassroom != null) {
             existingClassroom.setClassroomName(classroom.getClassroomName());
             existingClassroom.setDescription(classroom.getDescription());
+            existingClassroom.setActive(classroom.isActive());
             return classroomRepository.save(existingClassroom);
         }
         return null;
+    }
+
+    public Classroom finById(Long id ) {
+        return classroomRepository.findById(id).orElse(new Classroom());
     }
 
 //    public boolean deleteById(Long id) {
@@ -54,10 +59,14 @@ public class ClassroomService {
             existingClassroom.setBuilding(existingBuilding);
             return classroomRepository.save(existingClassroom);
         }
-        System.out.println(existingClassroom + " classroom");
-        System.out.println(existingBuilding + "  building");
+//        System.out.println(existingClassroom + " classroom");
+//        System.out.println(existingBuilding + "  building");
         return null;
     }
+
+//    public Page<Classroom> getAll(Pageable pagination) {
+//        return classroomRepository.findAll(pagination);
+//    }
 }
 
 

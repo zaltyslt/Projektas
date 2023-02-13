@@ -1,15 +1,18 @@
 import { useState } from 'react'
-import { useHref } from 'react-router-dom'
+import { useNavigate} from "react-router-dom"
 
 export function CreateRoom(props) {
     const [classroomName, setClassroomName] = useState("")
+    const [building, setBuildings] = useState("")
     const [description, setDescription] = useState("")
+    
 
-    // const listUrl = useHref('/')
+    let navigate = useNavigate();
 
     const clear = () => {
         setClassroomName("")
         setDescription("")
+        
     }
 
     const applyResult = (result) => {
@@ -31,7 +34,6 @@ export function CreateRoom(props) {
                 description,
             })
         }).then(applyResult)
-        // .then(() => window.location = listUrl)
     }
 
     return (
@@ -47,8 +49,10 @@ export function CreateRoom(props) {
                         (e) => setClassroomName(e.target.value)
                     } />
             </div>
+
+
             <div>
-                <label htmlFor="description">Description: </label>
+                <label htmlFor="description">Klasės aprašymas: </label>
                 <textarea
                     id="description"
                     value={description}
@@ -58,6 +62,7 @@ export function CreateRoom(props) {
             </div>
             <div>
                 <button onClick={createClassroom}>Sukurti</button>
+                <button onClick={() => navigate(-1)}>Grįžti</button>
             </div>
         </fieldset>
     )

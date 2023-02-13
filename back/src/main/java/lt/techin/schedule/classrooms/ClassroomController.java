@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static java.util.stream.Collectors.toList;
 import static lt.techin.schedule.classrooms.ClassroomMapper.toClassroom;
 import static lt.techin.schedule.classrooms.ClassroomMapper.toClassroomDto;
 import static org.springframework.http.ResponseEntity.ok;
@@ -20,19 +19,34 @@ public class ClassroomController {
         this.classroomService = classroomService;
     }
 
-    @GetMapping(value = "/classroom", produces = {MediaType.APPLICATION_JSON_VALUE})
-    @ResponseBody
-    public ResponseEntity<ClassroomDto> getClassroom() {
-        var response = new ClassroomDto();
-        return ResponseEntity.ok(response);
+    //    pridejau path /{id},tam kad atitiktu adresa, ieskant /classroom
+    @GetMapping(value = "/classroom/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    // nereikia, @RestController jau turi sita ijunges defaultu
+//    @ResponseBody
+    public ResponseEntity<ClassroomDto> getClassroom(@PathVariable Long id) {
+//        sito nebereikia
+//        var response = new ClassroomDto();
+//        pasinaudojam esamu classroommapper klase
+        return ResponseEntity.ok(ClassroomMapper.toClassroomDto(classroomService.finById(id)));
     }
 
+    //    MANO SENAS
 //    @GetMapping(value = "/classrooms", produces = {MediaType.APPLICATION_JSON_VALUE})
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE})
-    @ResponseBody
+    // nereikia, @RestController jau turi sita ijunges defaultu
+//    @ResponseBody
     public List<ClassroomDto> getClassrooms() {
-        return classroomService.getAll().stream().map(ClassroomMapper::toClassroomDto).collect(toList());
+        return classroomService.getAll().stream().map(ClassroomMapper::toClassroomDto).toList();
     }
+//      MANO PRADETAS\
+//    @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE})
+//    @ResponseBody
+//    public List<ClassroomDto> getClassrooms(
+//            @RequestParam(value = "page", defaultValue = "0") int page,
+//            @RequestParam(value = "size", defaultValue = "20") int size)) {
+//        return classroomService.getAll().stream().map(ClassroomMapper::toClassroomDto).collect(toList());
+//    }
+
 
     @PostMapping(value = "/create", consumes = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<ClassroomDto> createClassroom(@RequestBody ClassroomDto classroomDto) {
@@ -58,7 +72,6 @@ public class ClassroomController {
 //    }
 
     @PostMapping("/addBuilding/{classroomId}")
-    @ResponseBody
     public Classroom addBuildingToClassroom(@PathVariable Long classroomId, @RequestParam Long buildingId) {
         return classroomService.addClassroomToBuilding(classroomId, buildingId);
     }

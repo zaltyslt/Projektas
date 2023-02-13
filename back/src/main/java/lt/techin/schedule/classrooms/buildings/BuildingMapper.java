@@ -6,6 +6,7 @@ public class BuildingMapper {
 
         buildingDto.setId(building.getId());
         buildingDto.setName(building.getName());
+        buildingDto.setBuilding(building.getBuilding());
         return buildingDto;
     }
 
@@ -13,6 +14,7 @@ public class BuildingMapper {
         var building = new Building();
         building.setId(buildingDto.getId());
         building.setName(buildingDto.getName());
+        building.setBuilding(buildingDto.getBuilding());
         return building;
     }
 }

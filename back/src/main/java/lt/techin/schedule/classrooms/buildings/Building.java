@@ -5,14 +5,17 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
-import java.util.Objects;
-
 @Entity
 public class Building {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+//    tau sito nereikia jeigu nori savo id deti
+//    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
+
+    private BuildingType building;
+
     public Building(){
 
     }
@@ -33,24 +36,34 @@ public class Building {
         this.name = name;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Building building = (Building) o;
-        return Objects.equals(id, building.id) && Objects.equals(name, building.name);
+    public BuildingType getBuilding() {
+        return building;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, name);
+    public void setBuilding(BuildingType building) {
+        this.building = building;
     }
+
+    //    nuosirdziai gali buti kad px sitie yra
+//    @Override
+//    public boolean equals(Object o) {
+//        if (this == o) return true;
+//        if (o == null || getClass() != o.getClass()) return false;
+//        Building building = (Building) o;
+//        return Objects.equals(id, building.id) && Objects.equals(name, building.name);
+//    }
+
+//    @Override
+//    public int hashCode() {
+//        return Objects.hash(id, name);
+//    }
 
     @Override
     public String toString() {
         return "Building{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
+                ", building=" + building +
                 '}';
     }
 }

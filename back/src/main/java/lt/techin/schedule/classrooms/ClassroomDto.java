@@ -3,15 +3,25 @@ package lt.techin.schedule.classrooms;
 import java.util.Objects;
 
 public class ClassroomDto {
-    private Long id = 1L;
-    private String classroomName = "202";
-    private String description = "bruh";
+    private Long id;
+    private String classroomName;
+    private String description;
+    private boolean active;
+
     public ClassroomDto(){}
 
     public ClassroomDto(Long id, String classroomNumber, String description) {
         this.id = id;
         this.classroomName = classroomNumber;
         this.description = description;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 
     public Long getId() {

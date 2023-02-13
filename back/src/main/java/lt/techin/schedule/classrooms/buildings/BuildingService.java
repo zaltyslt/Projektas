@@ -6,6 +6,7 @@ import java.util.List;
 
 @Service
 public class BuildingService {
+
     private final BuildingRepository buildingRepository;
 
     public BuildingService(BuildingRepository buildingRepository) {
@@ -23,6 +24,10 @@ public class BuildingService {
     public Building update(Long id, Building building) {
         building.setId(id);
         return buildingRepository.save(building);
+    }
+
+    public Building getBuildingById(Long id) {
+        return buildingRepository.findById(id).orElse(new Building());
     }
 
 //    public boolean deleteById(Long id) {

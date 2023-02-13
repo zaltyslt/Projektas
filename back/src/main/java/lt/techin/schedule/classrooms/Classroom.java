@@ -15,16 +15,19 @@ public class Classroom {
     private Long id;
 //    @NotNull
 //    @Size(min = 1, max = 5)
+    @Column(name = "classroomName")
     private String classroomName;
     private String description;
      @ManyToOne(fetch = FetchType.EAGER)
      @JoinColumn(name = "building_id")
      private Building building;
+
     @CreatedDate
     private LocalDateTime createdDate;
     @LastModifiedDate
     private LocalDateTime modifiedDate;
 
+    private boolean active;
     public Building getBuilding() {
         return building;
     }
@@ -87,28 +90,37 @@ public class Classroom {
         this.modifiedDate = modifiedDate;
     }
 
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Classroom classroom = (Classroom) o;
-        return classroomName == classroom.classroomName && Objects.equals(id, classroom.id) && Objects.equals(description, classroom.description) && Objects.equals(building, classroom.building) && Objects.equals(createdDate, classroom.createdDate) && Objects.equals(modifiedDate, classroom.modifiedDate);
+        return active == classroom.active && Objects.equals(id, classroom.id) && Objects.equals(classroomName, classroom.classroomName) && Objects.equals(description, classroom.description) && Objects.equals(building, classroom.building) && Objects.equals(createdDate, classroom.createdDate) && Objects.equals(modifiedDate, classroom.modifiedDate);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, classroomName, description, building, createdDate, modifiedDate);
+        return Objects.hash(id, classroomName, description, building, createdDate, modifiedDate, active);
     }
 
     @Override
     public String toString() {
         return "Classroom{" +
                 "id=" + id +
-                ", classroomNumber=" + classroomName +
+                ", classroomName='" + classroomName + '\'' +
                 ", description='" + description + '\'' +
                 ", building=" + building +
                 ", createdDate=" + createdDate +
                 ", modifiedDate=" + modifiedDate +
+                ", active=" + active +
                 '}';
     }
 }

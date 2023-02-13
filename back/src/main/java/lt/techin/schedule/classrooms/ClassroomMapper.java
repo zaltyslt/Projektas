@@ -6,6 +6,7 @@ public class ClassroomMapper {
         classroomDto.setId(classroom.getId());
         classroomDto.setClassroomName(classroom.getClassroomName());
         classroomDto.setDescription(classroom.getDescription());
+        classroomDto.setActive(classroom.isActive());
         return classroomDto;
     }
 
@@ -14,6 +15,7 @@ public class ClassroomMapper {
         classroom.setId(classroomDto.getId());
         classroom.setClassroomName(classroomDto.getClassroomName());
         classroom.setDescription(classroomDto.getDescription());
+        classroom.setActive(classroomDto.isActive());
         return classroom;
     }
 }

@@ -9,6 +9,8 @@ import { TeacherList } from "./pages/teachers/TeacherList";
 import { GroupList } from "./pages/groups/GroupList";
 import { ProgramList } from "./pages/programs/ProgramList";
 import { CreateRoom } from "./pages/rooms/CreateRoom";
+import { ViewRoom } from "./pages/rooms/ViewRoom";
+import { UpdateClassroom } from "./pages/rooms/UpdateRoom";
 
 function App() {
   return (
@@ -22,9 +24,12 @@ function App() {
           <Route path="/modules" element={<ModuleList />}></Route>
           <Route path="/subjects" element={<SubjectList />}></Route>
           <Route path="/shifts" element={<ShiftList />}></Route>
-          {/* KLASIŲ PATHAI */}
+          {/* CLASSROOMS PATHAI */}
           <Route path='/rooms' element={<RoomList />}></Route>
           <Route path='/create' element={<CreateRoom />}></Route>
+          <Route path='/classrooms/view/:id' element={<ViewRoom />}></Route>
+          <Route path='/update/:id' element={<UpdateClassroom />} />
+          {/* CLASSROOM PATHAI DONE */}
           <Route path="/programs" element={<ProgramList />}></Route>
         </Routes>
       </HashRouter>
