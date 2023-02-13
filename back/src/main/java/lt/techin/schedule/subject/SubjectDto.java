@@ -14,16 +14,16 @@ public class SubjectDto {
 
     private Module module;
 
-    private Set<Room> rooms;
+//    private Set<Room> rooms;
 
     public SubjectDto() {
     }
 
-    public SubjectDto(String name, String description, Module module, Set<Room> rooms) {
+    public SubjectDto(String name, String description, Module module) {
         this.name = name;
         this.description = description;
         this.module = module;
-        this.rooms = rooms;
+//        this.rooms = rooms;
     }
 
     public String getName() {
@@ -50,25 +50,25 @@ public class SubjectDto {
         this.module = module;
     }
 
-    public Set<Room> getRooms() {
-        return rooms;
-    }
-
-    public void setRooms(Set<Room> rooms) {
-        this.rooms = rooms;
-    }
+//    public Set<Room> getRooms() {
+//        return rooms;
+//    }
+//
+//    public void setRooms(Set<Room> rooms) {
+//        this.rooms = rooms;
+//    }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         SubjectDto that = (SubjectDto) o;
-        return Objects.equals(name, that.name) && Objects.equals(description, that.description) && Objects.equals(module, that.module) && Objects.equals(rooms, that.rooms);
+        return Objects.equals(name, that.name) && Objects.equals(description, that.description) && Objects.equals(module, that.module);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, description, module, rooms);
+        return Objects.hash(name, description, module);
     }
 
     @Override
@@ -77,7 +77,7 @@ public class SubjectDto {
                 "name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", module=" + module +
-                ", rooms=" + rooms +
+//                ", rooms=" + rooms +
                 '}';
     }
 }

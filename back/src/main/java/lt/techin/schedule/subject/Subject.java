@@ -28,11 +28,11 @@ public class Subject {
     private String description;
 
     @ManyToOne
-    @JoinColumn(name = "model_id")
+    @JoinColumn(name = "module_id")
     private Module module;
 
-    @ManyToMany
-    private Set<Room> rooms;
+//    @ManyToMany
+//    private Set<Room> rooms;
 
     @CreatedDate
     private LocalDateTime createdDate;
@@ -97,13 +97,13 @@ public class Subject {
         this.module = module;
     }
 
-    public Set<Room> getRooms() {
-        return rooms;
-    }
-
-    public void setRooms(Set<Room> rooms) {
-        this.rooms = rooms;
-    }
+//    public Set<Room> getRooms() {
+//        return rooms;
+//    }
+//
+//    public void setRooms(Set<Room> rooms) {
+//        this.rooms = rooms;
+//    }
 
     public LocalDateTime getCreatedDate() {
         return createdDate;
@@ -150,11 +150,11 @@ public class Subject {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Subject subject = (Subject) o;
-        return Objects.equals(id, subject.id) && Objects.equals(name, subject.name) && Objects.equals(description, subject.description) && Objects.equals(module, subject.module) && Objects.equals(rooms, subject.rooms) && Objects.equals(createdDate, subject.createdDate) && Objects.equals(createdBy, subject.createdBy) && Objects.equals(modifiedDate, subject.modifiedDate) && Objects.equals(modifiedBy, subject.modifiedBy) && Objects.equals(deleted, subject.deleted);
+        return Objects.equals(id, subject.id) && Objects.equals(name, subject.name) && Objects.equals(description, subject.description) && Objects.equals(module, subject.module) && Objects.equals(createdDate, subject.createdDate) && Objects.equals(createdBy, subject.createdBy) && Objects.equals(modifiedDate, subject.modifiedDate) && Objects.equals(modifiedBy, subject.modifiedBy) && Objects.equals(deleted, subject.deleted);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, description, module, rooms, createdDate, createdBy, modifiedDate, modifiedBy, deleted);
+        return Objects.hash(id, name, description, module, createdDate, createdBy, modifiedDate, modifiedBy, deleted);
     }
 }

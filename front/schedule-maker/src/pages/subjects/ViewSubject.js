@@ -1,4 +1,4 @@
-import { Button, Paper, Grid } from "@mui/material";
+import { Button, Grid } from "@mui/material";
 import { Container, Stack } from "@mui/system";
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
@@ -10,7 +10,10 @@ export function ViewSubject() {
   useEffect(() => {
     fetch("api/v1/subjects/" + params.id)
       .then((response) => response.json())
-      .then(setSubject);
+      .then((data) => {
+        setSubject(data);
+        console.log(data);
+      });
   }, []);
 
   return (
@@ -26,7 +29,8 @@ export function ViewSubject() {
 
           <Grid item lg={12}>
             <h4>Modulis</h4>
-            <p></p>
+            {!subject.module ? <p>Loading</p> : <p>{subject.module.name}</p>}
+            
           </Grid>
 
           <Grid item lg={12}>

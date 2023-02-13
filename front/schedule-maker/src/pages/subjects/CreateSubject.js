@@ -12,15 +12,22 @@ import {
   Stack,
   TextField,
 } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 export function CreateSubject() {
   const [name, setName] = useState("");
+  const [modules, setModules] = useState([]);
   const [module, setModule] = useState("");
   const [description, setDescription] = useState("");
   const [room, setRoom] = useState([]);
   const [formValid, setFormValid] = useState(false);
+
+  useEffect(() => {
+    fetch("api/v1/modules")
+    .then((response) => response.json())
+    .then(setModules);
+  }, []);
 
   const clear = () => {
     setName("");
@@ -37,7 +44,6 @@ export function CreateSubject() {
   };
 
   const validation = () => {
-    console.log(name);
     if (name === "") {
       setFormValid(true);
     } else {
@@ -47,7 +53,7 @@ export function CreateSubject() {
   }
 
   const createSubject = () => {
-    fetch("/api/v1/subjects", {
+    fetch(`/api/v1/subjects?moduleId=${module}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -98,11 +104,12 @@ export function CreateSubject() {
                 label="Modulio pavadinimas"
                 labelId="module-label"
                 id="module"
-                // value={module}
-                // onChange={(e) => setModule(e.target.value)}
+                value={module}
+                onChange={(e) => setModule(e.target.value)}
               >
-                <MenuItem value="Pirmas modulis">Pirmas modulis</MenuItem>
-                <MenuItem value="Antras modulis">Antras modulis</MenuItem>
+                {modules.map((module) => (
+                  <MenuItem key={module.id} value={module.id}>{module.name}</MenuItem>
+                ))}
               </Select>
             </FormControl>
           </Grid>

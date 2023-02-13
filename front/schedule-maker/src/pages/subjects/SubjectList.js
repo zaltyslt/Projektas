@@ -139,7 +139,7 @@ export function SubjectList() {
                       {subject.name}
                     </Link>
                   </TableCell>
-                  <TableCell>{subject.description}</TableCell>
+                  <TableCell>{subject.module.name}</TableCell>
                 </TableRow>
               ))}
 

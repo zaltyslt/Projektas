@@ -44,11 +44,18 @@ public class SubjectController {
         return subjectService.getAll(true).stream().map(SubjectMapper::toSubjectEntityDto).collect(toList());
     }
 
+//    @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE})
+//    public ResponseEntity<SubjectDto> createSubject(@RequestBody SubjectDto subjectDto) {
+//        var createdSubject = subjectService.create(toSubject(subjectDto));
+//        return ok(toSubjectDto(createdSubject));
+//    }
+
     @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<SubjectDto> createSubject(@RequestBody SubjectDto subjectDto) {
-        var createdSubject = subjectService.create(toSubject(subjectDto));
+    public ResponseEntity<SubjectDto> createSubject(@RequestParam Long moduleId, @RequestBody SubjectDto subjectDto) {
+        var createdSubject = subjectService.create(moduleId, toSubject(subjectDto));
         return ok(toSubjectDto(createdSubject));
     }
+
 
     @PatchMapping("/{subjectId}")
     public ResponseEntity<SubjectDto> updateSubject(@PathVariable Long subjectId, @RequestBody SubjectDto subjectDto) {

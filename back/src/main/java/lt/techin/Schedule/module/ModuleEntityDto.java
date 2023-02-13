@@ -1,20 +1,16 @@
-package lt.techin.schedule.subject;
-
-import lt.techin.schedule.module.Module;
-import lt.techin.schedule.room.Room;
+package lt.techin.schedule.module;
 
 import java.util.Objects;
-import java.util.Set;
 
-public class SubjectEntityDto extends SubjectDto {
+public class ModuleEntityDto extends ModuleDto{
 
     private Long id;
 
-    public SubjectEntityDto() {
+    public ModuleEntityDto() {
     }
 
-    public SubjectEntityDto(String name, String description, Module module, Long id) {
-        super(name, description, module);
+    public ModuleEntityDto(String number, String name, Long id) {
+        super(number, name);
         this.id = id;
     }
 
@@ -31,7 +27,7 @@ public class SubjectEntityDto extends SubjectDto {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
-        SubjectEntityDto that = (SubjectEntityDto) o;
+        ModuleEntityDto that = (ModuleEntityDto) o;
         return Objects.equals(id, that.id);
     }
 
@@ -42,7 +38,7 @@ public class SubjectEntityDto extends SubjectDto {
 
     @Override
     public String toString() {
-        return "SubjectEntityDto{" +
+        return "ModuleEntityDto{" +
                 "id=" + id +
                 '}';
     }

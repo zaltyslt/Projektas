@@ -2,6 +2,7 @@ package lt.techin.schedule.subject;
 
 
 import jakarta.persistence.EntityManager;
+import lt.techin.schedule.module.ModuleRepository;
 import org.hibernate.Filter;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,11 +24,14 @@ public class SubjectService {
 
     private final SubjectRepository subjectRepository;
 
+    private final ModuleRepository moduleRepository;
+
     @Autowired
     private EntityManager entityManager;
 
-    public SubjectService(SubjectRepository subjectRepository) {
+    public SubjectService(SubjectRepository subjectRepository, ModuleRepository moduleRepository) {
         this.subjectRepository = subjectRepository;
+        this.moduleRepository = moduleRepository;
     }
 
     public List<Subject> getAll(boolean isDeleted) {
@@ -44,7 +48,13 @@ public class SubjectService {
         return subjectRepository.findById(id);
     }
 
-    public Subject create(Subject subject) {
+//    public Subject create(Subject subject) {
+//        return subjectRepository.save(subject);
+//    }
+
+    public Subject create(Long moduleId, Subject subject) {
+        var module = moduleRepository.findById(moduleId).orElseThrow();
+        subject.setModule(module);
         return subjectRepository.save(subject);
     }
 
@@ -54,7 +64,7 @@ public class SubjectService {
         existingSubject.setName(subject.getName());
         existingSubject.setDescription(subject.getDescription());
         existingSubject.setModule(subject.getModule());
-        existingSubject.setRooms(subject.getRooms());
+//        existingSubject.setRooms(subject.getRooms());
 
         return subjectRepository.save(existingSubject);
     }
@@ -90,28 +100,28 @@ public class SubjectService {
         return subjects;
     }
 
-    @PostConstruct
-    //FIXME for dev purpose
-    public void loadInitialSubjects() {
-        var initialSubjectsToAdd = List.of(
-                new SubjectDto("Pirmas dalykas", "Duomenų bazės", null, null),
-                new SubjectDto("Antras dalykas", "Srping Boot", null, null),
-                new SubjectDto("Trečias dalykas", "React", null, null)
-        );
+//    @PostConstruct
+//    //FIXME for dev purpose
+//    public void loadInitialSubjects() {
+//        var initialSubjectsToAdd = List.of(
+//                new SubjectDto("Pirmas dalykas", "Duomenų bazės", null),
+//                new SubjectDto("Antras dalykas", "Srping Boot", null),
+//                new SubjectDto("Trečias dalykas", "React", null)
+//        );
 
 //        initialSubjectsToAdd.stream()
 //                .map(SubjectMapper::toSubject)
 //                .forEach(subjectRepository::save);
-
-        List<SubjectDto> subjects = new ArrayList<>();
-        subjects.addAll(initialSubjectsToAdd);
-        for (int i = 0; i < 100; i++) {
-            var subjectDto = new SubjectDto(String.format("Dalykas (%s)", i), "Aprašas", null, null);
-            subjects.add(subjectDto);
-        }
-
-        subjects.stream()
-                .map(SubjectMapper::toSubject)
-                .forEach(subjectRepository::save);
-    }
+//
+//        List<SubjectDto> subjects = new ArrayList<>();
+//        subjects.addAll(initialSubjectsToAdd);
+//        for (int i = 0; i < 100; i++) {
+//            var subjectDto = new SubjectDto(String.format("Dalykas (%s)", i), "Aprašas", null, null);
+//            subjects.add(subjectDto);
+//        }
+//
+//        subjects.stream()
+//                .map(SubjectMapper::toSubject)
+//                .forEach(subjectRepository::save);
+//    }
 }

@@ -1,4 +1,4 @@
-import { Button, FormControl, Grid, InputLabel, MenuItem, OutlinedInput, Select, TextField } from "@mui/material";
+import { Button, FormControl, Grid, InputLabel, Menu, MenuItem, OutlinedInput, Select, TextField } from "@mui/material";
 import { Container, Stack } from "@mui/system";
 import { useState, useEffect } from "react";
 import { Link, useHref, useParams } from "react-router-dom";
@@ -11,6 +11,8 @@ export function EditSubject() {
         room: [],
     });
     const params = useParams();
+    const [modules, setModules] = useState([]);
+    const [module, setModule] = useState('');
     const listUrl = useHref('/subjects');
 
     useEffect(() => {
@@ -18,6 +20,12 @@ export function EditSubject() {
           .then((response) => response.json())
           .then(setSubject);
       }, []);
+
+    useEffect(() => {
+        fetch("api/v1/modules")
+        .then((response) => response.json())
+        .then(setModules);
+    }, []);
 
     const deleteSubject = (id) => {
         fetch("/api/v1/subjects/" + id, {
@@ -28,6 +36,10 @@ export function EditSubject() {
         })
         .then(() => window.location = listUrl);
     };
+
+    const handleEditSubject = (id) => {
+      
+    }
 
   return (
     <Container>
@@ -65,11 +77,12 @@ export function EditSubject() {
                 label="Modulio pavadinimas"
                 labelId="module-label"
                 id="module"
-                value=""
+                value={module}
                 onChange={(e) => setModule(e.target.value)}
               >
-                <MenuItem value="Pirmas modulis">Pirmas modulis</MenuItem>
-                <MenuItem value="Antras modulis">Antras modulis</MenuItem>
+                {modules.map((module) => (
+                  <MenuItem key={module.id} value={module.id}>{module.name}</MenuItem>
+                ))}
               </Select>
             </FormControl>
           </Grid>
@@ -90,7 +103,7 @@ export function EditSubject() {
 
           <Grid item lg={10}>
             <Stack direction="row" spacing={2}>
-              <Button variant="contained">
+              <Button variant="contained" onClick={() => handleEditSubject(subject.id)}>
                 Išsaugoti
               </Button>
 

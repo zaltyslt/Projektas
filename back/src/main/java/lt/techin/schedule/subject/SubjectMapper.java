@@ -8,7 +8,7 @@ public class SubjectMapper {
         subjectDto.setName(subject.getName());
         subjectDto.setDescription(subject.getDescription());
         subjectDto.setModule(subject.getModule());
-        subjectDto.setRooms(subject.getRooms());
+//        subjectDto.setRooms(subject.getRooms());
 
         return subjectDto;
     }
@@ -20,7 +20,7 @@ public class SubjectMapper {
         subjectEntityDto.setName(subject.getName());
         subjectEntityDto.setDescription(subject.getDescription());
         subjectEntityDto.setModule(subject.getModule());
-        subjectEntityDto.setRooms(subject.getRooms());
+//        subjectEntityDto.setRooms(subject.getRooms());
 
         return subjectEntityDto;
     }
@@ -31,7 +31,7 @@ public class SubjectMapper {
         subject.setName(subjectDto.getName());
         subject.setDescription(subjectDto.getDescription());
         subject.setModule(subjectDto.getModule());
-        subject.setRooms(subjectDto.getRooms());
+//        subject.setRooms(subjectDto.getRooms());
 
         return subject;
     }
@@ -43,7 +43,7 @@ public class SubjectMapper {
         subject.setName(subjectEntityDto.getName());
         subject.setDescription(subjectEntityDto.getDescription());
         subject.setModule(subjectEntityDto.getModule());
-        subject.setRooms(subjectEntityDto.getRooms());
+//        subject.setRooms(subjectEntityDto.getRooms());
 
         return subject;
     }
