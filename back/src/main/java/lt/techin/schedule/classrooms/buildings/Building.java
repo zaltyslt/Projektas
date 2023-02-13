@@ -12,7 +12,7 @@ public class Building {
 //    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String name;
+//    private String name;
 
     private BuildingType building;
 
@@ -28,13 +28,6 @@ public class Building {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 
     public BuildingType getBuilding() {
         return building;
@@ -62,7 +55,6 @@ public class Building {
     public String toString() {
         return "Building{" +
                 "id=" + id +
-                ", name='" + name + '\'' +
                 ", building=" + building +
                 '}';
     }

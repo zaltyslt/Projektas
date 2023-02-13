@@ -2,17 +2,18 @@ import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 
 export function UpdateClassroom() {
+  const [classroom, setClassroom] = useState({});
+  const [error, setError] = useState();
+  const [classroomName, setClassroomName] = useState("");
+
   const params = useParams({
     classroomName: "",
     building: "",
     description: "",
   });
 
-  const [classroom, setClassroom] = useState({});
-  const [error, setError] = useState();
-
   useEffect(() => {
-    fetch("/api/v1/classrooms/update/" + params.id)
+    fetch(`/api/v1/classrooms/classroom/${params.id}`)
       .then((response) => response.json())
       .then(setClassroom);
   }, []);
@@ -47,22 +48,22 @@ export function UpdateClassroom() {
         <legend>{params.classroomName}</legend>
         {error && <div classroomName="error">{error}</div>}
         <div>
-        <label>Klasės pavadinimas</label>
+          <label>Klasės pavadinimas</label>
         </div>
         <div>
-        <input
-          value={classroom.classroomName}
-          onChange={(e) => updateProperty("classroomName", e)}
-        />
+          <input
+            value={classroom.classroomName}
+            onChange={(e) => updateProperty("classroomName", e)}
+          />
         </div>
         <div>
-        <label>Klasės aprašymas</label>
+          <label>Klasės aprašymas</label>
         </div>
         <div>
-        <input
-          value={classroom.description}
-          onChange={(e) => updateProperty("description", e)}
-        />
+          <input
+            value={classroom.description}
+            onChange={(e) => updateProperty("description", e)}
+          />
         </div>
         <br></br>
         <button onClick={updateClassroom}>Išsaugoti</button>

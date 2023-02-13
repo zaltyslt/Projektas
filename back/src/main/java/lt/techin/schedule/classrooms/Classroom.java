@@ -1,5 +1,6 @@
 package lt.techin.schedule.classrooms;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lt.techin.schedule.classrooms.buildings.Building;
 import org.springframework.data.annotation.CreatedDate;
@@ -13,28 +14,23 @@ public class Classroom {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
-//    @NotNull
-//    @Size(min = 1, max = 5)
+
     @Column(name = "classroomName")
     private String classroomName;
     private String description;
-     @ManyToOne(fetch = FetchType.EAGER)
-     @JoinColumn(name = "building_id")
-     private Building building;
+    private BuildingType building;
+//     @ManyToOne(fetch = FetchType.EAGER)
+//     @JoinColumn(name = "building_id")
+//     private Building building;
 
     @CreatedDate
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createdDate;
     @LastModifiedDate
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private LocalDateTime modifiedDate;
 
     private boolean active;
-    public Building getBuilding() {
-        return building;
-    }
-
-    public void setBuilding(Building building) {
-        this.building = building;
-    }
 
     @PrePersist
     public void prePersist() {
@@ -74,6 +70,14 @@ public class Classroom {
         this.description = description;
     }
 
+    public BuildingType getBuilding() {
+        return building;
+    }
+
+    public void setBuilding(BuildingType building) {
+        this.building = building;
+    }
+
     public LocalDateTime getCreatedDate() {
         return createdDate;
     }
@@ -103,7 +107,12 @@ public class Classroom {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Classroom classroom = (Classroom) o;
-        return active == classroom.active && Objects.equals(id, classroom.id) && Objects.equals(classroomName, classroom.classroomName) && Objects.equals(description, classroom.description) && Objects.equals(building, classroom.building) && Objects.equals(createdDate, classroom.createdDate) && Objects.equals(modifiedDate, classroom.modifiedDate);
+        return active == classroom.active && Objects.equals(id, classroom.id)
+                && Objects.equals(classroomName, classroom.classroomName)
+                && Objects.equals(description, classroom.description)
+                && building == classroom.building
+                && Objects.equals(createdDate, classroom.createdDate)
+                && Objects.equals(modifiedDate, classroom.modifiedDate);
     }
 
     @Override

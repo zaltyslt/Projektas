@@ -4,14 +4,13 @@ import java.util.Objects;
 
 public class BuildingDto {
     private Long id;
-    private String name;
+//    private String name;
     private BuildingType building;
     public BuildingDto() {
     }
 
-    public BuildingDto(Long id, String name, BuildingType building) {
+    public BuildingDto(Long id, BuildingType building) {
         this.id = id;
-        this.name = name;
         this.building = building;
     }
 
@@ -23,13 +22,6 @@ public class BuildingDto {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 
     public BuildingType getBuilding() {
         return building;
@@ -44,19 +36,18 @@ public class BuildingDto {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         BuildingDto that = (BuildingDto) o;
-        return Objects.equals(id, that.id) && Objects.equals(name, that.name) && building == that.building;
+        return Objects.equals(id, that.id) && building == that.building;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, building);
+        return Objects.hash(id, building);
     }
 
     @Override
     public String toString() {
         return "BuildingDto{" +
                 "id=" + id +
-                ", name='" + name + '\'' +
                 ", building=" + building +
                 '}';
     }

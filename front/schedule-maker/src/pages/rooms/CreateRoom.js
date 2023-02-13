@@ -1,69 +1,117 @@
-import { useState } from 'react'
-import { useNavigate} from "react-router-dom"
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import {
+  Button,
+  Container,
+  FormControl,
+  Grid,
+  Select,
+  Stack,
+  TextField,
+  InputLabel,
+  MenuItem,
+} from "@mui/material";
+import { SelectChangeEvent } from "@mui/material/Select";
 
 export function CreateRoom(props) {
-    const [classroomName, setClassroomName] = useState("")
-    const [building, setBuildings] = useState("")
-    const [description, setDescription] = useState("")
-    
+  const [classroomName, setClassroomName] = useState("");
+  const [building, setBuilding] = useState("AKADEMIJA");
+  const [description, setDescription] = useState("");
 
-    let navigate = useNavigate();
+  let navigate = useNavigate();
 
-    const clear = () => {
-        setClassroomName("")
-        setDescription("")
-        
+  const clear = () => {
+    setClassroomName("");
+    setBuilding("");
+    setDescription("");
+  };
+
+  const applyResult = (result) => {
+    if (result.ok) {
+      clear();
+      window.alert("Sėkmingai pridėta");
+    } else {
+      window.alert("Nepavyko sukurti: " + result.status);
     }
+  };
 
-    const applyResult = (result) => {
-        if (result.ok) {
-            clear();
-        } else {
-            window.alert("Nepavyko sukurti: " + result.status)
-        }
-    }
+  const createClassroom = () => {
+    fetch("/api/v1/classrooms/create", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        classroomName,
+        description,
+        building,
+      }),
+    }).then(applyResult);
+  };
 
-    const createClassroom = () => {
-         fetch('/api/v1/classrooms/create', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                classroomName,
-                description,
-            })
-        }).then(applyResult)
-    }
+  const handleChange = (event: SelectChangeEvent) => {
+    setBuilding(event.target.value);
+  };
 
-    return (
-        <fieldset id="create">
-            <legend>Sukurti naują klasę</legend>
+  return (
+    <Container>
+      <h3>Pridėti naują klasę</h3>
+      <form>
+        <Grid container rowSpacing={2}>
+          <Grid item lg={10}>
+            {/* <label htmlFor="building">Pastatas</label> */}
+            <FormControl fullWidth>
+              <InputLabel id="building-label">Pastatas</InputLabel>
+              <Select
+                labelId="building-label"
+                id="building"
+                label="Pastatas"
+                value={building}
+                // onChange={(e) => setBuilding(e.target.value)}>
+                // <option value="AKADEMIJA">AKADEMIJA</option>
+                // <option value="TECHIN">TECHIN</option>
+                onChange={handleChange}
+              >
+                <MenuItem value="AKADEMIJA">AKADEMIJA</MenuItem>
+                <MenuItem value="TECHIN">TECHIN</MenuItem>
+              </Select>
+            </FormControl>
+          </Grid>
 
-            <div>
-                <label htmlFor="classroomName">Klasės vardas: </label>
-                <input
-                    id="classroomName"
-                    value={classroomName}
-                    onChange={
-                        (e) => setClassroomName(e.target.value)
-                    } />
-            </div>
+          <Grid item lg={10}>
+            <TextField
+              fullWidth
+              required
+              id="classroomName"
+              label="Klasės pavadinimas"
+              value={classroomName}
+              onChange={(e) => setClassroomName(e.target.value)}
+            ></TextField>
+          </Grid>
 
+          <Grid item lg={10}>
+            <TextField
+              fullWidth
+              multiline
+              label="Klasės aprašas"
+              id="description"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+            ></TextField>
+          </Grid>
 
-            <div>
-                <label htmlFor="description">Klasės aprašymas: </label>
-                <textarea
-                    id="description"
-                    value={description}
-                    onChange={
-                        (e) => setDescription(e.target.value)
-                    } />
-            </div>
-            <div>
-                <button onClick={createClassroom}>Sukurti</button>
-                <button onClick={() => navigate(-1)}>Grįžti</button>
-            </div>
-        </fieldset>
-    )
+          <Grid item lg={10}>
+            <Stack direction="row" spacing={2}>
+              <Button variant="contained" onClick={createClassroom}>
+                Sukurti
+              </Button>
+              <Button variant="contained" onClick={() => navigate(-1)}>
+                Grįžti
+              </Button>
+            </Stack>
+          </Grid>
+        </Grid>
+      </form>
+    </Container>
+  );
 }

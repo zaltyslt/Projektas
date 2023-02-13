@@ -10,12 +10,11 @@ import java.util.List;
 @Service
 public class ClassroomService {
     private final ClassroomRepository classroomRepository;
-    private final BuildingRepository buildingRepository;
+//    private final BuildingRepository buildingRepository;
 
     @Autowired
-    public ClassroomService(ClassroomRepository classroomRepository, BuildingRepository buildingRepository) {
+    public ClassroomService(ClassroomRepository classroomRepository) {
         this.classroomRepository = classroomRepository;
-        this.buildingRepository = buildingRepository;
     }
 
     public List<Classroom> getAll() {
@@ -31,6 +30,7 @@ public class ClassroomService {
         if (existingClassroom != null) {
             existingClassroom.setClassroomName(classroom.getClassroomName());
             existingClassroom.setDescription(classroom.getDescription());
+            existingClassroom.setBuilding(classroom.getBuilding());
             existingClassroom.setActive(classroom.isActive());
             return classroomRepository.save(existingClassroom);
         }
@@ -41,28 +41,19 @@ public class ClassroomService {
         return classroomRepository.findById(id).orElse(new Classroom());
     }
 
-//    public boolean deleteById(Long id) {
-//        try {
-//            classroomRepository.deleteById(id);
-//            return true;
-//        } catch (EmptyResultDataAccessException exception) {
-//            return false;
+//    public Classroom addClassroomToBuilding(Long classroomId, Long buildingId) {
+//        var existingClassroom = classroomRepository.findById(classroomId)
+//                .orElse(null);
+//        var existingBuilding = buildingRepository.findById(buildingId)
+//                .orElse(null);
+//        if (existingClassroom != null) {
+//            existingClassroom.setBuilding(existingBuilding);
+//            return classroomRepository.save(existingClassroom);
 //        }
+////        System.out.println(existingClassroom + " classroom");
+////        System.out.println(existingBuilding + "  building");
+//        return null;
 //    }
-
-    public Classroom addClassroomToBuilding(Long classroomId, Long buildingId) {
-        var existingClassroom = classroomRepository.findById(classroomId)
-                .orElse(null);
-        var existingBuilding = buildingRepository.findById(buildingId)
-                .orElse(null);
-        if (existingClassroom != null) {
-            existingClassroom.setBuilding(existingBuilding);
-            return classroomRepository.save(existingClassroom);
-        }
-//        System.out.println(existingClassroom + " classroom");
-//        System.out.println(existingBuilding + "  building");
-        return null;
-    }
 
 //    public Page<Classroom> getAll(Pageable pagination) {
 //        return classroomRepository.findAll(pagination);

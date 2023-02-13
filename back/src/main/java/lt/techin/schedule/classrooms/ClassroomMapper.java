@@ -6,7 +6,10 @@ public class ClassroomMapper {
         classroomDto.setId(classroom.getId());
         classroomDto.setClassroomName(classroom.getClassroomName());
         classroomDto.setDescription(classroom.getDescription());
+        classroomDto.setBuilding(classroom.getBuilding());
         classroomDto.setActive(classroom.isActive());
+        classroomDto.setCreatedDate(classroom.getCreatedDate());
+        classroomDto.setModifiedDate(classroom.getModifiedDate());
         return classroomDto;
     }
 
@@ -15,7 +18,10 @@ public class ClassroomMapper {
         classroom.setId(classroomDto.getId());
         classroom.setClassroomName(classroomDto.getClassroomName());
         classroom.setDescription(classroomDto.getDescription());
+        classroom.setBuilding(classroomDto.getBuilding());
         classroom.setActive(classroomDto.isActive());
+        classroom.setCreatedDate(classroomDto.getCreatedDate());
+        classroom.setModifiedDate(classroomDto.getModifiedDate());
         return classroom;
     }
 }

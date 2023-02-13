@@ -16,9 +16,11 @@ export function ViewRoom() {
   return (
     <div>
       <div>
-        <b>Klasės pavadinimas</b>
+      <h1>{classroom.classroomName}</h1>
       </div>
-      <div>{classroom.classroomName}</div>
+      <div>
+      <h5>Paskutinį kartą redaguota: {classroom.modifiedDate}</h5>
+      </div>
 
       <div>
         <b>Pastatas</b>
@@ -26,12 +28,12 @@ export function ViewRoom() {
       <div>{classroom.building}</div>
 
       <div>
-        <b>Klasės aprašymas</b>
+        <b>Klasės aprašas</b>
       </div>
       <div>{classroom.description}</div>
       <br></br>
       <div>
-        <Link to="/update/:id">
+        <Link to={`/update/${classroom.id}`}>
           <button>Redaguoti</button>
         </Link>
         <button onClick={() => navigate(-1)}>Grįžti</button>
