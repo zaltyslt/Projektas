@@ -1,6 +1,5 @@
 package lt.techin.schedule.shift;
 
-import java.math.BigDecimal;
 import java.text.DecimalFormat;
 
 public enum LessonTime {
@@ -10,7 +9,8 @@ public enum LessonTime {
     FIFTH("5", new float[]{12.00f, 12.45f}), SIXTH("6", new float[]{12.55f, 13.40f}),
     SEVENTH("7", new float[]{13.50f, 14.35f}), EIGHTH("8", new float[]{14.45f, 15.30f}),
     NINTH("9", new float[]{15.40f, 16.25f}), TENTH("10", new float[]{16.35f, 17.20f}),
-    ELEVENTH("11", new float[]{17.30f, 18.15f}), TWELFTH("12", new float[]{18.25f, 19.10f});
+    ELEVENTH("11", new float[]{17.30f, 18.15f}), TWELFTH("12", new float[]{18.25f, 19.10f}),
+    THIRTEENTH("13", new float[]{19.20f, 20.05f}), FOURTEENTH("14", new float[]{20.15f, 21.00f});
 
     private final int lessonName;
     private final float lessonStart;
@@ -54,6 +54,8 @@ public enum LessonTime {
             case 10 -> TENTH;
             case 11 -> ELEVENTH;
             case 12 -> TWELFTH;
+            case 13 -> THIRTEENTH;
+            case 14 -> FOURTEENTH;
             default -> null;
         };
     }

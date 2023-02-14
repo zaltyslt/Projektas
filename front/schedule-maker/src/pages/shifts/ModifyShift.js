@@ -7,6 +7,7 @@ import {
     MenuItem,
     OutlinedInput,
     Select,
+    FormHelperText,
     TextField,
   } from "@mui/material";
   import { Container, Stack } from "@mui/system";
@@ -24,11 +25,19 @@ export function ModifyShift() {
     const [currentShift, setCurrentShift] = useState([]);
 
     const [isValidName, setIsValidName] = useState(true);
+    const [isNameEmpty, setIsNameEmpty] = useState(false);
+
     const [isValidShiftTime, setIsValidShiftTime] = useState(true);
 
-    const [name, setShiftName] = useState("");
+    const [name, setName] = useState("");
     const [shiftStartingTime, setShiftStartingTime] = useState("1");
     const [shiftEndingTime, setShiftEndingTime] = useState("1");
+
+    const [successfulPost, setSuccessfulPost] = useState();
+    const [isPostUsed, setIsPostUsed] = useState(false);
+    const [shiftCreateMessageError, setShiftCreateMessageError] = useState([]);
+    const [isActive, setIsActive] = useState("");
+
 
     useEffect(() => {
         fetch( 'http://localhost:8080/api/v1/shift/view-shift/' + params.id)
@@ -38,15 +47,27 @@ export function ModifyShift() {
         });
     }, []);
 
-    useEffect(() => {
-        if (currentShift.startIntEnum && currentShift.endIntEnum && currentShift.name) {
-            setShiftStartingTime(currentShift.startIntEnum.toString());
-            setShiftEndingTime(currentShift.endIntEnum.toString());
-            setShiftName(currentShift.name);
-        } 
-    }, [currentShift])
+    const deactivateShift = ((shiftID) => {
+        fetch(
+            'http://localhost:8080/api/v1/shift/deactivate-shift/' + shiftID, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }
+        )
+    })
 
-    const ModifyShift = () => {
+    var startIntEnum;
+    var endIntEnum;
+
+    const modifyShift = (() => {
+        startIntEnum = shiftStartingTime;
+        endIntEnum = shiftEndingTime;
+        modifyShiftPutRequest();
+    })
+
+    const modifyShiftPutRequest = () => {
         fetch(
             'http://localhost:8080/api/v1/shift/modify-shift/' + params.id, {
                 method: 'PUT',
@@ -55,18 +76,50 @@ export function ModifyShift() {
                 },
                 body: JSON.stringify({
                     name,
-                    shiftStartingTime,
-                    shiftEndingTime,
+                    startIntEnum,
+                    endIntEnum,
+                    isActive,
                     registered: false
                 })
             }
         )
+        .then(response => response.json())
+        .then(data => {
+            handleAfterPost(data);
+        });
     }
+
+    useEffect(() => {
+        if (currentShift.startIntEnum && currentShift.endIntEnum && currentShift.name) {
+            setShiftStartingTime(currentShift.startIntEnum.toString());
+            setShiftEndingTime(currentShift.endIntEnum.toString());
+            setName(currentShift.name);
+            setIsActive(currentShift.isActive);
+        } 
+    }, [currentShift])
+
+
+    const handleAfterPost = ((data) => {
+        if ((Object.keys(data).length) === 0) {
+            setSuccessfulPost(true);
+        }
+        else {
+            setSuccessfulPost(false);
+            setShiftCreateMessageError(data);
+        }
+        setIsPostUsed(true);
+    })
 
     const badSymbols = "!@#$%^&*_+={}<>|~`\\\"\'";
 
     const setNameAndCheck = (name) => {
-        setShiftName(name);
+        setName(name);
+        if (name.length === 0) {
+            setIsNameEmpty(true);
+        }
+        else {
+            setIsNameEmpty(false);
+        }
         const isValid = name.split('').some(char => badSymbols.includes(char));
         if (isValid) {
             setIsValidName(false);
@@ -77,7 +130,7 @@ export function ModifyShift() {
     }
 
     useEffect(() => {
-        if (shiftStartingTime > shiftEndingTime) {
+        if (parseInt(shiftStartingTime) > parseInt(shiftEndingTime)) {
             setIsValidShiftTime(false);
         }
         else {
@@ -98,24 +151,30 @@ export function ModifyShift() {
         { value: '10', label: '10 pamoka' },
         { value: '11', label: '11 pamoka' },
         { value: '12', label: '12 pamoka' },
+        { value: '13', label: '13 pamoka' },
+        { value: '14', label: '14 pamoka' },
       ];
 
     return (
        <div>
          <Container>
             <h1>Redagavimas</h1> 
-            <h3>{name}</h3>
-            <span id="modified-date">Keista paskutinį kartą: {currentShift.modifiedDate}</span>
-               
+            <h3>{currentShift.name}</h3>
             <Grid container id="grid-input">
                 <Grid item lg={10}>
                     <TextField
                     fullWidth
+                    required
+                    error={!isValidName || isNameEmpty}
+                    helperText={
+                        !isValidName ? "Pavadinimas turi neleidžiamų simbolių." : 
+                        isNameEmpty ? "Pavadinimas negali būti tuščias" : null
+                    }
                     variant="outlined"
                     label="Pamainos pavadinimas"
                     id="name"
                     value={name}
-                    onChange={(e) => setName(e.target.value)}
+                    onChange={(e) => setNameAndCheck(e.target.value)}
                     ></TextField>
                 </Grid>
             </Grid>
@@ -126,8 +185,9 @@ export function ModifyShift() {
                     <Select
                     fullWidth
                     multiline
+                    error={!isValidShiftTime}
                     variant="outlined"
-                    label="Pamainos pradžia"
+                    label="Pamainos pradžia" 
                     id="description"
                     value={shiftStartingTime}
                     onChange={(e) => setShiftStartingTime(e.target.value)}>
@@ -137,14 +197,19 @@ export function ModifyShift() {
                         </MenuItem>
                     ))}
                     </Select>
+                    {!isValidShiftTime && (
+                    <FormHelperText error>
+                        Pamaina negali prasidėti vėliau negu pasibaigti.
+                    </FormHelperText>
+                    )}
                 </Grid>
-                
                 
                 <Grid item lg={2} id="grid-selector">
                     <h5>Pamainos pabaiga:</h5>
                     <Select
                     fullWidth
                     multiline
+                    error={!isValidShiftTime}
                     variant="outlined"
                     label="Pamainos pabaiga"
                     id="description"
@@ -156,18 +221,47 @@ export function ModifyShift() {
                         </MenuItem>
                     ))}
                     </Select>
+                    {!isValidShiftTime && (
+                    <FormHelperText error>
+                        Pamaina negali prasidėti vėliau negu pasibaigti.
+                    </FormHelperText>
+                    )}
                 </Grid> 
             </Grid>
             <Grid item lg={2}>
                 <Stack direction="row" spacing={2}>
-                    <Button variant="contained">
+                    <Button variant="contained" onClick={modifyShift}>
                         Išsaugoti
                     </Button>
                     <Link to="/shifts">
+                        <Button variant="contained" onClick={() => deactivateShift(currentShift.id)}> 
+                            Ištrinti
+                        </Button>
+                    </Link> 
+                    <Link to="/shifts">
                         <Button variant="contained">Grįžti</Button>
-                    </Link>
+                    </Link>     
                 </Stack>
             </Grid>
+            <Grid>
+                {isPostUsed ? (
+                    successfulPost ? (
+                        <div id="success-text"> Pamaina sėkmingai pakeista.</div>
+                        ) : 
+                        (
+                        <div id="error-text">
+                            <div>Nepavyko pakeisti pamainos.</div>
+                        {Object.keys(shiftCreateMessageError).map(key => (
+                        <div key={key} id="error-text"> {shiftCreateMessageError[key]} </div>
+                            ))}
+                        </div>
+                        )
+                    ) : 
+                    (
+                    <div></div>
+                    )}
+            </Grid>
+
         </Container>
         
         

@@ -1,5 +1,6 @@
 package lt.techin.schedule.shift;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lt.techin.schedule.tools.TextValid;
 import org.springframework.cglib.core.Local;
@@ -17,14 +18,14 @@ public class Shift {
     @TextValid(textMaximumLength = 30)
     private String name;
 
-    @TextValid(textMaximumLength = 6)
     private String shiftStartingTime;
 
-    @TextValid(textMaximumLength = 6)
     private String shiftEndingTime;
 
-    private String createdDate;
-    private String modifiedDate;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+    private LocalDateTime createdDate;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+    private LocalDateTime modifiedDate;
 
     private int startIntEnum;
     private int endIntEnum;
@@ -44,27 +45,37 @@ public class Shift {
 
     @PrePersist
     public void prePersist() {
-        LocalDateTime date = LocalDateTime.now();
-        modifiedDate = date.getDayOfMonth() + "-" + date.getMonthValue() + "-" + date.getYear() + " " + date.getHour() + ":" + date.getMinute();
-        createdDate = date.getDayOfMonth() + "-" + date.getMonthValue() + "-" + date.getYear() + " " + date.getHour() + ":" + date.getMinute();
+        modifiedDate = LocalDateTime.now();
+        createdDate = LocalDateTime.now();
     }
 
     @PreUpdate
     public void preUpdate() {
-        LocalDateTime date = LocalDateTime.now();
-        modifiedDate = date.getDayOfMonth() + "-" + date.getMonthValue() + "-" + date.getYear() + " " + date.getHour() + ":" + date.getMinute();
+        modifiedDate = LocalDateTime.now();
     }
 
-    public String getCreatedDate() {
+    public LocalDateTime getCreatedDate() {
         return createdDate;
     }
 
-    public String getModifiedDate() {
+    public LocalDateTime getModifiedDate() {
         return modifiedDate;
+    }
+
+    public void setCreatedDate(LocalDateTime createdDate) {
+        this.createdDate = createdDate;
+    }
+
+    public void setModifiedDate(LocalDateTime modifiedDate) {
+        this.modifiedDate = modifiedDate;
     }
 
     public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getName() {

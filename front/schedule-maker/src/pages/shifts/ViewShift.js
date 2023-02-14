@@ -1,9 +1,9 @@
-import { Button, Paper, Grid } from "@mui/material";
+import { Button, Grid } from "@mui/material";
 import { Container, Stack } from "@mui/system";
 
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
-import './ModifyShift.css';
+import './ViewShift.css';
 
 export function ViewShift() {
     
@@ -26,22 +26,25 @@ export function ViewShift() {
                     <Grid item lg={12}>
                         <header>
                             <h1>{currentShift.name}</h1>
-                            <span id="modified-date">Keista paskutinį kartą: {currentShift.modifiedDate}</span>
+                            <span id="modified-date">Paskutinį kartą redaguota: {currentShift.modifiedDate}</span>
                         </header>
                     </Grid>
+
                     <Grid item lg={12}>
-                        <h4>Pamainos Pradžia:</h4>
-                        <p>{currentShift.shiftStartingTime}</p>
+                        <h4>Pamainos pradžia:</h4>
+                        <h5>{currentShift.shiftStartingTime}</h5>
                     </Grid>
+
                     <Grid item lg={12}>
-                        <h4>Pamainos Pabaiga:</h4>
-                        <p>{currentShift.shiftEndingTime}</p>
+                        <h4>Pamainos pabaiga:</h4>
+                        <h5>{currentShift.shiftEndingTime}</h5>
                     </Grid>
+
                     <Grid item lg={12}>
                         <h4>Pamaina:</h4>
                         {currentShift.isActive ? 
-                            <p>Aktyvi</p> :
-                            <p>Neaktyvi</p>
+                            <h5>Aktyvi</h5> :
+                            <h5>Neaktyvi</h5>
                         }
                     </Grid>
                 </Grid>
@@ -54,12 +57,9 @@ export function ViewShift() {
                         <Link to="/shifts">
                             <Button variant="contained">Grįžti</Button>
                         </Link>
-                        <Button variant="contained"> Deaktyvuoti </Button>
                     </Stack>
                 </Grid>
-            </Container>
-          
-                        
+            </Container>           
         </div>
     )
 }

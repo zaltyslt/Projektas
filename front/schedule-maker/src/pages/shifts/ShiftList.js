@@ -16,7 +16,6 @@ import {
     TextField,
   } from "@mui/material";
 import { Container } from "@mui/system";
-
 import { useEffect, useState } from "react";
 import { Link, } from "react-router-dom";
 import './ShiftList.css';
@@ -60,6 +59,11 @@ export function ShiftList() {
     };
     
     useEffect(() => {
+        getActiveShifts();
+        getInactiveShifts();
+    }, []);
+
+    const getActiveShifts = (() => {
         fetch( 'http://localhost:8080/api/v1/shift/get-active' )
         .then((response) => response.json())
         .then(data => {
@@ -69,10 +73,9 @@ export function ShiftList() {
                 setActiveShifts([data]);
             }
         });
-        }, 
-    []);
+    })
 
-    useEffect(() => {
+    const getInactiveShifts = (() => {
         fetch( 'http://localhost:8080/api/v1/shift/get-inactive' )
         .then((response) => response.json())
         .then(data => {
@@ -82,12 +85,27 @@ export function ShiftList() {
                 setInactiveShifts([data]);
             }
         });
-        }, 
-    []);
+    })
+
+    const activateShift = ((shiftID) => {
+        fetch(
+            'http://localhost:8080/api/v1/shift/activate-shift/' + shiftID, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }
+        ).then(
+            getActiveShifts()
+        ).then(
+            getInactiveShifts()
+        )
+    })
 
     useEffect(() => {
         if (typeof activeShifts !== 'undefined') {
             setCurrentActiveShifts(activeShifts);
+            console.log(activeShifts.length)
         }
         },[activeShifts]);
 
@@ -181,7 +199,7 @@ export function ShiftList() {
                         </TableFooter>
                     </Table>
                 </TableContainer>
-            </Container>
+            
 
             <FormGroup>
                 <FormControlLabel
@@ -219,7 +237,9 @@ export function ShiftList() {
                                         {shift.shiftTime}
                                     </TableCell> 
                                     <TableCell>
-                                        <Button variant="contained">Aktyvuoti</Button>
+                                    <Link to="/shifts">
+                                        <Button variant="contained" onClick={() => activateShift(shift.id)}>Atstatyti</Button>
+                                    </Link>
                                     </TableCell>
                                 </TableRow>
                             ))}
@@ -253,6 +273,7 @@ export function ShiftList() {
                     </Table>
                 </TableContainer>
             )}    
+            </Container>
         </div>
     )
 }

@@ -1,14 +1,11 @@
 import {
   Button,
   Container,
-  fabClasses,
-  FormControl,
   Grid,
-  InputLabel,
   MenuItem,
-  OutlinedInput,
   Select,
   Stack,
+  FormHelperText,
   TextField,
 } from "@mui/material";
 
@@ -20,32 +17,41 @@ export function AddShift() {
 
     const [name, setName] = useState("")
     const [isValidName, setIsValidName] = useState(true);
+    const [isNameEmpty, setIsNameEmpty] = useState(false);
 
     const [shiftStartingTime, setShiftStartingTime] = useState("1");
     const [shiftEndingTime, setShiftEndingTime] = useState("1");
     const [isValidShiftTime, setIsValidShiftTime] = useState(true);
+   
+    const isActive = true;
 
-    const [isActive, setIsActive] = useState(true);
-
-    const [shiftCreateMessageError, setShiftCreateMessageError] = useState([]);
     const [successfulPost, setSuccessfulPost] = useState();
     const [isPostUsed, setIsPostUsed] = useState(false);
+    const [shiftCreateMessageError, setShiftCreateMessageError] = useState([]);
+
 
     const badSymbols = "!@#$%^&*_+={}<>|~`\\\"\'";
 
+
     const setNameAndCheck = (name) => {
         setName(name)
-        const isValid = name.split('').some(char => badSymbols.includes(char));
-        if (isValid) {
-            setIsValidName(false);
+        if (name.length === 0) {
+            setIsNameEmpty(true);
         }
         else {
+            setIsNameEmpty(false);
+        }
+        const isValid = name.split('').some(char => badSymbols.includes(char));
+        if (!isValid) {
             setIsValidName(true);
+        }
+        else {
+            setIsValidName(false);
         }
     }
 
     useEffect(() => {
-        if (shiftStartingTime > shiftEndingTime) {
+        if (parseInt(shiftStartingTime) > parseInt(shiftEndingTime)) {
             setIsValidShiftTime(false);
         }
         else {
@@ -53,7 +59,17 @@ export function AddShift() {
         }
     }, [shiftStartingTime, shiftEndingTime]);
 
-    const createShift = () =>  {
+
+    var startIntEnum;
+    var endIntEnum;
+
+    const createShift = (() => {
+        startIntEnum = shiftStartingTime;
+        endIntEnum = shiftEndingTime;
+        createShiftPostRequest();
+    })
+
+    const createShiftPostRequest = () =>  {
         fetch(
             'http://localhost:8080/api/v1/shift/add-shift', {
                 method: 'POST',
@@ -62,8 +78,8 @@ export function AddShift() {
                 },
                 body: JSON.stringify({
                     name,
-                    shiftStartingTime,
-                    shiftEndingTime,
+                    startIntEnum,
+                    endIntEnum,
                     isActive,
                     registered: false
                 })
@@ -78,7 +94,6 @@ export function AddShift() {
     const handleAfterPost = ((data) => {
             if ((Object.keys(data).length) === 0) {
                 setSuccessfulPost(true);
-                console.log(isPostUsed)
             }
             else {
                 setSuccessfulPost(false);
@@ -101,6 +116,8 @@ export function AddShift() {
         { value: '10', label: '10 pamoka' },
         { value: '11', label: '11 pamoka' },
         { value: '12', label: '12 pamoka' },
+        { value: '13', label: '13 pamoka' },
+        { value: '14', label: '14 pamoka' },
       ];
 
     return (
@@ -112,14 +129,17 @@ export function AddShift() {
                     <TextField
                     fullWidth
                     required
-                    error={isValidName}
-                    helperText={isValidName && "Dalyko pavadinimas yra privalomas."}
+                    error={!isValidName || isNameEmpty}
+                    helperText={
+                        !isValidName ? "Pavadinimas turi neleidžiamų simbolių." : 
+                        isNameEmpty ? "Pavadinimas negali būti tuščias" : null
+                    }
                     variant="outlined"
                     label="Dalyko pavadinimas"
                     id="name"
                     name="name"
                     value={name}
-                    onChange={(e) => setName(e.target.value)}
+                    onChange={(e) => setNameAndCheck(e.target.value)}
                     ></TextField>
                 </Grid>
             </Grid>
@@ -130,6 +150,7 @@ export function AddShift() {
                     <Select
                     fullWidth
                     multiline
+                    error={!isValidShiftTime}
                     variant="outlined"
                     label="Pamainos pradžia"
                     id="description"
@@ -141,13 +162,19 @@ export function AddShift() {
                         </MenuItem>
                     ))}
                     </Select>
+                    {!isValidShiftTime && (
+                    <FormHelperText error>
+                        Pamaina negali prasidėti vėliau negu pasibaigti.
+                    </FormHelperText>
+                    )}
                 </Grid>
-                
+    
                 <Grid item lg={2} id="grid-selector">
                     <h5>Pamainos pabaiga:</h5>
                     <Select
                     fullWidth
                     multiline
+                    error={!isValidShiftTime}
                     variant="outlined"
                     label="Pamainos pabaiga"
                     id="description"
@@ -159,28 +186,13 @@ export function AddShift() {
                         </MenuItem>
                     ))}
                     </Select>
+                    {!isValidShiftTime && (
+                    <FormHelperText error>
+                        Pamaina negali prasidėti vėliau negu pasibaigti.
+                    </FormHelperText>
+                    )}
                 </Grid>
             </Grid>
-
-            <h5>Pamaina aktyvi:</h5>
-            <Grid item lg={2} id="grid-selector">
-                <Select
-                fullWidth
-                multiline
-                variant="outlined"
-                label="Pamainos pabaiga"
-                id="description"
-                value={isActive}
-                onChange={(e) => setIsActive(e.target.value)}>
-                    <MenuItem value="true">
-                    Taip
-                    </MenuItem>
-                    <MenuItem value="false">
-                    Ne
-                    </MenuItem>
-                </Select>
-            </Grid>
-
 
             <Grid item lg={2}>
                 <Stack direction="row" spacing={2}>
@@ -192,104 +204,14 @@ export function AddShift() {
                     </Link>
                 </Stack>
             </Grid>
-
-        {/* <table id="shift-add">
-            <tbody>
-                <tr>
-                    <td>Pavadinimas:</td>
-                    <td>
-                        <form>
-                            <input 
-                                type="text" id="name" value={name}
-                                onChange={(e) => setNameAndCheck(e.target.value)}
-                                style={isValidName ? {borderColor: "black"} : {borderColor: "red"}}
-                            >
-                            </input>
-                        </form>
-                    </td>  
-                </tr>
-                {isValidName ? 
-                    <tr><td></td></tr> :
-                    <tr><td id="error-text"> Negalimas Simbolis Panaudotas Pavadinime! </td></tr>
-                }
-                <tr>
-                    <td>Pamainos Pradžia:</td>
-                    <td>
-                        <form>
-                            <select
-                                id="shift-start" value={shiftStartingTime} onChange={(e) => setShiftStartingTime(e.target.value)}>
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                                <option value="3">3</option>
-                                <option value="4">4</option>
-                                <option value="5">5</option>
-                                <option value="6">6</option>
-                                <option value="7">7</option>
-                                <option value="8">8</option>
-                                <option value="9">9</option>
-                                <option value="10">10</option>
-                                <option value="11">11</option>
-                                <option value="12">12</option>
-                            </select>
-                        </form>
-                    </td>
-                    {isValidShiftTime ?
-                        <td></td>:
-                        <td id="error-text"> Pamainos Laikas Negalimas!</td>
-                    }
-                </tr>
-                <tr>
-                    <td>Pamainos Pabaiga:</td>
-                    <td>
-                        <form>
-                            <select
-                                id="shift-end" value={shiftEndingTime} onChange={(e) => setShiftEndingTime(e.target.value)}>
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                                <option value="3">3</option>
-                                <option value="4">4</option>
-                                <option value="5">5</option>
-                                <option value="6">6</option>
-                                <option value="7">7</option>
-                                <option value="8">8</option>
-                                <option value="9">9</option>
-                                <option value="10">10</option>
-                                <option value="11">11</option>
-                                <option value="12">12</option>
-                            </select>
-                        </form>
-                    </td>
-                    {isValidShiftTime ?
-                        <td></td>:
-                        <td id="error-text"> Pamainos Laikas Negalimas!</td>
-                    }
-                </tr>
-                <tr>
-                    <td>Pamaina Aktyvi:</td>
-                    <td>
-                        <select
-                            id="shift-active" value={isActive} onChange={(e) => setIsActive(e.target.value)}>
-                            <option value="true">Taip</option>
-                            <option value="false">Ne</option>
-                        </select>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <button onClick={() => createShift()}>Sukurti Naują Pamainą</button>
-                    </td>
-                </tr>               
-            </tbody>
-        </table> */}
-
-            <footer>
+            <Grid>
                 {isPostUsed ? (
                     successfulPost ? (
-                        <div id="success-text"> Pamaina Sėkmingai Pridėta!</div>
+                        <div id="success-text"> Pamaina sėkmingai pridėta.</div>
                         ) : 
                         (
                         <div id="error-text">
-                            <div>Nepavyko Sukurti Pamainos</div>
+                            <div>Nepavyko sukurti pamainos.</div>
                         {Object.keys(shiftCreateMessageError).map(key => (
                         <div key={key} id="error-text"> {shiftCreateMessageError[key]} </div>
                             ))}
@@ -299,7 +221,7 @@ export function AddShift() {
                     (
                     <div></div>
                     )}
-            </footer>
+            </Grid>
         </Container>
     </div>
     )
