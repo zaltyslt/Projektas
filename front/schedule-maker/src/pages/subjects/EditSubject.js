@@ -3,7 +3,6 @@ import {
   FormControl,
   Grid,
   InputLabel,
-  Menu,
   MenuItem,
   OutlinedInput,
   Select,
@@ -61,7 +60,8 @@ export function EditSubject() {
         name, 
         description
       }),
-    });
+    })
+    .then(() => window.location = listUrl);
   };
 
   return (
