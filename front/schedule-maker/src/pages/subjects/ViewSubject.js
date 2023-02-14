@@ -12,7 +12,6 @@ export function ViewSubject() {
       .then((response) => response.json())
       .then((data) => {
         setSubject(data);
-        console.log(data);
       });
   }, []);
 

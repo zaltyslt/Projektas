@@ -1,5 +1,6 @@
 package lt.techin.schedule.subject;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lt.techin.schedule.module.Module;
 import lt.techin.schedule.room.Room;
@@ -35,12 +36,14 @@ public class Subject {
 //    private Set<Room> rooms;
 
     @CreatedDate
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime createdDate;
 
     @CreatedBy
     private String createdBy;
 
     @LastModifiedDate
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime modifiedDate;
 
     @LastModifiedBy
