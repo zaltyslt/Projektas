@@ -1,6 +1,6 @@
-package lt.techin.Schedule;
+package lt.techin.schedule;
 
-import lt.techin.Schedule.tools.TextValidator;
+import lt.techin.schedule.tools.TextValidator;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

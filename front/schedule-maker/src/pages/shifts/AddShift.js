@@ -1,3 +1,17 @@
+import {
+  Button,
+  Container,
+  fabClasses,
+  FormControl,
+  Grid,
+  InputLabel,
+  MenuItem,
+  OutlinedInput,
+  Select,
+  Stack,
+  TextField,
+} from "@mui/material";
+
 import { useEffect, useState } from "react"
 import { Link } from "react-router-dom";
 import './AddShift.css';
@@ -39,7 +53,7 @@ export function AddShift() {
         }
     }, [shiftStartingTime, shiftEndingTime]);
 
-    const CreateShift = () =>  {
+    const createShift = () =>  {
         fetch(
             'http://localhost:8080/api/v1/shift/add-shift', {
                 method: 'POST',
@@ -74,10 +88,112 @@ export function AddShift() {
         }
     )
 
+    const lessonTimes = [
+        { value: '1', label: '1 pamoka' },
+        { value: '2', label: '2 pamoka' },
+        { value: '3', label: '3 pamoka' },
+        { value: '4', label: '4 pamoka' },
+        { value: '5', label: '5 pamoka' },
+        { value: '6', label: '6 pamoka' },
+        { value: '7', label: '7 pamoka' },
+        { value: '8', label: '8 pamoka' },
+        { value: '9', label: '9 pamoka' },
+        { value: '10', label: '10 pamoka' },
+        { value: '11', label: '11 pamoka' },
+        { value: '12', label: '12 pamoka' },
+      ];
+
     return (
     <div>
-        <h4> Pridėti naują pamainą </h4>
-        <table id="shift-add">
+        <Container>
+            <h3> Pridėti naują pamainą </h3>
+            <Grid container id="grid-input">
+                <Grid item lg={10}>
+                    <TextField
+                    fullWidth
+                    required
+                    error={isValidName}
+                    helperText={isValidName && "Dalyko pavadinimas yra privalomas."}
+                    variant="outlined"
+                    label="Dalyko pavadinimas"
+                    id="name"
+                    name="name"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    ></TextField>
+                </Grid>
+            </Grid>
+           
+            <Grid container rowSpacing={2}>
+                <Grid item lg={2} id="grid-selector">
+                    <h5>Pamainos pradžia:</h5>
+                    <Select
+                    fullWidth
+                    multiline
+                    variant="outlined"
+                    label="Pamainos pradžia"
+                    id="description"
+                    value={shiftStartingTime}
+                    onChange={(e) => setShiftStartingTime(e.target.value)}>
+                    {lessonTimes.map((lessonTime) => (
+                        <MenuItem key={lessonTime.value} value={lessonTime.value}>
+                        {lessonTime.label}
+                        </MenuItem>
+                    ))}
+                    </Select>
+                </Grid>
+                
+                <Grid item lg={2} id="grid-selector">
+                    <h5>Pamainos pabaiga:</h5>
+                    <Select
+                    fullWidth
+                    multiline
+                    variant="outlined"
+                    label="Pamainos pabaiga"
+                    id="description"
+                    value={shiftEndingTime}
+                    onChange={(e) => setShiftEndingTime(e.target.value)}>
+                    {lessonTimes.map((lessonTime) => (
+                        <MenuItem key={lessonTime.value} value={lessonTime.value}>
+                        {lessonTime.label}
+                        </MenuItem>
+                    ))}
+                    </Select>
+                </Grid>
+            </Grid>
+
+            <h5>Pamaina aktyvi:</h5>
+            <Grid item lg={2} id="grid-selector">
+                <Select
+                fullWidth
+                multiline
+                variant="outlined"
+                label="Pamainos pabaiga"
+                id="description"
+                value={isActive}
+                onChange={(e) => setIsActive(e.target.value)}>
+                    <MenuItem value="true">
+                    Taip
+                    </MenuItem>
+                    <MenuItem value="false">
+                    Ne
+                    </MenuItem>
+                </Select>
+            </Grid>
+
+
+            <Grid item lg={2}>
+                <Stack direction="row" spacing={2}>
+                    <Button variant="contained" onClick={createShift}>
+                        Išsaugoti
+                    </Button>
+                    <Link to="/shifts">
+                        <Button variant="contained">Grįžti</Button>
+                    </Link>
+                </Stack>
+            </Grid>
+
+        {/* <table id="shift-add">
             <tbody>
                 <tr>
                     <td>Pavadinimas:</td>
@@ -160,33 +276,31 @@ export function AddShift() {
                 </tr>
                 <tr>
                     <td>
-                        <button onClick={() => CreateShift()}>Sukurti Naują Pamainą</button>
+                        <button onClick={() => createShift()}>Sukurti Naują Pamainą</button>
                     </td>
                 </tr>               
             </tbody>
-        </table>
+        </table> */}
 
-        <footer>
-            {isPostUsed ? (
-                successfulPost ? (
-                    <div id="success-text"> Pamaina Sėkmingai Pridėta!</div>
+            <footer>
+                {isPostUsed ? (
+                    successfulPost ? (
+                        <div id="success-text"> Pamaina Sėkmingai Pridėta!</div>
+                        ) : 
+                        (
+                        <div id="error-text">
+                            <div>Nepavyko Sukurti Pamainos</div>
+                        {Object.keys(shiftCreateMessageError).map(key => (
+                        <div key={key} id="error-text"> {shiftCreateMessageError[key]} </div>
+                            ))}
+                        </div>
+                        )
                     ) : 
                     (
-                    <div id="error-text">
-                        <div>Nepavyko Sukurti Pamainos</div>
-                    {Object.keys(shiftCreateMessageError).map(key => (
-                    <div key={key} id="error-text"> {shiftCreateMessageError[key]} </div>
-                        ))}
-                    </div>
-                    )
-                ) : 
-                (
-                <div></div>
-                )}
-        </footer>
-        <button> 
-                <Link to="/shifts" id="navigation-button">Grįžti atgal</Link>
-        </button>
+                    <div></div>
+                    )}
+            </footer>
+        </Container>
     </div>
     )
 }

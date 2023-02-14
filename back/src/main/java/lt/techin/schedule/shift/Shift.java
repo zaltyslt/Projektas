@@ -1,7 +1,8 @@
 package lt.techin.schedule.shift;
 
 import jakarta.persistence.*;
-import lt.techin.Schedule.tools.TextValid;
+import lt.techin.schedule.tools.TextValid;
+import org.springframework.cglib.core.Local;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -22,8 +23,8 @@ public class Shift {
     @TextValid(textMaximumLength = 6)
     private String shiftEndingTime;
 
-    private LocalDateTime createdDate;
-    private LocalDateTime modifiedDate;
+    private String createdDate;
+    private String modifiedDate;
 
     private int startIntEnum;
     private int endIntEnum;
@@ -43,20 +44,22 @@ public class Shift {
 
     @PrePersist
     public void prePersist() {
-        createdDate = LocalDateTime.now();
-        modifiedDate = LocalDateTime.now();
+        LocalDateTime date = LocalDateTime.now();
+        modifiedDate = date.getDayOfMonth() + "-" + date.getMonthValue() + "-" + date.getYear() + " " + date.getHour() + ":" + date.getMinute();
+        createdDate = date.getDayOfMonth() + "-" + date.getMonthValue() + "-" + date.getYear() + " " + date.getHour() + ":" + date.getMinute();
     }
 
     @PreUpdate
     public void preUpdate() {
-        modifiedDate = LocalDateTime.now();
+        LocalDateTime date = LocalDateTime.now();
+        modifiedDate = date.getDayOfMonth() + "-" + date.getMonthValue() + "-" + date.getYear() + " " + date.getHour() + ":" + date.getMinute();
     }
 
-    public LocalDateTime getCreatedDate() {
+    public String getCreatedDate() {
         return createdDate;
     }
 
-    public LocalDateTime getModifiedDate() {
+    public String getModifiedDate() {
         return modifiedDate;
     }
 

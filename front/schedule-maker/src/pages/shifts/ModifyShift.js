@@ -1,6 +1,21 @@
+import {
+    Button,
+    FormControl,
+    Grid,
+    InputLabel,
+    Menu,
+    MenuItem,
+    OutlinedInput,
+    Select,
+    TextField,
+  } from "@mui/material";
+  import { Container, Stack } from "@mui/system";
+
+  import { Link } from "react-router-dom";
+
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import './ModifyShift.css';
 
 export function ModifyShift() {
 
@@ -70,9 +85,99 @@ export function ModifyShift() {
         }
     }, [shiftStartingTime, shiftEndingTime]);
 
+    const lessonTimes = [
+        { value: '1', label: '1 pamoka' },
+        { value: '2', label: '2 pamoka' },
+        { value: '3', label: '3 pamoka' },
+        { value: '4', label: '4 pamoka' },
+        { value: '5', label: '5 pamoka' },
+        { value: '6', label: '6 pamoka' },
+        { value: '7', label: '7 pamoka' },
+        { value: '8', label: '8 pamoka' },
+        { value: '9', label: '9 pamoka' },
+        { value: '10', label: '10 pamoka' },
+        { value: '11', label: '11 pamoka' },
+        { value: '12', label: '12 pamoka' },
+      ];
+
     return (
        <div>
-        <h4>Redaguoti Pamainą:</h4>
+         <Container>
+            <h1>Redagavimas</h1> 
+            <h3>{name}</h3>
+            <span id="modified-date">Keista paskutinį kartą: {currentShift.modifiedDate}</span>
+               
+            <Grid container id="grid-input">
+                <Grid item lg={10}>
+                    <TextField
+                    fullWidth
+                    variant="outlined"
+                    label="Pamainos pavadinimas"
+                    id="name"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    ></TextField>
+                </Grid>
+            </Grid>
+
+            <Grid container rowSpacing={2}>
+                <Grid item lg={2} id="grid-selector">
+                    <h5>Pamainos pradžia:</h5>
+                    <Select
+                    fullWidth
+                    multiline
+                    variant="outlined"
+                    label="Pamainos pradžia"
+                    id="description"
+                    value={shiftStartingTime}
+                    onChange={(e) => setShiftStartingTime(e.target.value)}>
+                    {lessonTimes.map((lessonTime) => (
+                        <MenuItem key={lessonTime.value} value={lessonTime.value}>
+                        {lessonTime.label}
+                        </MenuItem>
+                    ))}
+                    </Select>
+                </Grid>
+                
+                
+                <Grid item lg={2} id="grid-selector">
+                    <h5>Pamainos pabaiga:</h5>
+                    <Select
+                    fullWidth
+                    multiline
+                    variant="outlined"
+                    label="Pamainos pabaiga"
+                    id="description"
+                    value={shiftEndingTime}
+                    onChange={(e) => setShiftEndingTime(e.target.value)}>
+                    {lessonTimes.map((lessonTime) => (
+                        <MenuItem key={lessonTime.value} value={lessonTime.value}>
+                        {lessonTime.label}
+                        </MenuItem>
+                    ))}
+                    </Select>
+                </Grid> 
+            </Grid>
+            <Grid item lg={2}>
+                <Stack direction="row" spacing={2}>
+                    <Button variant="contained">
+                        Išsaugoti
+                    </Button>
+                    <Link to="/shifts">
+                        <Button variant="contained">Grįžti</Button>
+                    </Link>
+                </Stack>
+            </Grid>
+        </Container>
+        
+        
+        
+        
+        
+        
+        
+        
+        {/* <h4>Redaguoti Pamainą:</h4>
         <table>
             <tbody>
                 <tr>
@@ -156,7 +261,7 @@ export function ModifyShift() {
         </button>
         <button onClick={() => ModifyShift()}> 
             Pakeisti Duomenis
-        </button>
+        </button> */}
        </div>
     )
 }

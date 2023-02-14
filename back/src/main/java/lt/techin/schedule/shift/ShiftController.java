@@ -81,7 +81,7 @@ public class ShiftController {
     @PutMapping("/modify-shift/{shiftID}")
     public @ResponseBody Map<String, String> modifyShift(@PathVariable Long shiftID, @RequestBody @Valid Shift shiftToChange, BindingResult bindingResult) {
         Map<String, String> response = new HashMap<>();
-        
+
         if (bindingResult.hasErrors()) {
             List<ObjectError> errors = bindingResult.getAllErrors();
             for (int x = 0; x < bindingResult.getAllErrors().size(); x++) {

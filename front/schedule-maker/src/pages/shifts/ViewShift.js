@@ -1,5 +1,9 @@
+import { Button, Paper, Grid } from "@mui/material";
+import { Container, Stack } from "@mui/system";
+
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
+import './ModifyShift.css';
 
 export function ViewShift() {
     
@@ -17,44 +21,44 @@ export function ViewShift() {
 
     return (
         <div>
-            <h4>Pasirinkta Pamaina:</h4>
-            <table>
-                <tbody>
-                    <tr>
-                        <td>Keista Paskutinį Kartą:</td>
-                        <td>{currentShift.modifiedDate}</td>
-                    </tr>
-                    <tr>
-                        <td>Pavadinimas:</td>
-                        <td>{currentShift.name}</td>
-                    </tr>
-                    <tr>
-                        <td>Pamainos Pradžia:</td>
-                        <td>{currentShift.shiftStartingTime}</td>
-                    </tr>
-                    <tr>
-                        <td>Pamainos Pabaiga:</td>
-                        <td>{currentShift.shiftEndingTime}</td>
-                    </tr>
-                    <tr>
-                        <td>Pamaina:</td>
+            <Container>
+                <Grid container rowSpacing={5}>
+                    <Grid item lg={12}>
+                        <header>
+                            <h1>{currentShift.name}</h1>
+                            <span id="modified-date">Keista paskutinį kartą: {currentShift.modifiedDate}</span>
+                        </header>
+                    </Grid>
+                    <Grid item lg={12}>
+                        <h4>Pamainos Pradžia:</h4>
+                        <p>{currentShift.shiftStartingTime}</p>
+                    </Grid>
+                    <Grid item lg={12}>
+                        <h4>Pamainos Pabaiga:</h4>
+                        <p>{currentShift.shiftEndingTime}</p>
+                    </Grid>
+                    <Grid item lg={12}>
+                        <h4>Pamaina:</h4>
                         {currentShift.isActive ? 
-                            <td>Aktyvi</td> :
-                            <td>Neaktyvi</td>
+                            <p>Aktyvi</p> :
+                            <p>Neaktyvi</p>
                         }
-                    </tr>
-                </tbody>
-            </table>
+                    </Grid>
+                </Grid>
+                <Grid item lg={12}>
+                    <Stack direction="row" spacing={2}>
+                        <Link to={"/modify-shift/" + currentShift.id}>
+                            <Button variant="contained">Redaguoti</Button>
+                        </Link>
 
-            <button> 
-                <Link to="/shifts" id="navigation-button">Grįžti atgal</Link>
-            </button>
-            <button> 
-            <Link to={"/modify-shift/" + currentShift.id}id="navigation-button"> Redaguoti</Link>
-            </button>
-            <button> 
-                <Link to="/shifts" id="navigation-button">Deaktyvuoti</Link>
-            </button>
+                        <Link to="/shifts">
+                            <Button variant="contained">Grįžti</Button>
+                        </Link>
+                        <Button variant="contained"> Deaktyvuoti </Button>
+                    </Stack>
+                </Grid>
+            </Container>
+          
                         
         </div>
     )
