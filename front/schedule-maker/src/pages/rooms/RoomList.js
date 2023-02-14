@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+// import * as React from "react";
+import { useEffect, useState, React } from "react";
 import { Link } from "react-router-dom";
 import {
   Button,
@@ -33,14 +34,20 @@ export function RoomList() {
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
   const [isChecked, setChecked] = useState(false);
 
-  // const JSON_HEADERS = {
-  //   "Content-Type": "application/json",
-  // };
-
   const fetchClassrooms = () => {
     fetch("/api/v1/classrooms")
       .then((responce) => responce.json())
       .then((jsonResponce) => setClassrooms(jsonResponce));
+  };
+
+  const enableClassroom = (event, classroom) => {
+    console.log(classroom)
+    fetch(`/api/v1/classrooms/enable/${classroom.id}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      }
+    }).then(fetchClassrooms);
   };
 
   useEffect(() => {
@@ -51,53 +58,67 @@ export function RoomList() {
     if (building === "All") {
       return String(classroom.classroomName)
         .toLowerCase()
-        .includes(filter.toLowerCase());
+        .includes(filter.toLowerCase()) 
+        && classroom.active === true;
     } else {
       return (
         String(classroom.classroomName)
           .toLowerCase()
-          .includes(filter.toLowerCase()) && classroom.building === building
+          .includes(filter.toLowerCase()) && classroom.building === building 
+          && classroom.active === true
       );
     }
   });
 
-  // const indexOfLastClassroom = currentPage * classroomsPerPage;
-  // const indexOfFirstClassroom = indexOfLastClassroom - classroomsPerPage;
-  // const currentClassrooms = filteredClassrooms.slice(
-  //   indexOfFirstClassroom,
-  //   indexOfLastClassroom
-  // );
+const filteredDisabledClassrooms = classrooms.filter((classroom) => {
+    if (building === "All") {
+      return String(classroom.classroomName)
+        .toLowerCase()
+        .includes(filter.toLowerCase()) 
+        && classroom.active === false;
+    } else {
+      return (
+        String(classroom.classroomName)
+          .toLowerCase()
+          .includes(filter.toLowerCase()) && classroom.building === building 
+          && classroom.active === false
+      );
+    }
+  });
+  
 
-  const filteredActiveClassrooms = classrooms.filter(
-    (classroom) =>
-        String(classroom.classroomName).toLowerCase().includes(filter.toLowerCase())
-        && classroom.active === true
-);
-
-const filteredDisabledClassrooms = classrooms.filter(
-  (classroom) =>
-      String(classroom.classroomName).toLowerCase().includes(filter.toLowerCase())
-      && classroom.active === false
-);
-
-const indexOfLastClassroom = currentPage * classroomsPerPage;
-const indexOfFirstClassroom = indexOfLastClassroom - classroomsPerPage;
-const currentClassrooms = filteredActiveClassrooms.slice(
+  const indexOfLastClassroom = currentPage * classroomsPerPage;
+  const indexOfFirstClassroom = indexOfLastClassroom - classroomsPerPage;
+  const currentClassrooms = filteredClassrooms.slice(
     indexOfFirstClassroom,
     indexOfLastClassroom
-);
+  );
 
-const pageNumbers = [];
-for (
+  const pageNumbers = [];
+  for (
     let i = 1;
-    i <= Math.ceil(filteredActiveClassrooms.length / classroomsPerPage);
+    i <= Math.ceil(filteredClassrooms.length / classroomsPerPage);
     i++
-) {
+  ) {
     pageNumbers.push(i);
-}
+  }
 
   const handleChange = (event: SelectChangeEvent) => {
     setBuilding(event.target.value);
+  };
+
+  const handlePageChange = (
+    event: React.MouseEvent<HTMLButtonElement> | null,
+    newPage: number
+  ) => {
+    setCurrentPage(newPage);
+  };
+
+  const handleRowsPerPageChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setClassroomsPerPage(Number(event.target.value));
+    setCurrentPage(1);
   };
 
   return (
@@ -171,87 +192,86 @@ for (
                     <TableCell>{classroom.building}</TableCell>
                   </TableRow>
                 ))}
-
-              {/* {emptyRows > 0 && (
-                <TableRow style={{ height: 53 * emptyRows }}>
-                  <TableCell colSpan={6} />
-                </TableRow>
-              )} */}
             </TableBody>
             <TableFooter>
               <TableRow>
-                {/* <TablePagination
-                  component="div"
-                  count={100}
-                  page={page}
-                  onPageChange={handleChangePage}
-                  rowsPerPage={rowsPerPage}
-                  onRowsPerPageChange={handleChangeRowsPerPage}
-                /> */}
-                {/* <TablePagination
+                <TablePagination
                   labelRowsPerPage="Rodyti po"
                   rowsPerPageOptions={[10, 20, { label: "Visi", value: -1 }]}
-                  colSpan={3}
-                  count={filteredSubjects.length}
-                  page={page}
-                  SelectProps={{
-                    inputProps: {
-                      "aria-label": "Rodyti po",
-                    },
-                    native: true,
-                  }}
-                  onPageChange={handleChangePage}
-                  rowsPerPage={rowsPerPage}
-                  onRowsPerPageChange={handleChangeRowsPerPage}
-                ></TablePagination> */}
+                  count={filteredClassrooms.length}
+                  page={currentPage - 1}
+                  rowsPerPage={classroomsPerPage}
+                  onPageChange={(_, page) => setCurrentPage(page + 1)}
+                  onRowsPerPageChange={(e) =>
+                    setClassroomsPerPage(parseInt(e.target.value))
+                  }
+                />
               </TableRow>
             </TableFooter>
           </Table>
         </TableContainer>
-
         <div>
-          <button
-            onClick={() => setCurrentPage(currentPage - 1)}
-            disabled={currentPage === 1}
-          >
-            Previous
-          </button>
-          {currentPage} /{" "}
-          {Math.ceil(filteredClassrooms.length / classroomsPerPage)}
-          <button
-            onClick={() => setCurrentPage(currentPage + 1)}
-            disabled={
-              currentPage ===
-              Math.ceil(filteredClassrooms.length / classroomsPerPage)
+          <input
+            type="checkbox"
+            onChange={(e) =>
+              e.target.checked ? setChecked(true) : setChecked(false)
             }
-          >
-            Next
-          </button>
+          />
+          <label>Ištrintos klasės</label>
         </div>
-        <div>
-                <input type="checkbox"
-                       onChange={(e) => e.target.checked ? setChecked(true) : setChecked(false)}/>
-                <label>Ištrintos klasės</label>
-            </div>
-
-            <tbody>
-            {/*check boxo if'as jeigu true rodo filteredDisabledClassrooms sarasa, 1:1(vienas prie vieno su filteredActiveClassrooms tavo parasyta logika)  */}
-            {isChecked && filteredDisabledClassrooms
+        {isChecked &&
+        <TableContainer component={Paper}>
+          <Table aria-label="custom pagination table">
+            <TableHead>
+              <TableRow> 
+                <TableCell>Klasės pavadinimas</TableCell>
+                <TableCell>Pastatas</TableCell>
+                <TableCell>Altyvinti</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {filteredDisabledClassrooms
                 .slice(
-                    (currentPage - 1) * classroomsPerPage,
-                    currentPage * classroomsPerPage
+                  (currentPage - 1) * classroomsPerPage,
+                  currentPage * classroomsPerPage
                 )
                 .map((classroom) => (
-                    <tr key={classroom.id}>
-                        <td>
-                            <Link to={`/classrooms/view/${classroom.id}`}>
-                                {classroom.classroomName}
-                            </Link>
-                        </td>
-                        <td>{classroom.building}</td>
-                    </tr>
+                  <TableRow key={classroom.id}>
+                    <TableCell component="th" scope="row">
+                      <Link to={`/classrooms/view/${classroom.id}`}>
+                        {classroom.classroomName}
+                      </Link>
+                    </TableCell>
+                    <TableCell>{classroom.building}</TableCell>
+                    <TableCell>
+                    <Button variant="contained"
+                        data-value='true'
+                        value={classroom}
+                        onClick={(e) => {enableClassroom(e, classroom);}}
+                    >Aktyvinti
+                    </Button>
+                    </TableCell>
+                  </TableRow>
                 ))}
-            </tbody>
+            </TableBody>
+            <TableFooter>
+              <TableRow>
+                <TablePagination
+                  labelRowsPerPage="Rodyti po"
+                  rowsPerPageOptions={[1, 20, { label: "Visi", value: -1 }]}
+                  count={filteredClassrooms.length}
+                  page={currentPage - 1}
+                  rowsPerPage={classroomsPerPage}
+                  onPageChange={(_, page) => setCurrentPage(page + 1)}
+                  onRowsPerPageChange={(e) =>
+                    setClassroomsPerPage(parseInt(e.target.value))
+                  }
+                />
+              </TableRow>
+            </TableFooter>
+          </Table>
+        </TableContainer>
+        }
       </Container>
     </div>
   );

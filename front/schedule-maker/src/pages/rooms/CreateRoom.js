@@ -17,6 +17,8 @@ export function CreateRoom(props) {
   const [classroomName, setClassroomName] = useState("");
   const [building, setBuilding] = useState("AKADEMIJA");
   const [description, setDescription] = useState("");
+  const [error, setError] = useState();
+  const [active, setActive] = useState(true);
 
   let navigate = useNavigate();
 
@@ -28,10 +30,10 @@ export function CreateRoom(props) {
 
   const applyResult = (result) => {
     if (result.ok) {
+      setError("Sėkmingai pridėta!");
       clear();
-      window.alert("Sėkmingai pridėta");
     } else {
-      window.alert("Nepavyko sukurti: " + result.status);
+      setError("Nepavyko sukurti!");
     }
   };
 
@@ -45,6 +47,7 @@ export function CreateRoom(props) {
         classroomName,
         description,
         building,
+        active,
       }),
     }).then(applyResult);
   };
@@ -59,7 +62,6 @@ export function CreateRoom(props) {
       <form>
         <Grid container rowSpacing={2}>
           <Grid item lg={10}>
-            {/* <label htmlFor="building">Pastatas</label> */}
             <FormControl fullWidth>
               <InputLabel id="building-label">Pastatas</InputLabel>
               <Select
@@ -67,9 +69,6 @@ export function CreateRoom(props) {
                 id="building"
                 label="Pastatas"
                 value={building}
-                // onChange={(e) => setBuilding(e.target.value)}>
-                // <option value="AKADEMIJA">AKADEMIJA</option>
-                // <option value="TECHIN">TECHIN</option>
                 onChange={handleChange}
               >
                 <MenuItem value="AKADEMIJA">AKADEMIJA</MenuItem>
@@ -77,7 +76,6 @@ export function CreateRoom(props) {
               </Select>
             </FormControl>
           </Grid>
-
           <Grid item lg={10}>
             <TextField
               fullWidth
@@ -88,7 +86,6 @@ export function CreateRoom(props) {
               onChange={(e) => setClassroomName(e.target.value)}
             ></TextField>
           </Grid>
-
           <Grid item lg={10}>
             <TextField
               fullWidth
@@ -99,8 +96,8 @@ export function CreateRoom(props) {
               onChange={(e) => setDescription(e.target.value)}
             ></TextField>
           </Grid>
-
           <Grid item lg={10}>
+            {error && <div classroomName="error">{error}</div>}
             <Stack direction="row" spacing={2}>
               <Button variant="contained" onClick={createClassroom}>
                 Sukurti

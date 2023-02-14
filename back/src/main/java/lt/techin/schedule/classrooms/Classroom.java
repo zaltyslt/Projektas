@@ -46,6 +46,13 @@ public class Classroom {
     public Classroom() {
     }
 
+    public Classroom(Long id, String classroomName, String description, boolean active) {
+        this.id = id;
+        this.classroomName = classroomName;
+        this.description = description;
+        this.active = active;
+    }
+
     public Long getId() {
         return id;
     }
