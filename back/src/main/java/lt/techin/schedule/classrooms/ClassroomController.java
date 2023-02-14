@@ -43,6 +43,18 @@ public class ClassroomController {
         return ok(toClassroomDto(updatedClassroom));
     }
 
+    @PatchMapping("/disable/{classroomId}")
+    public ClassroomDto disableClassroom(@PathVariable Long classroomId) {
+        var disableClassroom = classroomService.disable(classroomId);
+        return toClassroomDto(disableClassroom);
+    }
+
+    @PatchMapping("/enable/{classroomId}")
+    public ClassroomDto enableClassroom(@PathVariable Long classroomId) {
+        var disableClassroom = classroomService.enable(classroomId);
+        return toClassroomDto(disableClassroom);
+    }
+
 //    @PostMapping("/addBuilding/{classroomId}")
 //    public Classroom addBuildingToClassroom(@PathVariable Long classroomId, @RequestParam Long buildingId) {
 //        return classroomService.addClassroomToBuilding(classroomId, buildingId);

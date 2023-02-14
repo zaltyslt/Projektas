@@ -31,10 +31,11 @@ export function RoomList() {
   const [currentPage, setCurrentPage] = useState(1);
   const [classroomsPerPage, setClassroomsPerPage] = useState(10);
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
+  const [isChecked, setChecked] = useState(false);
 
-  const JSON_HEADERS = {
-    "Content-Type": "application/json",
-  };
+  // const JSON_HEADERS = {
+  //   "Content-Type": "application/json",
+  // };
 
   const fetchClassrooms = () => {
     fetch("/api/v1/classrooms")
@@ -60,21 +61,40 @@ export function RoomList() {
     }
   });
 
-  const indexOfLastClassroom = currentPage * classroomsPerPage;
-  const indexOfFirstClassroom = indexOfLastClassroom - classroomsPerPage;
-  const currentClassrooms = filteredClassrooms.slice(
+  // const indexOfLastClassroom = currentPage * classroomsPerPage;
+  // const indexOfFirstClassroom = indexOfLastClassroom - classroomsPerPage;
+  // const currentClassrooms = filteredClassrooms.slice(
+  //   indexOfFirstClassroom,
+  //   indexOfLastClassroom
+  // );
+
+  const filteredActiveClassrooms = classrooms.filter(
+    (classroom) =>
+        String(classroom.classroomName).toLowerCase().includes(filter.toLowerCase())
+        && classroom.active === true
+);
+
+const filteredDisabledClassrooms = classrooms.filter(
+  (classroom) =>
+      String(classroom.classroomName).toLowerCase().includes(filter.toLowerCase())
+      && classroom.active === false
+);
+
+const indexOfLastClassroom = currentPage * classroomsPerPage;
+const indexOfFirstClassroom = indexOfLastClassroom - classroomsPerPage;
+const currentClassrooms = filteredActiveClassrooms.slice(
     indexOfFirstClassroom,
     indexOfLastClassroom
-  );
+);
 
-  const pageNumbers = [];
-  for (
+const pageNumbers = [];
+for (
     let i = 1;
-    i <= Math.ceil(filteredClassrooms.length / classroomsPerPage);
+    i <= Math.ceil(filteredActiveClassrooms.length / classroomsPerPage);
     i++
-  ) {
+) {
     pageNumbers.push(i);
-  }
+}
 
   const handleChange = (event: SelectChangeEvent) => {
     setBuilding(event.target.value);
@@ -209,9 +229,29 @@ export function RoomList() {
           </button>
         </div>
         <div>
-          <input type="checkbox" />
-          <label>Ištrintos klasės</label>
-        </div>
+                <input type="checkbox"
+                       onChange={(e) => e.target.checked ? setChecked(true) : setChecked(false)}/>
+                <label>Ištrintos klasės</label>
+            </div>
+
+            <tbody>
+            {/*check boxo if'as jeigu true rodo filteredDisabledClassrooms sarasa, 1:1(vienas prie vieno su filteredActiveClassrooms tavo parasyta logika)  */}
+            {isChecked && filteredDisabledClassrooms
+                .slice(
+                    (currentPage - 1) * classroomsPerPage,
+                    currentPage * classroomsPerPage
+                )
+                .map((classroom) => (
+                    <tr key={classroom.id}>
+                        <td>
+                            <Link to={`/classrooms/view/${classroom.id}`}>
+                                {classroom.classroomName}
+                            </Link>
+                        </td>
+                        <td>{classroom.building}</td>
+                    </tr>
+                ))}
+            </tbody>
       </Container>
     </div>
   );

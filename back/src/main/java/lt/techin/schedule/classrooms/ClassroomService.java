@@ -41,6 +41,26 @@ public class ClassroomService {
         return classroomRepository.findById(id).orElse(new Classroom());
     }
 
+    public Classroom disable(Long id) {
+
+        var existingClassroom = classroomRepository.findById(id).orElse(null);
+        if (existingClassroom != null) {
+            existingClassroom.setActive(false);
+            return classroomRepository.save(existingClassroom);
+        }
+        return null;
+    }
+
+    public Classroom enable(Long classroomId) {
+        var existingClassroom = classroomRepository.findById(classroomId).orElse(null);
+        if (existingClassroom != null) {
+            existingClassroom.setActive(true);
+            return classroomRepository.save(existingClassroom);
+        }
+        return null;
+    }
+
+
 //    public Classroom addClassroomToBuilding(Long classroomId, Long buildingId) {
 //        var existingClassroom = classroomRepository.findById(classroomId)
 //                .orElse(null);
