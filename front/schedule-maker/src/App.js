@@ -8,6 +8,9 @@ import { SubjectList } from "./pages/subjects/SubjectList";
 import { TeacherList } from "./pages/teachers/TeacherList";
 import { GroupList } from "./pages/groups/GroupList";
 import { ProgramList } from "./pages/programs/ProgramList";
+import { CreateRoom } from "./pages/rooms/CreateRoom";
+import { ViewRoom } from "./pages/rooms/ViewRoom";
+import { UpdateClassroom } from "./pages/rooms/UpdateRoom";
 import { CreateSubject } from "./pages/subjects/CreateSubject";
 import { ViewSubject } from "./pages/subjects/ViewSubject";
 import { EditSubject } from "./pages/subjects/EditSubject"
@@ -17,7 +20,6 @@ function App() {
     <div className="App">
       <HashRouter>
         <Menu />
-
         <Routes>
           <Route path="/"></Route>
           <Route path="/teachers" element={<TeacherList />}></Route>
@@ -25,7 +27,12 @@ function App() {
           <Route path="/modules" element={<ModuleList />}></Route>
           <Route path="/subjects" element={<SubjectList />}></Route>
           <Route path="/shifts" element={<ShiftList />}></Route>
-          <Route path="/rooms" element={<RoomList />}></Route>
+          {/* CLASSROOMS PATHAI */}
+          <Route path='/rooms' element={<RoomList />}></Route>
+          <Route path='/create' element={<CreateRoom />}></Route>
+          <Route path='/classrooms/view/:id' element={<ViewRoom />}></Route>
+          <Route path='/update/:id' element={<UpdateClassroom />} />
+          {/* CLASSROOM PATHAI DONE */}
           <Route path="/programs" element={<ProgramList />}></Route>
 
           <Route path="/subjects/create" element={<CreateSubject />} />
