@@ -29,7 +29,6 @@ export function ViewSubject() {
           <Grid item lg={12}>
             <h4>Modulis</h4>
             {!subject.module ? <p>Loading</p> : <p>{subject.module.name}</p>}
-            
           </Grid>
 
           <Grid item lg={12}>
@@ -39,7 +38,9 @@ export function ViewSubject() {
 
           <Grid item lg={12}>
             <h4>Pageidaujamos klasės</h4>
-            <p></p>
+            {!subject.classRooms ? <p>Loading</p> : subject.classRooms.map((classRoom) => 
+              <p key={classRoom.id}>{classRoom.classroomName}</p>
+            )}
           </Grid>
 
           <Grid item lg={12}>
@@ -53,7 +54,6 @@ export function ViewSubject() {
               </Link>
             </Stack>
           </Grid>
-          
         </Grid>
       </Container>
     </div>

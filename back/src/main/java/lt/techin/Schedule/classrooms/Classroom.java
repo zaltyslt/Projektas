@@ -1,17 +1,12 @@
 package lt.techin.schedule.classrooms;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lt.techin.schedule.classrooms.buildings.Building;
-import lt.techin.schedule.subject.Subject;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDateTime;
-import java.util.HashSet;
 import java.util.Objects;
-import java.util.Set;
 
 @Entity
 public class Classroom {
@@ -28,17 +23,13 @@ public class Classroom {
 //     private Building building;
 
     @CreatedDate
-    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm")
     private LocalDateTime createdDate;
     @LastModifiedDate
-    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm")
     private LocalDateTime modifiedDate;
 
     private boolean active;
-
-//    @ManyToMany(mappedBy = "classRooms")
-//    @JsonIgnore
-//    private Set<Subject> subjects;
 
     @PrePersist
     public void prePersist() {
@@ -52,7 +43,6 @@ public class Classroom {
     }
 
     public Classroom() {
-//        subjects = new HashSet<Subject>();
     }
 
     public Long getId() {
@@ -110,14 +100,6 @@ public class Classroom {
     public void setActive(boolean active) {
         this.active = active;
     }
-
-//    public Set<Subject> getSubjects() {
-//        return subjects;
-//    }
-//
-//    public void setSubjects(Set<Subject> subjects) {
-//        this.subjects = subjects;
-//    }
 
     @Override
     public boolean equals(Object o) {

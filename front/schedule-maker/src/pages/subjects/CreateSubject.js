@@ -2,7 +2,6 @@ import { Label } from "@mui/icons-material";
 import {
   Button,
   Container,
-  fabClasses,
   FormControl,
   Grid,
   InputLabel,
@@ -20,27 +19,34 @@ export function CreateSubject() {
   const [modules, setModules] = useState([]);
   const [module, setModule] = useState("");
   const [description, setDescription] = useState("");
-  const [room, setRoom] = useState([]);
+  const [rooms, setRooms] = useState([]);
   const [formValid, setFormValid] = useState(false);
+  const [classRooms, setClassRooms] = useState([]);
 
   useEffect(() => {
     fetch("api/v1/modules")
+      .then((response) => response.json())
+      .then(setModules);
+  }, []);
+
+  useEffect(() => {
+    fetch("api/v1/classrooms")
     .then((response) => response.json())
-    .then(setModules);
+    .then(setRooms);
   }, []);
 
   const clear = () => {
     setName("");
     setDescription("");
     setModule("");
-    setRoom([]);
+    setRooms([]);
   };
 
   const handleRoomInput = (event) => {
     const {
       target: { value },
     } = event;
-    setRoom(typeof value === "string" ? value.split(",") : value);
+    setClassRooms(typeof value === "string" ? value.split(",") : value);
   };
 
   const validation = () => {
@@ -50,10 +56,10 @@ export function CreateSubject() {
       setFormValid(false);
       createSubject();
     }
-  }
+  };
 
   const createSubject = () => {
-    fetch(`/api/v1/subjects?moduleId=${module}`, {
+    fetch(`/api/v1/subjects`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -61,6 +67,8 @@ export function CreateSubject() {
       body: JSON.stringify({
         name,
         description,
+        module,
+        classRooms
       }),
     }).then(clear);
   };
@@ -105,10 +113,14 @@ export function CreateSubject() {
                 labelId="module-label"
                 id="module"
                 value={module}
-                onChange={(e) => setModule(e.target.value)}
+                onChange={(e) => {
+                  setModule(e.target.value);
+                }}
               >
                 {modules.map((module) => (
-                  <MenuItem key={module.id} value={module.id}>{module.name}</MenuItem>
+                  <MenuItem key={module.id} value={module}>
+                    {module.name}
+                  </MenuItem>
                 ))}
               </Select>
             </FormControl>
@@ -121,10 +133,16 @@ export function CreateSubject() {
                 multiple
                 labelId="room-label"
                 id="room"
-                // value={room}
-                // onChange={handleRoomInput}
+                value={classRooms}
+                onChange={handleRoomInput}
                 input={<OutlinedInput label="Klasės" />}
-              ></Select>
+              >
+                {rooms.map((room) => (
+                  <MenuItem key={room.id} value={room}>
+                    {room.classroomName}
+                  </MenuItem>
+                ))}
+              </Select>
             </FormControl>
           </Grid>
 

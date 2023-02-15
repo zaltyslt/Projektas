@@ -1,12 +1,9 @@
 package lt.techin.schedule.classrooms;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import lt.techin.schedule.subject.Subject;
 
 import java.time.LocalDateTime;
-import java.util.HashSet;
 import java.util.Objects;
-import java.util.Set;
 
 public class ClassroomDto {
     private Long id;

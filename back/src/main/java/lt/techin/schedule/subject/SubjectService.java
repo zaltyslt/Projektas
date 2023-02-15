@@ -13,10 +13,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.PostConstruct;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -45,19 +42,13 @@ public class SubjectService {
         List<Subject> subjects =  subjectRepository.findAll();
         session.disableFilter("deletedSubjectFilter");
         return subjects;
-//        return subjectRepository.findAll();
     }
 
     public Optional<Subject> getById(Long id) {
         return subjectRepository.findById(id);
     }
 
-    public Subject create(Long moduleId, Long classRoomId, Subject subject) {
-        var module = moduleRepository.findById(moduleId).orElseThrow();
-        var classRoom = classroomRepository.findById(classRoomId).orElseThrow();
-
-        subject.setModule(module);
-        subject.addClassRoom(classRoom);
+    public Subject create(Subject subject) {
         return subjectRepository.save(subject);
     }
 

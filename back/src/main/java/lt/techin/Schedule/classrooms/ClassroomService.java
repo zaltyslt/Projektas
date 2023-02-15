@@ -1,6 +1,5 @@
 package lt.techin.schedule.classrooms;
 
-import lt.techin.schedule.classrooms.buildings.BuildingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

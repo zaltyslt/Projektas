@@ -1,7 +1,6 @@
 package lt.techin.schedule.subject;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lt.techin.schedule.classrooms.Classroom;
 import lt.techin.schedule.module.Module;
@@ -35,7 +34,7 @@ public class Subject {
     private Module module;
 
     @ManyToMany
-    @JsonIgnore
+//    @JsonIgnore
     @JoinTable(name = "subject_classrooms", joinColumns = {@JoinColumn(name = "subject_id")}, inverseJoinColumns = {@JoinColumn(name = "classroom_id")})
     private Set<Classroom> classRooms;
 

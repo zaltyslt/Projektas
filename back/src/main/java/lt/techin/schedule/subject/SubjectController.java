@@ -31,10 +31,10 @@ public class SubjectController {
     }
 
     @GetMapping(value = "/{subjectId}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<Subject> getSubject(@PathVariable Long subjectId) {
+    public ResponseEntity<SubjectDto> getSubject(@PathVariable Long subjectId) {
         var subjectOptional = subjectService.getById(subjectId);
 
-        var responseEntity = subjectOptional.map(subject -> ok(subject)).orElseGet(()-> ResponseEntity.notFound().build());
+        var responseEntity = subjectOptional.map(subject -> ok(toSubjectDto(subject))).orElseGet(()-> ResponseEntity.notFound().build());
 
         return responseEntity;
     }
@@ -44,15 +44,9 @@ public class SubjectController {
         return subjectService.getAll(true).stream().map(SubjectMapper::toSubjectEntityDto).collect(toList());
     }
 
-//    @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE})
-//    public ResponseEntity<SubjectDto> createSubject(@RequestBody SubjectDto subjectDto) {
-//        var createdSubject = subjectService.create(toSubject(subjectDto));
-//        return ok(toSubjectDto(createdSubject));
-//    }
-
     @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<SubjectDto> createSubject(@RequestParam Long moduleId, @RequestParam Long classRoomId, @RequestBody SubjectDto subjectDto) {
-        var createdSubject = subjectService.create(moduleId, classRoomId, toSubject(subjectDto));
+    public ResponseEntity<SubjectDto> createSubject(@RequestBody SubjectDto subjectDto) {
+        var createdSubject = subjectService.create(toSubject(subjectDto));
         return ok(toSubjectDto(createdSubject));
     }
 

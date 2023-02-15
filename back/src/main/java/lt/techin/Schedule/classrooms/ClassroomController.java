@@ -6,8 +6,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static lt.techin.schedule.classrooms.ClassroomMapper.toClassroom;
-import static lt.techin.schedule.classrooms.ClassroomMapper.toClassroomDto;
 import static org.springframework.http.ResponseEntity.ok;
 
 @RestController
@@ -32,27 +30,27 @@ public class ClassroomController {
 
     @PostMapping(value = "/create", consumes = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<ClassroomDto> createClassroom(@RequestBody ClassroomDto classroomDto) {
-        var createClassroom = classroomService.create(toClassroom(classroomDto));
-        return ok(toClassroomDto(createClassroom));
+        var createClassroom = classroomService.create(ClassroomMapper.toClassroom(classroomDto));
+        return ok(ClassroomMapper.toClassroomDto(createClassroom));
     }
 
     @PatchMapping("/update/{classroomId}")
     public ResponseEntity<ClassroomDto> updateClassroom(@PathVariable Long classroomId,
                                                         @RequestBody ClassroomDto classroomDto) {
-        var updatedClassroom = classroomService.update(classroomId, toClassroom(classroomDto));
-        return ok(toClassroomDto(updatedClassroom));
+        var updatedClassroom = classroomService.update(classroomId, ClassroomMapper.toClassroom(classroomDto));
+        return ok(ClassroomMapper.toClassroomDto(updatedClassroom));
     }
 
     @PatchMapping("/disable/{classroomId}")
     public ClassroomDto disableClassroom(@PathVariable Long classroomId) {
         var disableClassroom = classroomService.disable(classroomId);
-        return toClassroomDto(disableClassroom);
+        return ClassroomMapper.toClassroomDto(disableClassroom);
     }
 
     @PatchMapping("/enable/{classroomId}")
     public ClassroomDto enableClassroom(@PathVariable Long classroomId) {
         var disableClassroom = classroomService.enable(classroomId);
-        return toClassroomDto(disableClassroom);
+        return ClassroomMapper.toClassroomDto(disableClassroom);
     }
 
 //    @PostMapping("/addBuilding/{classroomId}")
