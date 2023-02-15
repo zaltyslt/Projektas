@@ -1,4 +1,4 @@
-package lt.techin.Schedule.tools;
+package lt.techin.schedule.validators;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
@@ -12,13 +12,13 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 @Target({ FIELD })
 @Retention(RUNTIME)
-@Constraint(validatedBy = TextValidator.class)
+@Constraint(validatedBy = PhoneNumberValidator.class)
 @Documented
-public @interface TextValid {
+public @interface PhoneNumberValid {
 
-    String message() default "{Text.invalid}";
+    String message() default "Number is invalid";
 
-    int textMaximumLength() default 50;
+    int maximumLength() default 20;
 
     Class<?>[] groups() default { };
 

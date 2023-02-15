@@ -63,7 +63,6 @@ export function App2() {
           >
             Check server connection <i className="fas fa-download ms-1"></i>
           </button>
-
           <div id="serverResponse">{showText && serverResponse.answer}</div>
           <div>
             <p>Count = {smt} </p>
