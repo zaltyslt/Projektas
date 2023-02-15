@@ -1,11 +1,8 @@
-package lt.techin.Schedule.hello;
+package lt.techin.schedule.hello;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import lt.techin.Schedule.validators.EmailValid;
-import lt.techin.Schedule.validators.PhoneNumberValid;
-import lt.techin.Schedule.validators.TextValid;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class HelloDTO {

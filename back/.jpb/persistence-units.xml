@@ -4,7 +4,7 @@
     <persistence-units>
       <persistence-unit name="Default">
         <packages>
-          <package value="lt.techin.Schedule" />
+          <package value="lt.techin.schedule" />
         </packages>
       </persistence-unit>
     </persistence-units>

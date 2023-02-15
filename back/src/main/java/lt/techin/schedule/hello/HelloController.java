@@ -1,6 +1,5 @@
-package lt.techin.Schedule.hello;
+package lt.techin.schedule.hello;
 
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
