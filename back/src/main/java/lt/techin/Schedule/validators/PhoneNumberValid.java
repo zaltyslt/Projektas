@@ -16,7 +16,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Documented
 public @interface PhoneNumberValid {
 
-    String message() default "{Number is invalid}";
+    String message() default "Number is invalid";
 
     int maximumLength() default 20;
 

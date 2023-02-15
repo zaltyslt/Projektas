@@ -16,7 +16,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Documented
 public @interface EmailValid {
 
-    String message() default "{Email is invalid}";
+    String message() default "Email is invalid";
 
     int nameMaximumLength() default 35;
 

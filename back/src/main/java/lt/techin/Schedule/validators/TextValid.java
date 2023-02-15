@@ -16,7 +16,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Documented
 public @interface TextValid {
 
-    String message() default "{Text is invalid}";
+    String message() default "Text is invalid";
 
     int textMaximumLength() default 50;
 
