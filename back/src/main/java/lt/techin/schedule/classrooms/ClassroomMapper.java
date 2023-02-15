@@ -10,7 +10,6 @@ public class ClassroomMapper {
         classroomDto.setActive(classroom.isActive());
         classroomDto.setCreatedDate(classroom.getCreatedDate());
         classroomDto.setModifiedDate(classroom.getModifiedDate());
-        classroomDto.setSubjects(classroom.getSubjects());
         return classroomDto;
     }
 
@@ -23,7 +22,6 @@ public class ClassroomMapper {
         classroom.setActive(classroomDto.isActive());
         classroom.setCreatedDate(classroomDto.getCreatedDate());
         classroom.setModifiedDate(classroomDto.getModifiedDate());
-        classroom.setSubjects(classroomDto.getSubjects());
         return classroom;
     }
 }

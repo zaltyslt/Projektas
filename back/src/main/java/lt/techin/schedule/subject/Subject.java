@@ -168,14 +168,12 @@ public class Subject {
 
     public void addClassRoom(Classroom classroom) {
         classRooms.add(classroom);
-        classroom.getSubjects().add(this);
     }
 
     public void removeClassRoom(Long classroomId) {
         var classRoomToRemove = classRooms.stream().filter(c -> c.getId().equals(classroomId)).findFirst().orElseThrow();
         if (classRoomToRemove != null) {
             classRooms.remove(classRoomToRemove);
-            classRoomToRemove.getSubjects().remove(this);
         }
     }
 
@@ -189,6 +187,6 @@ public class Subject {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, description, module, createdDate, createdBy, modifiedDate, modifiedBy, deleted);
+        return Objects.hash(id, name, description, module, classRooms, createdDate, createdBy, modifiedDate, modifiedBy, deleted);
     }
 }

@@ -52,10 +52,6 @@ public class SubjectService {
         return subjectRepository.findById(id);
     }
 
-//    public Subject create(Subject subject) {
-//        return subjectRepository.save(subject);
-//    }
-
     public Subject create(Long moduleId, Long classRoomId, Subject subject) {
         var module = moduleRepository.findById(moduleId).orElseThrow();
         var classRoom = classroomRepository.findById(classRoomId).orElseThrow();

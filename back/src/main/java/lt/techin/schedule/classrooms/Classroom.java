@@ -36,9 +36,9 @@ public class Classroom {
 
     private boolean active;
 
-    @ManyToMany(mappedBy = "classRooms")
-    @JsonIgnore
-    private Set<Subject> subjects;
+//    @ManyToMany(mappedBy = "classRooms")
+//    @JsonIgnore
+//    private Set<Subject> subjects;
 
     @PrePersist
     public void prePersist() {
@@ -52,7 +52,7 @@ public class Classroom {
     }
 
     public Classroom() {
-        subjects = new HashSet<Subject>();
+//        subjects = new HashSet<Subject>();
     }
 
     public Long getId() {
@@ -111,25 +111,12 @@ public class Classroom {
         this.active = active;
     }
 
-    public Set<Subject> getSubjects() {
-        return subjects;
-    }
-
-    public void setSubjects(Set<Subject> subjects) {
-        this.subjects = subjects;
-    }
-
-//    @Override
-//    public boolean equals(Object o) {
-//        if (this == o) return true;
-//        if (o == null || getClass() != o.getClass()) return false;
-//        Classroom classroom = (Classroom) o;
-//        return active == classroom.active && Objects.equals(id, classroom.id) && Objects.equals(classroomName, classroom.classroomName) && Objects.equals(description, classroom.description) && building == classroom.building && Objects.equals(createdDate, classroom.createdDate) && Objects.equals(modifiedDate, classroom.modifiedDate) && Objects.equals(subjects, classroom.subjects);
+//    public Set<Subject> getSubjects() {
+//        return subjects;
 //    }
 //
-//    @Override
-//    public int hashCode() {
-//        return Objects.hash(id, classroomName, description, building, createdDate, modifiedDate, active);
+//    public void setSubjects(Set<Subject> subjects) {
+//        this.subjects = subjects;
 //    }
 
     @Override
@@ -137,27 +124,13 @@ public class Classroom {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Classroom classroom = (Classroom) o;
-        return active == classroom.active && Objects.equals(id, classroom.id) && Objects.equals(classroomName, classroom.classroomName) && Objects.equals(description, classroom.description) && building == classroom.building && Objects.equals(createdDate, classroom.createdDate) && Objects.equals(modifiedDate, classroom.modifiedDate) && Objects.equals(subjects, classroom.subjects);
+        return active == classroom.active && Objects.equals(id, classroom.id) && Objects.equals(classroomName, classroom.classroomName) && Objects.equals(description, classroom.description) && building == classroom.building && Objects.equals(createdDate, classroom.createdDate) && Objects.equals(modifiedDate, classroom.modifiedDate);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, classroomName, description, building, createdDate, modifiedDate, active, subjects);
+        return Objects.hash(id, classroomName, description, building, createdDate, modifiedDate, active);
     }
 
-
-//    @Override
-//    public String toString() {
-//        return "Classroom{" +
-//                "id=" + id +
-//                ", classroomName='" + classroomName + '\'' +
-//                ", description='" + description + '\'' +
-//                ", building=" + building +
-//                ", createdDate=" + createdDate +
-//                ", modifiedDate=" + modifiedDate +
-//                ", active=" + active +
-//                ", subjects=" + subjects +
-//                '}';
-//    }
 }
 
