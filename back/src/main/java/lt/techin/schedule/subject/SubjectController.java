@@ -51,8 +51,8 @@ public class SubjectController {
 //    }
 
     @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<SubjectDto> createSubject(@RequestParam Long moduleId, @RequestBody SubjectDto subjectDto) {
-        var createdSubject = subjectService.create(moduleId, toSubject(subjectDto));
+    public ResponseEntity<SubjectDto> createSubject(@RequestParam Long moduleId, @RequestParam Long classRoomId, @RequestBody SubjectDto subjectDto) {
+        var createdSubject = subjectService.create(moduleId, classRoomId, toSubject(subjectDto));
         return ok(toSubjectDto(createdSubject));
     }
 

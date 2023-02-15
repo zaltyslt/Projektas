@@ -1,7 +1,7 @@
 package lt.techin.schedule.subject;
 
+import lt.techin.schedule.classrooms.Classroom;
 import lt.techin.schedule.module.Module;
-import lt.techin.schedule.room.Room;
 
 import java.util.Objects;
 import java.util.Set;
@@ -13,8 +13,8 @@ public class SubjectEntityDto extends SubjectDto {
     public SubjectEntityDto() {
     }
 
-    public SubjectEntityDto(String name, String description, Module module, Long id) {
-        super(name, description, module);
+    public SubjectEntityDto(String name, String description, Module module, Set<Classroom> classRooms, Long id) {
+        super(name, description, module, classRooms);
         this.id = id;
     }
 

@@ -2,6 +2,7 @@ package lt.techin.schedule.subject;
 
 
 import jakarta.persistence.EntityManager;
+import lt.techin.schedule.classrooms.ClassroomRepository;
 import lt.techin.schedule.module.ModuleRepository;
 import org.hibernate.Filter;
 import org.hibernate.Session;
@@ -26,12 +27,15 @@ public class SubjectService {
 
     private final ModuleRepository moduleRepository;
 
+    private final ClassroomRepository classroomRepository;
+
     @Autowired
     private EntityManager entityManager;
 
-    public SubjectService(SubjectRepository subjectRepository, ModuleRepository moduleRepository) {
+    public SubjectService(SubjectRepository subjectRepository, ModuleRepository moduleRepository, ClassroomRepository classroomRepository) {
         this.subjectRepository = subjectRepository;
         this.moduleRepository = moduleRepository;
+        this.classroomRepository = classroomRepository;
     }
 
     public List<Subject> getAll(boolean isDeleted) {
@@ -52,9 +56,12 @@ public class SubjectService {
 //        return subjectRepository.save(subject);
 //    }
 
-    public Subject create(Long moduleId, Subject subject) {
+    public Subject create(Long moduleId, Long classRoomId, Subject subject) {
         var module = moduleRepository.findById(moduleId).orElseThrow();
+        var classRoom = classroomRepository.findById(classRoomId).orElseThrow();
+
         subject.setModule(module);
+        subject.addClassRoom(classRoom);
         return subjectRepository.save(subject);
     }
 

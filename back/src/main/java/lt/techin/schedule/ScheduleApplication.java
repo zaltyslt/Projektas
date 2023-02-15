@@ -19,10 +19,6 @@ import java.util.Map;
 @SpringBootApplication
 public class ScheduleApplication extends SpringBootServletInitializer {
 	Logger logger = LoggerFactory.getLogger(ScheduleApplication.class);
-
-@SpringBootApplication
-public class ScheduleApplication extends SpringBootServletInitializer {
-//	Logger logger = LoggerFactory.getLogger(ScheduleApplication.class);
 	public static void main(String[] args) {
 		SpringApplication.run(ScheduleApplication.class, args);
 	}

@@ -1,9 +1,10 @@
 package lt.techin.schedule.subject;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import lt.techin.schedule.classrooms.Classroom;
 import lt.techin.schedule.module.Module;
-import lt.techin.schedule.room.Room;
 import org.hibernate.annotations.*;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
@@ -11,6 +12,7 @@ import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
@@ -32,8 +34,10 @@ public class Subject {
     @JoinColumn(name = "module_id")
     private Module module;
 
-//    @ManyToMany
-//    private Set<Room> rooms;
+    @ManyToMany
+    @JsonIgnore
+    @JoinTable(name = "subject_classrooms", joinColumns = {@JoinColumn(name = "subject_id")}, inverseJoinColumns = {@JoinColumn(name = "classroom_id")})
+    private Set<Classroom> classRooms;
 
     @CreatedDate
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
@@ -66,6 +70,20 @@ public class Subject {
     }
 
     public Subject() {
+        classRooms = new HashSet<>();
+    }
+
+    public Subject(Long id, String name, String description, Module module, Set<Classroom> classRooms, LocalDateTime createdDate, String createdBy, LocalDateTime modifiedDate, String modifiedBy, Boolean deleted) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.module = module;
+        this.classRooms = classRooms;
+        this.createdDate = createdDate;
+        this.createdBy = createdBy;
+        this.modifiedDate = modifiedDate;
+        this.modifiedBy = modifiedBy;
+        this.deleted = deleted;
     }
 
     public Long getId() {
@@ -100,13 +118,13 @@ public class Subject {
         this.module = module;
     }
 
-//    public Set<Room> getRooms() {
-//        return rooms;
-//    }
-//
-//    public void setRooms(Set<Room> rooms) {
-//        this.rooms = rooms;
-//    }
+    public Set<Classroom> getClassRooms() {
+        return classRooms;
+    }
+
+    public void setClassRooms(Set<Classroom> classRooms) {
+        this.classRooms = classRooms;
+    }
 
     public LocalDateTime getCreatedDate() {
         return createdDate;
@@ -148,12 +166,25 @@ public class Subject {
         this.deleted = deleted;
     }
 
+    public void addClassRoom(Classroom classroom) {
+        classRooms.add(classroom);
+        classroom.getSubjects().add(this);
+    }
+
+    public void removeClassRoom(Long classroomId) {
+        var classRoomToRemove = classRooms.stream().filter(c -> c.getId().equals(classroomId)).findFirst().orElseThrow();
+        if (classRoomToRemove != null) {
+            classRooms.remove(classRoomToRemove);
+            classRoomToRemove.getSubjects().remove(this);
+        }
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Subject subject = (Subject) o;
-        return Objects.equals(id, subject.id) && Objects.equals(name, subject.name) && Objects.equals(description, subject.description) && Objects.equals(module, subject.module) && Objects.equals(createdDate, subject.createdDate) && Objects.equals(createdBy, subject.createdBy) && Objects.equals(modifiedDate, subject.modifiedDate) && Objects.equals(modifiedBy, subject.modifiedBy) && Objects.equals(deleted, subject.deleted);
+        return Objects.equals(id, subject.id) && Objects.equals(name, subject.name) && Objects.equals(description, subject.description) && Objects.equals(module, subject.module) && Objects.equals(classRooms, subject.classRooms) && Objects.equals(createdDate, subject.createdDate) && Objects.equals(createdBy, subject.createdBy) && Objects.equals(modifiedDate, subject.modifiedDate) && Objects.equals(modifiedBy, subject.modifiedBy) && Objects.equals(deleted, subject.deleted);
     }
 
     @Override

@@ -1,8 +1,9 @@
 package lt.techin.schedule.subject;
 
+import lt.techin.schedule.classrooms.Classroom;
 import lt.techin.schedule.module.Module;
-import lt.techin.schedule.room.Room;
 
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
@@ -14,16 +15,17 @@ public class SubjectDto {
 
     private Module module;
 
-//    private Set<Room> rooms;
+    private Set<Classroom> classRooms;
 
     public SubjectDto() {
+        classRooms = new HashSet<>();
     }
 
-    public SubjectDto(String name, String description, Module module) {
+    public SubjectDto(String name, String description, Module module, Set<Classroom> classRooms) {
         this.name = name;
         this.description = description;
         this.module = module;
-//        this.rooms = rooms;
+        this.classRooms = classRooms;
     }
 
     public String getName() {
@@ -50,25 +52,25 @@ public class SubjectDto {
         this.module = module;
     }
 
-//    public Set<Room> getRooms() {
-//        return rooms;
-//    }
-//
-//    public void setRooms(Set<Room> rooms) {
-//        this.rooms = rooms;
-//    }
+    public Set<Classroom> getClassRooms() {
+        return classRooms;
+    }
+
+    public void setClassRooms(Set<Classroom> classRooms) {
+        this.classRooms = classRooms;
+    }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         SubjectDto that = (SubjectDto) o;
-        return Objects.equals(name, that.name) && Objects.equals(description, that.description) && Objects.equals(module, that.module);
+        return Objects.equals(name, that.name) && Objects.equals(description, that.description) && Objects.equals(module, that.module) && Objects.equals(classRooms, that.classRooms);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, description, module);
+        return Objects.hash(name, description, module, classRooms);
     }
 
     @Override
@@ -77,7 +79,7 @@ public class SubjectDto {
                 "name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", module=" + module +
-//                ", rooms=" + rooms +
+                ", classRooms=" + classRooms +
                 '}';
     }
 }
