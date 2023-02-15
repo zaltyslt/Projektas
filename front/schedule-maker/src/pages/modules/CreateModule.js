@@ -17,10 +17,20 @@ import { Link } from "react-router-dom";
 export function CreateModule() {
   const [number, setNumber] = useState("");
   const [name, setName] = useState("");
+  const [formValid, setFormValid] = useState(false);
 
   const clear = () => {
     setNumber("");
     setName("");
+  };
+
+  const validation = () => {
+    if (name === "") {
+      setFormValid(true);
+    } else {
+      setFormValid(false);
+      createModule();
+    }
   };
 
   const createModule = () => {
@@ -45,6 +55,9 @@ export function CreateModule() {
         <Grid item lg={10}>
             <TextField
               fullWidth
+              required
+              error={formValid}
+              helperText={formValid && 'Modulio kodas yra privalomas.'}
               variant="outlined"
               label="Modulio kodas"
               id="number"
@@ -56,6 +69,9 @@ export function CreateModule() {
           <Grid item lg={10}>
             <TextField
               fullWidth
+              required
+              error={formValid}
+              helperText={formValid && 'Modulio pavadinimas yra privalomas.'}
               variant="outlined"
               label="Modulio pavadinimas"
               id="name"
@@ -66,7 +82,7 @@ export function CreateModule() {
 
           <Grid item lg={10}>
             <Stack direction="row" spacing={2}>
-              <Button variant="contained" onClick={createModule}>
+              <Button variant="contained" onClick={validation}>
                 Išsaugoti
               </Button>
 

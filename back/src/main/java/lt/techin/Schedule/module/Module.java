@@ -1,5 +1,6 @@
-package lt.techin.Schedule.module;
+package lt.techin.schedule.module;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import org.hibernate.annotations.Filter;
 import org.hibernate.annotations.FilterDef;
@@ -26,9 +27,11 @@ public class Module {
 
 
     @CreatedDate
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime createdDate;
 
     @LastModifiedDate
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime modifiedDate;
 
     private boolean deleted = false;
@@ -45,6 +48,15 @@ public class Module {
     }
 
     public Module() {
+    }
+
+    public Module(Long id, String number, String name, LocalDateTime createdDate, LocalDateTime modifiedDate, boolean deleted) {
+        this.id = id;
+        this.number = number;
+        this.name = name;
+        this.createdDate = createdDate;
+        this.modifiedDate = modifiedDate;
+        this.deleted = deleted;
     }
 
     public Long getId() { return id;

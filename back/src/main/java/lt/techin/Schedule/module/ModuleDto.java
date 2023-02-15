@@ -1,9 +1,8 @@
-package lt.techin.Schedule.module;
+package lt.techin.schedule.module;
 
 import java.util.Objects;
 
 public class ModuleDto {
-
 
     private String number;
     private String name;

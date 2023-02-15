@@ -1,4 +1,4 @@
-package lt.techin.Schedule.module;
+package lt.techin.schedule.module;
 
 import jakarta.annotation.PostConstruct;
 import jakarta.persistence.EntityManager;
@@ -36,7 +36,6 @@ public class ModuleService {
         List<Module> modules = moduleRepository.findAll();
         session.disableFilter("deletedModuleFilter");
         return modules;
-
     }
 
     public Optional<Module> getById(Long id) {

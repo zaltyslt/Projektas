@@ -1,4 +1,4 @@
-package lt.techin.Schedule;
+package lt.techin.schedule;
 
 
 import org.slf4j.Logger;

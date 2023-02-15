@@ -1,4 +1,4 @@
-package lt.techin.Schedule.module;
+package lt.techin.schedule.module;
 
 public class ModuleMapper {
 

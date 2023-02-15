@@ -1,4 +1,4 @@
-package lt.techin.Schedule.module;
+package lt.techin.schedule.module;
 
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;
-import static lt.techin.Schedule.module.ModuleMapper.toModule;
-import static lt.techin.Schedule.module.ModuleMapper.toModuleDto;
+import static lt.techin.schedule.module.ModuleMapper.toModule;
+import static lt.techin.schedule.module.ModuleMapper.toModuleDto;
 import static org.springframework.http.ResponseEntity.ok;
 
 @RestController
@@ -33,6 +33,11 @@ public class ModuleController {
         var moduleOptional = moduleService.getById(moduleId);
         var responseEntity = moduleOptional.map(module -> ok(module)).orElseGet(() -> ResponseEntity.notFound().build());
         return responseEntity;
+    }
+
+    @GetMapping(value = "/deleted", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public List<ModuleEntityDto> getDeletedModules() {
+        return moduleService.getAll(true).stream().map(ModuleMapper::toModuleEntityDto).collect(toList());
     }
 
     @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE})

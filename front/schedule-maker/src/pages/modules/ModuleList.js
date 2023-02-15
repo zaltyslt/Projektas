@@ -16,7 +16,6 @@ import {
   TextField,
 } from "@mui/material";
 import { Container } from "@mui/system";
-
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
@@ -24,12 +23,19 @@ export function ModuleList() {
   const [modules, setModules] = useState([]);
   const [filteredModules, setFilteredModules] = useState([]);
   const [deletedModules, setDeletedModules] = useState([]);
-
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [isChecked, setChecked] = useState(false);
 
   useEffect(() => {
+    fetchModules();
+  }, []);
+
+  useEffect(() => {
+    fetchDeletedModules();
+  }, []);
+
+  const fetchModules = () => {
     fetch("api/v1/modules")
       .then((response) => response.json())
       .then((data) => {
@@ -37,13 +43,13 @@ export function ModuleList() {
         return data;
       })
       .then((data) => setFilteredModules(data));
-  }, []);
+  };
 
-  useEffect(() => {
+  const fetchDeletedModules = () => {
     fetch("api/v1/modules/deleted")
       .then((response) => response.json())
       .then(setDeletedModules);
-  }, []);
+  };
 
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - modules.length) : 0;
@@ -69,6 +75,17 @@ export function ModuleList() {
       });
       setFilteredModules(filtered);
     }
+  };
+
+  const handleRestore = (id) => {
+    fetch("/api/v1/modules/restore/" + id, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then(fetchModules)
+      .then(fetchDeletedModules);
   };
 
   return (
@@ -178,12 +195,15 @@ export function ModuleList() {
                   : deletedModules
                 ).map((module) => (
                   <TableRow key={module.id}>
-                    <TableCell component="th" scope="row">
-                      <Link to={"/modules/view/" + module.id}>
-                        {module.number}
-                      </Link>
+                    <TableCell colSpan={6} component="th" scope="row">
+                      {module.name}
                     </TableCell>
-                    <TableCell>{module.name}</TableCell>
+                    <TableCell colSpan={6}>{module.name}</TableCell>
+                    <TableCell colSpan={2} align="center">
+                      <Button onClick={() => handleRestore(module.id)}>
+                        Atstatyti
+                      </Button>
+                    </TableCell>
                   </TableRow>
                 ))}
 

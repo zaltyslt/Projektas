@@ -10,7 +10,9 @@ export function ViewModule() {
   useEffect(() => {
     fetch("api/v1/modules/" + params.id)
       .then((response) => response.json())
-      .then(setModule);
+      .then((data) => {
+        setModule(data);
+      });
   }, []);
 
   return (
