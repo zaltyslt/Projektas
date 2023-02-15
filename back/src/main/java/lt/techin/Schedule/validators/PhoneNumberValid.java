@@ -1,4 +1,4 @@
-package lt.techin.Schedule.validators;
+package lt.techin.schedule.validators;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
