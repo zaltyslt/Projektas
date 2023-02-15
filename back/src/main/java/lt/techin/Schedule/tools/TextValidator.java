@@ -2,6 +2,7 @@ package lt.techin.schedule.tools;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
+import lt.techin.schedule.validators.TextValid;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
