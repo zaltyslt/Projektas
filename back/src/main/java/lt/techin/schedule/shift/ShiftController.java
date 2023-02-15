@@ -13,17 +13,10 @@ import java.util.*;
 @CrossOrigin("http://localhost:3000")
 public class ShiftController {
 
-    private final ShiftDTO shiftDatabase;
     private final ShiftService shiftService;
 
-    public ShiftController(ShiftDTO shiftDatabase, ShiftService shiftService) {
-        this.shiftDatabase = shiftDatabase;
+    public ShiftController(ShiftService shiftService) {
         this.shiftService = shiftService;
-    }
-
-    @GetMapping("/get")
-    public Shift getShift () {
-        return shiftDatabase.findAll().get(0);
     }
 
     @GetMapping("/get-active")
@@ -39,23 +32,6 @@ public class ShiftController {
     @GetMapping("/view-shift/{shiftID}")
     public Shift getShift(@PathVariable Long shiftID) {
         return shiftService.getShiftByID(shiftID);
-    }
-
-    @GetMapping("/add")
-    public List<Shift> tryingToAdd() {
-        shiftDatabase.save(new Shift("Rytas", LessonTime.getLessonTimeByInt(1).getLessonStart(), LessonTime.getLessonTimeByInt(3).getLessonEnd(), true, 1, 3));
-        shiftDatabase.save(new Shift("Rytas veliau", LessonTime.getLessonTimeByInt(4).getLessonStart(), LessonTime.getLessonTimeByInt(4).getLessonEnd(), true,4 ,4));
-        shiftDatabase.save(new Shift("Vidurdienis", LessonTime.getLessonTimeByInt(5).getLessonStart(), LessonTime.getLessonTimeByInt(7).getLessonEnd(), true,5, 7));
-        shiftDatabase.save(new Shift("Vakaras anskciau", LessonTime.getLessonTimeByInt(8).getLessonStart(), LessonTime.getLessonTimeByInt(10).getLessonEnd(), true,8 ,10));
-        shiftDatabase.save(new Shift("Vakaras", LessonTime.getLessonTimeByInt(11).getLessonStart(), LessonTime.getLessonTimeByInt(12).getLessonEnd(), true,11,12));
-        return shiftDatabase.findAll();
-    }
-
-    @GetMapping("/add-inactive")
-    public List<Shift> tryingToAddInactive() {
-        shiftDatabase.save(new Shift("Naktis", LessonTime.getLessonTimeByInt(1).getLessonStart(), LessonTime.getLessonTimeByInt(3).getLessonEnd(), false,1,3));
-        shiftDatabase.save(new Shift("Kazkokia Nesamone Cia", LessonTime.getLessonTimeByInt(4).getLessonStart(), LessonTime.getLessonTimeByInt(4).getLessonEnd(), false, 4,4));
-        return shiftDatabase.findAll();
     }
 
     @PostMapping("/add-shift")
@@ -76,13 +52,14 @@ public class ShiftController {
         return response;
     }
 
-    @PutMapping("/activate-shift/{shiftID}")
+    @PatchMapping("/activate-shift/{shiftID}")
     public void activateShift(@PathVariable Long shiftID) {
         shiftService.changeActiveShiftStatusByID(shiftID, true);
     }
 
-    @PutMapping("/deactivate-shift/{shiftID}")
+    @PatchMapping("/deactivate-shift/{shiftID}")
     public void deactivateShift(@PathVariable Long shiftID) {
+        System.out.println("Sup deactivation");
         shiftService.changeActiveShiftStatusByID(shiftID, false);
     }
 

@@ -1,28 +1,3 @@
-#shift-name, #shift-start, #shift-end {
-    padding: 0.5rem;
-}
-
-#shift-header {
-    font-size: large;
-    font-weight: bold;
-    padding-right: 2rem;
-    margin-left: 0.5 rem;
-}
-
-#shift-list-active, #shift-list-inactive, #shift-list, #filter-active {
-    border: 1px;
-    border-color: black;
-    border-style: solid;
-    margin: 2rem;
-}
-
-#shift-active-paging {
-    align-items: center;
-    justify-content: center;
-    margin: 1rem;
-    font-size: 2rem;
-}
-
-#navigation-button {
-    color: black;
+.MuiTablePagination-selectLabel, .MuiTablePagination-displayedRows{
+    margin-top: 15px;
 }

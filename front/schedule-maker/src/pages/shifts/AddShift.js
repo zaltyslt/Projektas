@@ -64,9 +64,11 @@ export function AddShift() {
     var endIntEnum;
 
     const createShift = (() => {
-        startIntEnum = shiftStartingTime;
-        endIntEnum = shiftEndingTime;
-        createShiftPostRequest();
+        if (isValidName && !isNameEmpty) {
+            startIntEnum = shiftStartingTime;
+            endIntEnum = shiftEndingTime;
+            createShiftPostRequest();
+        }
     })
 
     const createShiftPostRequest = () =>  {
@@ -164,7 +166,7 @@ export function AddShift() {
                     </Select>
                     {!isValidShiftTime && (
                     <FormHelperText error>
-                        Pamaina negali prasidėti vėliau negu pasibaigti.
+                        Pirma pamoka negali prasidėti vėliau negu paskutinė pamoka.
                     </FormHelperText>
                     )}
                 </Grid>
@@ -188,7 +190,7 @@ export function AddShift() {
                     </Select>
                     {!isValidShiftTime && (
                     <FormHelperText error>
-                        Pamaina negali prasidėti vėliau negu pasibaigti.
+                        Pirma pamoka negali prasidėti vėliau negu paskutinė pamoka.
                     </FormHelperText>
                     )}
                 </Grid>

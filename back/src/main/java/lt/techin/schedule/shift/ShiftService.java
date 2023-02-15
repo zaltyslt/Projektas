@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 @Service
 public class ShiftService {
 
-    private ShiftDTO shiftDatabase;
+    private final ShiftDTO shiftDatabase;
 
     public ShiftService(ShiftDTO shiftDatabase) {
         this.shiftDatabase = shiftDatabase;

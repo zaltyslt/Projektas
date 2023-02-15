@@ -1,19 +1,14 @@
 import {
     Button,
-    FormControl,
     Grid,
-    InputLabel,
-    Menu,
     MenuItem,
-    OutlinedInput,
     Select,
     FormHelperText,
     TextField,
   } from "@mui/material";
-  import { Container, Stack } from "@mui/system";
+import { Container, Stack } from "@mui/system";
 
-  import { Link } from "react-router-dom";
-
+import { Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import './ModifyShift.css';
@@ -50,7 +45,7 @@ export function ModifyShift() {
     const deactivateShift = ((shiftID) => {
         fetch(
             'http://localhost:8080/api/v1/shift/deactivate-shift/' + shiftID, {
-                method: 'PUT',
+                method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json'
                 }
@@ -62,9 +57,11 @@ export function ModifyShift() {
     var endIntEnum;
 
     const modifyShift = (() => {
-        startIntEnum = shiftStartingTime;
-        endIntEnum = shiftEndingTime;
-        modifyShiftPutRequest();
+        if (isValidName && !isNameEmpty) {
+            startIntEnum = shiftStartingTime;
+            endIntEnum = shiftEndingTime;
+            modifyShiftPutRequest();
+        }
     })
 
     const modifyShiftPutRequest = () => {
@@ -199,7 +196,7 @@ export function ModifyShift() {
                     </Select>
                     {!isValidShiftTime && (
                     <FormHelperText error>
-                        Pamaina negali prasidėti vėliau negu pasibaigti.
+                        Pirma pamoka negali prasidėti vėliau negu paskutinė pamoka.
                     </FormHelperText>
                     )}
                 </Grid>
@@ -223,7 +220,7 @@ export function ModifyShift() {
                     </Select>
                     {!isValidShiftTime && (
                     <FormHelperText error>
-                        Pamaina negali prasidėti vėliau negu pasibaigti.
+                        Pirma pamoka negali prasidėti vėliau negu paskutinė pamoka.
                     </FormHelperText>
                     )}
                 </Grid> 
@@ -261,101 +258,7 @@ export function ModifyShift() {
                     <div></div>
                     )}
             </Grid>
-
         </Container>
-        
-        
-        
-        
-        
-        
-        
-        
-        {/* <h4>Redaguoti Pamainą:</h4>
-        <table>
-            <tbody>
-                <tr>
-                    <td>Keista Paskutinį Kartą:</td>
-                    <td>{currentShift.modifiedDate}</td>
-                </tr>
-                <tr>
-                    <td>Pavadinimas:</td>
-                    <td>
-                        <form>
-                            <input 
-                                type="text" id="name" defaultValue={currentShift.name}
-                                onChange={(e) => setNameAndCheck(e.target.value)}
-                                style={isValidName ? {borderColor: "black"} : {borderColor: "red"}}>
-                            </input>
-                        </form>
-                    </td>  
-                </tr>
-                {isValidName ? 
-                    <tr><td></td></tr> :
-                    <tr><td id="error-text"> Negalimas Simbolis Panaudotas Pavadinime! </td></tr>
-                }
-                <tr>
-                    <td>Pamainos Pradžia:</td>
-                    <td>
-                        <form>
-                            <select
-                                id="shift-start" value={shiftStartingTime} 
-                                onChange={(e) => setShiftStartingTime(e.target.value)}>
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                                <option value="3">3</option>
-                                <option value="4">4</option>
-                                <option value="5">5</option>
-                                <option value="6">6</option>
-                                <option value="7">7</option>
-                                <option value="8">8</option>
-                                <option value="9">9</option>
-                                <option value="10">10</option>
-                                <option value="11">11</option>
-                                <option value="12">12</option>
-                            </select>
-                        </form>
-                    </td>
-                    {isValidShiftTime ?
-                        <td></td>:
-                        <td id="error-text"> Pamainos Laikas Negalimas!</td>
-                    }
-                </tr>
-                <tr>
-                    <td>Pamainos Pabaiga:</td>
-                    <td>
-                        <form>
-                            <select
-                                id="shift-end" value={shiftEndingTime}
-                                onChange={(e) => setShiftEndingTime(e.target.value)}>
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                                <option value="3">3</option>
-                                <option value="4">4</option>
-                                <option value="5">5</option>
-                                <option value="6">6</option>
-                                <option value="7">7</option>
-                                <option value="8">8</option>
-                                <option value="9">9</option>
-                                <option value="10">10</option>
-                                <option value="11">11</option>
-                                <option value="12">12</option>
-                            </select>
-                        </form>
-                    </td>
-                    {isValidShiftTime ?
-                        <td></td>:
-                        <td id="error-text"> Pamainos Laikas Negalimas!</td>
-                    }
-                </tr>
-            </tbody>
-        </table>
-        <button> 
-                <Link to="/shifts" id="navigation-button">Grįžti atgal</Link>
-        </button>
-        <button onClick={() => ModifyShift()}> 
-            Pakeisti Duomenis
-        </button> */}
        </div>
     )
 }

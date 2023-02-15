@@ -87,27 +87,22 @@ export function ShiftList() {
         });
     })
 
-    const activateShift = ((shiftID) => {
-        fetch(
-            'http://localhost:8080/api/v1/shift/activate-shift/' + shiftID, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            }
-        ).then(
-            getActiveShifts()
-        ).then(
-            getInactiveShifts()
-        )
-    })
-
-    useEffect(() => {
-        if (typeof activeShifts !== 'undefined') {
-            setCurrentActiveShifts(activeShifts);
-            console.log(activeShifts.length)
+    const activateShift = async (shiftID) => {
+        await fetch(`http://localhost:8080/api/v1/shift/activate-shift/${shiftID}`, {
+        method: 'PATCH',
+        headers: {
+            'Content-Type': 'application/json'
         }
-        },[activeShifts]);
+        });
+        getActiveShifts();
+        getInactiveShifts();
+    } 
+      
+    useEffect(() => {
+        if (activeShifts) {
+          setCurrentActiveShifts(activeShifts);
+        }
+    }, [activeShifts]);
 
     const filterActiveShifts = (filterString) => {
         if (filterString.length === 0) {
@@ -177,11 +172,12 @@ export function ShiftList() {
                                 </TableRow>
                             )}
                         </TableBody>
+                        
                         <TableFooter>
                             <TableRow>
-                                <TablePagination
+                                <TablePagination  
                                     labelRowsPerPage="Rodyti po"
-                                    rowsPerPageOptions={[2, 20, { label: "Visi", value: -1 }]}
+                                    rowsPerPageOptions={[10, 20, { label: "Visi", value: -1 }]}
                                     colSpan={2}
                                     count={currentActiveShifts.length}
                                     page={currentPageActive}
@@ -197,6 +193,7 @@ export function ShiftList() {
                                 ></TablePagination>
                             </TableRow>
                         </TableFooter>
+                        
                     </Table>
                 </TableContainer>
             
@@ -237,9 +234,7 @@ export function ShiftList() {
                                         {shift.shiftTime}
                                     </TableCell> 
                                     <TableCell>
-                                    <Link to="/shifts">
                                         <Button variant="contained" onClick={() => activateShift(shift.id)}>Atstatyti</Button>
-                                    </Link>
                                     </TableCell>
                                 </TableRow>
                             ))}
@@ -256,7 +251,7 @@ export function ShiftList() {
                                     labelRowsPerPage="Rodyti po"
                                     rowsPerPageOptions={[10, 20, { label: "Visi", value: -1 }]}
                                     colSpan={2}
-                                    count={currentActiveShifts.length}
+                                    count={inactiveShifts.length}
                                     page={currentPageInactive}
                                     SelectProps={{
                                         inputProps: {
