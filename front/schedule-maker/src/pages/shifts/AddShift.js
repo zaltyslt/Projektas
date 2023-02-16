@@ -83,7 +83,6 @@ export function AddShift() {
                     startIntEnum,
                     endIntEnum,
                     isActive,
-                    registered: false
                 })
             }
         ) 
