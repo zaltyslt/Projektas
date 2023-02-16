@@ -92,7 +92,7 @@ public class ShiftControllerTests {
 
         mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/shift/add-shift")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"id\": 1, \"name\": \"New Shift\",\"isActive\": true}"))
+                        .content("{\"id\": 1, \"name\": \"New Shift\",\"shiftStartingTime\": \"8:00\",\"shiftEndingTime\": \"16:00\",\"startIntEnum\": 1, \"endIntEnum\": 8,\"isActive\": true}"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().json("{}"));
     }
@@ -105,7 +105,7 @@ public class ShiftControllerTests {
 
         mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/shift/modify-shift/1")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"name\": \"Updated Shift\",\"isActive\": true}"))
+                        .content("{\"id\": 1, \"name\": \"Updated Shift\",\"shiftStartingTime\": \"8:00\",\"shiftEndingTime\": \"16:00\",\"startIntEnum\": 1, \"endIntEnum\": 8,\"isActive\": true}"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().json("{}"));
     }
