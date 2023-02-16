@@ -11,7 +11,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -35,7 +34,6 @@ public class ShiftControllerTests {
 
     @Test
     public void testGetActiveShifts() throws Exception {
-
         Shift shift1 = new Shift("Shift 1", "8:00", "16:00", true, 1, 8);
         Shift shift2 = new Shift("Shift 2", "9:00", "17:00", true, 2, 9);
         shift1.setId(1L);
@@ -49,21 +47,29 @@ public class ShiftControllerTests {
         mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/shift/get-active"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().json("[" +
-                        "{\"id\": 1,\"name\": \"Shift 1\",\"start_time\": \"8:00\",\"end_time\": \"16:00\",\"total_slots\": 8,\"available_slots\": 1,\"active\": true}," +
-                        "{\"id\": 2,\"name\": \"Shift 2\",\"start_time\": \"9:00\",\"end_time\": \"17:00\",\"total_slots\": 9,\"available_slots\": 2,\"active\": true}" +
+                        "{\"id\": 1,\"name\": \"Shift 1\",\"shiftStartingTime\": \"8:00\",\"shiftEndingTime\": \"16:00\",\"startIntEnum\": 1, \"endIntEnum\": 8, \"isActive\": true}," +
+                        "{\"id\": 2,\"name\": \"Shift 2\",\"shiftStartingTime\": \"9:00\",\"shiftEndingTime\": \"17:00\",\"startIntEnum\": 2,\"endIntEnum\": 9,\"isActive\": true}" +
                         "]"));
     }
 
     @Test
-    public void testAddShift() throws Exception {
-        Shift shiftToAdd = new Shift("New Shift", "8:00", "16:00", true, 1, 8);
-        when(shiftService.addUniqueShift(shiftToAdd)).thenReturn("");
+    public void testGetInactiveShifts() throws Exception {
+        Shift shift1 = new Shift("Shift 1", "8:00", "16:00", false, 1, 8);
+        Shift shift2 = new Shift("Shift 2", "9:00", "17:00", false, 2, 9);
+        shift1.setId(1L);
+        shift2.setId(2L);
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/shift/add-shift")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"name\": \"New Shift\",\"active\": true}"))
+        List<Shift> expectedShifts = List.of(shift1, shift2);
+        when(shiftService.getInactiveShifts()).thenReturn(expectedShifts);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/shift/get-inactive")).andDo(print());
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/shift/get-inactive"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().json("{}"));
+                .andExpect(MockMvcResultMatchers.content().json("[" +
+                        "{\"id\": 1,\"name\": \"Shift 1\",\"shiftStartingTime\": \"8:00\",\"shiftEndingTime\": \"16:00\",\"startIntEnum\": 1, \"endIntEnum\": 8, \"isActive\": false}," +
+                        "{\"id\": 2,\"name\": \"Shift 2\",\"shiftStartingTime\": \"9:00\",\"shiftEndingTime\": \"17:00\",\"startIntEnum\": 2,\"endIntEnum\": 9,\"isActive\": false}" +
+                        "]"));
     }
 
     @Test
@@ -79,13 +85,27 @@ public class ShiftControllerTests {
     }
 
     @Test
+    public void testAddShift() throws Exception {
+        Shift shiftToAdd = new Shift("New Shift", "8:00", "16:00", true, 1, 8);
+        shiftToAdd.setId(1L);
+        when(shiftService.addUniqueShift(shiftToAdd)).thenReturn("");
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/shift/add-shift")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"id\": 1, \"name\": \"New Shift\",\"isActive\": true}"))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.content().json("{}"));
+    }
+
+    @Test
     public void testModifyShift() throws Exception {
         Shift shiftToChange = new Shift("Updated Shift", "8:00", "16:00", true, 1, 8);
+        shiftToChange.setId(1L);
         when(shiftService.modifyExistingShift(1L, shiftToChange)).thenReturn("");
 
         mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/shift/modify-shift/1")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"name\": \"Updated Shift\",\"active\": true}"))
+                        .content("{\"name\": \"Updated Shift\",\"isActive\": true}"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().json("{}"));
     }
