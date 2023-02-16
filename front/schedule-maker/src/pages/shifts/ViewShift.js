@@ -39,14 +39,6 @@ export function ViewShift() {
                         <h4>Pamainos pabaiga:</h4>
                         <h5>{currentShift.shiftEndingTime}</h5>
                     </Grid>
-
-                    <Grid item lg={12}>
-                        <h4>Pamaina:</h4>
-                        {currentShift.isActive ? 
-                            <h5>Aktyvi</h5> :
-                            <h5>Neaktyvi</h5>
-                        }
-                    </Grid>
                 </Grid>
                 <Grid item lg={12}>
                     <Stack direction="row" spacing={2}>
