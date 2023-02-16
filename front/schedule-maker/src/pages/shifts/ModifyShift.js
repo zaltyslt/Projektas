@@ -76,7 +76,6 @@ export function ModifyShift() {
                     startIntEnum,
                     endIntEnum,
                     isActive,
-                    registered: false
                 })
             }
         )
