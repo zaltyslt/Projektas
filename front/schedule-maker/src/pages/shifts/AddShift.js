@@ -102,6 +102,11 @@ export function AddShift() {
                 setShiftCreateMessageError(data);
             }
             setIsPostUsed(true);
+            if (successfulPost) {
+                setName("");
+                setShiftStartingTime(1);
+                setShiftEndingTime(1);
+            }
         }
     )
 
