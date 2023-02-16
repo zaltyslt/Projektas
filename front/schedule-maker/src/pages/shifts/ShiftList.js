@@ -177,6 +177,7 @@ export function ShiftList() {
                             <TableRow>
                                 <TablePagination  
                                     labelRowsPerPage="Rodyti po"
+                                    labelDisplayedRows={({ from, to, count }) => `${from}-${to} iš ${count}`}
                                     rowsPerPageOptions={[10, 20, { label: "Visi", value: -1 }]}
                                     colSpan={2}
                                     count={currentActiveShifts.length}

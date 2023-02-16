@@ -1,4 +1,4 @@
-package lt.techin.schedule;
+package lt.techin.schedule.shifts;
 
 import lt.techin.schedule.shift.LessonTime;
 import lt.techin.schedule.shift.Shift;
