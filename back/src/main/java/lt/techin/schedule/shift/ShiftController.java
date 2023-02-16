@@ -10,6 +10,7 @@ import java.util.*;
 
 @RestController
 @RequestMapping("/api/v1/shift")
+@CrossOrigin("http://localhost:3000/")
 public class ShiftController {
 
     private final ShiftService shiftService;
@@ -34,18 +35,18 @@ public class ShiftController {
     }
 
     @PostMapping("/add-shift")
-    public @ResponseBody Map<String, String> addShift (@RequestBody @Valid Shift shiftToAdd, BindingResult bindingResult) {
-        Map<String, String> response = new HashMap<>();
+    public @ResponseBody Map<Integer, String> addShift (@RequestBody @Valid Shift shiftToAdd, BindingResult bindingResult) {
+        Map<Integer, String> response = new HashMap<>();
         if (bindingResult.hasErrors()) {
             List<ObjectError> errors = bindingResult.getAllErrors();
             for (int x = 0; x < bindingResult.getAllErrors().size(); x++) {
-                response.put("message" + x, errors.get(x).getDefaultMessage());
+                response.put(x, errors.get(x).getDefaultMessage());
             }
         }
         else {
             String addRequest = shiftService.addUniqueShift(shiftToAdd);
             if(!addRequest.isEmpty()) {
-                response.put("message" + 0, addRequest);
+                response.put(0, addRequest);
             }
         }
         return response;
@@ -63,19 +64,18 @@ public class ShiftController {
     }
 
     @PutMapping("/modify-shift/{shiftID}")
-    public @ResponseBody Map<String, String> modifyShift(@PathVariable Long shiftID, @RequestBody @Valid Shift shiftToChange, BindingResult bindingResult) {
-        Map<String, String> response = new HashMap<>();
+    public @ResponseBody Map<Integer, String> modifyShift(@PathVariable Long shiftID, @RequestBody @Valid Shift shiftToChange, BindingResult bindingResult) {
+        Map<Integer, String> response = new HashMap<>();
         if (bindingResult.hasErrors()) {
             List<ObjectError> errors = bindingResult.getAllErrors();
             for (int x = 0; x < bindingResult.getAllErrors().size(); x++) {
-                response.put("message" + x, errors.get(x).getDefaultMessage());
+                response.put(x, errors.get(x).getDefaultMessage());
             }
         }
         else {
             String modifyRequest = shiftService.modifyExistingShift(shiftID, shiftToChange);
             if (!modifyRequest.isEmpty()) {
-                System.out.println("ERRORAS HERE");
-                response.put("message" + 0, modifyRequest);
+                response.put(0, modifyRequest);
             }
         }
         return response;
