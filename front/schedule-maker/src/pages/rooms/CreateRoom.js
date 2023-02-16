@@ -11,6 +11,8 @@ import {
   InputLabel,
   MenuItem,
   colors,
+  Alert,
+  AlertTitle
 } from "@mui/material";
 import { SelectChangeEvent } from "@mui/material/Select";
 
@@ -122,14 +124,14 @@ export function CreateRoom(props) {
           </Grid>
           <Grid item lg={10}>
             {error && (
-              <div style={{ color: "red" }} classroomName="error">
+                <Alert severity="warning">
                 {error}
-              </div>
+              </Alert>
             )}
             {success && (
-              <div style={{ color: "green" }} classroomName="success">
+                <Alert severity="success">
                 {success}
-              </div>
+              </Alert>
             )}
             <Stack direction="row" spacing={2}>
               <Button variant="contained" onClick={createClassroom}>

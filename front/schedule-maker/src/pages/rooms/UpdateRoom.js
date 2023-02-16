@@ -11,6 +11,8 @@ import {
   TextField,
   InputLabel,
   MenuItem,
+  Alert,
+  AlertTitle
 } from "@mui/material";
 import { SelectChangeEvent } from "@mui/material/Select";
 
@@ -167,14 +169,14 @@ export function UpdateClassroom() {
               {" "}
               <legend>{params.classroomName}</legend>
               {error && (
-                <div style={{ color: "red" }} classroomName="error">
-                  {error}
-                </div>
+                <Alert severity="warning">
+                {error}
+              </Alert>
               )}
               {success && (
-                <div style={{ color: "green" }} classroomName="success">
-                  {success}
-                </div>
+                <Alert severity="success">
+                {success}
+              </Alert>
               )}
             </Grid>
             <Grid item lg={10}>
