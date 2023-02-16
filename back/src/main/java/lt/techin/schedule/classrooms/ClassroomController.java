@@ -1,5 +1,6 @@
 package lt.techin.schedule.classrooms;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -33,14 +34,15 @@ public class ClassroomController {
     @PostMapping(value = "/create", consumes = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<ClassroomDto> createClassroom(@RequestBody ClassroomDto classroomDto) {
         var createClassroom = classroomService.create(toClassroom(classroomDto));
-        return ok(toClassroomDto(createClassroom));
+        if (createClassroom == null) {
+            return ResponseEntity.status(HttpStatus.I_AM_A_TEAPOT).body(null);
+        }
+        return ResponseEntity.status(HttpStatus.CREATED).body(toClassroomDto(createClassroom));
     }
 
     @PatchMapping("/update/{classroomId}")
     public ResponseEntity<ClassroomDto> updateClassroom(@PathVariable Long classroomId,
                                                         @RequestBody ClassroomDto classroomDto) {
-        System.out.println(classroomDto);
-        System.out.println(toClassroom(classroomDto));
         var updatedClassroom = classroomService.update(classroomId, toClassroom(classroomDto));
         return ok(toClassroomDto(updatedClassroom));
     }
@@ -56,9 +58,4 @@ public class ClassroomController {
         var disableClassroom = classroomService.enable(classroomId);
         return toClassroomDto(disableClassroom);
     }
-
-//    @PostMapping("/addBuilding/{classroomId}")
-//    public Classroom addBuildingToClassroom(@PathVariable Long classroomId, @RequestParam Long buildingId) {
-//        return classroomService.addClassroomToBuilding(classroomId, buildingId);
-//    }
 }

@@ -17,6 +17,7 @@ import { SelectChangeEvent } from "@mui/material/Select";
 export function UpdateClassroom() {
   const [classroom, setClassroom] = useState({});
   const [error, setError] = useState();
+  const [success, setSuccess] = useState();
   const [active, setActive] = useState("");
   const [classroomName, setClassroomName] = useState("");
   const [description, setDescription] = useState("");
@@ -53,12 +54,15 @@ export function UpdateClassroom() {
   }, []);
 
   const updateClassroom = () => {
-    console.log(classroom.active)
-    setActive(classroom.active)
-
-    console.log(active)
-
-
+    setError('')
+    setSuccess('')
+    if (!classroomName) {
+      setError("Prašome užpildyti klasės pavadinimą.");
+    } else if (!description) {
+      setError("Prašome užpildyti klasės aprašą.")
+    } else if (!building) {
+      setError("Prašome pasirinkti pastatą.")
+    } else {
     fetch(`/api/v1/classrooms/update/${params.id}`, {
       method: "PATCH",
       headers: {
@@ -67,16 +71,16 @@ export function UpdateClassroom() {
       body: JSON.stringify({
         description,
         classroomName,
-        active,
+        // active,
         building
       }),
     }).then((result) => {
       if (!result.ok) {
         setError("Redaguoti nepavyko!");
       } else {
-        setError("Sėkmingai atnaujinote!");
+        setSuccess("Sėkmingai atnaujinote!");
       }
-    });
+    });}
   };
 
   const disableClassroom = () => {
@@ -157,7 +161,8 @@ export function UpdateClassroom() {
             <Grid item lg={10}>
               {" "}
               <legend>{params.classroomName}</legend>
-              {error && <div classroomName="error">{error}</div>}
+              {error && <div style={{color: 'red'}} classroomName="error">{error}</div>}
+            {success && <div style={{color: 'green'}} classroomName="success" >{success}</div>}
             </Grid>
             <Grid item lg={10}>
               <Stack direction="row" spacing={2}>
@@ -175,6 +180,7 @@ export function UpdateClassroom() {
                   </Button>
                 )}
                 {classroom.active && (
+                  <Link to="/rooms">
                   <Button
                     variant="contained"
                     data-value="true"
@@ -183,6 +189,7 @@ export function UpdateClassroom() {
                   >
                     Ištrinti
                   </Button>
+                  </Link>
                 )}
                 <Link to="/rooms">
                   <Button variant="contained">Grįžti</Button>

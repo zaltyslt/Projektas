@@ -30,8 +30,11 @@ export function RoomList() {
   const [building, setBuilding] = useState("All");
   const [filter, setFilter] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage2, setCurrentPage2] = useState(1);
   const [classroomsPerPage, setClassroomsPerPage] = useState(10);
+  const [classroomsPerPage2, setClassroomsPerPage2] = useState(10);
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
+  const paginate2 = (pageNumber2) => setCurrentPage2(pageNumber2);
   const [isChecked, setChecked] = useState(false);
 
   const fetchClassrooms = () => {
@@ -101,6 +104,22 @@ const filteredDisabledClassrooms = classrooms.filter((classroom) => {
     i++
   ) {
     pageNumbers.push(i);
+  }
+
+  const indexOfLastClassroom2 = currentPage2 * classroomsPerPage2;
+  const indexOfFirstClassroom2 = indexOfLastClassroom2 - classroomsPerPage2;
+  const currentClassrooms2 = filteredDisabledClassrooms.slice(
+    indexOfFirstClassroom2,
+    indexOfLastClassroom2
+  );
+
+  const pageNumbers2 = [];
+  for (
+    let i = 1;
+    i <= Math.ceil(filteredDisabledClassrooms.length / classroomsPerPage2);
+    i++
+  ) {
+    pageNumbers2.push(i);
   }
 
   const handleChange = (event: SelectChangeEvent) => {
@@ -232,8 +251,8 @@ const filteredDisabledClassrooms = classrooms.filter((classroom) => {
             <TableBody>
               {filteredDisabledClassrooms
                 .slice(
-                  (currentPage - 1) * classroomsPerPage,
-                  currentPage * classroomsPerPage
+                  (currentPage2 - 1) * classroomsPerPage2,
+                  currentPage2 * classroomsPerPage2
                 )
                 .map((classroom) => (
                   <TableRow key={classroom.id}>
@@ -259,12 +278,12 @@ const filteredDisabledClassrooms = classrooms.filter((classroom) => {
                 <TablePagination
                   labelRowsPerPage="Rodyti po"
                   rowsPerPageOptions={[1, 20, { label: "Visi", value: -1 }]}
-                  count={filteredClassrooms.length}
-                  page={currentPage - 1}
-                  rowsPerPage={classroomsPerPage}
-                  onPageChange={(_, page) => setCurrentPage(page + 1)}
+                  count={filteredDisabledClassrooms.length}
+                  page={currentPage2 - 1}
+                  rowsPerPage={classroomsPerPage2}
+                  onPageChange={(_, page) => setCurrentPage2(page + 1)}
                   onRowsPerPageChange={(e) =>
-                    setClassroomsPerPage(parseInt(e.target.value))
+                    setClassroomsPerPage2(parseInt(e.target.value))
                   }
                 />
               </TableRow>
