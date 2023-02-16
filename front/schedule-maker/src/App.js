@@ -7,10 +7,14 @@ import { CreateModule } from "./pages/modules/CreateModule";
 import { ViewModule } from "./pages/modules/ViewModule";
 import { EditModule } from "./pages/modules/EditModule";
 import { ShiftList } from "./pages/shifts/ShiftList";
+import { AddShift } from "./pages/shifts/AddShift";
+import { ViewShift } from "./pages/shifts/ViewShift";
+import { ModifyShift } from "./pages/shifts/ModifyShift";
 import { SubjectList } from "./pages/subjects/SubjectList";
 import { TeacherList } from "./pages/teachers/TeacherList";
 import { GroupList } from "./pages/groups/GroupList";
 import { ProgramList } from "./pages/programs/ProgramList";
+
 
 function App() {
   return (
@@ -25,6 +29,9 @@ function App() {
           <Route path="/modules" element={<ModuleList />}></Route>
           <Route path="/subjects" element={<SubjectList />}></Route>
           <Route path="/shifts" element={<ShiftList />}></Route>
+          <Route exact path="/add-shift" element={<AddShift/>} ></Route>
+          <Route path="/view-shift/:id" element={<ViewShift/>} ></Route>
+          <Route path="/modify-shift/:id" element={<ModifyShift/>} ></Route>
           <Route path="/rooms" element={<RoomList />}></Route>
           <Route path="/programs" element={<ProgramList />}></Route>
 

@@ -1,0 +1,14 @@
+#modified-date {
+    font-style: italic;
+}
+
+h5 {
+    font-style: italic;
+    font-weight: 500;
+}
+
+#table-grid {
+    border-style: solid;
+    border-color: black;
+    border: 1px;
+}
