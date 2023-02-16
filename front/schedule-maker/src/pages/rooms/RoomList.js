@@ -1,4 +1,3 @@
-// import * as React from "react";
 import { useEffect, useState, React } from "react";
 import { Link } from "react-router-dom";
 import {
@@ -24,6 +23,7 @@ import {
 } from "@mui/material";
 import { Container } from "@mui/system";
 import { SelectChangeEvent } from "@mui/material/Select";
+
 
 export function RoomList() {
   const [classrooms, setClassrooms] = useState([]);
@@ -56,39 +56,37 @@ export function RoomList() {
   useEffect(() => {
     fetchClassrooms();
   }, []);
-
   const filteredClassrooms = classrooms.filter((classroom) => {
     if (building === "All") {
       return String(classroom.classroomName)
         .toLowerCase()
-        .includes(filter.toLowerCase()) 
+        .includes(filter.toLowerCase())
         && classroom.active === true;
     } else {
       return (
         String(classroom.classroomName)
           .toLowerCase()
-          .includes(filter.toLowerCase()) && classroom.building === building 
-          && classroom.active === true
+          .includes(filter.toLowerCase()) && classroom.building === building
+        && classroom.active === true
       );
     }
   });
 
-const filteredDisabledClassrooms = classrooms.filter((classroom) => {
+  const filteredDisabledClassrooms = classrooms.filter((classroom) => {
     if (building === "All") {
       return String(classroom.classroomName)
         .toLowerCase()
-        .includes(filter.toLowerCase()) 
+        .includes(filter.toLowerCase())
         && classroom.active === false;
     } else {
       return (
         String(classroom.classroomName)
           .toLowerCase()
-          .includes(filter.toLowerCase()) && classroom.building === building 
-          && classroom.active === false
+          .includes(filter.toLowerCase()) && classroom.building === building
+        && classroom.active === false
       );
     }
   });
-  
 
   const indexOfLastClassroom = currentPage * classroomsPerPage;
   const indexOfFirstClassroom = indexOfLastClassroom - classroomsPerPage;
@@ -105,7 +103,6 @@ const filteredDisabledClassrooms = classrooms.filter((classroom) => {
   ) {
     pageNumbers.push(i);
   }
-
   const indexOfLastClassroom2 = currentPage2 * classroomsPerPage2;
   const indexOfFirstClassroom2 = indexOfLastClassroom2 - classroomsPerPage2;
   const currentClassrooms2 = filteredDisabledClassrooms.slice(
@@ -121,24 +118,22 @@ const filteredDisabledClassrooms = classrooms.filter((classroom) => {
   ) {
     pageNumbers2.push(i);
   }
-
   const handleChange = (event: SelectChangeEvent) => {
     setBuilding(event.target.value);
   };
-
   const handlePageChange = (
     event: React.MouseEvent<HTMLButtonElement> | null,
     newPage: number
   ) => {
     setCurrentPage(newPage);
   };
-
   const handleRowsPerPageChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     setClassroomsPerPage(Number(event.target.value));
     setCurrentPage(1);
   };
+
 
   return (
     <div>
@@ -152,7 +147,6 @@ const filteredDisabledClassrooms = classrooms.filter((classroom) => {
               <Button variant="contained">Sukurti naują</Button>
             </Link>
           </Grid>
-
           <Grid container spacing={2}>
             <Grid item xs={8}>
               <TextField
@@ -175,7 +169,6 @@ const filteredDisabledClassrooms = classrooms.filter((classroom) => {
                   value={building}
                   onChange={handleChange}
                 >
-                  {/* Kaip cia ideti verte, kad vel rodytu viska??? TODO */}
                   <MenuItem value="All">
                     <em>Visi</em>
                   </MenuItem>
@@ -186,7 +179,6 @@ const filteredDisabledClassrooms = classrooms.filter((classroom) => {
             </Grid>
           </Grid>
         </Grid>
-
         <TableContainer component={Paper}>
           <Table aria-label="custom pagination table">
             <TableHead>
@@ -229,67 +221,65 @@ const filteredDisabledClassrooms = classrooms.filter((classroom) => {
             </TableFooter>
           </Table>
         </TableContainer>
-        <div>
-          <input
-            type="checkbox"
+        <FormGroup>
+          <FormControlLabel
+            control={<Checkbox />}
+            label="Ištrintos klasės"
             onChange={(e) =>
               e.target.checked ? setChecked(true) : setChecked(false)
             }
           />
-          <label>Ištrintos klasės</label>
-        </div>
+        </FormGroup>
         {isChecked &&
-        <TableContainer component={Paper}>
-          <Table aria-label="custom pagination table">
-            <TableHead>
-              <TableRow> 
-                <TableCell>Klasės pavadinimas</TableCell>
-                <TableCell>Pastatas</TableCell>
-                <TableCell>Altyvinti</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {filteredDisabledClassrooms
-                .slice(
-                  (currentPage2 - 1) * classroomsPerPage2,
-                  currentPage2 * classroomsPerPage2
-                )
-                .map((classroom) => (
-                  <TableRow key={classroom.id}>
-                    <TableCell component="th" scope="row">
-                      {/* <Link to={`/classrooms/view/${classroom.id}`}> */}
+          <TableContainer component={Paper}>
+            <Table aria-label="custom pagination table">
+              <TableHead>
+                <TableRow>
+                  <TableCell>Klasės pavadinimas</TableCell>
+                  <TableCell>Pastatas</TableCell>
+                  <TableCell>Altyvinti</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {filteredDisabledClassrooms
+                  .slice(
+                    (currentPage2 - 1) * classroomsPerPage2,
+                    currentPage2 * classroomsPerPage2
+                  )
+                  .map((classroom) => (
+                    <TableRow key={classroom.id}>
+                      <TableCell component="th" scope="row">
                         {classroom.classroomName}
-                      {/* </Link> */}
-                    </TableCell>
-                    <TableCell>{classroom.building}</TableCell>
-                    <TableCell>
-                    <Button variant="contained"
-                        data-value='true'
-                        value={classroom}
-                        onClick={(e) => {enableClassroom(e, classroom);}}
-                    >Aktyvinti
-                    </Button>
-                    </TableCell>
-                  </TableRow>
-                ))}
-            </TableBody>
-            <TableFooter>
-              <TableRow>
-                <TablePagination
-                  labelRowsPerPage="Rodyti po"
-                  rowsPerPageOptions={[1, 20, { label: "Visi", value: -1 }]}
-                  count={filteredDisabledClassrooms.length}
-                  page={currentPage2 - 1}
-                  rowsPerPage={classroomsPerPage2}
-                  onPageChange={(_, page) => setCurrentPage2(page + 1)}
-                  onRowsPerPageChange={(e) =>
-                    setClassroomsPerPage2(parseInt(e.target.value))
-                  }
-                />
-              </TableRow>
-            </TableFooter>
-          </Table>
-        </TableContainer>
+                      </TableCell>
+                      <TableCell>{classroom.building}</TableCell>
+                      <TableCell>
+                        <Button variant="contained"
+                          data-value='true'
+                          value={classroom}
+                          onClick={(e) => { enableClassroom(e, classroom); }}
+                        >Aktyvinti
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+              </TableBody>
+              <TableFooter>
+                <TableRow>
+                  <TablePagination
+                    labelRowsPerPage="Rodyti po"
+                    rowsPerPageOptions={[1, 20, { label: "Visi", value: -1 }]}
+                    count={filteredDisabledClassrooms.length}
+                    page={currentPage2 - 1}
+                    rowsPerPage={classroomsPerPage2}
+                    onPageChange={(_, page) => setCurrentPage2(page + 1)}
+                    onRowsPerPageChange={(e) =>
+                      setClassroomsPerPage2(parseInt(e.target.value))
+                    }
+                  />
+                </TableRow>
+              </TableFooter>
+            </Table>
+          </TableContainer>
         }
       </Container>
     </div>

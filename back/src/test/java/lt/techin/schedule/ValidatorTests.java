@@ -1,8 +1,8 @@
-package lt.techin.Schedule;
+package lt.techin.schedule;
 
-import lt.techin.Schedule.validators.EmailValidator;
-import lt.techin.Schedule.validators.PhoneNumberValidator;
-import lt.techin.Schedule.validators.TextValidator;
+import lt.techin.schedule.validators.EmailValidator;
+import lt.techin.schedule.validators.PhoneNumberValidator;
+import lt.techin.schedule.validators.TextValidator;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

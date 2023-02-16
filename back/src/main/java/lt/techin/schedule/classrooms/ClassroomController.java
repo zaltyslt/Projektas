@@ -1,5 +1,7 @@
 package lt.techin.schedule.classrooms;
 
+import jakarta.validation.Valid;
+import org.apache.commons.lang3.Validate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +27,6 @@ public class ClassroomController {
         return ResponseEntity.ok(ClassroomMapper.toClassroomDto(classroomService.finById(id)));
     }
 
-    //    @GetMapping(value = "/classrooms", produces = {MediaType.APPLICATION_JSON_VALUE})
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE})
     public List<ClassroomDto> getClassrooms() {
         return classroomService.getAll().stream().map(ClassroomMapper::toClassroomDto).toList();

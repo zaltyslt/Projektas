@@ -1,27 +1,21 @@
-package lt.techin.schedule.classrooms.buildings;
+package lt.techin.schedule.classrooms;
 
-//package lt.techin.schedule.classrooms;
-
-import lt.techin.schedule.classrooms.Classroom;
-import lt.techin.schedule.classrooms.ClassroomDto;
-import lt.techin.schedule.classrooms.ClassroomRepository;
-import lt.techin.schedule.classrooms.ClassroomService;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-
-import static org.mockito.Mockito.*;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static lt.techin.schedule.classrooms.ClassroomMapper.toClassroom;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.when;
 
-@SpringBootTest
-@EnableJpaRepositories(basePackageClasses = ClassroomRepository.class)
+@ExtendWith(MockitoExtension.class)
 public class ClassroomServiceTest {
     @Mock
     private ClassroomRepository classroomRepository;
@@ -45,11 +39,13 @@ public class ClassroomServiceTest {
 
     @Test
     public void testCreate() {
-        Classroom classroom = new Classroom(null, "New Classroom",
-                "New Description", true);
-        when(classroomRepository.save(classroom)).thenReturn(new Classroom(1L, "New Classroom",
-                "New Description", true));
+        Classroom classroom = new Classroom(
+                null, "New Classroom", "New Description", true);
+        when(classroomRepository.save(classroom))
+                .thenReturn(new Classroom(
+                        1L, "New Classroom", "New Description", true));
 
+        classroom.setBuilding(BuildingType.AKADEMIJA);
         Classroom result = classroomService.create(classroom);
 
         assertEquals(1L, result.getId());
@@ -60,10 +56,27 @@ public class ClassroomServiceTest {
     }
 
     @Test
+    void create_shouldCreateNewClassroom() {
+
+        Classroom classroom = new Classroom(
+                null, "New Classroom", "New Description", true);
+        when(classroomRepository.save(classroom))
+                .thenReturn(new Classroom(
+                        1L, "New Classroom", "New Description", true));
+        classroom.setBuilding(BuildingType.AKADEMIJA);
+
+        Classroom savedClassroom = classroomService.create(classroom);
+
+        assertNotNull(savedClassroom);
+        assertNotNull(savedClassroom.getId());
+    }
+
+    @Test
     public void testUpdate() {
         Long id = 1L;
         Classroom existingClassroom = new Classroom(id, "Classroom 1",
                 "Description 1", true);
+        existingClassroom.setBuilding(BuildingType.AKADEMIJA);
         Classroom updatedClassroom = new Classroom(id, "Updated Classroom",
                 "Updated Description", true);
         when(classroomRepository.findById(id)).thenReturn(Optional.of(existingClassroom));
@@ -80,9 +93,7 @@ public class ClassroomServiceTest {
         Long id = 1L;
         Classroom classroom = new Classroom(id, "Classroom 1", "Description 1", true);
         when(classroomRepository.findById(id)).thenReturn(Optional.of(classroom));
-
         Classroom result = classroomService.finById(id);
-
         assertEquals("Classroom 1", result.getClassroomName());
         assertEquals("Description 1", result.getDescription());
     }
@@ -93,9 +104,7 @@ public class ClassroomServiceTest {
         Classroom existingClassroom = new Classroom(id, "Classroom 1", "Description 1", true);
         when(classroomRepository.findById(id)).thenReturn(Optional.of(existingClassroom));
         when(classroomRepository.save(existingClassroom)).thenReturn(existingClassroom);
-
         Classroom result = classroomService.disable(id);
-
         assertFalse(result.isActive());
     }
 
@@ -106,9 +115,27 @@ public class ClassroomServiceTest {
                 "Description 1", false);
         when(classroomRepository.findById(id)).thenReturn(Optional.of(existingClassroom));
         when(classroomRepository.save(existingClassroom)).thenReturn(existingClassroom);
-
         Classroom result = classroomService.enable(id);
-
         assertTrue(result.isActive());
     }
+
+    @Test
+    void testFailCreate() {
+        String generatedName = RandomStringUtils.random(5, false, true);
+        String generatedDescription = RandomStringUtils.random(5, true, false);
+
+        ClassroomDto badClassRoom = new ClassroomDto();
+        badClassRoom.setClassroomName("!@#$%^%");
+        badClassRoom.setDescription("generatedDescription");
+        badClassRoom.setBuilding(BuildingType.AKADEMIJA);
+
+        System.out.println(badClassRoom);
+        when(classroomRepository.save(toClassroom(badClassRoom)))
+                .thenReturn(toClassroom(badClassRoom));
+
+
+        var createClassroom = classroomService.create(toClassroom(badClassRoom));
+        assertNull(createClassroom);
+    }
+
 }

@@ -14,6 +14,7 @@ import {
 } from "@mui/material";
 import { SelectChangeEvent } from "@mui/material/Select";
 
+
 export function UpdateClassroom() {
   const [classroom, setClassroom] = useState({});
   const [error, setError] = useState();
@@ -22,11 +23,12 @@ export function UpdateClassroom() {
   const [classroomName, setClassroomName] = useState("");
   const [description, setDescription] = useState("");
   const [building, setBuilding] = useState("AKADEMIJA");
-
+  const invalidSymbols = "!@#$%^&*_+={}<>|~`\\\"'";
+  
   const handleDescriptionChange = (event) => {
     setdescription(event.target.value);
   };
-  
+
   const handleCNameeChange = (event) => {
     setclassroomName(event.target.value);
   };
@@ -39,48 +41,56 @@ export function UpdateClassroom() {
     classroomName: "",
     building: "",
     description: "",
-    active: classroom.active
+    active: classroom.active,
   });
 
   useEffect(() => {
     fetch(`/api/v1/classrooms/classroom/${params.id}`)
       .then((response) => response.json())
       .then((data) => {
-        setClassroom(data)
-        setClassroomName(data.classroomName)
-        setDescription(data.description)
-        setBuilding(data.building)
+        setClassroom(data);
+        setClassroomName(data.classroomName);
+        setDescription(data.description);
+        setBuilding(data.building);
       });
   }, []);
 
   const updateClassroom = () => {
-    setError('')
-    setSuccess('')
+    setError("");
+    setSuccess("");
     if (!classroomName) {
       setError("Prašome užpildyti klasės pavadinimą.");
+    } else if (
+      classroomName.split("").some((char) => invalidSymbols.includes(char))
+    ) {
+      setError("Klasės pavadinimas turi neleidžiamų simbolių.");
     } else if (!description) {
-      setError("Prašome užpildyti klasės aprašą.")
+      setError("Prašome užpildyti klasės aprašą.");
+    } else if (
+      description.split("").some((char) => invalidSymbols.includes(char))
+    ) {
+      setError("Klasės aprašas turi neleidžiamų simbolių.");
     } else if (!building) {
-      setError("Prašome pasirinkti pastatą.")
+      setError("Prašome pasirinkti pastatą.");
     } else {
-    fetch(`/api/v1/classrooms/update/${params.id}`, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        description,
-        classroomName,
-        // active,
-        building
-      }),
-    }).then((result) => {
-      if (!result.ok) {
-        setError("Redaguoti nepavyko!");
-      } else {
-        setSuccess("Sėkmingai atnaujinote!");
-      }
-    });}
+      fetch(`/api/v1/classrooms/update/${params.id}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          description,
+          classroomName,
+          building,
+        }),
+      }).then((result) => {
+        if (!result.ok) {
+          setError("Redaguoti nepavyko!");
+        } else {
+          setSuccess("Sėkmingai atnaujinote!");
+        }
+      });
+    }
   };
 
   const disableClassroom = () => {
@@ -88,12 +98,7 @@ export function UpdateClassroom() {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
-      }
-      // ,
-      // body: JSON.stringify({
-      //   description,
-      //   classroomName,
-      // }),
+      },
     }).then(() => navigate(-1));
   };
 
@@ -112,6 +117,7 @@ export function UpdateClassroom() {
       [property]: event.target.value,
     });
   };
+
 
   return (
     <div>
@@ -154,15 +160,22 @@ export function UpdateClassroom() {
                 label="Klasės aprašas"
                 id="description"
                 value={description}
-                // onChange={handleDescriptionChange}
                 onChange={(e) => setDescription(e.target.value)}
               ></TextField>
             </Grid>
             <Grid item lg={10}>
               {" "}
               <legend>{params.classroomName}</legend>
-              {error && <div style={{color: 'red'}} classroomName="error">{error}</div>}
-            {success && <div style={{color: 'green'}} classroomName="success" >{success}</div>}
+              {error && (
+                <div style={{ color: "red" }} classroomName="error">
+                  {error}
+                </div>
+              )}
+              {success && (
+                <div style={{ color: "green" }} classroomName="success">
+                  {success}
+                </div>
+              )}
             </Grid>
             <Grid item lg={10}>
               <Stack direction="row" spacing={2}>
@@ -181,14 +194,14 @@ export function UpdateClassroom() {
                 )}
                 {classroom.active && (
                   <Link to="/rooms">
-                  <Button
-                    variant="contained"
-                    data-value="true"
-                    value={params.id}
-                    onClick={disableClassroom}
-                  >
-                    Ištrinti
-                  </Button>
+                    <Button
+                      variant="contained"
+                      data-value="true"
+                      value={params.id}
+                      onClick={disableClassroom}
+                    >
+                      Ištrinti
+                    </Button>
                   </Link>
                 )}
                 <Link to="/rooms">

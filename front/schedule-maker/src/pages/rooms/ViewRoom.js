@@ -9,6 +9,7 @@ import {
 } from "@mui/material";
 import { Container } from "@mui/system";
 
+
 export function ViewRoom() {
   const [classroom, setClassroom] = useState({});
   const params = useParams();
@@ -19,6 +20,7 @@ export function ViewRoom() {
       .then((response) => response.json())
       .then(setClassroom);
   }, [params.id]);
+
 
   return (
     <div>
@@ -31,17 +33,14 @@ export function ViewRoom() {
               <h5>Paskutinį kartą redaguota: {classroom.modifiedDate}</h5>
             </header>
           </Grid>
-
           <Grid item lg={12}>
             <h4>Pastatas</h4>
             {classroom.building}
           </Grid>
-
           <Grid item lg={12}>
             <h4>Klasės aprašas</h4>
             <p>{classroom.description}</p>
           </Grid>
-
           <Grid item lg={12}>
             <Stack direction="row" spacing={2}>
               <Link to={`/update/${classroom.id}`}>

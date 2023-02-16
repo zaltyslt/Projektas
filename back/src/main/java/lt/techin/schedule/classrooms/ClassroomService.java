@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-
 @Service
 public class ClassroomService {
     private final ClassroomRepository classroomRepository;
@@ -24,13 +23,22 @@ public class ClassroomService {
         if (findByClassroomNameAndBuilding(classroom.getClassroomName(), classroom.getBuilding())) {
             return null;
         } else {
-            return classroomRepository.save(classroom);
+            try {
+                return classroomRepository.save(classroom);
+
+            } catch (Exception e) {
+                System.out.println(e.getLocalizedMessage());
+            }
+            return null;
         }
     }
 
     public Classroom update(Long id, Classroom classroom) {
         var existingClassroom = classroomRepository.findById(id).orElse(null);
         if (existingClassroom != null) {
+            if (!existingClassroom.getBuilding().equals(classroom.getBuilding())
+                    && (findByClassroomNameAndBuilding(classroom.getClassroomName(), classroom.getBuilding())))
+                return null;
             existingClassroom.setClassroomName(classroom.getClassroomName());
             existingClassroom.setDescription(classroom.getDescription());
             existingClassroom.setBuilding(classroom.getBuilding());

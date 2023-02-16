@@ -14,16 +14,15 @@ import {
 } from "@mui/material";
 import { SelectChangeEvent } from "@mui/material/Select";
 
+
 export function CreateRoom(props) {
   const [classroomName, setClassroomName] = useState("");
   const [building, setBuilding] = useState("AKADEMIJA");
   const [description, setDescription] = useState("");
   const [error, setError] = useState();
   const [success, setSuccess] = useState();
-  
   const [active, setActive] = useState(true);
-  const invalidSymbols = "!@#$%^&*_+={}<>|~`\\\"\'";
-
+  const invalidSymbols = "!@#$%^&*_+={}<>|~`\\\"'";
   let navigate = useNavigate();
 
   const clear = () => {
@@ -33,7 +32,7 @@ export function CreateRoom(props) {
   };
 
   const applyResult = (result) => {
-     if (result.ok) {
+    if (result.ok) {
       setSuccess("Sėkmingai pridėta!");
       clear();
     } else {
@@ -42,27 +41,35 @@ export function CreateRoom(props) {
   };
 
   const createClassroom = () => {
-    setError('')
-    setSuccess('')
+    setError("");
+    setSuccess("");
     if (!classroomName) {
       setError("Prašome užpildyti klasės pavadinimą.");
+    } else if (
+      classroomName.split("").some((char) => invalidSymbols.includes(char))
+    ) {
+      setError("Klasės pavadinimas turi neleidžiamų simbolių.");
     } else if (!description) {
-      setError("Prašome užpildyti klasės aprašą.")
+      setError("Prašome užpildyti klasės aprašą.");
+    } else if (
+      description.split("").some((char) => invalidSymbols.includes(char))
+    ) {
+      setError("Klasės aprašas turi neleidžiamų simbolių.");
     } else if (!building) {
-      setError("Prašome pasirinkti pastatą.")
+      setError("Prašome pasirinkti pastatą.");
     } else {
-    fetch("/api/v1/classrooms/create", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        classroomName,
-        description,
-        building,
-        active,
-      }),
-    }).then(applyResult);
+      fetch("/api/v1/classrooms/create", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          classroomName,
+          description,
+          building,
+          active,
+        }),
+      }).then(applyResult);
     }
   };
 
@@ -114,8 +121,16 @@ export function CreateRoom(props) {
             ></TextField>
           </Grid>
           <Grid item lg={10}>
-            {error && <div style={{color: 'red'}} classroomName="error">{error}</div>}
-            {success && <div style={{color: 'green'}} classroomName="success" >{success}</div>}
+            {error && (
+              <div style={{ color: "red" }} classroomName="error">
+                {error}
+              </div>
+            )}
+            {success && (
+              <div style={{ color: "green" }} classroomName="success">
+                {success}
+              </div>
+            )}
             <Stack direction="row" spacing={2}>
               <Button variant="contained" onClick={createClassroom}>
                 Sukurti

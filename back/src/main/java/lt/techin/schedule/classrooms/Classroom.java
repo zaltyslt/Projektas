@@ -2,6 +2,7 @@ package lt.techin.schedule.classrooms;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
+import lt.techin.schedule.validators.TextValid;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
@@ -13,18 +14,18 @@ public class Classroom {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
-
     @Column(name = "classroomName")
+    @TextValid
     private String classroomName;
+    @TextValid(textMaximumLength = 1000)
     private String description;
     private BuildingType building;
     @CreatedDate
-    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createdDate;
     @LastModifiedDate
-    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime modifiedDate;
-
     private boolean active = true;
 
     @PrePersist
