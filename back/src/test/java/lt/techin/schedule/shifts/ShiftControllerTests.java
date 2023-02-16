@@ -9,12 +9,13 @@ import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.mockito.Mockito.when;
@@ -23,25 +24,24 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 @SpringBootTest
 @AutoConfigureMockMvc
 public class ShiftControllerTests {
-    @Mock
-    private ShiftService shiftService;
+    @MockBean
+    ShiftService shiftService;
 
     @InjectMocks
-    private ShiftController shiftController;
+    public ShiftController shiftController;
 
     @Autowired
     private MockMvc mockMvc;
 
     @Test
     public void testGetActiveShifts() throws Exception {
-        List<Shift> expectedShifts = new ArrayList<>();
+
         Shift shift1 = new Shift("Shift 1", "8:00", "16:00", true, 1, 8);
         Shift shift2 = new Shift("Shift 2", "9:00", "17:00", true, 2, 9);
         shift1.setId(1L);
         shift2.setId(2L);
 
-        expectedShifts.add(shift1);
-        expectedShifts.add(shift2);
+        List<Shift> expectedShifts = List.of(shift1, shift2);
         when(shiftService.getActiveShifts()).thenReturn(expectedShifts);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/shift/get-active")).andDo(print());
