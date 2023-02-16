@@ -8,10 +8,53 @@ export function EditModule() {
     const [number, setNumber] = useState("");
     const [name, setName] = useState("");
 
+    const [isNameEmpty, setIsNameEmpty] = useState(false);
+    const [isNameValid, setIsNameValid] = useState(true);
+  
+    const [isModuleCodeEmpty, setIsModuleCodeEmpty] = useState(false);
+    const [isModuleCodeValid, setIsModuleCodeValid] = useState(true);
+  
+
   const params = useParams({
     number: "",
     name: ""
   });
+
+  const badSymbols = "!@#$%^&*_+={}<>|~`\\\"\'";
+
+  const setAndCheckName = ((name) => {
+    setName(name);
+    if (name.length === 0) {
+      setIsNameEmpty(true);
+    }
+    else {
+      setIsNameEmpty(false);
+    }
+    const isValid = name.split('').some(char => badSymbols.includes(char));
+    if (isValid) {
+      setIsNameValid(false);
+    }
+    else {
+      setIsNameValid(true);
+    }
+  })
+
+  const setAndCheckModuleCode = ((moduleCode) => {
+    setNumber(moduleCode);
+    if (moduleCode.length === 0) {
+      setIsModuleCodeEmpty(true);
+    }
+    else {
+      setIsModuleCodeEmpty(false);
+    }
+    const containsBadSymbols = moduleCode.split('').some(char => badSymbols.includes(char));
+    if (containsBadSymbols) {
+      setIsModuleCodeValid(false);
+    }
+    else {
+      setIsModuleCodeValid(true);
+    }
+    })
   
       useEffect(() => {
         fetch(`api/v1/modules/${params.id}`)
@@ -32,7 +75,13 @@ export function EditModule() {
       }).then(() => (window.location = listUrl));
     };
 
-    const handleEditModule = () => {
+    const handleEditModule = (() => {
+      if (!isNameEmpty && isNameValid && !isModuleCodeEmpty && isModuleCodeValid) {
+          editModule();
+      }
+    })
+
+    const editModule = () => {
       fetch(`/api/v1/modules/${params.id}`, {
         method: "PATCH",
         headers: {
@@ -43,7 +92,6 @@ export function EditModule() {
           name
         }),
       })
-      .then(() => window.location = listUrl);
     };
 
   return (
@@ -55,23 +103,33 @@ export function EditModule() {
           <Grid item lg={10}>
             <TextField
               fullWidth
+              error={!isModuleCodeValid || isModuleCodeEmpty}
+              helperText={
+                !isModuleCodeValid ? "Modulio kodas turi neleidžiamų simbolių." : 
+                isModuleCodeEmpty ? "Modulio kodas negali būti tuščias" : null
+              }
               variant="outlined"
               label="Modulio kodas"
               id="number"
               value={number}
-              onChange={(e) => setNumber(e.target.value)}
+              onChange={(e) => setAndCheckModuleCode(e.target.value)}
             ></TextField>
           </Grid>
 
           <Grid item lg={10}>
             <TextField
               fullWidth
+              error={!isNameValid || isNameEmpty}
+              helperText={
+                !isNameValid ? "Modulio pavadinimas turi neleidžiamų simbolių." : 
+                isNameEmpty ? "Modulio pavadinimas negali būti tuščias" : null
+              }
               multiline
               variant="outlined"
               label="Modulio pavadinimas"
               id="name"
               value={name}
-              onChange={(e) => setName(e.target.value)}
+              onChange={(e) => setAndCheckName(e.target.value)}
             ></TextField>
           </Grid>
 
