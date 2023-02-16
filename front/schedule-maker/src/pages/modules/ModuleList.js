@@ -18,6 +18,7 @@ import {
 import { Container } from "@mui/system";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import './ModuleList.css';
 
 export function ModuleList() {
   const [modules, setModules] = useState([]);
@@ -184,6 +185,7 @@ export function ModuleList() {
                 <TableRow>
                   <TableCell>Dalyko pavadinimas</TableCell>
                   <TableCell>Modulio pavadinimas</TableCell>
+                  <TableCell></TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -195,11 +197,11 @@ export function ModuleList() {
                   : deletedModules
                 ).map((module) => (
                   <TableRow key={module.id}>
-                    <TableCell colSpan={6} component="th" scope="row">
-                      {module.name}
+                    <TableCell component="th" scope="row">
+                      {module.number}
                     </TableCell>
-                    <TableCell colSpan={6}>{module.name}</TableCell>
-                    <TableCell colSpan={2} align="center">
+                    <TableCell>{module.name}</TableCell>
+                    <TableCell align="center">
                       <Button onClick={() => handleRestore(module.id)}>
                         Atstatyti
                       </Button>

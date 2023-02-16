@@ -4,18 +4,17 @@ import { useState, useEffect } from "react";
 import { Link, useHref, useParams } from "react-router-dom";
 
 export function EditModule() {
-    const [module, setModule] = useState({
-        number: "",
-        name: "", 
-    });
-
-    const params = useParams();
+    const [module, setModule] = useState({});
     const [number, setNumber] = useState("");
     const [name, setName] = useState("");
-    const listUrl = useHref('/modules');
 
-    useEffect(() => {
-        fetch("api/v1/modules/" + params.id)
+  const params = useParams({
+    number: "",
+    name: ""
+  });
+  
+      useEffect(() => {
+        fetch(`api/v1/modules/${params.id}`)
           .then((response) => response.json())
           .then((data) => {
             setModule(data)
@@ -28,10 +27,9 @@ export function EditModule() {
         fetch("/api/v1/modules/" + id, {
             method: "DELETE", 
             headers: {
-                "Content-Type": "application/json"
-            } 
-        })
-        .then(() => window.location = listUrl);
+                "Content-Type": "application/json",
+        },
+      }).then(() => (window.location = listUrl));
     };
 
     const handleEditModule = () => {
@@ -42,7 +40,7 @@ export function EditModule() {
         },
         body: JSON.stringify({
           number, 
-          number
+          name
         }),
       })
       .then(() => window.location = listUrl);
