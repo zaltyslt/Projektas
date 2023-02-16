@@ -25,6 +25,7 @@ export function UpdateClassroom() {
   const handleDescriptionChange = (event) => {
     setdescription(event.target.value);
   };
+  
   const handleCNameeChange = (event) => {
     setclassroomName(event.target.value);
   };
@@ -37,15 +38,27 @@ export function UpdateClassroom() {
     classroomName: "",
     building: "",
     description: "",
+    active: classroom.active
   });
 
   useEffect(() => {
     fetch(`/api/v1/classrooms/classroom/${params.id}`)
       .then((response) => response.json())
-      .then(setClassroom);
+      .then((data) => {
+        setClassroom(data)
+        setClassroomName(data.classroomName)
+        setDescription(data.description)
+        setBuilding(data.building)
+      });
   }, []);
 
   const updateClassroom = () => {
+    console.log(classroom.active)
+    setActive(classroom.active)
+
+    console.log(active)
+
+
     fetch(`/api/v1/classrooms/update/${params.id}`, {
       method: "PATCH",
       headers: {
@@ -54,6 +67,8 @@ export function UpdateClassroom() {
       body: JSON.stringify({
         description,
         classroomName,
+        active,
+        building
       }),
     }).then((result) => {
       if (!result.ok) {
@@ -69,11 +84,12 @@ export function UpdateClassroom() {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        description,
-        classroomName,
-      }),
+      }
+      // ,
+      // body: JSON.stringify({
+      //   description,
+      //   classroomName,
+      // }),
     }).then(() => navigate(-1));
   };
 
@@ -120,10 +136,9 @@ export function UpdateClassroom() {
               <TextField
                 fullWidth
                 variant="outlined"
-                required
                 id="classroomName"
                 label="Klasės pavadinimas"
-                value={classroom.classroomName}
+                value={classroomName}
                 onChange={(e) => setClassroomName(e.target.value)}
               ></TextField>
             </Grid>
@@ -131,12 +146,12 @@ export function UpdateClassroom() {
               <TextField
                 fullWidth
                 multiline
-                labelId="building-label"
                 variant="outlined"
                 label="Klasės aprašas"
                 id="description"
-                value={classroom.description}
-                onChange={handleDescriptionChange}
+                value={description}
+                // onChange={handleDescriptionChange}
+                onChange={(e) => setDescription(e.target.value)}
               ></TextField>
             </Grid>
             <Grid item lg={10}>

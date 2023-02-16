@@ -10,6 +10,7 @@ import {
   TextField,
   InputLabel,
   MenuItem,
+  colors,
 } from "@mui/material";
 import { SelectChangeEvent } from "@mui/material/Select";
 
@@ -18,7 +19,10 @@ export function CreateRoom(props) {
   const [building, setBuilding] = useState("AKADEMIJA");
   const [description, setDescription] = useState("");
   const [error, setError] = useState();
+  const [success, setSuccess] = useState();
+  
   const [active, setActive] = useState(true);
+  const invalidSymbols = "!@#$%^&*_+={}<>|~`\\\"\'";
 
   let navigate = useNavigate();
 
@@ -29,8 +33,8 @@ export function CreateRoom(props) {
   };
 
   const applyResult = (result) => {
-    if (result.ok) {
-      setError("Sėkmingai pridėta!");
+     if (result.ok) {
+      setSuccess("Sėkmingai pridėta!");
       clear();
     } else {
       setError("Nepavyko sukurti!");
@@ -38,6 +42,15 @@ export function CreateRoom(props) {
   };
 
   const createClassroom = () => {
+    setError('')
+    setSuccess('')
+    if (!classroomName) {
+      setError("Prašome užpildyti klasės pavadinimą.");
+    } else if (!description) {
+      setError("Prašome užpildyti klasės aprašą.")
+    } else if (!building) {
+      setError("Prašome pasirinkti pastatą.")
+    } else {
     fetch("/api/v1/classrooms/create", {
       method: "POST",
       headers: {
@@ -50,11 +63,13 @@ export function CreateRoom(props) {
         active,
       }),
     }).then(applyResult);
+    }
   };
 
   const handleChange = (event: SelectChangeEvent) => {
     setBuilding(event.target.value);
   };
+
 
   return (
     <Container>
@@ -65,6 +80,7 @@ export function CreateRoom(props) {
             <FormControl fullWidth>
               <InputLabel id="building-label">Pastatas</InputLabel>
               <Select
+                required
                 labelId="building-label"
                 id="building"
                 label="Pastatas"
@@ -90,6 +106,7 @@ export function CreateRoom(props) {
             <TextField
               fullWidth
               multiline
+              required
               label="Klasės aprašas"
               id="description"
               value={description}
@@ -97,7 +114,8 @@ export function CreateRoom(props) {
             ></TextField>
           </Grid>
           <Grid item lg={10}>
-            {error && <div classroomName="error">{error}</div>}
+            {error && <div style={{color: 'red'}} classroomName="error">{error}</div>}
+            {success && <div style={{color: 'green'}} classroomName="success" >{success}</div>}
             <Stack direction="row" spacing={2}>
               <Button variant="contained" onClick={createClassroom}>
                 Sukurti

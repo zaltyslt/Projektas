@@ -157,8 +157,8 @@ const filteredDisabledClassrooms = classrooms.filter((classroom) => {
                   onChange={handleChange}
                 >
                   {/* Kaip cia ideti verte, kad vel rodytu viska??? TODO */}
-                  <MenuItem value="AKADEMIJA, TECHIN">
-                    <em>None</em>
+                  <MenuItem value="All">
+                    <em>Visi</em>
                   </MenuItem>
                   <MenuItem value="AKADEMIJA">AKADEMIJA</MenuItem>
                   <MenuItem value="TECHIN">TECHIN</MenuItem>
@@ -238,9 +238,9 @@ const filteredDisabledClassrooms = classrooms.filter((classroom) => {
                 .map((classroom) => (
                   <TableRow key={classroom.id}>
                     <TableCell component="th" scope="row">
-                      <Link to={`/classrooms/view/${classroom.id}`}>
+                      {/* <Link to={`/classrooms/view/${classroom.id}`}> */}
                         {classroom.classroomName}
-                      </Link>
+                      {/* </Link> */}
                     </TableCell>
                     <TableCell>{classroom.building}</TableCell>
                     <TableCell>

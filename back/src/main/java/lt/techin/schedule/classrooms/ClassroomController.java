@@ -39,6 +39,8 @@ public class ClassroomController {
     @PatchMapping("/update/{classroomId}")
     public ResponseEntity<ClassroomDto> updateClassroom(@PathVariable Long classroomId,
                                                         @RequestBody ClassroomDto classroomDto) {
+        System.out.println(classroomDto);
+        System.out.println(toClassroom(classroomDto));
         var updatedClassroom = classroomService.update(classroomId, toClassroom(classroomDto));
         return ok(toClassroomDto(updatedClassroom));
     }
