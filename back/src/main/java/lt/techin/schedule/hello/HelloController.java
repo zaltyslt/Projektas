@@ -1,6 +1,5 @@
 package lt.techin.schedule.hello;
 
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -31,7 +30,7 @@ public class HelloController {
     @GetMapping("/stuff")
     public String checkPersonInfo(@Valid HelloDTO helloDTO, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return "/sup";
+            return "/sup" + bindingResult.getErrorCount() + " " + bindingResult.getAllErrors().get(0);
         }
         return "/hello";
     }
