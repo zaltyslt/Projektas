@@ -2,6 +2,7 @@ package lt.techin.schedule.shift;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
+import lt.techin.schedule.validators.TextValid;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -13,6 +14,7 @@ public class Shift {
     @Column(name = "id", nullable = false)
     private Long id;
 
+    @TextValid(textMaximumLength = 30)
     private String name;
 
     private String shiftStartingTime;
