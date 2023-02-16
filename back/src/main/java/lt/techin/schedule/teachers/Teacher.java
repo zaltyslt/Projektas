@@ -1,4 +1,4 @@
-package lt.techin.Schedule.teachers;
+package lt.techin.schedule.teachers;
 
 public class Teacher {
 }
