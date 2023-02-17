@@ -4,7 +4,6 @@ import jakarta.annotation.PostConstruct;
 import jakarta.persistence.EntityManager;
 import org.hibernate.Filter;
 import org.hibernate.Session;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -12,19 +11,19 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class ModuleService {
 
     private final ModuleRepository moduleRepository;
-
-    @Autowired
-
     private EntityManager entityManager;
+
+    public ModuleService(ModuleRepository moduleRepository, EntityManager entityManager) {
+        this.moduleRepository = moduleRepository;
+        this.entityManager = entityManager;
+    }
 
     public ModuleService(ModuleRepository moduleRepository) {
         this.moduleRepository = moduleRepository;
