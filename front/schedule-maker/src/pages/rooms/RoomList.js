@@ -208,6 +208,7 @@ export function RoomList() {
               <TableRow>
                 <TablePagination
                   labelRowsPerPage="Rodyti po"
+                  labelDisplayedRows={({ from, to, count }) => `${from}-${to} iš ${count}`}
                   rowsPerPageOptions={[10, 20, { label: "Visi", value: -1 }]}
                   count={filteredClassrooms.length}
                   page={currentPage - 1}
