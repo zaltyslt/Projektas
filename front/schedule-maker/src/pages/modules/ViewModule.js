@@ -19,24 +19,24 @@ export function ViewModule() {
     <div>
       <Container>
         <Grid container rowSpacing={4}>
-          <Grid item lg={10}>
+          <Grid item sm={10}>
             <header>
               <h1>{module.name}</h1>
               <h5>Paskutinį kartą redaguota: {module.modifiedDate}</h5>
             </header>
           </Grid>
 
-          <Grid item lg={12}>
+          <Grid item sm={12}>
             <h4>Modulio kodas</h4>
             <p>{module.number}</p>
           </Grid>
 
-          <Grid item lg={12}>
+          <Grid item sm={12}>
             <h4>Modulio pavadinimas</h4>
             <p>{module.name}</p>
           </Grid>
 
-          <Grid item lg={12}>
+          <Grid item sm={12}>
             <Stack direction="row" spacing={2}>
               <Link to={"/modules/edit/" + module.id}>
                 <Button variant="contained">Redaguoti</Button>
