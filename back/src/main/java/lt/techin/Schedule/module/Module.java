@@ -2,6 +2,7 @@ package lt.techin.schedule.module;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
+import lt.techin.schedule.validators.TextValid;
 import org.hibernate.annotations.Filter;
 import org.hibernate.annotations.FilterDef;
 import org.hibernate.annotations.ParamDef;
@@ -22,7 +23,9 @@ public class Module {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 
     private Long id;
+    @TextValid
     private String number;
+    @TextValid
     private String name;
 
 

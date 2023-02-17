@@ -1,12 +1,17 @@
 package lt.techin.schedule.module;
 
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static java.util.stream.Collectors.toList;
 import static lt.techin.schedule.module.ModuleMapper.toModule;
@@ -39,18 +44,39 @@ public class ModuleController {
     public List<ModuleEntityDto> getDeletedModules() {
         return moduleService.getAll(true).stream().map(ModuleMapper::toModuleEntityDto).collect(toList());
     }
-
+    //ModuleDto Validation - Internal server error 500
     @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<ModuleDto> createModule(@RequestBody ModuleDto moduleDto) {
-        var createdModule = moduleService.create(toModule(moduleDto));
-        return ok(toModuleDto(createdModule));
+    public @ResponseBody Map<Integer, String> createModule(@Valid @RequestBody ModuleDto moduleDto, BindingResult bindingResult) {
+        Map<Integer, String> response = new HashMap<>();
+        if (bindingResult.hasErrors()) {
+            List<ObjectError> errors = bindingResult.getAllErrors();
+            for (int x = 0; x < bindingResult.getAllErrors().size(); x++) {
+                response.put(x, errors.get(x).getDefaultMessage());
+            }
+        } else {
+            String createResponse = moduleService.create(toModule(moduleDto));
+            if (!createResponse.isEmpty()) {
+                response.put(0, createResponse);
+            }
+        }
+        return response;
     }
 
     @PatchMapping("/{moduleId}")
-    public ResponseEntity<ModuleDto> updateModule(@PathVariable Long moduleId,
-                                                  @RequestBody ModuleDto moduleDto) {
-        var updatedModule = moduleService.updateModule(moduleId, toModule(moduleDto));
-        return ok(toModuleDto(updatedModule));
+    public @ResponseBody Map<Integer, String> updateModule (@PathVariable Long moduleId, @Valid @RequestBody Module moduleDto, BindingResult bindingResult) {
+        Map<Integer, String> response = new HashMap<>();
+        if (bindingResult.hasErrors()) {
+            List<ObjectError> errors = bindingResult.getAllErrors();
+            for (int x = 0; x < bindingResult.getAllErrors().size(); x++) {
+                response.put(x, errors.get(x).getDefaultMessage());
+            }
+        } else {
+            String modifyResponse = moduleService.updateModule(moduleId, moduleDto);
+            if (!modifyResponse.isEmpty()) {
+                response.put(0, modifyResponse);
+            }
+        }
+        return response;
     }
 
     @DeleteMapping("/{moduleId}")
