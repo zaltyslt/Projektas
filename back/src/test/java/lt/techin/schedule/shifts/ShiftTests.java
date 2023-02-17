@@ -1,14 +1,10 @@
-package lt.techin.schedule;
+package lt.techin.schedule.shifts;
 
 import lt.techin.schedule.shift.LessonTime;
 import lt.techin.schedule.shift.Shift;
-import lt.techin.schedule.shift.ShiftDTO;
-import lt.techin.schedule.shift.ShiftService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 
@@ -53,22 +49,5 @@ public class ShiftTests {
 
         Assertions.assertNull(shift.getCreatedDate(), "Created date should be null.");
         Assertions.assertNull(shift.getModifiedDate(), "Modified date should be null.");
-    }
-
-    @Mock
-    ShiftDTO shiftDTO;
-
-    @InjectMocks
-    ShiftService shiftService = new ShiftService(shiftDTO);
-
-    @Test
-    public void shiftServiceTest() {
-
-
-        Shift shift = new Shift("Morning", "10:00", "15:00", true, 2, 5);
-        shiftService.addShift(shift);
-
-        Shift shiftFromBase = shiftService.getActiveShifts().get(0);
-
     }
 }

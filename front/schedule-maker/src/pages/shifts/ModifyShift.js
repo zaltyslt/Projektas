@@ -5,6 +5,7 @@ import {
     Select,
     FormHelperText,
     TextField,
+    Alert
   } from "@mui/material";
 import { Container, Stack } from "@mui/system";
 
@@ -239,18 +240,18 @@ export function ModifyShift() {
                     </Link>     
                 </Stack>
             </Grid>
-            <Grid>
+            <Grid item lg={10}>
                 {isPostUsed ? (
                     successfulPost ? (
-                        <div id="success-text"> Pamaina sėkmingai pakeista.</div>
+                        <Alert severity="success"> Pamaina sėkmingai pakeista.</Alert>
                         ) : 
                         (
-                        <div id="error-text">
-                            <div>Nepavyko pakeisti pamainos.</div>
-                        {Object.keys(shiftCreateMessageError).map(key => (
-                        <div key={key} id="error-text"> {shiftCreateMessageError[key]} </div>
+                        <Grid>
+                            <Alert severity="warning">Nepavyko pakeisti pamainos.</Alert>
+                            {Object.keys(shiftCreateMessageError).map(key => (
+                            <Alert key={key} severity="warning"> {shiftCreateMessageError[key]} </Alert>
                             ))}
-                        </div>
+                        </Grid>
                         )
                     ) : 
                     (

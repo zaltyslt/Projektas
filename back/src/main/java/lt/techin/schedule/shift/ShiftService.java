@@ -3,10 +3,7 @@ package lt.techin.schedule.shift;
 
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -22,12 +19,12 @@ public class ShiftService {
         shiftDatabase.save(shift);
     }
 
-    private boolean findShiftByName(String name) {
-        return shiftDatabase.findAll().stream().anyMatch(s -> s.getName().equalsIgnoreCase(name));
+    private Optional<Shift> findShiftByName(String name) {
+        return shiftDatabase.findAll().stream().filter(s -> s.getName().equalsIgnoreCase(name)).findFirst();
     }
 
     public String addUniqueShift(Shift shift) {
-        if(findShiftByName(shift.getName())) {
+        if(findShiftByName(shift.getName()).isPresent()) {
             return "Pamainos pavadinimas turi būti unikalus.";
         }
         else {
@@ -43,12 +40,14 @@ public class ShiftService {
         }
     }
 
+    private final Comparator<Shift> compareShiftByName = Comparator.comparing(o -> o.getName().toLowerCase());
+
     public List<Shift> getActiveShifts() {
-        return shiftDatabase.findAll().stream().filter(Shift::getIsActive).collect(Collectors.toList());
+        return shiftDatabase.findAll().stream().filter(Shift::getIsActive).sorted(compareShiftByName).collect(Collectors.toList());
     }
 
     public List<Shift> getInactiveShifts() {
-        return shiftDatabase.findAll().stream().filter(s -> !s.getIsActive()).collect(Collectors.toList());
+        return shiftDatabase.findAll().stream().filter(s -> !s.getIsActive()).sorted(compareShiftByName).collect(Collectors.toList());
     }
 
     public Shift getShiftByID(Long shiftID) {
@@ -57,7 +56,8 @@ public class ShiftService {
 
     public String modifyExistingShift(Long shiftID, Shift shift) {
         if (shiftDatabase.findById(shiftID).isPresent()) {
-            if(findShiftByName(shift.getName())) {
+            Optional<Shift> foundShift = findShiftByName(shift.getName());
+            if(foundShift.isPresent() && !foundShift.get().getId().equals(shiftID)) {
                 return "Pamainos pavadinimas turi būti unikalus.";
             }
             if (shift.getId() == null) {

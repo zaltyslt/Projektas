@@ -59,7 +59,6 @@ public class ShiftController {
 
     @PatchMapping("/deactivate-shift/{shiftID}")
     public void deactivateShift(@PathVariable Long shiftID) {
-        System.out.println("Sup deactivation");
         shiftService.changeActiveShiftStatusByID(shiftID, false);
     }
 
