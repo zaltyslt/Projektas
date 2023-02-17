@@ -150,6 +150,7 @@ export function ModuleList() {
                 <TablePagination
                   labelRowsPerPage="Rodyti po"
                   rowsPerPageOptions={[10, 20, { label: "Visi", value: -1 }]}
+                  labelDisplayedRows={({ from, to, count }) => `${from}-${to} iš ${count}`}
                   colSpan={3}
                   count={filteredModules.length}
                   page={page}
@@ -220,6 +221,7 @@ export function ModuleList() {
                   <TablePagination
                     labelRowsPerPage="Rodyti po"
                     rowsPerPageOptions={[10, 20, { label: "Visi", value: -1 }]}
+                    labelDisplayedRows={({ from, to, count }) => `${from}-${to} iš ${count}`}
                     colSpan={3}
                     count={deletedModules.length}
                     page={page}

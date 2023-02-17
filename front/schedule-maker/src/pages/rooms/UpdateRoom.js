@@ -12,7 +12,6 @@ import {
   InputLabel,
   MenuItem,
   Alert,
-  AlertTitle
 } from "@mui/material";
 import { SelectChangeEvent } from "@mui/material/Select";
 
@@ -28,11 +27,11 @@ export function UpdateClassroom() {
   const invalidSymbols = "!@#$%^&*_+={}<>|~`\\\"'";
   
   const handleDescriptionChange = (event) => {
-    setdescription(event.target.value);
+    setDescription(event.target.value);
   };
 
   const handleCNameeChange = (event) => {
-    setclassroomName(event.target.value);
+    setClassroomName(event.target.value);
   };
 
   const handleChange = (event: SelectChangeEvent) => {
