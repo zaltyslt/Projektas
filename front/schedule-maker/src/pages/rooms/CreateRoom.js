@@ -26,6 +26,7 @@ export function CreateRoom(props) {
   const [active, setActive] = useState(true);
   const invalidSymbols = "!@#$%^&*_+={}<>|~`\\\"'";
   let navigate = useNavigate();
+  const [formValid, setFormValid] = useState(false);
 
   const clear = () => {
     setClassroomName("");
@@ -90,6 +91,8 @@ export function CreateRoom(props) {
               <InputLabel id="building-label">Pastatas</InputLabel>
               <Select
                 required
+                error={formValid}
+                helperText={formValid && 'Klasės pavadinimas yra privalomas.'}
                 labelId="building-label"
                 id="building"
                 label="Pastatas"
@@ -105,6 +108,8 @@ export function CreateRoom(props) {
             <TextField
               fullWidth
               required
+              error={formValid}
+              helperText={formValid && 'Klasės pavadinimas yra privalomas.'}
               id="classroomName"
               label="Klasės pavadinimas"
               value={classroomName}
@@ -116,6 +121,8 @@ export function CreateRoom(props) {
               fullWidth
               multiline
               required
+              error={formValid}
+              helperText={formValid && 'Klasės aprašas yra privalomas.'}
               label="Klasės aprašas"
               id="description"
               value={description}

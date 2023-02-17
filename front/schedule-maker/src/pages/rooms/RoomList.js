@@ -56,6 +56,8 @@ export function RoomList() {
   useEffect(() => {
     fetchClassrooms();
   }, []);
+
+
   const filteredClassrooms = classrooms.filter((classroom) => {
     if (building === "All") {
       return String(classroom.classroomName)
@@ -103,6 +105,8 @@ export function RoomList() {
   ) {
     pageNumbers.push(i);
   }
+
+
   const indexOfLastClassroom2 = currentPage2 * classroomsPerPage2;
   const indexOfFirstClassroom2 = indexOfLastClassroom2 - classroomsPerPage2;
   const currentClassrooms2 = filteredDisabledClassrooms.slice(
@@ -209,7 +213,9 @@ export function RoomList() {
                 <TablePagination
                   labelRowsPerPage="Rodyti po"
                   labelDisplayedRows={({ from, to, count }) => `${from}-${to} iš ${count}`}
-                  rowsPerPageOptions={[10, 20, { label: "Visi", value: -1 }]}
+                  rowsPerPageOptions={[10, 20, { label: "Visi", value: filteredClassrooms.length }]}
+                  // rowsPerPageOptions={[10, 20, { label: "Visi"}]}
+                  colSpan={2}
                   count={filteredClassrooms.length}
                   page={currentPage - 1}
                   rowsPerPage={classroomsPerPage}
@@ -238,7 +244,7 @@ export function RoomList() {
                 <TableRow>
                   <TableCell>Klasės pavadinimas</TableCell>
                   <TableCell>Pastatas</TableCell>
-                  <TableCell>Altyvinti</TableCell>
+                  <TableCell>Veiksmai</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -258,7 +264,7 @@ export function RoomList() {
                           data-value='true'
                           value={classroom}
                           onClick={(e) => { enableClassroom(e, classroom); }}
-                        >Aktyvinti
+                        >Atstatyti
                         </Button>
                       </TableCell>
                     </TableRow>
@@ -268,7 +274,7 @@ export function RoomList() {
                 <TableRow>
                   <TablePagination
                     labelRowsPerPage="Rodyti po"
-                    rowsPerPageOptions={[1, 20, { label: "Visi", value: -1 }]}
+                    rowsPerPageOptions={[10, 20, { label: "Visi", value: -1 }]}
                     count={filteredDisabledClassrooms.length}
                     page={currentPage2 - 1}
                     rowsPerPage={classroomsPerPage2}
