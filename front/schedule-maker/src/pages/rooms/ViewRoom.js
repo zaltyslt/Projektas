@@ -26,22 +26,22 @@ export function ViewRoom() {
     <div>
       <Container>
         <Grid container rowSpacing={4}>
-          <Grid item lg={10}>
+          <Grid item sm={10}>
             <header>
               <h1>{classroom.classroomName}</h1>
               <h5>Įrašo sukūrimo data: {classroom.createdDate}</h5>
               <h5>Paskutinį kartą redaguota: {classroom.modifiedDate}</h5>
             </header>
           </Grid>
-          <Grid item lg={12}>
+          <Grid item sm={12}>
             <h4>Pastatas</h4>
             {classroom.building}
           </Grid>
-          <Grid item lg={12}>
+          <Grid item sm={12}>
             <h4>Klasės aprašas</h4>
             <p>{classroom.description}</p>
           </Grid>
-          <Grid item lg={12}>
+          <Grid item sm={12}>
             <Stack direction="row" spacing={2}>
               <Link to={`/update/${classroom.id}`}>
                 <Button variant="contained">Redaguoti</Button>

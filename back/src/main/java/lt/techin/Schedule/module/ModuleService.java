@@ -42,7 +42,12 @@ public class ModuleService {
     }
 
     public Module create(Module module) {
-        return moduleRepository.save(module);
+        if (moduleRepository.findAll().stream().anyMatch(m -> m.getNumber().equalsIgnoreCase(module.getNumber()))) {
+            return null;
+        }
+        else {
+            return moduleRepository.save(module);
+        }
     }
 
     public Module updateModule(Long id, Module module) {

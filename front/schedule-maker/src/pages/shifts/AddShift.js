@@ -139,7 +139,7 @@ export function AddShift() {
         <Container>
             <h3> Pridėti naują pamainą </h3>
             <Grid container id="grid-input">
-                <Grid item lg={10}>
+                <Grid item sm={10}>
                     <TextField
                     fullWidth
                     required
@@ -161,7 +161,7 @@ export function AddShift() {
             </Grid>
            
             <Grid container rowSpacing={2}>
-                <Grid item lg={2} id="grid-selector">
+                <Grid item sm={2} id="grid-selector">
                     <h5>Pamainos pradžia:</h5>
                     <Select
                     fullWidth
@@ -185,7 +185,7 @@ export function AddShift() {
                     )}
                 </Grid>
     
-                <Grid item lg={2} id="grid-selector">
+                <Grid item sm={2} id="grid-selector">
                     <h5>Pamainos pabaiga:</h5>
                     <Select
                     fullWidth
@@ -210,7 +210,7 @@ export function AddShift() {
                 </Grid>
             </Grid>
 
-            <Grid item lg={2}>
+            <Grid item sm={2}>
                 <Stack direction="row" spacing={2}>
                     <Button variant="contained" onClick={createShift}>
                         Išsaugoti

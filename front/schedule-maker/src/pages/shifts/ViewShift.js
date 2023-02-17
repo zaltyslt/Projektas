@@ -23,24 +23,24 @@ export function ViewShift() {
         <div>
             <Container>
                 <Grid container rowSpacing={5}>
-                    <Grid item lg={12}>
+                    <Grid item sm={12}>
                         <header>
                             <h1>{currentShift.name}</h1>
                             <span id="modified-date">Paskutinį kartą redaguota: {currentShift.modifiedDate}</span>
                         </header>
                     </Grid>
 
-                    <Grid item lg={12}>
+                    <Grid item sm={12}>
                         <h4>Pamainos pradžia:</h4>
                         <h5>{currentShift.shiftStartingTime}</h5>
                     </Grid>
 
-                    <Grid item lg={12}>
+                    <Grid item sm={12}>
                         <h4>Pamainos pabaiga:</h4>
                         <h5>{currentShift.shiftEndingTime}</h5>
                     </Grid>
                 </Grid>
-                <Grid item lg={12}>
+                <Grid item sm={12}>
                     <Stack direction="row" spacing={2}>
                         <Link to={"/modify-shift/" + currentShift.id}>
                             <Button variant="contained">Redaguoti</Button>

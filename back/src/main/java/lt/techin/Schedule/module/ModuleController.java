@@ -1,9 +1,7 @@
 package lt.techin.schedule.module;
 
 import org.springframework.data.domain.Page;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -43,7 +41,11 @@ public class ModuleController {
     @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<ModuleDto> createModule(@RequestBody ModuleDto moduleDto) {
         var createdModule = moduleService.create(toModule(moduleDto));
-        return ok(toModuleDto(createdModule));
+        if (createdModule == null) {
+          return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        } else {
+            return ok(toModuleDto(createdModule));
+        }
     }
 
     @PatchMapping("/{moduleId}")

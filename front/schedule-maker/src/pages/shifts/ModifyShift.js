@@ -158,7 +158,7 @@ export function ModifyShift() {
             <h1>Redagavimas</h1> 
             <h3>{currentShift.name}</h3>
             <Grid container id="grid-input">
-                <Grid item lg={10}>
+                <Grid item sm={10}>
                     <TextField
                     fullWidth
                     required
@@ -177,7 +177,7 @@ export function ModifyShift() {
             </Grid>
 
             <Grid container rowSpacing={2}>
-                <Grid item lg={2} id="grid-selector">
+                <Grid item sm={2} id="grid-selector">
                     <h5>Pamainos pradžia:</h5>
                     <Select
                     fullWidth
@@ -201,7 +201,7 @@ export function ModifyShift() {
                     )}
                 </Grid>
                 
-                <Grid item lg={2} id="grid-selector">
+                <Grid item sm={2} id="grid-selector">
                     <h5>Pamainos pabaiga:</h5>
                     <Select
                     fullWidth
@@ -225,7 +225,7 @@ export function ModifyShift() {
                     )}
                 </Grid> 
             </Grid>
-            <Grid item lg={2}>
+            <Grid item sm={2}>
                 <Stack direction="row" spacing={2}>
                     <Button variant="contained" onClick={modifyShift}>
                         Išsaugoti
@@ -240,7 +240,7 @@ export function ModifyShift() {
                     </Link>     
                 </Stack>
             </Grid>
-            <Grid item lg={10}>
+            <Grid item sm={10}>
                 {isPostUsed ? (
                     successfulPost ? (
                         <Alert severity="success"> Pamaina sėkmingai pakeista.</Alert>
