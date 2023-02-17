@@ -36,6 +36,9 @@ public class Module {
 
     private boolean deleted = false;
 
+    public Module(String s) {
+    }
+
     @PrePersist
     public void prePersist() {
         createdDate = LocalDateTime.now();
@@ -56,6 +59,13 @@ public class Module {
         this.name = name;
         this.createdDate = createdDate;
         this.modifiedDate = modifiedDate;
+        this.deleted = deleted;
+    }
+
+    public Module(Long id, String number, String name, boolean deleted) {
+        this.id = id;
+        this.number = number;
+        this.name = name;
         this.deleted = deleted;
     }
 
