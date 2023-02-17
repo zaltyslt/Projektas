@@ -1,20 +1,24 @@
-import { Button, FormControl, Grid, InputLabel, MenuItem, OutlinedInput, Select, TextField } from "@mui/material";
+import { Button, FormControl, Grid, InputLabel, MenuItem, OutlinedInput, Select, TextField, Alert } from "@mui/material";
 import { Container, Stack } from "@mui/system";
 import { useState, useEffect } from "react";
 import { Link, useHref, useParams } from "react-router-dom";
 
 export function EditModule() {
-    const [module, setModule] = useState({});
-    const [number, setNumber] = useState("");
-    const [name, setName] = useState("");
+  const [module, setModule] = useState({});
+  const [number, setNumber] = useState("");
+  const [name, setName] = useState("");
 
-    const [isNameEmpty, setIsNameEmpty] = useState(false);
-    const [isNameValid, setIsNameValid] = useState(true);
-  
-    const [isModuleCodeEmpty, setIsModuleCodeEmpty] = useState(false);
-    const [isModuleCodeValid, setIsModuleCodeValid] = useState(true);
-  
+  const [isNameEmpty, setIsNameEmpty] = useState(false);
+  const [isNameValid, setIsNameValid] = useState(true);
 
+  const [isModuleCodeEmpty, setIsModuleCodeEmpty] = useState(false);
+  const [isModuleCodeValid, setIsModuleCodeValid] = useState(true);
+
+  const [successfulPost, setSuccessfulPost] = useState();
+  const [isPostUsed, setIsPostUsed] = useState(false);
+  const [moduleCreateMessageError, setModuleCreateMessageError] = useState([]);
+
+  
   const params = useParams({
     number: "",
     name: ""
@@ -90,9 +94,24 @@ export function EditModule() {
         body: JSON.stringify({
           number, 
           name
-        }),
+        })
+      })
+      .then(response => response.json())
+      .then(data => {
+          handleAfterPost(data);
       })
     };
+
+    const handleAfterPost = ((data) => {
+      if ((Object.keys(data).length) === 0) {
+          setSuccessfulPost(true);
+      }
+      else {
+          setSuccessfulPost(false);
+          setModuleCreateMessageError(data);
+      }
+      setIsPostUsed(true);
+  })
 
   return (
     <Container>
@@ -151,6 +170,24 @@ export function EditModule() {
               </Link>
             </Stack>
           </Grid>
+          <Grid item lg={10}>
+                {isPostUsed ? (
+                    successfulPost ? (
+                        <Alert severity="success"> Modulis sėkmingai pakeistas.</Alert>
+                        ) : 
+                        (
+                        <Grid>
+                            <Alert severity="warning">Nepavyko pakeisti moduio.</Alert>
+                            {Object.keys(moduleCreateMessageError).map(key => (
+                            <Alert key={key} severity="warning"> {moduleCreateMessageError[key]} </Alert>
+                            ))}
+                        </Grid>
+                        )
+                    ) : 
+                    (
+                    <div></div>
+                    )}
+            </Grid>
         </Grid>
       </form>
     </Container>

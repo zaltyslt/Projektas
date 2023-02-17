@@ -12,8 +12,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ModuleService {
@@ -41,18 +43,34 @@ public class ModuleService {
         return moduleRepository.findById(id);
     }
 
-    public Module create(Module module) {
-        return moduleRepository.save(module);
+    public String create(Module module) {
+        if (moduleRepository.findAll().stream().anyMatch(m -> m.getNumber().equalsIgnoreCase(module.getNumber()))) {
+            return "Modulis su tokiu kodu jau egzistuoja.";
+        }
+        else {
+            moduleRepository.save(module);
+            return "";
+        }
     }
 
-    public Module updateModule(Long id, Module module) {
-        var existingModule = moduleRepository.findById(id).orElseThrow();
-        if (existingModule != null) {
-            existingModule.setNumber(module.getNumber());
-            existingModule.setName(module.getName());
-            return moduleRepository.save(existingModule);
+    public String updateModule(Long id, Module module) {
+        Optional<Module> optModule = moduleRepository.findById(id);
+        if (optModule.isPresent()) {
+            Module moduleFromDB = optModule.get();
+            List<Module> similarNameModules = moduleRepository.findAll().stream().filter(
+                    m -> m.getNumber().equalsIgnoreCase(module.getNumber())).toList();
+
+            if (similarNameModules.isEmpty() || similarNameModules.size() == 1 && similarNameModules.get(0).getId().equals(id)) {
+                moduleFromDB.setNumber(module.getNumber());
+                moduleFromDB.setName(module.getName());
+                moduleRepository.save(moduleFromDB);
+                return "";
+            }
+            else {
+                return "Modulis su tokiu kodu jau egzistuoja.";
+            }
         }
-        return null;
+        return "Toks modulis nerastas.";
     }
 
     public Module restoreModule(Long id) {

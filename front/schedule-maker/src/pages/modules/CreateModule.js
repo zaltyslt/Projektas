@@ -9,6 +9,7 @@ import {
   Select,
   Stack,
   TextField,
+  Alert
 } from "@mui/material";
 import { useState } from "react";
 import { Link } from "react-router-dom";
@@ -23,7 +24,9 @@ export function CreateModule() {
   const [isModuleCodeEmpty, setIsModuleCodeEmpty] = useState(false);
   const [isModuleCodeValid, setIsModuleCodeValid] = useState(true);
 
-  const [successfulPost, setSuccessfulPost] = useState(true);
+  const [successfulPost, setSuccessfulPost] = useState();
+  const [isPostUsed, setIsPostUsed] = useState(false);
+  const [moduleCreateMessageError, setModuleCreateMessageError] = useState([]);
 
   const clear = () => {
     setNumber("");
@@ -82,8 +85,23 @@ export function CreateModule() {
         number,
         name,
       }),
-    }).then(clear);
+    }).then(response => response.json())
+      .then(data => {
+        handleAfterPost(data);
+    })
   };
+
+const handleAfterPost = ((data) => {
+  if ((Object.keys(data).length) === 0) {
+      setSuccessfulPost(true);
+      clear();
+  }
+  else {
+      setSuccessfulPost(false);
+      setModuleCreateMessageError(data);
+  }
+  setIsPostUsed(true);
+})
 
   return (
     <Container>
@@ -137,22 +155,22 @@ export function CreateModule() {
             </Stack>
           </Grid>
           <Grid item lg={10}>
-          {/* {isPostUsed ? (
+          {isPostUsed ? (
             successfulPost ? (
-                <Alert severity="success"> Modulis sėkmingai pakeistas.</Alert>
+                <Alert severity="success"> Modulis sėkmingai sukurtas.</Alert>
                 ) : 
                 (
                 <Grid>
-                    <Alert severity="warning">Nepavyko pakeisti modulio.</Alert>
-                    {Object.keys(shiftCreateMessageError).map(key => (
-                    <Alert key={key} severity="warning"> {shiftCreateMessageError[key]} </Alert>
+                    <Alert severity="warning">Nepavyko sukurti modulio.</Alert>
+                    {Object.keys(moduleCreateMessageError).map(key => (
+                    <Alert key={key} severity="warning"> {moduleCreateMessageError[key]} </Alert>
                     ))}
                 </Grid>
                 )
             ) : 
             (
             <div></div>
-            )} */}
+            )}
           </Grid>
         </Grid>
       </form>
