@@ -60,7 +60,7 @@ export function CreateModule() {
       <h3>Pridėti naują modulį</h3>
       <form>
         <Grid container rowSpacing={2}>
-          <Grid item lg={10}>
+          <Grid item sm={10}>
             <TextField
               fullWidth
               required
@@ -72,7 +72,7 @@ export function CreateModule() {
             ></TextField>
           </Grid>
 
-          <Grid item lg={10}>
+          <Grid item sm={10}>
             <TextField
               fullWidth
               required
@@ -84,7 +84,7 @@ export function CreateModule() {
             ></TextField>
           </Grid>
 
-          <Grid item lg={10}>
+          <Grid item sm={10}>
             {error && <Alert severity="warning">{error}</Alert>}
             {success && <Alert severity="success">{success}</Alert>}
             <Stack direction="row" spacing={2}>

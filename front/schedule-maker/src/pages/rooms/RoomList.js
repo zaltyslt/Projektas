@@ -139,16 +139,16 @@ export function RoomList() {
     <div>
       <Container maxWidth="lg">
         <Grid container rowSpacing={3}>
-          <Grid item lg={10}>
+          <Grid item sm={10}>
             <h3>Klasių sąrašas</h3>
           </Grid>
-          <Grid item lg={2}>
+          <Grid item sm={2}>
             <Link to="/create">
               <Button variant="contained">Sukurti naują</Button>
             </Link>
           </Grid>
           <Grid container spacing={2}>
-            <Grid item xs={8}>
+            <Grid item sm={8}>
               <TextField
                 fullWidth
                 variant="outlined"
@@ -159,7 +159,7 @@ export function RoomList() {
                 onChange={(e) => setFilter(e.target.value)}
               ></TextField>
             </Grid>
-            <Grid item xs={4}>
+            <Grid item sm={4}>
               <FormControl fullWidth>
                 <InputLabel id="building-label">Pastatas</InputLabel>
                 <Select
