@@ -160,10 +160,12 @@ export function EditModule() {
                 Išsaugoti
               </Button>
 
-              <Button variant="contained" 
-              onClick={() => deleteModule(module.id)}>
-                Ištrinti
-              </Button>
+              <Link to="/modules">
+                <Button variant="contained" 
+                onClick={() => deleteModule(module.id)}>
+                  Ištrinti
+                </Button>
+              </Link>
 
               <Link to="/modules">
                 <Button variant="contained">Grįžti</Button>

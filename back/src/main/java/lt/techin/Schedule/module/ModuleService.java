@@ -53,16 +53,16 @@ public class ModuleService {
         }
     }
 
-    public String updateModule(Long id, Module module) {
+    public String updateModule(Long id, Module newModule) {
         Optional<Module> optModule = moduleRepository.findById(id);
         if (optModule.isPresent()) {
             Module moduleFromDB = optModule.get();
-            List<Module> similarNameModules = moduleRepository.findAll().stream().filter(
-                    m -> m.getNumber().equalsIgnoreCase(module.getNumber())).toList();
+            Optional<Module> similarNameModule = moduleRepository.findAll().stream().filter(
+                    m -> m.getNumber().equalsIgnoreCase(newModule.getNumber())).findAny();
 
-            if (similarNameModules.isEmpty() || similarNameModules.size() == 1 && similarNameModules.get(0).getId().equals(id)) {
-                moduleFromDB.setNumber(module.getNumber());
-                moduleFromDB.setName(module.getName());
+            if (similarNameModule.isEmpty() || similarNameModule.get().getId().equals(id)) {
+                moduleFromDB.setNumber(newModule.getNumber());
+                moduleFromDB.setName(newModule.getName());
                 moduleRepository.save(moduleFromDB);
                 return "";
             }
