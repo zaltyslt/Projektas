@@ -12,7 +12,6 @@ import {
   InputLabel,
   MenuItem,
   Alert,
-  AlertTitle
 } from "@mui/material";
 import { SelectChangeEvent } from "@mui/material/Select";
 
@@ -28,11 +27,11 @@ export function UpdateClassroom() {
   const invalidSymbols = "!@#$%^&*_+={}<>|~`\\\"'";
   
   const handleDescriptionChange = (event) => {
-    setdescription(event.target.value);
+    setDescription(event.target.value);
   };
 
   const handleCNameeChange = (event) => {
-    setclassroomName(event.target.value);
+    setClassroomName(event.target.value);
   };
 
   const handleChange = (event: SelectChangeEvent) => {
@@ -129,7 +128,7 @@ export function UpdateClassroom() {
         <h5>Paskutinį kartą redaguota: {classroom.modifiedDate}</h5>
         <form>
           <Grid container rowSpacing={2}>
-            <Grid item lg={10}>
+            <Grid item sm={10}>
               <FormControl fullWidth>
                 <InputLabel id="building-label">Pastatas</InputLabel>
                 <Select
@@ -144,7 +143,7 @@ export function UpdateClassroom() {
                 </Select>
               </FormControl>
             </Grid>
-            <Grid item lg={10}>
+            <Grid item sm={10}>
               <TextField
                 fullWidth
                 variant="outlined"
@@ -154,7 +153,7 @@ export function UpdateClassroom() {
                 onChange={(e) => setClassroomName(e.target.value)}
               ></TextField>
             </Grid>
-            <Grid item lg={10}>
+            <Grid item sm={10}>
               <TextField
                 fullWidth
                 multiline
@@ -165,7 +164,7 @@ export function UpdateClassroom() {
                 onChange={(e) => setDescription(e.target.value)}
               ></TextField>
             </Grid>
-            <Grid item lg={10}>
+            <Grid item sm={10}>
               {" "}
               <legend>{params.classroomName}</legend>
               {error && (
@@ -179,7 +178,7 @@ export function UpdateClassroom() {
               </Alert>
               )}
             </Grid>
-            <Grid item lg={10}>
+            <Grid item sm={10}>
               <Stack direction="row" spacing={2}>
                 <Button variant="contained" onClick={updateClassroom}>
                   Išsaugoti

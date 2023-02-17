@@ -1,32 +1,14 @@
-import {
-  Button,
-  Container,
-  FormControl,
-  Grid,
-  InputLabel,
-  MenuItem,
-  OutlinedInput,
-  Select,
-  Stack,
-  TextField,
-  Alert
-} from "@mui/material";
+import { Alert, Button, Container, Grid, Stack, TextField } from "@mui/material";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
 export function CreateModule() {
   const [number, setNumber] = useState("");
   const [name, setName] = useState("");
+  const [success, setSuccess] = useState("");
+  const [error, setError] = useState("");
 
-  const [isNameEmpty, setIsNameEmpty] = useState(false);
-  const [isNameValid, setIsNameValid] = useState(true);
-
-  const [isModuleCodeEmpty, setIsModuleCodeEmpty] = useState(false);
-  const [isModuleCodeValid, setIsModuleCodeValid] = useState(true);
-
-  const [successfulPost, setSuccessfulPost] = useState();
-  const [isPostUsed, setIsPostUsed] = useState(false);
-  const [moduleCreateMessageError, setModuleCreateMessageError] = useState([]);
+  const invalidSymbols = "!@#$%^&*_+={}<>|~`\\'";
 
   const clear = () => {
     setNumber("");
@@ -70,8 +52,29 @@ export function CreateModule() {
   })
 
   const validation = () => {
-    if (!isNameEmpty && isNameValid && !isModuleCodeEmpty && isModuleCodeValid) {
+    setError("");
+    setSuccess("");
+    if (!number) {
+      setError("Prašome užpildyti modulio kodą.");
+    } else if (number.split("").some((char) => invalidSymbols.includes(char))) {
+      setError("Modulio numeris turi neleidžiamų simbolių.")
+    } else if (!name) {
+      setError("Prašome užpildyti modulio pavadinimą.")
+    } else if (name.split("").some((char) => invalidSymbols.includes(char))) {
+      setError("Modulio pavadinimas turi neleidžiamų simbolių.");
+    } else {
       createModule();
+    }
+  };
+
+  const applyResult = (result) => {
+    if (result.ok) {
+      setSuccess("Sėkmingai pridėta");
+      clear();
+    } else if (result.status === 400) {
+      setError("Modulis su tokiu numeriu jau egzistuoja");
+    } else {
+      setError("Nepavyko pridėti");
     }
   };
 
@@ -85,10 +88,7 @@ export function CreateModule() {
         number,
         name,
       }),
-    }).then(response => response.json())
-      .then(data => {
-        handleAfterPost(data);
-    })
+    }).then(applyResult);
   };
 
 const handleAfterPost = ((data) => {
@@ -108,16 +108,10 @@ const handleAfterPost = ((data) => {
       <h3>Pridėti naują modulį</h3>
       <form>
         <Grid container rowSpacing={2}>
-
-        <Grid item lg={10}>
+          <Grid item sm={10}>
             <TextField
               fullWidth
               required
-              error={!isModuleCodeValid || isModuleCodeEmpty}
-              helperText={
-                !isModuleCodeValid ? "Modulio kodas turi neleidžiamų simbolių." : 
-                isModuleCodeEmpty ? "Modulio kodas negali būti tuščias" : null
-              }
               variant="outlined"
               label="Modulio kodas"
               id="number"
@@ -126,15 +120,10 @@ const handleAfterPost = ((data) => {
             ></TextField>
           </Grid>
 
-          <Grid item lg={10}>
+          <Grid item sm={10}>
             <TextField
               fullWidth
               required
-              error={!isNameValid || isNameEmpty}
-              helperText={
-                !isNameValid ? "Modulio pavadinimas turi neleidžiamų simbolių." : 
-                isNameEmpty ? "Modulio pavadinimas negali būti tuščias" : null
-              }
               variant="outlined"
               label="Modulio pavadinimas"
               id="name"
@@ -143,7 +132,9 @@ const handleAfterPost = ((data) => {
             ></TextField>
           </Grid>
 
-          <Grid item lg={10}>
+          <Grid item sm={10}>
+            {error && <Alert severity="warning">{error}</Alert>}
+            {success && <Alert severity="success">{success}</Alert>}
             <Stack direction="row" spacing={2}>
               <Button variant="contained" onClick={validation}>
                 Išsaugoti

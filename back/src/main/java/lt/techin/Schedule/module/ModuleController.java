@@ -2,11 +2,7 @@ package lt.techin.schedule.module;
 
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -46,20 +42,13 @@ public class ModuleController {
     }
     //ModuleDto Validation - Internal server error 500
     @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE})
-    public @ResponseBody Map<Integer, String> createModule(@Valid @RequestBody ModuleDto moduleDto, BindingResult bindingResult) {
-        Map<Integer, String> response = new HashMap<>();
-        if (bindingResult.hasErrors()) {
-            List<ObjectError> errors = bindingResult.getAllErrors();
-            for (int x = 0; x < bindingResult.getAllErrors().size(); x++) {
-                response.put(x, errors.get(x).getDefaultMessage());
-            }
+    public ResponseEntity<ModuleDto> createModule(@RequestBody ModuleDto moduleDto) {
+        var createdModule = moduleService.create(toModule(moduleDto));
+        if (createdModule == null) {
+          return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         } else {
-            String createResponse = moduleService.create(toModule(moduleDto));
-            if (!createResponse.isEmpty()) {
-                response.put(0, createResponse);
-            }
+            return ok(toModuleDto(createdModule));
         }
-        return response;
     }
 
     @PatchMapping("/{moduleId}")

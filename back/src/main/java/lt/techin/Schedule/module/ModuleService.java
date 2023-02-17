@@ -42,13 +42,12 @@ public class ModuleService {
         return moduleRepository.findById(id);
     }
 
-    public String create(Module module) {
+    public Module create(Module module) {
         if (moduleRepository.findAll().stream().anyMatch(m -> m.getNumber().equalsIgnoreCase(module.getNumber()))) {
-            return "Modulis su tokiu kodu jau egzistuoja.";
+            return null;
         }
         else {
-            moduleRepository.save(module);
-            return "";
+            return moduleRepository.save(module);
         }
     }
 
