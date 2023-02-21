@@ -14,8 +14,8 @@ public class SubjectEntityDto extends SubjectDto {
     public SubjectEntityDto() {
     }
 
-    public SubjectEntityDto(String name, String description, Module module, Set<Classroom> classRooms, LocalDateTime createdDate, LocalDateTime modifiedDate, Long id) {
-        super(name, description, module, classRooms, createdDate, modifiedDate);
+    public SubjectEntityDto(String name, String description, Module module, Set<Classroom> classRooms, LocalDateTime createdDate, LocalDateTime modifiedDate, Long id, Boolean deleted) {
+        super(name, description, module, classRooms, createdDate, modifiedDate, deleted);
         this.id = id;
     }
 

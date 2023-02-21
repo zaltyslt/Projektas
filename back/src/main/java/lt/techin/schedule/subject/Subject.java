@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lt.techin.schedule.classrooms.Classroom;
 import lt.techin.schedule.module.Module;
-import org.hibernate.annotations.*;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -16,9 +15,6 @@ import java.util.Objects;
 import java.util.Set;
 
 @Entity
-@SQLDelete(sql = "UPDATE subject SET deleted = true WHERE id=?")
-@FilterDef(name = "deletedSubjectFilter", parameters = @ParamDef(name = "isDeleted", type = org.hibernate.type.descriptor.java.BooleanJavaType.class))
-@Filter(name = "deletedSubjectFilter", condition = "deleted = :isDeleted")
 public class Subject {
 
     @Id
@@ -52,7 +48,7 @@ public class Subject {
     @LastModifiedBy
     private String modifiedBy;
 
-    private Boolean deleted = false;
+    private Boolean deleted;
 
     @PrePersist
     public void prePersist() {
@@ -70,6 +66,7 @@ public class Subject {
 
     public Subject() {
         classRooms = new HashSet<>();
+        deleted = false;
     }
 
     public Subject(Long id, String name, String description, Module module, Set<Classroom> classRooms, LocalDateTime createdDate, String createdBy, LocalDateTime modifiedDate, String modifiedBy, Boolean deleted) {

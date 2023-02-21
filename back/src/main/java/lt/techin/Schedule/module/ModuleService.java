@@ -95,18 +95,7 @@ public class ModuleService {
                 new ModuleDto("TRA", "React")
         );
 
-//        initialModulesToAdd.stream()
-//                .map(ModuleMapper::toModule)
-//                .forEach(moduleRepository::save);
-
-        List<ModuleDto> modules = new ArrayList<>();
-        modules.addAll(initialModulesToAdd);
-        for (int i = 0; i < 100; i++) {
-            var moduleDto = new ModuleDto(String.format("Modulio numeris (%s)", i), String.format("Modulio pavadinimas (%s)", i));
-            modules.add(moduleDto);
-        }
-
-        modules.stream()
+        initialModulesToAdd.stream()
                 .map(ModuleMapper::toModule)
                 .forEach(moduleRepository::save);
     }

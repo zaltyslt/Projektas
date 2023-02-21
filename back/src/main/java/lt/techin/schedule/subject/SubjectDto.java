@@ -17,6 +17,8 @@ public class SubjectDto {
 
     private Module module;
 
+    private Boolean deleted;
+
     private Set<Classroom> classRooms;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
@@ -27,15 +29,17 @@ public class SubjectDto {
 
     public SubjectDto() {
         classRooms = new HashSet<>();
+        deleted = false;
     }
 
-    public SubjectDto(String name, String description, Module module, Set<Classroom> classRooms, LocalDateTime createdDate, LocalDateTime modifiedDate) {
+    public SubjectDto(String name, String description, Module module, Set<Classroom> classRooms, LocalDateTime createdDate, LocalDateTime modifiedDate, Boolean deleted) {
         this.name = name;
         this.description = description;
         this.module = module;
         this.classRooms = classRooms;
         this.createdDate = createdDate;
         this.modifiedDate = modifiedDate;
+        this.deleted = deleted;
     }
 
     public String getName() {
@@ -86,17 +90,25 @@ public class SubjectDto {
         this.modifiedDate = modifiedDate;
     }
 
+    public Boolean getDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(Boolean deleted) {
+        this.deleted = deleted;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         SubjectDto that = (SubjectDto) o;
-        return Objects.equals(name, that.name) && Objects.equals(description, that.description) && Objects.equals(module, that.module) && Objects.equals(classRooms, that.classRooms) && Objects.equals(createdDate, that.createdDate) && Objects.equals(modifiedDate, that.modifiedDate);
+        return Objects.equals(name, that.name) && Objects.equals(description, that.description) && Objects.equals(module, that.module) && Objects.equals(deleted, that.deleted) && Objects.equals(classRooms, that.classRooms) && Objects.equals(createdDate, that.createdDate) && Objects.equals(modifiedDate, that.modifiedDate);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, description, module, classRooms, createdDate, modifiedDate);
+        return Objects.hash(name, description, module, deleted, classRooms, createdDate, modifiedDate);
     }
 
     @Override
@@ -105,6 +117,7 @@ public class SubjectDto {
                 "name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", module=" + module +
+                ", deleted=" + deleted +
                 ", classRooms=" + classRooms +
                 ", createdDate=" + createdDate +
                 ", modifiedDate=" + modifiedDate +

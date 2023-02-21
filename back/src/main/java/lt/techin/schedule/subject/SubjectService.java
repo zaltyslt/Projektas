@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class SubjectService {
@@ -35,13 +36,13 @@ public class SubjectService {
         this.classroomRepository = classroomRepository;
     }
 
-    public List<Subject> getAll(boolean isDeleted) {
-        Session session = entityManager.unwrap(Session.class);
-        Filter filter = session.enableFilter("deletedSubjectFilter");
-        filter.setParameter("isDeleted", isDeleted);
-        List<Subject> subjects =  subjectRepository.findAll();
-        session.disableFilter("deletedSubjectFilter");
+    public List<Subject> getAll() {
+        List<Subject> subjects =  subjectRepository.findAll().stream().filter(subject -> !subject.getDeleted()).collect(Collectors.toList());
         return subjects;
+    }
+
+    public List<Subject> getAllDeleted() {
+        return subjectRepository.findAll().stream().filter(Subject::getDeleted).collect(Collectors.toList());
     }
 
     public Optional<Subject> getById(Long id) {
@@ -52,16 +53,11 @@ public class SubjectService {
         return subjectRepository.save(subject);
     }
 
-//    public Subject updateSubject(Long id, Subject subject) {
-//        var existingSubject = subjectRepository.findById(id).orElseThrow();
-//
-//        existingSubject.setName(subject.getName());
-//        existingSubject.setDescription(subject.getDescription());
-//        existingSubject.setModule(subject.getModule());
-////        existingSubject.setRooms(subject.getRooms());
-//
-//        return subjectRepository.save(existingSubject);
-//    }
+    public Subject delete(Long subjectId) {
+        var existingSubject = subjectRepository.findById(subjectId).orElseThrow();
+        existingSubject.setDeleted(true);
+        return subjectRepository.save(existingSubject);
+    }
 
     public Subject updateSubject(Long subjectId, Subject subject) {
         var existingSubject = subjectRepository.findById(subjectId).orElseThrow();
@@ -81,6 +77,7 @@ public class SubjectService {
         return subjectRepository.save(subject);
     }
 
+    //Not used
     public boolean deleteById(Long id) {
         try {
             subjectRepository.deleteById(id);
@@ -90,10 +87,12 @@ public class SubjectService {
         }
     }
 
+    //Not used (pagination done only from frontend)
     private Pageable pageable(int page, int pageSize, String sortField, Sort.Direction sortDirection) {
         return PageRequest.of(page, pageSize, sortDirection, sortField);
     }
 
+    //Not used
     public Page<Subject> findAllPaged(int page, int pageSize, boolean isDeleted) {
 
         Pageable pageable = PageRequest.of(page, pageSize);
@@ -105,29 +104,4 @@ public class SubjectService {
         session.disableFilter("deletedSubjectFilter");
         return subjects;
     }
-
-//    @PostConstruct
-//    //FIXME for dev purpose
-//    public void loadInitialSubjects() {
-//        var initialSubjectsToAdd = List.of(
-//                new SubjectDto("Pirmas dalykas", "Duomenų bazės", null),
-//                new SubjectDto("Antras dalykas", "Srping Boot", null),
-//                new SubjectDto("Trečias dalykas", "React", null)
-//        );
-
-//        initialSubjectsToAdd.stream()
-//                .map(SubjectMapper::toSubject)
-//                .forEach(subjectRepository::save);
-//
-//        List<SubjectDto> subjects = new ArrayList<>();
-//        subjects.addAll(initialSubjectsToAdd);
-//        for (int i = 0; i < 100; i++) {
-//            var subjectDto = new SubjectDto(String.format("Dalykas (%s)", i), "Aprašas", null, null);
-//            subjects.add(subjectDto);
-//        }
-//
-//        subjects.stream()
-//                .map(SubjectMapper::toSubject)
-//                .forEach(subjectRepository::save);
-//    }
 }

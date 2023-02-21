@@ -58,8 +58,8 @@ export function EditSubject() {
   };
 
   const deleteSubject = (id) => {
-    fetch("/api/v1/subjects/" + id, {
-      method: "DELETE",
+    fetch("/api/v1/subjects/delete/" + id, {
+      method: "PATCH",
       headers: {
         "Content-Type": "application/json",
       },

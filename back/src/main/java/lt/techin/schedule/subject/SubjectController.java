@@ -1,14 +1,12 @@
 package lt.techin.schedule.subject;
 
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
 import static lt.techin.schedule.subject.SubjectMapper.*;
@@ -26,7 +24,7 @@ public class SubjectController {
 
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE})
     public List<SubjectEntityDto> getSubjects() {
-        return subjectService.getAll(false).stream().map(SubjectMapper::toSubjectEntityDto).collect(toList());
+        return subjectService.getAll().stream().map(SubjectMapper::toSubjectEntityDto).collect(toList());
     }
 
     @GetMapping(value = "/{subjectId}", produces = {MediaType.APPLICATION_JSON_VALUE})
@@ -40,7 +38,7 @@ public class SubjectController {
 
     @GetMapping(value = "/deleted", produces = {MediaType.APPLICATION_JSON_VALUE})
     public List<SubjectEntityDto> getDeletedSubjects() {
-        return subjectService.getAll(true).stream().map(SubjectMapper::toSubjectEntityDto).collect(toList());
+        return subjectService.getAllDeleted().stream().map(SubjectMapper::toSubjectEntityDto).collect(toList());
     }
 
     @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE})
@@ -49,12 +47,11 @@ public class SubjectController {
         return ok(toSubjectDto(createdSubject));
     }
 
-
-//    @PatchMapping("/{subjectId}")
-//    public ResponseEntity<SubjectDto> updateSubject(@PathVariable Long subjectId, @RequestBody SubjectDto subjectDto) {
-//        var updatedSubject = subjectService.updateSubject(subjectId, toSubject(subjectDto));
-//        return ok(toSubjectDto(updatedSubject));
-//    }
+    @PatchMapping("/delete/{subjectId}")
+    public ResponseEntity<SubjectDto> delete(@PathVariable Long subjectId) {
+        var deletedSubject = subjectService.delete(subjectId);
+        return ok(toSubjectDto(deletedSubject));
+    }
 
     @PatchMapping("/{subjectId}")
     public ResponseEntity<SubjectDto> updateSubject(@PathVariable Long subjectId, @RequestBody SubjectDto subjectDto) {
@@ -62,6 +59,7 @@ public class SubjectController {
         return ok(toSubjectDto(updatedSubject));
     }
 
+    //Not used
     @DeleteMapping("/{subjectId}")
     public ResponseEntity<Void> deleteSubject(@PathVariable Long subjectId) {
         boolean deleted = subjectService.deleteById(subjectId);
@@ -79,7 +77,7 @@ public class SubjectController {
         return ok(toSubjectDto(restoredSubject));
     }
 
-//    Not used at demo v1
+//    Not used at demo v1/v2
     @GetMapping("/paged")
     @ResponseBody
     public ResponseEntity<List<SubjectEntityDto>> findSubjectsPaged(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int pageSize) {
