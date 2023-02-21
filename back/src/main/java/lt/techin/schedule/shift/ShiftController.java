@@ -35,7 +35,7 @@ public class ShiftController {
     }
 
     @PostMapping("/add-shift")
-    public @ResponseBody Map<Integer, String> addShift (@RequestBody @Valid Shift shiftToAdd, BindingResult bindingResult) {
+    public @ResponseBody Map<Integer, String> addShift (@RequestBody @Valid ShiftDto shiftToAdd, BindingResult bindingResult) {
         Map<Integer, String> response = new HashMap<>();
         if (bindingResult.hasErrors()) {
             List<ObjectError> errors = bindingResult.getAllErrors();
@@ -63,7 +63,7 @@ public class ShiftController {
     }
 
     @PutMapping("/modify-shift/{shiftID}")
-    public @ResponseBody Map<Integer, String> modifyShift(@PathVariable Long shiftID, @RequestBody @Valid Shift shiftToChange, BindingResult bindingResult) {
+    public @ResponseBody Map<Integer, String> modifyShift(@PathVariable Long shiftID, @RequestBody @Valid ShiftDto shiftToChangeDto, BindingResult bindingResult) {
         Map<Integer, String> response = new HashMap<>();
         if (bindingResult.hasErrors()) {
             List<ObjectError> errors = bindingResult.getAllErrors();
@@ -72,7 +72,7 @@ public class ShiftController {
             }
         }
         else {
-            String modifyRequest = shiftService.modifyExistingShift(shiftID, shiftToChange);
+            String modifyRequest = shiftService.modifyExistingShift(shiftID, shiftToChangeDto);
             if (!modifyRequest.isEmpty()) {
                 response.put(0, modifyRequest);
             }
