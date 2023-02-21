@@ -1,4 +1,3 @@
-import { Label } from "@mui/icons-material";
 import {
   Button,
   Container,
@@ -47,6 +46,7 @@ export function CreateSubject() {
       target: { value },
     } = event;
     setClassRooms(typeof value === "string" ? value.split(",") : value);
+    console.log(classRooms);
   };
 
   const validation = () => {
@@ -68,7 +68,7 @@ export function CreateSubject() {
         name,
         description,
         module,
-        classRooms
+        classRooms,
       }),
     }).then(clear);
   };

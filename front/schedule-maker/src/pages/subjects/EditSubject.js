@@ -24,6 +24,8 @@ export function EditSubject() {
   const [module, setModule] = useState("");
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
+  const [classRooms, setClassRooms] = useState([]);
+  const [rooms, setRooms] = useState([]);
   const listUrl = useHref("/subjects");
 
   useEffect(() => {
@@ -42,6 +44,19 @@ export function EditSubject() {
       .then(setModules);
   }, []);
 
+  useEffect(() => {
+    fetch("api/v1/classrooms")
+    .then((response) => response.json())
+    .then(setRooms);
+  }, []);
+
+  const handleRoomInput = (event) => {
+    const {
+      target: { value },
+    } = event;
+    setClassRooms(typeof value === "string" ? value.split(",") : value);
+  };
+
   const deleteSubject = (id) => {
     fetch("/api/v1/subjects/" + id, {
       method: "DELETE",
@@ -52,17 +67,18 @@ export function EditSubject() {
   };
 
   const handleEditSubject = () => {
-    fetch(`/api/v1/subjects/${params.id}?moduleId=${module}`, {
+    fetch(`/api/v1/subjects/${params.id}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        name, 
-        description
+        name,
+        description,
+        module, 
+        classRooms
       }),
-    })
-    .then(() => window.location = listUrl);
+    }).then(() => (window.location = listUrl));
   };
 
   return (
@@ -105,7 +121,7 @@ export function EditSubject() {
                 onChange={(e) => setModule(e.target.value)}
               >
                 {modules.map((module) => (
-                  <MenuItem key={module.id} value={module.id}>
+                  <MenuItem key={module.id} value={module}>
                     {module.name}
                   </MenuItem>
                 ))}
@@ -114,16 +130,22 @@ export function EditSubject() {
           </Grid>
 
           <Grid item lg={10}>
-            <FormControl fullWidth>
+          <FormControl fullWidth>
               <InputLabel id="room-label">Klasės</InputLabel>
               <Select
                 multiple
                 labelId="room-label"
                 id="room"
-                value=""
-                // onChange={handleRoomInput}
+                value={classRooms}
+                onChange={handleRoomInput}
                 input={<OutlinedInput label="Klasės" />}
-              ></Select>
+              >
+                {rooms.map((room) => (
+                  <MenuItem key={room.id} value={room}>
+                    {room.classroomName}
+                  </MenuItem>
+                ))}
+              </Select>
             </FormControl>
           </Grid>
 
