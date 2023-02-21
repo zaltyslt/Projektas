@@ -1,0 +1,15 @@
+/* table {
+    width: 100%;
+    table-layout: fixed; */
+
+.activity {
+    width: 10%;
+}
+
+.empty-activity {
+    width: 12%;
+}
+
+TableCell {
+    width: 50%;
+}
