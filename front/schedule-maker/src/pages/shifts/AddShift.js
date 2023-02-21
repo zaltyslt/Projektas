@@ -151,7 +151,7 @@ export function AddShift() {
                         : null
                     }
                     variant="outlined"
-                    label="Dalyko pavadinimas"
+                    label="Pamainos pavadinimas"
                     id="name"
                     name="name"
                     value={name}
