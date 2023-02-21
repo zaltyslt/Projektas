@@ -17,6 +17,7 @@ export function EditSubject() {
     name: "",
     description: "",
     module: {},
+    classRooms: [],
   });
   const params = useParams();
   const [modules, setModules] = useState([]);

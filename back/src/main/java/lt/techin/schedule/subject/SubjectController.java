@@ -11,8 +11,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
-import static lt.techin.schedule.subject.SubjectMapper.toSubject;
-import static lt.techin.schedule.subject.SubjectMapper.toSubjectDto;
+import static lt.techin.schedule.subject.SubjectMapper.*;
 import static org.springframework.http.ResponseEntity.ok;
 
 @RestController
@@ -31,10 +30,10 @@ public class SubjectController {
     }
 
     @GetMapping(value = "/{subjectId}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<SubjectDto> getSubject(@PathVariable Long subjectId) {
+    public ResponseEntity<SubjectEntityDto> getSubject(@PathVariable Long subjectId) {
         var subjectOptional = subjectService.getById(subjectId);
 
-        var responseEntity = subjectOptional.map(subject -> ok(toSubjectDto(subject))).orElseGet(()-> ResponseEntity.notFound().build());
+        var responseEntity = subjectOptional.map(subject -> ok(toSubjectEntityDto(subject))).orElseGet(()-> ResponseEntity.notFound().build());
 
         return responseEntity;
     }

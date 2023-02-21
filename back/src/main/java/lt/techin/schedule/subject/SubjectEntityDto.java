@@ -3,6 +3,7 @@ package lt.techin.schedule.subject;
 import lt.techin.schedule.classrooms.Classroom;
 import lt.techin.schedule.module.Module;
 
+import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.Set;
 
@@ -13,8 +14,8 @@ public class SubjectEntityDto extends SubjectDto {
     public SubjectEntityDto() {
     }
 
-    public SubjectEntityDto(String name, String description, Module module, Set<Classroom> classRooms, Long id) {
-        super(name, description, module, classRooms);
+    public SubjectEntityDto(String name, String description, Module module, Set<Classroom> classRooms, LocalDateTime createdDate, LocalDateTime modifiedDate, Long id) {
+        super(name, description, module, classRooms, createdDate, modifiedDate);
         this.id = id;
     }
 
