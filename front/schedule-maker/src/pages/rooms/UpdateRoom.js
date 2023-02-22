@@ -15,7 +15,6 @@ import {
 } from "@mui/material";
 import { SelectChangeEvent } from "@mui/material/Select";
 
-
 export function UpdateClassroom() {
   const [classroom, setClassroom] = useState({});
   const [error, setError] = useState();
@@ -25,7 +24,7 @@ export function UpdateClassroom() {
   const [description, setDescription] = useState("");
   const [building, setBuilding] = useState("AKADEMIJA");
   const invalidSymbols = "!@#$%^&*_+={}<>|~`\\\"'";
-  
+
   const handleDescriptionChange = (event) => {
     setDescription(event.target.value);
   };
@@ -119,15 +118,16 @@ export function UpdateClassroom() {
     });
   };
 
-
   return (
     <div>
       <Container>
-        <h1>Redagavimas</h1>
-        <h3>{classroom.classroomName}</h3>
-        <h5>Paskutinį kartą redaguota: {classroom.modifiedDate}</h5>
+          <h1 className="edit-header">Redagavimas</h1>
+          <h3>{classroom.classroomName}</h3>
+          <span id="modified-date">
+            Paskutinį kartą redaguota: {classroom.modifiedDate}
+          </span>
         <form>
-          <Grid container rowSpacing={2}>
+          <Grid container rowSpacing={3}>
             <Grid item sm={10}>
               <FormControl fullWidth>
                 <InputLabel id="building-label">Pastatas</InputLabel>
@@ -167,18 +167,9 @@ export function UpdateClassroom() {
             <Grid item sm={10}>
               {" "}
               <legend>{params.classroomName}</legend>
-              {error && (
-                <Alert severity="warning">
-                {error}
-              </Alert>
-              )}
-              {success && (
-                <Alert severity="success">
-                {success}
-              </Alert>
-              )}
+              {error && <Alert severity="warning">{error}</Alert>}
+              {success && <Alert severity="success">{success}</Alert>}
             </Grid>
-            <Grid item sm={10}>
               <Stack direction="row" spacing={2}>
                 <Button variant="contained" onClick={updateClassroom}>
                   Išsaugoti
@@ -210,7 +201,6 @@ export function UpdateClassroom() {
                 </Link>
               </Stack>
             </Grid>
-          </Grid>
         </form>
       </Container>
     </div>

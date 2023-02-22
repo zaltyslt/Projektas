@@ -155,8 +155,9 @@ export function ModifyShift() {
     return (
        <div>
          <Container>
-            <h1>Redagavimas</h1> 
+            <h1 className="edit-header">Redagavimas</h1> 
             <h3>{currentShift.name}</h3>
+            <span id="modified-date">Paskutinį kartą redaguota: {currentShift.modifiedDate}</span>
             <Grid container id="grid-input">
                 <Grid item sm={10}>
                     <TextField

@@ -1,4 +1,4 @@
-import { Button, Paper, Grid } from "@mui/material";
+import { Button, Grid } from "@mui/material";
 import { Container, Stack } from "@mui/system";
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
@@ -22,7 +22,7 @@ export function ViewModule() {
           <Grid item sm={10}>
             <header>
               <h1>{module.name}</h1>
-              <h5>Paskutinį kartą redaguota: {module.modifiedDate}</h5>
+              <span id="modified-date">Paskutinį kartą redaguota: {module.modifiedDate}</span>
             </header>
           </Grid>
 

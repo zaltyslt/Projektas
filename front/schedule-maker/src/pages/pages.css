@@ -1,0 +1,27 @@
+.MuiTablePagination-selectLabel, .MuiTablePagination-displayedRows{
+    margin-top: 15px;
+}
+
+.activity {
+    width: 10%;
+}
+
+.empty-activity {
+    width: 12%;
+}
+
+TableCell {
+    width: 50%;
+}
+
+.create-header {
+    line-height: 5rem;
+}
+
+.edit-header{
+    line-height: 4rem;;
+}
+
+#modified-date {
+    line-height: 4rem;;
+}
