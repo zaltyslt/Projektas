@@ -281,21 +281,21 @@ export function RoomList() {
                     </TableRow>
                   ))}
               </TableBody>
+              
               <TableFooter>
                 <TableRow>
                   <TablePagination
-                    labelRowsPerPage="Rodyti po"
-                    rowsPerPageOptions={[1, 20, { label: "Visi", value: -1 }]}
-                    labelDisplayedRows={({ from, to, count }) =>
-                      `${from}-${to} iš ${count}`
-                    }
-                    count={filteredDisabledClassrooms.length}
-                    page={currentPage2 - 1}
-                    rowsPerPage={classroomsPerPage2}
-                    onPageChange={(_, page) => setCurrentPage2(page + 1)}
-                    onRowsPerPageChange={(e) =>
-                      setClassroomsPerPage2(parseInt(e.target.value))
-                    }
+                     labelRowsPerPage="Rodyti po"
+                     rowsPerPageOptions={[10, 20, { label: "Visi", value: filteredDisabledClassrooms.length }]}
+                     labelDisplayedRows={({ from, to, count }) => `${from}-${to} iš ${count}`}
+                     colSpan={3}
+                     count={filteredDisabledClassrooms.length}
+                     page={currentPage2 - 1}
+                     rowsPerPage={classroomsPerPage2}
+                     onPageChange={(_, page) => setCurrentPage2(page + 1)}
+                     onRowsPerPageChange={(e) =>
+                       setClassroomsPerPage2(parseInt(e.target.value))
+                     }
                   />
                 </TableRow>
               </TableFooter>

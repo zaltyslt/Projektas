@@ -18,7 +18,6 @@ import {
 import { Container } from "@mui/system";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import "./ShiftList.css";
 import Stack from "@mui/material/Stack";
 import ".././pages.css"
 
