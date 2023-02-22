@@ -1,4 +1,4 @@
-package lt.techin.schedule.classrooms;
+package lt.techin.schedule.programs;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
@@ -10,23 +10,27 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
-public class Classroom {
+class Program {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
-    @Column(name = "classroomName")
+
+    @Column(name = "programName")
     @TextValid
-    private String classroomName;
+    private String programName;
+
     // TODO Sutvarkyti textMaxL
     @TextValid(textMaximumLength = 1000)
     private String description;
-    private BuildingType building;
+
     @CreatedDate
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDateTime createdDate;
+
     @LastModifiedDate
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime modifiedDate;
+
     private boolean active = true;
 
     @PrePersist
@@ -40,13 +44,16 @@ public class Classroom {
         modifiedDate = LocalDateTime.now();
     }
 
-    public Classroom() {
+    public Program() {
     }
 
-    public Classroom(Long id, String classroomName, String description, boolean active) {
+    public Program(Long id, String programName, String description, LocalDateTime createdDate,
+                   LocalDateTime modifiedDate, boolean active) {
         this.id = id;
-        this.classroomName = classroomName;
+        this.programName = programName;
         this.description = description;
+        this.createdDate = createdDate;
+        this.modifiedDate = modifiedDate;
         this.active = active;
     }
 
@@ -58,12 +65,12 @@ public class Classroom {
         this.id = id;
     }
 
-    public String getClassroomName() {
-        return classroomName;
+    public String getProgramName() {
+        return programName;
     }
 
-    public void setClassroomName(String classroomName) {
-        this.classroomName = classroomName;
+    public void setProgramName(String programName) {
+        this.programName = programName;
     }
 
     public String getDescription() {
@@ -72,14 +79,6 @@ public class Classroom {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public BuildingType getBuilding() {
-        return building;
-    }
-
-    public void setBuilding(BuildingType building) {
-        this.building = building;
     }
 
     public LocalDateTime getCreatedDate() {
@@ -110,31 +109,29 @@ public class Classroom {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Classroom classroom = (Classroom) o;
-        return active == classroom.active && Objects.equals(id, classroom.id)
-                && Objects.equals(classroomName, classroom.classroomName)
-                && Objects.equals(description, classroom.description)
-                && building == classroom.building
-                && Objects.equals(createdDate, classroom.createdDate)
-                && Objects.equals(modifiedDate, classroom.modifiedDate);
+        Program program = (Program) o;
+        return active == program.active
+                && Objects.equals(id, program.id)
+                && Objects.equals(programName, program.programName)
+                && Objects.equals(description, program.description)
+                && Objects.equals(createdDate, program.createdDate)
+                && Objects.equals(modifiedDate, program.modifiedDate);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, classroomName, description, building, createdDate, modifiedDate, active);
+        return Objects.hash(id, programName, description, createdDate, modifiedDate, active);
     }
 
     @Override
     public String toString() {
-        return "Classroom{" +
+        return "Program{" +
                 "id=" + id +
-                ", classroomName='" + classroomName + '\'' +
+                ", programName='" + programName + '\'' +
                 ", description='" + description + '\'' +
-                ", building=" + building +
                 ", createdDate=" + createdDate +
                 ", modifiedDate=" + modifiedDate +
                 ", active=" + active +
                 '}';
     }
 }
-

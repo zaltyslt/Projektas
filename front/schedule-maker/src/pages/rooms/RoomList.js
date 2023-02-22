@@ -26,15 +26,15 @@ import { SelectChangeEvent } from "@mui/material/Select";
 
 
 export function RoomList() {
-  const [classrooms, setClassrooms] = useState([]);
-  const [building, setBuilding] = useState("All");
-  const [filter, setFilter] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
-  const [currentPage2, setCurrentPage2] = useState(1);
-  const [classroomsPerPage, setClassroomsPerPage] = useState(10);
-  const [classroomsPerPage2, setClassroomsPerPage2] = useState(10);
-  const paginate = (pageNumber) => setCurrentPage(pageNumber);
-  const paginate2 = (pageNumber2) => setCurrentPage2(pageNumber2);
+  const [classrooms, setClassrooms] = useState([])
+  const [building, setBuilding] = useState("All")
+  const [filter, setFilter] = useState("")
+  const [currentPage, setCurrentPage] = useState(1)
+  const [currentPage2, setCurrentPage2] = useState(1)
+  const [classroomsPerPage, setClassroomsPerPage] = useState(10)
+  const [classroomsPerPage2, setClassroomsPerPage2] = useState(10)
+  const paginate = (pageNumber) => setCurrentPage(pageNumber)
+  const paginate2 = (pageNumber2) => setCurrentPage2(pageNumber2)
   const [isChecked, setChecked] = useState(false);
 
   const fetchClassrooms = () => {
@@ -45,7 +45,7 @@ export function RoomList() {
 
   const enableClassroom = (event, classroom) => {
     console.log(classroom)
-    fetch(`/api/v1/classrooms/enable/${classroom.id}`, {
+    fetch(`/api/v1/classrooms/enable-classroom/${classroom.id}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
@@ -143,7 +143,7 @@ export function RoomList() {
             <h3>Klasių sąrašas</h3>
           </Grid>
           <Grid item sm={2}>
-            <Link to="/create">
+            <Link to="/create-classroom">
               <Button variant="contained">Sukurti naują</Button>
             </Link>
           </Grid>
@@ -196,7 +196,7 @@ export function RoomList() {
                 .map((classroom) => (
                   <TableRow key={classroom.id}>
                     <TableCell component="th" scope="row">
-                      <Link to={`/classrooms/view/${classroom.id}`}>
+                      <Link to={`/classrooms/view-classroom/${classroom.id}`}>
                         {classroom.classroomName}
                       </Link>
                     </TableCell>

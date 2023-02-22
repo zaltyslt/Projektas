@@ -10,15 +10,15 @@ import {
 import { Container } from "@mui/system";
 
 
-export function ViewRoom() {
-  const [classroom, setClassroom] = useState({});
+export function ViewProgram() {
+  const [program, setProgram] = useState({});
   const params = useParams();
   let navigate = useNavigate();
 
   useEffect(() => {
-    fetch(`/api/v1/classrooms/classroom/${params.id}`)
+    fetch(`/api/v1/programs/program/${params.id}`)
       .then((response) => response.json())
-      .then(setClassroom);
+      .then(setProgram);
   }, [params.id]);
 
 
@@ -28,21 +28,17 @@ export function ViewRoom() {
         <Grid container rowSpacing={4}>
           <Grid item sm={10}>
             <header>
-              <h1>{classroom.classroomName}</h1>
-              <h5>Paskutinį kartą redaguota: {classroom.modifiedDate}</h5>
+              <h1>{program.programName}</h1>
+              <h5>Paskutinį kartą redaguota: {program.modifiedDate}</h5>
             </header>
           </Grid>
           <Grid item sm={12}>
-            <h4>Pastatas</h4>
-            {classroom.building}
-          </Grid>
-          <Grid item sm={12}>
-            <h4>Klasės aprašas</h4>
-            <p>{classroom.description}</p>
+            <h4>Programos aprašas</h4>
+            <p>{program.description}</p>
           </Grid>
           <Grid item sm={12}>
             <Stack direction="row" spacing={2}>
-              <Link to={`/update-classroom/${classroom.id}`}>
+              <Link to={`/update-program/${program.id}`}>
                 <Button variant="contained">Redaguoti</Button>
               </Link>
               <Button variant="contained" onClick={() => navigate(-1)}>

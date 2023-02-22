@@ -1,33 +1,37 @@
-package lt.techin.schedule.classrooms;
+package lt.techin.schedule.programs;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-public class ClassroomDto {
+public class ProgramDto {
+
     private Long id;
-    private String classroomName;
+
+    private String programName;
+
     private String description;
-    private BuildingType building;
-    private boolean active = true;
+
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDateTime createdDate;
+
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime modifiedDate;
 
-    public ClassroomDto() {
+    private boolean active = true;
+
+    public ProgramDto() {
     }
 
-    public ClassroomDto(Long id, String classroomName, String description,
-                        BuildingType building, boolean active, LocalDateTime createdDate, LocalDateTime modifiedDate) {
+    public ProgramDto(Long id, String programName, String description, LocalDateTime createdDate,
+                      LocalDateTime modifiedDate, boolean active) {
         this.id = id;
-        this.classroomName = classroomName;
+        this.programName = programName;
         this.description = description;
-        this.building = building;
-        this.active = active;
         this.createdDate = createdDate;
         this.modifiedDate = modifiedDate;
+        this.active = active;
     }
 
     public Long getId() {
@@ -38,12 +42,12 @@ public class ClassroomDto {
         this.id = id;
     }
 
-    public String getClassroomName() {
-        return classroomName;
+    public String getProgramName() {
+        return programName;
     }
 
-    public void setClassroomName(String classroomName) {
-        this.classroomName = classroomName;
+    public void setProgramName(String programName) {
+        this.programName = programName;
     }
 
     public String getDescription() {
@@ -52,22 +56,6 @@ public class ClassroomDto {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public BuildingType getBuilding() {
-        return building;
-    }
-
-    public void setBuilding(BuildingType building) {
-        this.building = building;
-    }
-
-    public boolean isActive() {
-        return active;
-    }
-
-    public void setActive(boolean active) {
-        this.active = active;
     }
 
     public LocalDateTime getCreatedDate() {
@@ -86,29 +74,40 @@ public class ClassroomDto {
         this.modifiedDate = modifiedDate;
     }
 
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        ClassroomDto that = (ClassroomDto) o;
-        return active == that.active && Objects.equals(id, that.id)
-                && Objects.equals(classroomName, that.classroomName)
+        ProgramDto that = (ProgramDto) o;
+        return active == that.active
+                && Objects.equals(id, that.id)
+                && Objects.equals(programName, that.programName)
                 && Objects.equals(description, that.description)
-                && building == that.building;
+                && Objects.equals(createdDate, that.createdDate)
+                && Objects.equals(modifiedDate, that.modifiedDate);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, classroomName, description, building, active);
+        return Objects.hash(id, programName, description, createdDate, modifiedDate, active);
     }
 
     @Override
     public String toString() {
-        return "ClassroomDto{" +
+        return "ProgramDto{" +
                 "id=" + id +
-                ", classroomName='" + classroomName + '\'' +
+                ", programName='" + programName + '\'' +
                 ", description='" + description + '\'' +
-                ", building=" + building +
+                ", createdDate=" + createdDate +
+                ", modifiedDate=" + modifiedDate +
                 ", active=" + active +
                 '}';
     }

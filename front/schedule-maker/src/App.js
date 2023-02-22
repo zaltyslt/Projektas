@@ -17,6 +17,9 @@ import { ProgramList } from "./pages/programs/ProgramList";
 import { CreateRoom } from "./pages/rooms/CreateRoom";
 import { ViewRoom } from "./pages/rooms/ViewRoom";
 import { UpdateClassroom } from "./pages/rooms/UpdateRoom";
+import { CreateProgram } from "./pages/programs/CreateProgram"
+import { ViewProgram } from "./pages/programs/ViewProgram";
+import { UpdateProgram } from "./pages/programs/UpdateProgram";
 
 
 function App() {
@@ -33,16 +36,19 @@ function App() {
           <Route path="/shifts" element={<ShiftList />}></Route>
           {/* CLASSROOMS PATHAI */}
           <Route path='/rooms' element={<RoomList />}></Route>
-          <Route path='/create' element={<CreateRoom />}></Route>
-          <Route path='/classrooms/view/:id' element={<ViewRoom />}></Route>
-          <Route path='/update/:id' element={<UpdateClassroom />} />
-          {/* CLASSROOM PATHAI DONE */}
+          <Route path='/create-classroom' element={<CreateRoom />}></Route>
+          <Route path='/classrooms/view-classroom/:id' element={<ViewRoom />}></Route>
+          <Route path='/update-classroom/:id' element={<UpdateClassroom />} />
+          {/* SHIFTS PATHAI */}
           <Route exact path="/add-shift" element={<AddShift/>} ></Route>
           <Route path="/view-shift/:id" element={<ViewShift/>} ></Route>
           <Route path="/modify-shift/:id" element={<ModifyShift/>} ></Route>
-          <Route path="/rooms" element={<RoomList />}></Route>
+          {/* PROGRAMS PATHAI */}
           <Route path="/programs" element={<ProgramList />}></Route>
-
+          <Route path="/create-program" element={<CreateProgram />}></Route>
+          <Route path='/programs/view-program/:id' element={<ViewProgram />}></Route>
+          <Route path='/update-program/:id' element={<UpdateProgram />} />
+          {/* MODULES PATHAI */}
           <Route path="/modules/create" element={<CreateModule />} />
           <Route path="/modules/view/:id" element={<ViewModule />}></Route>
           <Route path="/modules/edit/:id" element={<EditModule />}></Route>
