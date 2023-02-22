@@ -12,7 +12,7 @@ public class ShiftDto {
 
     private Long id;
 
-    @TextValid(textMaximumLength = 50)
+    @TextValid(textMaximumLength = 70)
     private String name;
 
     private String shiftStartingTime;

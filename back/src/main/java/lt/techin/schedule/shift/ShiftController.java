@@ -1,6 +1,7 @@
 package lt.techin.schedule.shift;
 
 import jakarta.validation.Valid;
+import lt.techin.schedule.validators.ValidatorDto;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
@@ -63,20 +64,34 @@ public class ShiftController {
     }
 
     @PutMapping("/modify-shift/{shiftID}")
-    public @ResponseBody Map<Integer, String> modifyShift(@PathVariable Long shiftID, @RequestBody @Valid ShiftDto shiftToChangeDto, BindingResult bindingResult) {
-        Map<Integer, String> response = new HashMap<>();
-        if (bindingResult.hasErrors()) {
-            List<ObjectError> errors = bindingResult.getAllErrors();
-            for (int x = 0; x < bindingResult.getAllErrors().size(); x++) {
-                response.put(x, errors.get(x).getDefaultMessage());
+    public @ResponseBody ValidatorDto modifyShift(@PathVariable Long shiftID, @RequestBody @Valid ShiftDto shiftToChangeDto, BindingResult bindingResult) {
+        System.out.println("Binding error me lol");
+        ValidatorDto validatorDto = new ValidatorDto();
+        try {
+            if (bindingResult.hasErrors()) {
+                List<ObjectError> errors = bindingResult.getAllErrors();
+                for (int x = 0; x < bindingResult.getAllErrors().size(); x++) {
+                    System.out.println("This is field " + Objects.requireNonNull(bindingResult.getFieldError()).getField());
+                    validatorDto.addValidationError(
+                            "\"" + Objects.requireNonNull(bindingResult.getFieldError()).getField() + "\"",
+                            errors.get(x).getDefaultMessage());
+                }
+                validatorDto.setPassedValidation(false);
+                validatorDto.setValid(false);
+            } else {
+                String modifyResponse = shiftService.modifyExistingShift(shiftID, shiftToChangeDto);
+                validatorDto.setPassedValidation(true);
+                if (modifyResponse.isEmpty()) {
+                    validatorDto.setValid(true);
+                } else {
+                    validatorDto.setValid(false);
+                    validatorDto.addDatabaseError(modifyResponse);
+                }
             }
         }
-        else {
-            String modifyRequest = shiftService.modifyExistingShift(shiftID, shiftToChangeDto);
-            if (!modifyRequest.isEmpty()) {
-                response.put(0, modifyRequest);
-            }
+        catch (Exception e) {
+            System.out.println("Sexeption thrown");
         }
-        return response;
+        return validatorDto;
     }
 }

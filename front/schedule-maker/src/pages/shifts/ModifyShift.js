@@ -28,11 +28,11 @@ export function ModifyShift() {
     const [name, setName] = useState("");
     const [shiftStartingTime, setShiftStartingTime] = useState("1");
     const [shiftEndingTime, setShiftEndingTime] = useState("1");
+    const [isActive, setIsActive] = useState("");
 
     const [successfulPost, setSuccessfulPost] = useState();
     const [isPostUsed, setIsPostUsed] = useState(false);
-    const [shiftCreateMessageError, setShiftCreateMessageError] = useState([]);
-    const [isActive, setIsActive] = useState("");
+    const [shiftErrors, setShiftErrors] = useState();
 
 
     useEffect(() => {
@@ -76,7 +76,7 @@ export function ModifyShift() {
                     name,
                     startIntEnum,
                     endIntEnum,
-                    isActive,
+                    isActive
                 })
             }
         )
@@ -97,12 +97,12 @@ export function ModifyShift() {
 
 
     const handleAfterPost = ((data) => {
-        if ((Object.keys(data).length) === 0) {
+        if (data.valid) {
             setSuccessfulPost(true);
         }
         else {
+            setShiftErrors(data)
             setSuccessfulPost(false);
-            setShiftCreateMessageError(data);
         }
         setIsPostUsed(true);
     })
@@ -248,9 +248,20 @@ export function ModifyShift() {
                         (
                         <Grid>
                             <Alert severity="warning">Nepavyko pakeisti pamainos.</Alert>
-                            {Object.keys(shiftCreateMessageError).map(key => (
-                            <Alert key={key} severity="warning"> {shiftCreateMessageError[key]} </Alert>
-                            ))}
+                            {
+                                (shiftErrors.passedValidation ?
+                                    (shiftErrors.databaseErrors).map((databaseError, index) => (
+                                        <Alert key={index} severity="warning">
+                                        {databaseError}
+                                        </Alert>
+                                    )) 
+                                    :
+                                    Object.keys(shiftErrors.validationErrors).map(key => (
+                                    <Alert key={key} severity="warning"> {shiftErrors.validationErrors[key]} {key} laukelyje.
+                                    </Alert>
+                                    ))
+                                )
+                            }
                         </Grid>
                         )
                     ) : 
