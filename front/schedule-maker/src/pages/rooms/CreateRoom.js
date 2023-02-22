@@ -135,7 +135,7 @@ export function CreateRoom(props) {
             )}
             <Stack direction="row" spacing={2}>
               <Button variant="contained" onClick={createClassroom}>
-                Sukurti
+                Išsaugoti
               </Button>
               <Button variant="contained" onClick={() => navigate(-1)}>
                 Grįžti
