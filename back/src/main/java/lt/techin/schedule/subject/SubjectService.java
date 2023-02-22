@@ -77,6 +77,10 @@ public class SubjectService {
         return subjectRepository.save(subject);
     }
 
+    public List<Subject> findAllByModuleId(Long moduleId) {
+        return subjectRepository.findSubjectsByModuleId(moduleId);
+    }
+
     //Not used
     public boolean deleteById(Long id) {
         try {

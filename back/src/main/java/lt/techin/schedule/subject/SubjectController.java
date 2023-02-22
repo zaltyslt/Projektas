@@ -17,9 +17,12 @@ import static org.springframework.http.ResponseEntity.ok;
 public class SubjectController {
 
     private final SubjectService subjectService;
+    private final SubjectRepository subjectRepository;
 
-    public SubjectController(SubjectService subjectService) {
+    public SubjectController(SubjectService subjectService,
+                             SubjectRepository subjectRepository) {
         this.subjectService = subjectService;
+        this.subjectRepository = subjectRepository;
     }
 
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE})
@@ -75,6 +78,12 @@ public class SubjectController {
     public ResponseEntity<SubjectDto> restoreSubject(@PathVariable Long subjectId) {
         var restoredSubject = subjectService.restoreSubject(subjectId);
         return ok(toSubjectDto(restoredSubject));
+    }
+
+    @GetMapping("/module/{moduleId}")
+    public List<SubjectEntityDto> findByModule(@PathVariable Long moduleId) {
+        var subjects = subjectService.findAllByModuleId(moduleId);
+        return subjects.stream().map(SubjectMapper::toSubjectEntityDto).collect(toList());
     }
 
 //    Not used at demo v1/v2

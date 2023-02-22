@@ -10,6 +10,6 @@ public interface SubjectRepository extends JpaRepository<Subject, Long> {
 
     List<Subject> findByModuleId(Long moduleId);
 
-//    List<Subject> findSubjectsByClassRoomId(Long classRoomId);
+    List<Subject> findSubjectsByModuleId(Long moduleId);
 
 }
