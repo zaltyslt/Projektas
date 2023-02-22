@@ -10,14 +10,21 @@ import {
   TextField,
   InputLabel,
   MenuItem,
+  colors,
+  Alert,
+  AlertTitle
 } from "@mui/material";
 import { SelectChangeEvent } from "@mui/material/Select";
+
 
 export function CreateRoom(props) {
   const [classroomName, setClassroomName] = useState("");
   const [building, setBuilding] = useState("AKADEMIJA");
   const [description, setDescription] = useState("");
-
+  const [error, setError] = useState();
+  const [success, setSuccess] = useState();
+  const [active, setActive] = useState(true);
+  const invalidSymbols = "!@#$%^&*_+={}<>|~`\\\"'";
   let navigate = useNavigate();
 
   const clear = () => {
@@ -28,48 +35,65 @@ export function CreateRoom(props) {
 
   const applyResult = (result) => {
     if (result.ok) {
+      setSuccess("Sėkmingai pridėta!");
       clear();
-      window.alert("Sėkmingai pridėta");
     } else {
-      window.alert("Nepavyko sukurti: " + result.status);
+      setError("Nepavyko sukurti!");
     }
   };
 
   const createClassroom = () => {
-    fetch("/api/v1/classrooms/create", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        classroomName,
-        description,
-        building,
-      }),
-    }).then(applyResult);
+    setError("");
+    setSuccess("");
+    if (!classroomName) {
+      setError("Prašome užpildyti klasės pavadinimą.");
+    } else if (
+      classroomName.split("").some((char) => invalidSymbols.includes(char))
+    ) {
+      setError("Klasės pavadinimas turi neleidžiamų simbolių.");
+    } else if (!description) {
+      setError("Prašome užpildyti klasės aprašą.");
+    } else if (
+      description.split("").some((char) => invalidSymbols.includes(char))
+    ) {
+      setError("Klasės aprašas turi neleidžiamų simbolių.");
+    } else if (!building) {
+      setError("Prašome pasirinkti pastatą.");
+    } else {
+      fetch("/api/v1/classrooms/create", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          classroomName,
+          description,
+          building,
+          active,
+        }),
+      }).then(applyResult);
+    }
   };
 
   const handleChange = (event: SelectChangeEvent) => {
     setBuilding(event.target.value);
   };
 
+
   return (
     <Container>
       <h3>Pridėti naują klasę</h3>
       <form>
         <Grid container rowSpacing={2}>
-          <Grid item lg={10}>
-            {/* <label htmlFor="building">Pastatas</label> */}
+          <Grid item sm={10}>
             <FormControl fullWidth>
               <InputLabel id="building-label">Pastatas</InputLabel>
               <Select
+                required
                 labelId="building-label"
                 id="building"
                 label="Pastatas"
                 value={building}
-                // onChange={(e) => setBuilding(e.target.value)}>
-                // <option value="AKADEMIJA">AKADEMIJA</option>
-                // <option value="TECHIN">TECHIN</option>
                 onChange={handleChange}
               >
                 <MenuItem value="AKADEMIJA">AKADEMIJA</MenuItem>
@@ -77,8 +101,7 @@ export function CreateRoom(props) {
               </Select>
             </FormControl>
           </Grid>
-
-          <Grid item lg={10}>
+          <Grid item sm={10}>
             <TextField
               fullWidth
               required
@@ -88,19 +111,28 @@ export function CreateRoom(props) {
               onChange={(e) => setClassroomName(e.target.value)}
             ></TextField>
           </Grid>
-
-          <Grid item lg={10}>
+          <Grid item sm={10}>
             <TextField
               fullWidth
               multiline
+              required
               label="Klasės aprašas"
               id="description"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
             ></TextField>
           </Grid>
-
-          <Grid item lg={10}>
+          <Grid item sm={10}>
+            {error && (
+                <Alert severity="warning">
+                {error}
+              </Alert>
+            )}
+            {success && (
+                <Alert severity="success">
+                {success}
+              </Alert>
+            )}
             <Stack direction="row" spacing={2}>
               <Button variant="contained" onClick={createClassroom}>
                 Sukurti

@@ -5,11 +5,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-
 @Service
 public class ClassroomService {
     private final ClassroomRepository classroomRepository;
-//    private final BuildingRepository buildingRepository;
 
     @Autowired
     public ClassroomService(ClassroomRepository classroomRepository) {
@@ -21,12 +19,26 @@ public class ClassroomService {
     }
 
     public Classroom create(Classroom classroom) {
-        return classroomRepository.save(classroom);
+        if (classroom.getBuilding() == null) return null;
+        if (findByClassroomNameAndBuilding(classroom.getClassroomName(), classroom.getBuilding())) {
+            return null;
+        } else {
+            try {
+                return classroomRepository.save(classroom);
+
+            } catch (Exception e) {
+                System.out.println(e.getLocalizedMessage());
+            }
+            return null;
+        }
     }
 
     public Classroom update(Long id, Classroom classroom) {
         var existingClassroom = classroomRepository.findById(id).orElse(null);
         if (existingClassroom != null) {
+            if (!existingClassroom.getBuilding().equals(classroom.getBuilding())
+                    && (findByClassroomNameAndBuilding(classroom.getClassroomName(), classroom.getBuilding())))
+                return null;
             existingClassroom.setClassroomName(classroom.getClassroomName());
             existingClassroom.setDescription(classroom.getDescription());
             existingClassroom.setBuilding(classroom.getBuilding());
@@ -36,7 +48,7 @@ public class ClassroomService {
         return null;
     }
 
-    public Classroom finById(Long id ) {
+    public Classroom finById(Long id) {
         return classroomRepository.findById(id).orElse(new Classroom());
     }
 
@@ -59,24 +71,10 @@ public class ClassroomService {
         return null;
     }
 
-
-//    public Classroom addClassroomToBuilding(Long classroomId, Long buildingId) {
-//        var existingClassroom = classroomRepository.findById(classroomId)
-//                .orElse(null);
-//        var existingBuilding = buildingRepository.findById(buildingId)
-//                .orElse(null);
-//        if (existingClassroom != null) {
-//            existingClassroom.setBuilding(existingBuilding);
-//            return classroomRepository.save(existingClassroom);
-//        }
-////        System.out.println(existingClassroom + " classroom");
-////        System.out.println(existingBuilding + "  building");
-//        return null;
-//    }
-
-//    public Page<Classroom> getAll(Pageable pagination) {
-//        return classroomRepository.findAll(pagination);
-//    }
+    public boolean findByClassroomNameAndBuilding(String classroomName, BuildingType building) {
+        return getAll().stream().anyMatch(classroom -> classroom.getClassroomName().matches(classroomName)
+                && classroom.getBuilding().equals(building));
+    }
 }
 
 

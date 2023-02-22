@@ -14,7 +14,7 @@ public class Shift {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @TextValid(textMaximumLength = 30)
+    @TextValid(textMaximumLength = 50)
     private String name;
 
     private String shiftStartingTime;

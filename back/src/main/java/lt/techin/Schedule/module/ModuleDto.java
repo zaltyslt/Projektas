@@ -3,6 +3,7 @@ package lt.techin.schedule.module;
 import java.util.Objects;
 
 public class ModuleDto {
+
     private String number;
     private String name;
 
@@ -50,5 +51,4 @@ public class ModuleDto {
                 ", name='" + name + '\'' +
                 '}';
     }
-
 }

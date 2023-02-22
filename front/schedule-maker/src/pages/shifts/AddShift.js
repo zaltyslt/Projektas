@@ -7,6 +7,7 @@ import {
   Stack,
   FormHelperText,
   TextField,
+  Alert,
 } from "@mui/material";
 
 import { useEffect, useState } from "react"
@@ -18,6 +19,7 @@ export function AddShift() {
     const [name, setName] = useState("")
     const [isValidName, setIsValidName] = useState(true);
     const [isNameEmpty, setIsNameEmpty] = useState(false);
+    const [isNameTooLong, setIsNameTooLong] = useState(false);
 
     const [shiftStartingTime, setShiftStartingTime] = useState("1");
     const [shiftEndingTime, setShiftEndingTime] = useState("1");
@@ -31,7 +33,7 @@ export function AddShift() {
 
 
     const badSymbols = "!@#$%^&*_+={}<>|~`\\\"\'";
-
+    const maxLength = 50;
 
     const setNameAndCheck = (name) => {
         setName(name)
@@ -47,6 +49,12 @@ export function AddShift() {
         }
         else {
             setIsValidName(false);
+        }
+        if (name.length > maxLength) {
+            setIsNameTooLong(true);
+        }
+        else {
+            setIsNameTooLong(false);
         }
     }
 
@@ -131,14 +139,16 @@ export function AddShift() {
         <Container>
             <h3> Pridėti naują pamainą </h3>
             <Grid container id="grid-input">
-                <Grid item lg={10}>
+                <Grid item sm={10}>
                     <TextField
                     fullWidth
                     required
-                    error={!isValidName || isNameEmpty}
+                    error={!isValidName || isNameEmpty || isNameTooLong}
                     helperText={
                         !isValidName ? "Pavadinimas turi neleidžiamų simbolių." : 
-                        isNameEmpty ? "Pavadinimas negali būti tuščias" : null
+                        isNameEmpty ? "Pavadinimas negali būti tuščias" : 
+                        isNameTooLong ? "Pavadinimas negali būti ilgesnis nei 50 simbolių"
+                        : null
                     }
                     variant="outlined"
                     label="Dalyko pavadinimas"
@@ -151,7 +161,7 @@ export function AddShift() {
             </Grid>
            
             <Grid container rowSpacing={2}>
-                <Grid item lg={2} id="grid-selector">
+                <Grid item sm={2} id="grid-selector">
                     <h5>Pamainos pradžia:</h5>
                     <Select
                     fullWidth
@@ -175,7 +185,7 @@ export function AddShift() {
                     )}
                 </Grid>
     
-                <Grid item lg={2} id="grid-selector">
+                <Grid item sm={2} id="grid-selector">
                     <h5>Pamainos pabaiga:</h5>
                     <Select
                     fullWidth
@@ -200,7 +210,7 @@ export function AddShift() {
                 </Grid>
             </Grid>
 
-            <Grid item lg={2}>
+            <Grid item sm={2}>
                 <Stack direction="row" spacing={2}>
                     <Button variant="contained" onClick={createShift}>
                         Išsaugoti
@@ -213,15 +223,15 @@ export function AddShift() {
             <Grid>
                 {isPostUsed ? (
                     successfulPost ? (
-                        <div id="success-text"> Pamaina sėkmingai pridėta.</div>
+                        <Alert severity="success"> Pamaina sėkmingai pridėta.</Alert>
                         ) : 
                         (
-                        <div id="error-text">
-                            <div>Nepavyko sukurti pamainos.</div>
-                        {Object.keys(shiftCreateMessageError).map(key => (
-                        <div key={key} id="error-text"> {shiftCreateMessageError[key]} </div>
-                            ))}
-                        </div>
+                        <Grid>
+                            <Alert severity="warning">Nepavyko sukurti pamainos.</Alert>
+                            {Object.keys(shiftCreateMessageError).map(key => (
+                            <Alert severity="warning" key={key} id="error-text"> {shiftCreateMessageError[key]} </Alert>
+                                ))}
+                        </Grid>
                         )
                     ) : 
                     (

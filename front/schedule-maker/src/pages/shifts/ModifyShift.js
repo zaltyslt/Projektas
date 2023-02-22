@@ -5,6 +5,7 @@ import {
     Select,
     FormHelperText,
     TextField,
+    Alert
   } from "@mui/material";
 import { Container, Stack } from "@mui/system";
 
@@ -157,7 +158,7 @@ export function ModifyShift() {
             <h1>Redagavimas</h1> 
             <h3>{currentShift.name}</h3>
             <Grid container id="grid-input">
-                <Grid item lg={10}>
+                <Grid item sm={10}>
                     <TextField
                     fullWidth
                     required
@@ -176,7 +177,7 @@ export function ModifyShift() {
             </Grid>
 
             <Grid container rowSpacing={2}>
-                <Grid item lg={2} id="grid-selector">
+                <Grid item sm={2} id="grid-selector">
                     <h5>Pamainos pradžia:</h5>
                     <Select
                     fullWidth
@@ -200,7 +201,7 @@ export function ModifyShift() {
                     )}
                 </Grid>
                 
-                <Grid item lg={2} id="grid-selector">
+                <Grid item sm={2} id="grid-selector">
                     <h5>Pamainos pabaiga:</h5>
                     <Select
                     fullWidth
@@ -224,7 +225,7 @@ export function ModifyShift() {
                     )}
                 </Grid> 
             </Grid>
-            <Grid item lg={2}>
+            <Grid item sm={2}>
                 <Stack direction="row" spacing={2}>
                     <Button variant="contained" onClick={modifyShift}>
                         Išsaugoti
@@ -239,18 +240,18 @@ export function ModifyShift() {
                     </Link>     
                 </Stack>
             </Grid>
-            <Grid>
+            <Grid item sm={10}>
                 {isPostUsed ? (
                     successfulPost ? (
-                        <div id="success-text"> Pamaina sėkmingai pakeista.</div>
+                        <Alert severity="success"> Pamaina sėkmingai pakeista.</Alert>
                         ) : 
                         (
-                        <div id="error-text">
-                            <div>Nepavyko pakeisti pamainos.</div>
-                        {Object.keys(shiftCreateMessageError).map(key => (
-                        <div key={key} id="error-text"> {shiftCreateMessageError[key]} </div>
+                        <Grid>
+                            <Alert severity="warning">Nepavyko pakeisti pamainos.</Alert>
+                            {Object.keys(shiftCreateMessageError).map(key => (
+                            <Alert key={key} severity="warning"> {shiftCreateMessageError[key]} </Alert>
                             ))}
-                        </div>
+                        </Grid>
                         )
                     ) : 
                     (

@@ -4,6 +4,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -35,10 +36,19 @@ public class ModuleController {
         return responseEntity;
     }
 
+    @GetMapping(value = "/deleted", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public List<ModuleEntityDto> getDeletedModules() {
+        return moduleService.getAll(true).stream().map(ModuleMapper::toModuleEntityDto).collect(toList());
+    }
+
     @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<ModuleDto> createModule(@RequestBody ModuleDto moduleDto) {
         var createdModule = moduleService.create(toModule(moduleDto));
-        return ok(toModuleDto(createdModule));
+        if (createdModule == null) {
+          return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        } else {
+            return ok(toModuleDto(createdModule));
+        }
     }
 
     @PatchMapping("/{moduleId}")
@@ -59,7 +69,7 @@ public class ModuleController {
     }
 
     @PatchMapping("/restore/{moduleId}")
-    public ResponseEntity<ModuleDto> restoreModule(@PathVariable Long moduleId) {
+    public ResponseEntity<ModuleDto>  restoreModule(@PathVariable Long moduleId) {
         var restoredModule = moduleService.restoreModule(moduleId);
         return ok(toModuleDto(restoredModule));
     }
@@ -73,7 +83,8 @@ public class ModuleController {
 
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.set("totalCount", Integer.toString(totalPageCount));
-        return ok().headers(httpHeaders).body(modules);
-    }
 
+        return ResponseEntity.ok().headers(httpHeaders).body(modules);
+
+    }
 }

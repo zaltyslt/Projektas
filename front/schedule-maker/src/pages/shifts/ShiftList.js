@@ -119,15 +119,15 @@ export function ShiftList() {
         <div>
             <Container maxWidth="lg">
                 <Grid container rowSpacing={3}>
-                    <Grid item lg={10}>
+                    <Grid item sm={10}>
                         <h3>Pamainų sąrašas</h3>
                     </Grid>
-                    <Grid item lg={2}>
+                    <Grid item sm={2}>
                         <Link to="/add-shift">
                             <Button variant="contained">Pridėti naują</Button>
                         </Link>
                     </Grid>
-                    <Grid item lg={12}>
+                    <Grid item sm={12}>
                         <TextField
                         fullWidth
                         variant="outlined"
@@ -177,6 +177,7 @@ export function ShiftList() {
                             <TableRow>
                                 <TablePagination  
                                     labelRowsPerPage="Rodyti po"
+                                    labelDisplayedRows={({ from, to, count }) => `${from}-${to} iš ${count}`}
                                     rowsPerPageOptions={[10, 20, { label: "Visi", value: -1 }]}
                                     colSpan={2}
                                     count={currentActiveShifts.length}

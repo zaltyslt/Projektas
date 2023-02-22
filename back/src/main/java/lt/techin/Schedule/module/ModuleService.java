@@ -12,7 +12,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,7 +34,6 @@ public class ModuleService {
         List<Module> modules = moduleRepository.findAll();
         session.disableFilter("deletedModuleFilter");
         return modules;
-
     }
 
     public Optional<Module> getById(Long id) {
@@ -43,7 +41,12 @@ public class ModuleService {
     }
 
     public Module create(Module module) {
-        return moduleRepository.save(module);
+        if (moduleRepository.findAll().stream().anyMatch(m -> m.getNumber().equalsIgnoreCase(module.getNumber()))) {
+            return null;
+        }
+        else {
+            return moduleRepository.save(module);
+        }
     }
 
     public Module updateModule(Long id, Module module) {
@@ -98,6 +101,18 @@ public class ModuleService {
         initialModulesToAdd.stream()
                 .map(ModuleMapper::toModule)
                 .forEach(moduleRepository::save);
-    }
 
+
+//        List<ModuleDto> modules = new ArrayList<>();
+//        modules.addAll(initialModulesToAdd);
+//        for (int i = 0; i < 100; i++) {
+//            var moduleDto = new ModuleDto();
+//            modules.add(moduleDto);
+//        }
+
+//        modules.stream()
+//                .map(ModuleMapper::toModule)
+//                .forEach(moduleRepository::save);
+//    }
+    }
 }

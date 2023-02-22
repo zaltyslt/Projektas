@@ -63,13 +63,6 @@ export function App2() {
           >
             Check server connection <i className="fas fa-download ms-1"></i>
           </button>
-
-          {/* <MDBBtn 
-            tag='a'href='https://mdbootstrap.com/docs/standard/getting-started/'             target='_blank'
-            role='button'
-          >
-            Check server connection
-          </MDBBtn> */}
           <div id="serverResponse">{showText && serverResponse.answer}</div>
           <div>
             <p>Count = {smt} </p>

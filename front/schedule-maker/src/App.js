@@ -3,6 +3,9 @@ import { HashRouter, Routes, Route } from "react-router-dom";
 import { Menu } from "./components/Menu";
 import { RoomList } from "./pages/rooms/RoomList";
 import { ModuleList } from "./pages/modules/ModuleList";
+import { CreateModule } from "./pages/modules/CreateModule";
+import { ViewModule } from "./pages/modules/ViewModule";
+import { EditModule } from "./pages/modules/EditModule";
 import { ShiftList } from "./pages/shifts/ShiftList";
 import { AddShift } from "./pages/shifts/AddShift";
 import { ViewShift } from "./pages/shifts/ViewShift";
@@ -30,17 +33,21 @@ function App() {
           <Route path="/modules" element={<ModuleList />}></Route>
           <Route path="/subjects" element={<SubjectList />}></Route>
           <Route path="/shifts" element={<ShiftList />}></Route>
-          <Route exact path="/add-shift" element={<AddShift/>} ></Route>
-          <Route path="/view-shift/:id" element={<ViewShift/>} ></Route>
-          <Route path="/modify-shift/:id" element={<ModifyShift/>} ></Route>
-          <Route path="/rooms" element={<RoomList />}></Route>
           {/* CLASSROOMS PATHAI */}
           <Route path='/rooms' element={<RoomList />}></Route>
           <Route path='/create' element={<CreateRoom />}></Route>
           <Route path='/classrooms/view/:id' element={<ViewRoom />}></Route>
           <Route path='/update/:id' element={<UpdateClassroom />} />
           {/* CLASSROOM PATHAI DONE */}
+          <Route exact path="/add-shift" element={<AddShift/>} ></Route>
+          <Route path="/view-shift/:id" element={<ViewShift/>} ></Route>
+          <Route path="/modify-shift/:id" element={<ModifyShift/>} ></Route>
+          <Route path="/rooms" element={<RoomList />}></Route>
           <Route path="/programs" element={<ProgramList />}></Route>
+
+          <Route path="/modules/create" element={<CreateModule />} />
+          <Route path="/modules/view/:id" element={<ViewModule />}></Route>
+          <Route path="/modules/edit/:id" element={<EditModule />}></Route>
 
           <Route path="/subjects/create" element={<CreateSubject />} />
           <Route path="/subjects/view/:id" element={<ViewSubject />}></Route>

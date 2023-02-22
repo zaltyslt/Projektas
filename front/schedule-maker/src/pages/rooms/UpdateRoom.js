@@ -1,98 +1,115 @@
-import { useState, useEffect } from "react";
-import { useParams, Link } from "react-router-dom";
+import * as React from "react";
+import { useEffect, useState } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import {
+  Button,
+  Container,
+  FormControl,
+  Grid,
+  Select,
+  Stack,
+  TextField,
+  InputLabel,
+  MenuItem,
+  Alert,
+} from "@mui/material";
+import { SelectChangeEvent } from "@mui/material/Select";
+
 
 export function UpdateClassroom() {
   const [classroom, setClassroom] = useState({});
   const [error, setError] = useState();
-  const [active, setActive] = useState('');
-  const [classroomName, setclassroomName] = useState('');
-  const [description, setdescription] = useState('');
-
+  const [success, setSuccess] = useState();
+  const [active, setActive] = useState("");
+  const [classroomName, setClassroomName] = useState("");
+  const [description, setDescription] = useState("");
+  const [building, setBuilding] = useState("AKADEMIJA");
+  const invalidSymbols = "!@#$%^&*_+={}<>|~`\\\"'";
+  
   const handleDescriptionChange = (event) => {
-    setdescription(event.target.value);
+    setDescription(event.target.value);
   };
 
   const handleCNameeChange = (event) => {
-    setclassroomName(event.target.value);
+    setClassroomName(event.target.value);
+  };
+
+  const handleChange = (event: SelectChangeEvent) => {
+    setBuilding(event.target.value);
   };
 
   const params = useParams({
     classroomName: "",
     building: "",
     description: "",
+    active: classroom.active,
   });
 
-  // useEffect(() => {
-  //   fetch(`/api/v1/classrooms/classroom/${params.id}`)
-  //     .then((response) => response.json())
-  //     .then(setClassroom);
-  // }, []);
   useEffect(() => {
     fetch(`/api/v1/classrooms/classroom/${params.id}`)
       .then((response) => response.json())
-      .then(e => {
-        params.classroomName = e.classroomName
-        setdescription(e.description)
-        setActive(e.active)
-        setclassroomName(e.classroomName)
+      .then((data) => {
+        setClassroom(data);
+        setClassroomName(data.classroomName);
+        setDescription(data.description);
+        setBuilding(data.building);
       });
-  },);
-
-  // const updateClassroom = () => {
-  //   fetch("/api/v1/classrooms/update/" + params.id, {
-  //     method: "PATCH",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //     },
-  //     body: JSON.stringify(classroom),
-  //   }).then((result) => {
-  //     if (!result.ok) {
-  //       setError("Redaguoti nepavyko!");
-  //     } else {
-  //       setError();
-  //     }
-  //   });
-  // };
+  }, []);
 
   const updateClassroom = () => {
-    fetch(`/api/v1/classrooms/update/${params.id}`, {
-      method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        description,
-        classroomName
-      })
-    }).then((result) => {
-      if (!result.ok) {
-        setError('Redaguoti nepavyko!');
-      } else {
-        setError('Sėkmingai atnaujinote!')
-      }
-    });
+    setError("");
+    setSuccess("");
+    if (!classroomName) {
+      setError("Prašome užpildyti klasės pavadinimą.");
+    } else if (
+      classroomName.split("").some((char) => invalidSymbols.includes(char))
+    ) {
+      setError("Klasės pavadinimas turi neleidžiamų simbolių.");
+    } else if (!description) {
+      setError("Prašome užpildyti klasės aprašą.");
+    } else if (
+      description.split("").some((char) => invalidSymbols.includes(char))
+    ) {
+      setError("Klasės aprašas turi neleidžiamų simbolių.");
+    } else if (!building) {
+      setError("Prašome pasirinkti pastatą.");
+    } else {
+      fetch(`/api/v1/classrooms/update/${params.id}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          description,
+          classroomName,
+          building,
+        }),
+      }).then((result) => {
+        if (!result.ok) {
+          setError("Redaguoti nepavyko!");
+        } else {
+          setSuccess("Sėkmingai atnaujinote!");
+        }
+      });
+    }
   };
 
   const disableClassroom = () => {
     fetch(`/api/v1/classrooms/disable/${params.id}`, {
       method: "PATCH",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        description,
-        classroomName
-      })
-    }).then(() => navigate(-2));
+    }).then(() => navigate(-1));
   };
 
   const enableClassroom = () => {
     fetch(`/api/v1/classrooms/enable/${params.id}`, {
       method: "PATCH",
       headers: {
-        'Content-Type': 'application/json',
-      }
-    }).then(() => navigate(-2));
+        "Content-Type": "application/json",
+      },
+    }).then(() => navigate("/rooms"));
   };
 
   const updateProperty = (property, event) => {
@@ -102,60 +119,100 @@ export function UpdateClassroom() {
     });
   };
 
+
   return (
     <div>
-      <h2>Redagavimas</h2>
-      <fieldset>
-        <legend>{params.classroomName}</legend>
-        {error && <div classroomName="error">{error}</div>}
-        <div>
-          <label>Klasės pavadinimas</label>
-        </div>
-        <div>
-          <input
-            value={classroom.classroomName}
-            onChange={(e) => updateProperty("classroomName", e)}
-          />
-        </div>
-        <div>
-          <label>Klasės aprašymas</label>
-        </div>
-        <div>
-          <input
-            value={classroom.description}
-            onChange={(e) => updateProperty("description", e)}
-          />
-        </div>
-        <div>
-          <label>Klasė aktyvi</label>
-        </div>
-        <input
-          disabled={true}
-          value={active} />
-        <br></br>
-        <button onClick={updateClassroom}>Išsaugoti</button>
-        {!active &&
-          <button
-            data-value='true'
-            value={params.id}
-            onClick={enableClassroom}
-          >Aktyvuoti
-          </button>
-        }
-        {/*Ištrinti*/}
-        {active &&
-          <button
-            data-value='true'
-            value={params.id}
-            onClick={disableClassroom}
-          >Ištrinti
-          </button>
-        }
-        {/* <button>Ištrinti</button> */}
-        <Link to="/rooms">
-          <button>Grįžti</button>
-        </Link>
-      </fieldset>
+      <Container>
+        <h1>Redagavimas</h1>
+        <h3>{classroom.classroomName}</h3>
+        <h5>Paskutinį kartą redaguota: {classroom.modifiedDate}</h5>
+        <form>
+          <Grid container rowSpacing={2}>
+            <Grid item sm={10}>
+              <FormControl fullWidth>
+                <InputLabel id="building-label">Pastatas</InputLabel>
+                <Select
+                  labelId="building-label"
+                  id="building"
+                  label="Pastatas"
+                  value={building}
+                  onChange={handleChange}
+                >
+                  <MenuItem value="AKADEMIJA">AKADEMIJA</MenuItem>
+                  <MenuItem value="TECHIN">TECHIN</MenuItem>
+                </Select>
+              </FormControl>
+            </Grid>
+            <Grid item sm={10}>
+              <TextField
+                fullWidth
+                variant="outlined"
+                id="classroomName"
+                label="Klasės pavadinimas"
+                value={classroomName}
+                onChange={(e) => setClassroomName(e.target.value)}
+              ></TextField>
+            </Grid>
+            <Grid item sm={10}>
+              <TextField
+                fullWidth
+                multiline
+                variant="outlined"
+                label="Klasės aprašas"
+                id="description"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+              ></TextField>
+            </Grid>
+            <Grid item sm={10}>
+              {" "}
+              <legend>{params.classroomName}</legend>
+              {error && (
+                <Alert severity="warning">
+                {error}
+              </Alert>
+              )}
+              {success && (
+                <Alert severity="success">
+                {success}
+              </Alert>
+              )}
+            </Grid>
+            <Grid item sm={10}>
+              <Stack direction="row" spacing={2}>
+                <Button variant="contained" onClick={updateClassroom}>
+                  Išsaugoti
+                </Button>
+                {!classroom.active && (
+                  <Button
+                    variant="contained"
+                    data-value="true"
+                    value={params.id}
+                    onClick={enableClassroom}
+                  >
+                    Aktyvuoti
+                  </Button>
+                )}
+                {classroom.active && (
+                  <Link to="/rooms">
+                    <Button
+                      variant="contained"
+                      data-value="true"
+                      value={params.id}
+                      onClick={disableClassroom}
+                    >
+                      Ištrinti
+                    </Button>
+                  </Link>
+                )}
+                <Link to="/rooms">
+                  <Button variant="contained">Grįžti</Button>
+                </Link>
+              </Stack>
+            </Grid>
+          </Grid>
+        </form>
+      </Container>
     </div>
   );
 }
