@@ -1,6 +1,7 @@
 package lt.techin.schedule.shift;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import lt.techin.schedule.config.DataFieldsLengthConstraints;
 import lt.techin.schedule.teachers.Teacher;
 import lt.techin.schedule.validators.TextValid;
 
@@ -12,7 +13,7 @@ public class ShiftDto {
 
     private Long id;
 
-    @TextValid(textMaximumLength = 70)
+    @TextValid(textMaximumLength = DataFieldsLengthConstraints.shiftNameMaximumLength)
     private String name;
 
     private String shiftStartingTime;

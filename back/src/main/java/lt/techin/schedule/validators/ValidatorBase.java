@@ -12,7 +12,6 @@ public abstract class ValidatorBase {
     protected boolean isValid(CharSequence textToCheck, ConstraintValidatorContext constraintValidatorContext) {
         Matcher matcher = validSymbolsPattern.matcher(textToCheck);
         try {
-            System.out.println("Matcher does worky!" + matcher.matches());
             return matcher.matches();
         } catch (Exception e) {
             return false;

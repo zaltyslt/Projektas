@@ -85,19 +85,6 @@ public class ShiftControllerTests {
                 .andExpect(status().isOk());
     }
 
-//    @Test
-//    public void testAddShift() throws Exception {
-//        Shift shiftToAdd = new Shift("New Shift", "8:00", "16:00", true, 1, 8);
-//        shiftToAdd.setId(1L);
-//        when(shiftService.addUniqueShift(ShiftMapper.shiftToDto(shiftToAdd))).thenReturn("");
-//
-//        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/shift/add-shift")
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .content("{\"id\": 1, \"name\": \"New Shift\",\"shiftStartingTime\": \"8:00\",\"shiftEndingTime\": \"16:00\",\"startIntEnum\": 1, \"endIntEnum\": 8,\"isActive\": true}"))
-//                .andExpect(MockMvcResultMatchers.status().isOk())
-//                .andExpect(MockMvcResultMatchers.content().json("{}"));
-//    }
-
     @Test
     void testAddShift() throws Exception {
         Shift shiftToAdd = new Shift("New Shift", "8:00", "16:00", true, 1, 8);

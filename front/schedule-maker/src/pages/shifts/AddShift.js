@@ -29,11 +29,11 @@ export function AddShift() {
 
     const [successfulPost, setSuccessfulPost] = useState();
     const [isPostUsed, setIsPostUsed] = useState(false);
-    const [shiftCreateMessageError, setShiftCreateMessageError] = useState([]);
+    const [shiftErrors, setShiftErrors] = useState();
 
 
     const badSymbols = "!@#$%^&*_+={}<>|~`\\\"\'";
-    const maxLength = 50;
+    const maxLength = 45;
 
     const setNameAndCheck = (name) => {
         setName(name)
@@ -72,7 +72,7 @@ export function AddShift() {
     var endIntEnum;
 
     const createShift = (() => {
-        if (isValidName && !isNameEmpty) {
+        if (isValidName && !isNameEmpty && !isNameTooLong) {
             startIntEnum = shiftStartingTime;
             endIntEnum = shiftEndingTime;
             createShiftPostRequest();
@@ -101,21 +101,15 @@ export function AddShift() {
     }
 
     const handleAfterPost = ((data) => {
-            if ((Object.keys(data).length) === 0) {
-                setSuccessfulPost(true);
-            }
-            else {
-                setSuccessfulPost(false);
-                setShiftCreateMessageError(data);
-            }
-            setIsPostUsed(true);
-            if (successfulPost) {
-                setName("");
-                setShiftStartingTime(1);
-                setShiftEndingTime(1);
-            }
+        if (data.valid) {
+            setSuccessfulPost(true);
         }
-    )
+        else {
+            setShiftErrors(data)
+            setSuccessfulPost(false);
+        }
+        setIsPostUsed(true);
+    })
 
     const lessonTimes = [
         { value: '1', label: '1 pamoka' },
@@ -147,7 +141,7 @@ export function AddShift() {
                     helperText={
                         !isValidName ? "Pavadinimas turi neleidžiamų simbolių." : 
                         isNameEmpty ? "Pavadinimas negali būti tuščias" : 
-                        isNameTooLong ? "Pavadinimas negali būti ilgesnis nei 50 simbolių"
+                        isNameTooLong ? "Pavadinimas negali būti ilgesnis nei 45 simboliai"
                         : null
                     }
                     variant="outlined"
@@ -228,9 +222,20 @@ export function AddShift() {
                         (
                         <Grid>
                             <Alert severity="warning">Nepavyko sukurti pamainos.</Alert>
-                            {Object.keys(shiftCreateMessageError).map(key => (
-                            <Alert severity="warning" key={key} id="error-text"> {shiftCreateMessageError[key]} </Alert>
-                                ))}
+                            {
+                                (shiftErrors.passedValidation ?
+                                    (shiftErrors.databaseErrors).map((databaseError, index) => (
+                                        <Alert key={index} severity="warning">
+                                        {databaseError}
+                                        </Alert>
+                                    )) 
+                                    :
+                                    Object.keys(shiftErrors.validationErrors).map(key => (
+                                    <Alert key={key} severity="warning"> {shiftErrors.validationErrors[key]} {key} laukelyje.
+                                    </Alert>
+                                    ))
+                                )
+                            }
                         </Grid>
                         )
                     ) : 

@@ -15,7 +15,7 @@ public class Classroom {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
     @Column(name = "classroomName")
-    @TextValid
+    @TextValid(textMaximumLength = 50)
     private String classroomName;
     @TextValid(textMaximumLength = 1000)
     private String description;

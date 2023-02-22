@@ -22,6 +22,7 @@ export function ModifyShift() {
 
     const [isValidName, setIsValidName] = useState(true);
     const [isNameEmpty, setIsNameEmpty] = useState(false);
+    const [isNameTooLong, setIsNameTooLong] = useState(false);
 
     const [isValidShiftTime, setIsValidShiftTime] = useState(true);
 
@@ -108,6 +109,7 @@ export function ModifyShift() {
     })
 
     const badSymbols = "!@#$%^&*_+={}<>|~`\\\"\'";
+    const maxLength = 45;
 
     const setNameAndCheck = (name) => {
         setName(name);
@@ -123,6 +125,12 @@ export function ModifyShift() {
         }
         else {
             setIsValidName(true);
+        }
+        if (name.length > maxLength) {
+            setIsNameTooLong(true);
+        }
+        else {
+            setIsNameTooLong(false);
         }
     }
 
@@ -162,10 +170,12 @@ export function ModifyShift() {
                     <TextField
                     fullWidth
                     required
-                    error={!isValidName || isNameEmpty}
+                    error={!isValidName || isNameEmpty || isNameTooLong}
                     helperText={
                         !isValidName ? "Pavadinimas turi neleidžiamų simbolių." : 
-                        isNameEmpty ? "Pavadinimas negali būti tuščias" : null
+                        isNameEmpty ? "Pavadinimas negali būti tuščias" :
+                        isNameTooLong ? "Pavadinimas negali būti ilgesnis nei 45 simboliai" 
+                        : null
                     }
                     variant="outlined"
                     label="Pamainos pavadinimas"

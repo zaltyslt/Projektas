@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class ValidatorDto {
+public class ValidationDto {
 
     private Boolean isValid;
     private Boolean passedValidation;
@@ -12,7 +12,7 @@ public class ValidatorDto {
     private final List<String> databaseErrors;
     private final HashMap<String, String> validationErrors;
 
-    public ValidatorDto() {
+    public ValidationDto() {
         databaseErrors = new ArrayList<>();
         validationErrors = new HashMap<>();
     }

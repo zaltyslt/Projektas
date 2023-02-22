@@ -17,7 +17,6 @@ public class TextValidator extends ValidatorBase implements ConstraintValidator<
 
     @Override
     public boolean isValid(CharSequence charSequence, ConstraintValidatorContext constraintValidatorContext) {
-        System.out.println("Why text matcher does crashy :(" + textMaximumLength);
         return super.isValid(charSequence, constraintValidatorContext);
     }
 

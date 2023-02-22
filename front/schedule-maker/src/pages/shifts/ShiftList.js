@@ -162,7 +162,7 @@ export function ShiftList() {
                                         {shift.name}
                                         </Link>
                                     </TableCell>
-                                    <TableCell>{shift.shiftTime}</TableCell> 
+                                    <TableCell>{shift.shiftStartingTime}-{shift.shiftEndingTime}</TableCell> 
                                 </TableRow>
                             ))}
 
