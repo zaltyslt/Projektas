@@ -73,8 +73,9 @@ export function EditModule() {
 
   return (
     <Container>
-      <h1>Redagavimas</h1>
+      <h1 className="edit-header">Redagavimas</h1>
       <h3>{module.name}</h3>
+      <span id="modified-date">Paskutinį kartą redaguota: {module.modifiedDate}</span>
       <form>
         <Grid container rowSpacing={2}>
           <Grid item sm={10}>
