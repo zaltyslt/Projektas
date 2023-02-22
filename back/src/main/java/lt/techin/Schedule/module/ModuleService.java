@@ -21,7 +21,6 @@ public class ModuleService {
     private final ModuleRepository moduleRepository;
 
     @Autowired
-
     private EntityManager entityManager;
 
     public ModuleService(ModuleRepository moduleRepository) {
@@ -102,6 +101,7 @@ public class ModuleService {
         initialModulesToAdd.stream()
                 .map(ModuleMapper::toModule)
                 .forEach(moduleRepository::save);
+
 
 //        List<ModuleDto> modules = new ArrayList<>();
 //        modules.addAll(initialModulesToAdd);

@@ -24,7 +24,7 @@ public class ClassroomController {
 
     @GetMapping(value = "/classroom/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<ClassroomDto> getClassroom(@PathVariable Long id) {
-        return ResponseEntity.ok(ClassroomMapper.toClassroomDto(classroomService.finById(id)));
+        return ResponseEntity.ok(toClassroomDto(classroomService.finById(id)));
     }
 
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE})

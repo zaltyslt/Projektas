@@ -1,33 +1,53 @@
 package lt.techin.schedule.classrooms;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import jakarta.persistence.*;
+import lt.techin.schedule.validators.TextValid;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-public class ClassroomDto {
+@Entity
+public class Classroom {
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
+    @Column(name = "classroomName")
+    @TextValid
     private String classroomName;
+    @TextValid(textMaximumLength = 1000)
     private String description;
     private BuildingType building;
-    private boolean active = true;
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+    @CreatedDate
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm")
     private LocalDateTime createdDate;
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
-    private LocalDateTime modifiedDate;
+    @LastModifiedDate
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm")
 
-    public ClassroomDto() {
+    private LocalDateTime modifiedDate;
+    private boolean active = true;
+
+    @PrePersist
+    public void prePersist() {
+        createdDate = LocalDateTime.now();
+        modifiedDate = LocalDateTime.now();
     }
 
-    public ClassroomDto(Long id, String classroomName, String description,
-                        BuildingType building, boolean active, LocalDateTime createdDate, LocalDateTime modifiedDate) {
+    @PreUpdate
+    public void preUpdate() {
+        modifiedDate = LocalDateTime.now();
+    }
+
+    public Classroom() {
+    }
+
+    public Classroom(Long id, String classroomName, String description, boolean active) {
         this.id = id;
         this.classroomName = classroomName;
         this.description = description;
-        this.building = building;
         this.active = active;
-        this.createdDate = createdDate;
-        this.modifiedDate = modifiedDate;
     }
 
     public Long getId() {
@@ -62,14 +82,6 @@ public class ClassroomDto {
         this.building = building;
     }
 
-    public boolean isActive() {
-        return active;
-    }
-
-    public void setActive(boolean active) {
-        this.active = active;
-    }
-
     public LocalDateTime getCreatedDate() {
         return createdDate;
     }
@@ -86,30 +98,26 @@ public class ClassroomDto {
         this.modifiedDate = modifiedDate;
     }
 
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        ClassroomDto that = (ClassroomDto) o;
-        return active == that.active && Objects.equals(id, that.id)
-                && Objects.equals(classroomName, that.classroomName)
-                && Objects.equals(description, that.description)
-                && building == that.building;
+        Classroom classroom = (Classroom) o;
+        return active == classroom.active && Objects.equals(id, classroom.id) && Objects.equals(classroomName, classroom.classroomName) && Objects.equals(description, classroom.description) && building == classroom.building && Objects.equals(createdDate, classroom.createdDate) && Objects.equals(modifiedDate, classroom.modifiedDate);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, classroomName, description, building, active);
+        return Objects.hash(id, classroomName, description, building, createdDate, modifiedDate, active);
     }
 
-    @Override
-    public String toString() {
-        return "ClassroomDto{" +
-                "id=" + id +
-                ", classroomName='" + classroomName + '\'' +
-                ", description='" + description + '\'' +
-                ", building=" + building +
-                ", active=" + active +
-                '}';
-    }
 }
+

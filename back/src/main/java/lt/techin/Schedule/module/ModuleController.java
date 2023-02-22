@@ -1,6 +1,9 @@
 package lt.techin.schedule.module;
 
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
@@ -80,6 +83,8 @@ public class ModuleController {
 
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.set("totalCount", Integer.toString(totalPageCount));
+
         return ResponseEntity.ok().headers(httpHeaders).body(modules);
+
     }
 }

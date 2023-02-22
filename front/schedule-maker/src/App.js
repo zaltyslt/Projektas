@@ -17,7 +17,9 @@ import { ProgramList } from "./pages/programs/ProgramList";
 import { CreateRoom } from "./pages/rooms/CreateRoom";
 import { ViewRoom } from "./pages/rooms/ViewRoom";
 import { UpdateClassroom } from "./pages/rooms/UpdateRoom";
-
+import { CreateSubject } from "./pages/subjects/CreateSubject";
+import { ViewSubject } from "./pages/subjects/ViewSubject";
+import { EditSubject } from "./pages/subjects/EditSubject"
 
 function App() {
   return (
@@ -46,6 +48,10 @@ function App() {
           <Route path="/modules/create" element={<CreateModule />} />
           <Route path="/modules/view/:id" element={<ViewModule />}></Route>
           <Route path="/modules/edit/:id" element={<EditModule />}></Route>
+
+          <Route path="/subjects/create" element={<CreateSubject />} />
+          <Route path="/subjects/view/:id" element={<ViewSubject />}></Route>
+          <Route path="/subjects/edit/:id" element={<EditSubject />}></Route>
         </Routes>
       </HashRouter>
     </div>

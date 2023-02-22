@@ -24,5 +24,4 @@ public class ModuleMapper {
         module.setName(moduleDto.getName());
         return module;
     }
-
 }

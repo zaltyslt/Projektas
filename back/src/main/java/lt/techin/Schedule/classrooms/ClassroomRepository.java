@@ -9,4 +9,6 @@ import org.springframework.stereotype.Repository;
 public interface ClassroomRepository extends JpaRepository<Classroom, Long> {
     Page<Classroom> findByClassroomName
             (String classroomName, Pageable pageable);
+
+//    List<Classroom> findClassRoomsBySubjectId(Long subjectId);
 }
