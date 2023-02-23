@@ -95,8 +95,6 @@ public class ModuleController {
     @DeleteMapping("/{moduleId}")
     public ResponseEntity<Void> deleteModule(@PathVariable Long moduleId) {
         boolean deleted = moduleService.deleteById(moduleId);
-        System.out.println("Deletions is called");
-        System.out.println(moduleService.getById(moduleId));
         if (deleted) {
             return ResponseEntity.noContent().build();
         } else {

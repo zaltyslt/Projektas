@@ -75,7 +75,6 @@ public class ModuleService {
     }
 
     public boolean deleteById(Long id) {
-        System.out.println("Deleting module");
         try {
             moduleRepository.deleteById(id);
             return true;
