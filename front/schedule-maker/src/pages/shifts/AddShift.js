@@ -79,8 +79,8 @@ export function AddShift() {
         }
     })
 
-    const createShiftPostRequest = () =>  {
-        fetch(
+    const createShiftPostRequest = async () =>  {
+        await fetch(
             'http://localhost:8080/api/v1/shift/add-shift', {
                 method: 'POST',
                 headers: {

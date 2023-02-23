@@ -42,8 +42,8 @@ export function EditModule() {
       });
   }, []);
 
-  const deleteModule = (id) => {
-    fetch("/api/v1/modules/" + id, {
+  const deleteModule = async (id) => {
+    await fetch("/api/v1/modules/" + id, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
@@ -57,8 +57,8 @@ export function EditModule() {
     }
   }
 
-  const editModule = () => {
-      fetch(`/api/v1/modules/update/${params.id}`, {
+  const editModule = async () => {
+      await fetch(`/api/v1/modules/update/${params.id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

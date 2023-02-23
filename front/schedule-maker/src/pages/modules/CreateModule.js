@@ -1,5 +1,5 @@
 import { Alert, Button, Container, Grid, Stack, TextField } from "@mui/material";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 
 export function CreateModule() {
@@ -14,6 +14,10 @@ export function CreateModule() {
   const [isNameEmpty, setIsNameEmpty] = useState(false);
   const [isNameTooLong, setIsNameTooLong] = useState(false);
 
+  const [successfulPost, setSuccessfulPost] = useState();
+  const [isPostUsed, setIsPostUsed] = useState(false);
+  const [moduleErrors, setModuleErrors] = useState();
+
 
   const validation = () => {
     if (isValidNumber && isValidName && !isNumberEmpty && !isNameEmpty && !isNumberTooLong && !isNameTooLong) {
@@ -21,8 +25,8 @@ export function CreateModule() {
     }
   };
 
-  const createModule = () => {
-    fetch("/api/v1/modules/create", {
+  const createModule = async () => {
+    await fetch("/api/v1/modules/create", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -36,8 +40,15 @@ export function CreateModule() {
     .then(applyResult);
   };
 
-  const applyResult = (result) => {
-    console.log(result);
+  const applyResult = (data) => {
+    if (data.valid) {
+      setSuccessfulPost(true);
+    }
+    else {
+        setModuleErrors(data)
+        setSuccessfulPost(false);
+    }
+    setIsPostUsed(true);
   };
 
   const badSymbols = "!@#$%^&*_+={}<>|~`\\'";
@@ -45,23 +56,25 @@ export function CreateModule() {
   const moduleNameLength = 50;
 
 
-  useEffect(() => {
+  const setNumberOnChange = (number) => {
+    setNumber(number);
     (number.length === 0) ? setIsNumberEmpty(true) : setIsNumberEmpty(false);
    
     const isValid = number.split('').some(char => badSymbols.includes(char));
     (isValid) ? setIsValidNumber(false) : setIsValidNumber(true);
  
     (number.length > moduleNumberLength) ? setIsNumberTooLong(true) : setIsNumberTooLong(false);
-  },[number])
+  }
 
-  useEffect(() => {
+  const setNameOnChange = (name) => {
+    setName(name);
     (name.length === 0) ? setIsNameEmpty(true) : setIsNameEmpty(false);
    
     const isValid = name.split('').some(char => badSymbols.includes(char));
     (isValid) ? setIsValidName(false) : setIsValidName(true);
   
     (name.length > moduleNameLength) ? setIsNameTooLong(true) : setIsNameTooLong(false);
-  },[name])
+  }
 
   return (
     <Container>
@@ -83,7 +96,7 @@ export function CreateModule() {
               label="Modulio kodas"
               id="number"
               value={number}
-              onChange={(e) => setNumber(e.target.value)}
+              onChange={(e) => setNumberOnChange(e.target.value)}
             ></TextField>
           </Grid>
 
@@ -102,7 +115,7 @@ export function CreateModule() {
               label="Modulio pavadinimas"
               id="name"
               value={name}
-              onChange={(e) => setName(e.target.value)}
+              onChange={(e) => setNameOnChange(e.target.value)}
             ></TextField>
           </Grid>
 
@@ -117,6 +130,36 @@ export function CreateModule() {
               </Link>
             </Stack>
           </Grid>
+
+          <Grid item sm={10}>
+                {isPostUsed ? (
+                    successfulPost ? (
+                        <Alert severity="success"> Modulis sėkmingai pakeistas.</Alert>
+                        ) : 
+                        (
+                        <Grid>
+                            <Alert severity="warning">Nepavyko pakeisti modulio.</Alert>
+                            {
+                                (moduleErrors.passedValidation ?
+                                    (moduleErrors.databaseErrors).map((databaseError, index) => (
+                                        <Alert key={index} severity="warning">
+                                        {databaseError}
+                                        </Alert>
+                                    )) 
+                                    :
+                                    Object.keys(moduleErrors.validationErrors).map(key => (
+                                    <Alert key={key} severity="warning"> {moduleErrors.validationErrors[key]} {key} laukelyje.
+                                    </Alert>
+                                    ))
+                                )
+                            }
+                        </Grid>
+                        )
+                    ) : 
+                    (
+                    <div></div>
+                    )}
+            </Grid>
         </Grid>
       </form>
     </Container>

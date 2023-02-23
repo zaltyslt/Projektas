@@ -115,25 +115,12 @@ export function ModifyShift() {
 
     const setNameAndCheck = (name) => {
         setName(name);
-        if (name.length === 0) {
-            setIsNameEmpty(true);
-        }
-        else {
-            setIsNameEmpty(false);
-        }
+        (name.length === 0) ? setIsNameEmpty(true) : setIsNameEmpty(false);
+
         const isValid = name.split('').some(char => badSymbols.includes(char));
-        if (isValid) {
-            setIsValidName(false);
-        }
-        else {
-            setIsValidName(true);
-        }
-        if (name.length > maxShiftLength) {
-            setIsNameTooLong(true);
-        }
-        else {
-            setIsNameTooLong(false);
-        }
+        (isValid) ? setIsValidName(false) : setIsValidName(true);
+     
+        (name.length > maxShiftLength) ? setIsNameTooLong(true) : setIsNameTooLong(false);
     }
 
     useEffect(() => {
