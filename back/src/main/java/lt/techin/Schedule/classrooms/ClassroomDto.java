@@ -17,6 +17,7 @@ public class ClassroomDto {
     private LocalDateTime modifiedDate;
 
     public ClassroomDto() {
+//       subjects = new HashSet<>();
     }
 
     public ClassroomDto(Long id, String classroomName, String description,
@@ -86,20 +87,26 @@ public class ClassroomDto {
         this.modifiedDate = modifiedDate;
     }
 
+//    public Set<Subject> getSubjects() {
+//        return subjects;
+//    }
+//
+//    public void setSubjects(Set<Subject> subjects) {
+//        this.subjects = subjects;
+//    }
+
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ClassroomDto that = (ClassroomDto) o;
-        return active == that.active && Objects.equals(id, that.id)
-                && Objects.equals(classroomName, that.classroomName)
-                && Objects.equals(description, that.description)
-                && building == that.building;
+        return active == that.active && Objects.equals(id, that.id) && Objects.equals(classroomName, that.classroomName) && Objects.equals(description, that.description) && building == that.building && Objects.equals(createdDate, that.createdDate) && Objects.equals(modifiedDate, that.modifiedDate);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, classroomName, description, building, active);
+        return Objects.hash(id, classroomName, description, building, active, createdDate, modifiedDate);
     }
 
     @Override
@@ -110,6 +117,8 @@ public class ClassroomDto {
                 ", description='" + description + '\'' +
                 ", building=" + building +
                 ", active=" + active +
+                ", createdDate=" + createdDate +
+                ", modifiedDate=" + modifiedDate +
                 '}';
     }
 }

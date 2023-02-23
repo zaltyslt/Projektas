@@ -18,7 +18,9 @@ import {
 import { Container } from "@mui/system";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import './ModuleList.css';
+import "./ModuleList.css";
+import Stack from "@mui/material/Stack";
+import ".././pages.css"
 
 export function ModuleList() {
   const [modules, setModules] = useState([]);
@@ -70,9 +72,7 @@ export function ModuleList() {
     } else {
       const filtered = modules.filter((module) => {
         const moduleName = module.name.toLowerCase();
-        return (
-          moduleName.includes(event.toLowerCase())
-        );
+        return moduleName.includes(event.toLowerCase());
       });
       setFilteredModules(filtered);
     }
@@ -97,9 +97,11 @@ export function ModuleList() {
             <h3>Modulių sąrašas</h3>
           </Grid>
           <Grid item sm={2}>
-            <Link to="/modules/create">
-              <Button variant="contained">Pridėti naują</Button>
-            </Link>
+            <Stack direction="row" justifyContent="flex-end">
+              <Link to="/modules/create">
+                <Button variant="contained">Pridėti naują</Button>
+              </Link>
+            </Stack>
           </Grid>
 
           <Grid item sm={12}>
@@ -113,14 +115,17 @@ export function ModuleList() {
             ></TextField>
           </Grid>
         </Grid>
+
         <TableContainer component={Paper}>
           <Table aria-label="custom pagination table">
             <TableHead>
               <TableRow>
                 <TableCell>Modulio kodas</TableCell>
                 <TableCell>Modulio pavadinimas</TableCell>
+                <TableCell className="empty-activity"></TableCell>
               </TableRow>
             </TableHead>
+
             <TableBody>
               {(rowsPerPage > 0
                 ? filteredModules.slice(
@@ -136,6 +141,7 @@ export function ModuleList() {
                     </Link>
                   </TableCell>
                   <TableCell>{module.name}</TableCell>
+                  <TableCell></TableCell>
                 </TableRow>
               ))}
 
@@ -150,7 +156,9 @@ export function ModuleList() {
                 <TablePagination
                   labelRowsPerPage="Rodyti po"
                   rowsPerPageOptions={[10, 20, { label: "Visi", value: -1 }]}
-                  labelDisplayedRows={({ from, to, count }) => `${from}-${to} iš ${count}`}
+                  labelDisplayedRows={({ from, to, count }) =>
+                    `${from}-${to} iš ${count}`
+                  }
                   colSpan={3}
                   count={filteredModules.length}
                   page={page}
@@ -172,7 +180,7 @@ export function ModuleList() {
         <FormGroup>
           <FormControlLabel
             control={<Checkbox />}
-            label="Ištrinti dalykai"
+            label="Ištrinti moduliai"
             onChange={(e) =>
               e.target.checked ? setChecked(true) : setChecked(false)
             }
@@ -184,9 +192,9 @@ export function ModuleList() {
             <Table aria-label="custom pagination table">
               <TableHead>
                 <TableRow>
-                  <TableCell>Dalyko pavadinimas</TableCell>
+                  <TableCell>Modulio kodas</TableCell>
                   <TableCell>Modulio pavadinimas</TableCell>
-                  <TableCell></TableCell>
+                  <TableCell className="activity"></TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -201,9 +209,12 @@ export function ModuleList() {
                     <TableCell component="th" scope="row">
                       {module.number}
                     </TableCell>
-                    <TableCell>{module.name}</TableCell>
-                    <TableCell align="center">
-                      <Button onClick={() => handleRestore(module.id)}>
+                    <TableCell component="th" scope="row">{module.name}</TableCell>
+                    <TableCell align="center" className="activity">
+                      <Button 
+                        variant="contained"
+                        onClick={() => handleRestore(module.id)}
+                      >
                         Atstatyti
                       </Button>
                     </TableCell>
@@ -221,7 +232,9 @@ export function ModuleList() {
                   <TablePagination
                     labelRowsPerPage="Rodyti po"
                     rowsPerPageOptions={[10, 20, { label: "Visi", value: -1 }]}
-                    labelDisplayedRows={({ from, to, count }) => `${from}-${to} iš ${count}`}
+                    labelDisplayedRows={({ from, to, count }) =>
+                      `${from}-${to} iš ${count}`
+                    }
                     colSpan={3}
                     count={deletedModules.length}
                     page={page}

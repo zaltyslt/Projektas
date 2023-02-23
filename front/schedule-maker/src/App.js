@@ -21,7 +21,6 @@ import { CreateProgram } from "./pages/programs/CreateProgram"
 import { ViewProgram } from "./pages/programs/ViewProgram";
 import { UpdateProgram } from "./pages/programs/UpdateProgram";
 
-
 function App() {
   return (
     <div className="App">
@@ -52,6 +51,10 @@ function App() {
           <Route path="/modules/create" element={<CreateModule />} />
           <Route path="/modules/view/:id" element={<ViewModule />}></Route>
           <Route path="/modules/edit/:id" element={<EditModule />}></Route>
+
+          <Route path="/subjects/create" element={<CreateSubject />} />
+          <Route path="/subjects/view/:id" element={<ViewSubject />}></Route>
+          <Route path="/subjects/edit/:id" element={<EditSubject />}></Route>
         </Routes>
       </HashRouter>
     </div>

@@ -29,17 +29,20 @@ export function ViewRoom() {
           <Grid item sm={10}>
             <header>
               <h1>{classroom.classroomName}</h1>
-              <h5>Paskutinį kartą redaguota: {classroom.modifiedDate}</h5>
+              <span id="modified-date">Paskutinį kartą redaguota: {classroom.modifiedDate}</span>
             </header>
           </Grid>
+
           <Grid item sm={12}>
             <h4>Pastatas</h4>
-            {classroom.building}
+            <p>{classroom.building}</p>
           </Grid>
+
           <Grid item sm={12}>
             <h4>Klasės aprašas</h4>
             <p>{classroom.description}</p>
           </Grid>
+
           <Grid item sm={12}>
             <Stack direction="row" spacing={2}>
               <Link to={`/update-classroom/${classroom.id}`}>
