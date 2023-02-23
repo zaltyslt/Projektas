@@ -1,9 +1,11 @@
 package lt.techin.schedule.subject;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lt.techin.schedule.classrooms.Classroom;
 import lt.techin.schedule.module.Module;
+import lt.techin.schedule.teachers.Teacher;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -33,7 +35,10 @@ public class Subject {
 //    @JsonIgnore
     @JoinTable(name = "subject_classrooms", joinColumns = {@JoinColumn(name = "subject_id")}, inverseJoinColumns = {@JoinColumn(name = "classroom_id")})
     private Set<Classroom> classRooms;
-
+    @ManyToMany(mappedBy = "subjects")
+//@JsonIgnore
+    @JsonBackReference
+    private Set<Teacher> teachers;
     @CreatedDate
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime createdDate;
@@ -92,6 +97,14 @@ public class Subject {
 
     public String getName() {
         return name;
+    }
+
+    public Set<Teacher> getTeachers() {
+        return teachers;
+    }
+
+    public void setTeachers(Set<Teacher> teachers) {
+        this.teachers = teachers;
     }
 
     public void setName(String name) {
@@ -178,11 +191,28 @@ public class Subject {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Subject subject = (Subject) o;
-        return Objects.equals(id, subject.id) && Objects.equals(name, subject.name) && Objects.equals(description, subject.description) && Objects.equals(module, subject.module) && Objects.equals(classRooms, subject.classRooms) && Objects.equals(createdDate, subject.createdDate) && Objects.equals(createdBy, subject.createdBy) && Objects.equals(modifiedDate, subject.modifiedDate) && Objects.equals(modifiedBy, subject.modifiedBy) && Objects.equals(deleted, subject.deleted);
+        return Objects.equals(id, subject.id) && Objects.equals(name, subject.name) && Objects.equals(description, subject.description) && Objects.equals(module, subject.module) && Objects.equals(classRooms, subject.classRooms) && Objects.equals(teachers, subject.teachers) && Objects.equals(createdDate, subject.createdDate) && Objects.equals(createdBy, subject.createdBy) && Objects.equals(modifiedDate, subject.modifiedDate) && Objects.equals(modifiedBy, subject.modifiedBy) && Objects.equals(deleted, subject.deleted);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, description, module, classRooms, createdDate, createdBy, modifiedDate, modifiedBy, deleted);
+        return Objects.hash(id, name, description, module, classRooms, teachers, createdDate, createdBy, modifiedDate, modifiedBy, deleted);
+    }
+
+    @Override
+    public String toString() {
+        return "Subject{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", module=" + module +
+                ", classRooms=" + classRooms +
+                ", teachers=" + teachers +
+                ", createdDate=" + createdDate +
+                ", createdBy='" + createdBy + '\'' +
+                ", modifiedDate=" + modifiedDate +
+                ", modifiedBy='" + modifiedBy + '\'' +
+                ", deleted=" + deleted +
+                '}';
     }
 }
