@@ -9,7 +9,7 @@ import {
   } from "@mui/material";
 import { Container, Stack } from "@mui/system";
 
-import { Link } from "react-router-dom";
+import { Link, useHref } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import './ModifyShift.css';
@@ -44,16 +44,18 @@ export function ModifyShift() {
         });
     }, []);
 
-    const deactivateShift = ((shiftID) => {
+    const listUrl = useHref("/shifts");
+
+    const deactivateShift = (shiftID) => {
         fetch(
             'http://localhost:8080/api/v1/shift/deactivate-shift/' + shiftID, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json'
                 }
-            }
-        )
-    })
+            })
+        .then(() => (window.location = listUrl));
+    }
 
     var startIntEnum;
     var endIntEnum;
@@ -109,7 +111,7 @@ export function ModifyShift() {
     })
 
     const badSymbols = "!@#$%^&*_+={}<>|~`\\\"\'";
-    const maxLength = 45;
+    const maxShiftLength = 45;
 
     const setNameAndCheck = (name) => {
         setName(name);
@@ -126,7 +128,7 @@ export function ModifyShift() {
         else {
             setIsValidName(true);
         }
-        if (name.length > maxLength) {
+        if (name.length > maxShiftLength) {
             setIsNameTooLong(true);
         }
         else {
@@ -174,7 +176,7 @@ export function ModifyShift() {
                     helperText={
                         !isValidName ? "Pavadinimas turi neleidžiamų simbolių." : 
                         isNameEmpty ? "Pavadinimas negali būti tuščias" :
-                        isNameTooLong ? "Pavadinimas negali būti ilgesnis nei 45 simboliai" 
+                        isNameTooLong ? `Pavadinimas negali būti ilgesnis nei ${maxShiftLength} simboliai` 
                         : null
                     }
                     variant="outlined"
@@ -240,11 +242,9 @@ export function ModifyShift() {
                     <Button variant="contained" onClick={modifyShift}>
                         Išsaugoti
                     </Button>
-                    <Link to="/shifts">
-                        <Button variant="contained" onClick={() => deactivateShift(currentShift.id)}> 
-                            Ištrinti
-                        </Button>
-                    </Link> 
+                    <Button variant="contained" onClick={() => deactivateShift(currentShift.id)}> 
+                        Ištrinti
+                    </Button>
                     <Link to="/shifts">
                         <Button variant="contained">Grįžti</Button>
                     </Link>     

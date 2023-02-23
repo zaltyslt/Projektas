@@ -2,6 +2,7 @@ package lt.techin.schedule.module;
 
 import jakarta.annotation.PostConstruct;
 import jakarta.persistence.EntityManager;
+import lt.techin.schedule.shift.Shift;
 import org.hibernate.Filter;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +22,6 @@ public class ModuleService {
     private final ModuleRepository moduleRepository;
 
     @Autowired
-
     private EntityManager entityManager;
 
     public ModuleService(ModuleRepository moduleRepository) {
@@ -41,23 +41,31 @@ public class ModuleService {
         return moduleRepository.findById(id);
     }
 
-    public Module create(Module module) {
+    private Optional<Module> findModuleByNumber(String number) {
+        return moduleRepository.findAll().stream().filter(s -> s.getNumber().equalsIgnoreCase(number)).findFirst();
+    }
+
+    public String create(Module module) {
         if (moduleRepository.findAll().stream().anyMatch(m -> m.getNumber().equalsIgnoreCase(module.getNumber()))) {
-            return null;
+            return "Modulio numeris turi būti unikalus.";
         }
         else {
-            return moduleRepository.save(module);
+            moduleRepository.save(module);
+            return "";
         }
     }
 
-    public Module updateModule(Long id, Module module) {
-        var existingModule = moduleRepository.findById(id).orElseThrow();
-        if (existingModule != null) {
-            existingModule.setNumber(module.getNumber());
-            existingModule.setName(module.getName());
-            return moduleRepository.save(existingModule);
+    public String updateModule(Long id, Module module) {
+        if (moduleRepository.findById(id).isPresent()) {
+            Optional<Module> foundModule = findModuleByNumber(module.getNumber());
+            if(foundModule.isPresent() && !foundModule.get().getId().equals(id)) {
+                return "Modulio numeris turi būti unikalus.";
+            }
+            module.setId(id);
+            moduleRepository.save(module);
+            return "";
         }
-        return null;
+        return "Modulio pakeisti nepavyko.";
     }
 
     public Module restoreModule(Long id) {
@@ -67,6 +75,7 @@ public class ModuleService {
     }
 
     public boolean deleteById(Long id) {
+        System.out.println("Deleting module");
         try {
             moduleRepository.deleteById(id);
             return true;
@@ -75,44 +84,25 @@ public class ModuleService {
         }
     }
 
-    private Pageable pageable(int page, int pageSize, String sortField, Sort.Direction sortDirection) {
-        return PageRequest.of(page, pageSize, sortDirection, sortField);
-    }
-
-    public Page<Module> findAllPaged(int page, int pageSize, boolean isDeleted) {
-        Pageable pageable = PageRequest.of(page, pageSize);
-
-        Session session = entityManager.unwrap(Session.class);
-        Filter filter = session.enableFilter("deletedModuleFilter");
-        filter.setParameter("isDeleted", isDeleted);
-        Page<Module> modules = moduleRepository.findAll(pageable);
-        session.disableFilter("deletedModuleFilter");
-        return modules;
-    }
-
     @PostConstruct
-    //FIXME for dev purpose
     public void loadInitialModules() {
         var initialModulesToAdd = List.of(
                 new ModuleDto("ABC", "Java"),
                 new ModuleDto("59A", "Spring Boot"),
-                new ModuleDto("TRA", "React")
+                new ModuleDto("TRA", "React"),
+                new ModuleDto("ASDD", "Java"),
+                new ModuleDto("Das", "Java"),
+                new ModuleDto("fsaf", "React"),
+                new ModuleDto("sad", "Java"),
+                new ModuleDto("ewqe", "Java"),
+                new ModuleDto("TRgA", "ewqr"),
+                new ModuleDto("dsa", "fsaf"),
+                new ModuleDto("ewq", "dasa"),
+                new ModuleDto("TRsA", "ewqesdx")
         );
 
         initialModulesToAdd.stream()
                 .map(ModuleMapper::toModule)
                 .forEach(moduleRepository::save);
-
-//        List<ModuleDto> modules = new ArrayList<>();
-//        modules.addAll(initialModulesToAdd);
-//        for (int i = 0; i < 100; i++) {
-//            var moduleDto = new ModuleDto();
-//            modules.add(moduleDto);
-//        }
-
-//        modules.stream()
-//                .map(ModuleMapper::toModule)
-//                .forEach(moduleRepository::save);
-//    }
     }
 }
