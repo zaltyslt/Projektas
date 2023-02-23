@@ -20,6 +20,11 @@ import { UpdateClassroom } from "./pages/rooms/UpdateRoom";
 import { CreateProgram } from "./pages/programs/CreateProgram"
 import { ViewProgram } from "./pages/programs/ViewProgram";
 import { UpdateProgram } from "./pages/programs/UpdateProgram";
+import { CreateSubject } from "./pages/subjects/CreateSubject";
+import { ViewSubject } from "./pages/subjects/ViewSubject";
+import { EditSubject } from "./pages/subjects/EditSubject";
+
+
 
 function App() {
   return (
