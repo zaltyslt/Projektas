@@ -17,12 +17,9 @@ import static org.springframework.http.ResponseEntity.ok;
 public class SubjectController {
 
     private final SubjectService subjectService;
-    private final SubjectRepository subjectRepository;
 
-    public SubjectController(SubjectService subjectService,
-                             SubjectRepository subjectRepository) {
+    public SubjectController(SubjectService subjectService) {
         this.subjectService = subjectService;
-        this.subjectRepository = subjectRepository;
     }
 
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE})

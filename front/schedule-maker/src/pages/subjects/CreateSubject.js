@@ -21,6 +21,7 @@ export function CreateSubject() {
   const [rooms, setRooms] = useState([]);
   const [formValid, setFormValid] = useState(false);
   const [classRooms, setClassRooms] = useState([]);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     fetch("api/v1/modules")
@@ -30,8 +31,8 @@ export function CreateSubject() {
 
   useEffect(() => {
     fetch("api/v1/classrooms")
-    .then((response) => response.json())
-    .then(setRooms);
+      .then((response) => response.json())
+      .then(setRooms);
   }, []);
 
   const clear = () => {
@@ -46,7 +47,6 @@ export function CreateSubject() {
       target: { value },
     } = event;
     setClassRooms(typeof value === "string" ? value.split(",") : value);
-    console.log(classRooms);
   };
 
   const validation = () => {
@@ -70,12 +70,24 @@ export function CreateSubject() {
         module,
         classRooms,
       }),
-    }).then(clear);
+    }).then((response) => {
+      // let statusCode = response.status;
+      let success = response.ok;
+
+      response.json().then((response) => {
+        if (!success) {
+          setError(response.message);
+        } else {
+          clear();
+        }
+      });
+    });
   };
 
   return (
     <Container>
       <h3>Pridėti naują dalyką</h3>
+      {error && <p>{error}</p>}
       <form>
         <Grid container rowSpacing={2}>
           <Grid item lg={10}>
