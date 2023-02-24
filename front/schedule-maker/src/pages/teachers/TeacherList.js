@@ -24,6 +24,7 @@ export function TeacherList() {
   const [teachers, setTeachers] = useState([]);
   const [filteredTeachers, setFilteredTeachers] = useState([]);
   const [deletedTeachers, setDeletedTeachers] = useState([]);
+  const [subjects, setSubjects] = useState([]);
 
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -37,10 +38,14 @@ export function TeacherList() {
     fetchDeletedTeachers();
   }, []);
 
+  useEffect(() => {
+    fetchSubjects();
+    console.log("Boom!");
+  }, []);
+
   const fetchTeachers = async () => {
     fetch("/api/v1/teachers?active=true")
       .then((response) => response.json())
-
       .then((data) => {
         setTeachers(data);
 
@@ -50,10 +55,16 @@ export function TeacherList() {
   };
 
   const fetchDeletedTeachers = async () => {
-    //fetch("/api/v1/teachers?active=false")
     fetch("/api/v1/teachers?active=false")
       .then((response) => response.json())
       .then(setDeletedTeachers);
+  };
+
+  const fetchSubjects = async () => {
+    fetch("/api/v1/subjects")
+      .then((response) => response.json())
+      .then(setSubjects);
+    console.log(subjects);
   };
 
   const emptyRows =
@@ -142,21 +153,38 @@ export function TeacherList() {
                 <TableRow key={teacher.id}>
                   <TableCell component="th" scope="row">
                     <Link to={"/teacher/view?tid=" + teacher.id}>
-                      {teacher.fName +' '+ teacher.lName}
+                      {teacher.fName + " " + teacher.lName}
                     </Link>
                   </TableCell>
-                  
+
+                  <TableCell>{teacher.nickName && teacher.nickName}</TableCell>
+
+                  {/* 
+                "subjectsDtoList": 
+                 [
+                  {"subjectId": 2},
+                  {"subjectId": 1}
+                 ]
+                 */}
+
                   <TableCell>
-                    {teacher.nickName && teacher.nickName}
+                    {/* ////////////////////////////////////// */}
+                    {teacher.subjectsDtoList.length > 0
+                      ? (teacher.subjectsDtoList.map((subjectItem, index) => {
+                          const subject = subjects.find(
+                            (s) => s.id === subjectItem.subjectId
+                          );
+                          return <p key={index}>{subject.name}</p>;
+                        }))
+                      : "* Nepriskirta"}
+                    
+
                   </TableCell>
+
                   <TableCell>
-                  {console.log( teacher.subjectsDtoList.length>0 && teacher.subjectsDtoList)}
-                    {/* {teacher.subjectsDtoList && teacher.subjectsDtoList} */}
-                    TDalykai
-                  </TableCell>
-                  <TableCell>
-                  {teacher.teacherShiftDto ? teacher.teacherShiftDto.name : '* Nepriskirta'}
-                  {console.log( teacher.teacherShiftDto)}
+                    {teacher.teacherShiftDto
+                      ? teacher.teacherShiftDto.name
+                      : "** Nepriskirta"}
                   </TableCell>
                 </TableRow>
               ))}
