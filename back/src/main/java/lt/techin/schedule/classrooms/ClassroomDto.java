@@ -1,6 +1,7 @@
 package lt.techin.schedule.classrooms;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import lt.techin.schedule.validators.TextValid;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -8,6 +9,7 @@ import java.util.Objects;
 public class ClassroomDto {
     private Long id;
     private String classroomName;
+    @TextValid(textMaximumLength = 1000)
     private String description;
     private BuildingType building;
     private boolean active = true;
