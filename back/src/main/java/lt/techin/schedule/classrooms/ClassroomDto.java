@@ -1,6 +1,7 @@
 package lt.techin.schedule.classrooms;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import lt.techin.schedule.validators.TextValid;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -8,16 +9,16 @@ import java.util.Objects;
 public class ClassroomDto {
     private Long id;
     private String classroomName;
+    @TextValid(textMaximumLength = 1000)
     private String description;
     private BuildingType building;
     private boolean active = true;
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDateTime createdDate;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime modifiedDate;
 
     public ClassroomDto() {
-//       subjects = new HashSet<>();
     }
 
     public ClassroomDto(Long id, String classroomName, String description,
@@ -87,26 +88,20 @@ public class ClassroomDto {
         this.modifiedDate = modifiedDate;
     }
 
-//    public Set<Subject> getSubjects() {
-//        return subjects;
-//    }
-//
-//    public void setSubjects(Set<Subject> subjects) {
-//        this.subjects = subjects;
-//    }
-
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ClassroomDto that = (ClassroomDto) o;
-        return active == that.active && Objects.equals(id, that.id) && Objects.equals(classroomName, that.classroomName) && Objects.equals(description, that.description) && building == that.building && Objects.equals(createdDate, that.createdDate) && Objects.equals(modifiedDate, that.modifiedDate);
+        return active == that.active && Objects.equals(id, that.id)
+                && Objects.equals(classroomName, that.classroomName)
+                && Objects.equals(description, that.description)
+                && building == that.building;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, classroomName, description, building, active, createdDate, modifiedDate);
+        return Objects.hash(id, classroomName, description, building, active);
     }
 
     @Override
@@ -117,8 +112,6 @@ public class ClassroomDto {
                 ", description='" + description + '\'' +
                 ", building=" + building +
                 ", active=" + active +
-                ", createdDate=" + createdDate +
-                ", modifiedDate=" + modifiedDate +
                 '}';
     }
 }
