@@ -1,5 +1,7 @@
 package lt.techin.schedule.module;
 
+import lt.techin.schedule.subject.SubjectDto;
+import lt.techin.schedule.subject.SubjectMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
@@ -9,6 +11,7 @@ import java.util.List;
 import static java.util.stream.Collectors.toList;
 import static lt.techin.schedule.module.ModuleMapper.toModule;
 import static lt.techin.schedule.module.ModuleMapper.toModuleDto;
+import static lt.techin.schedule.subject.SubjectMapper.toSubjectDto;
 import static org.springframework.http.ResponseEntity.ok;
 
 @RestController
@@ -23,7 +26,7 @@ public class ModuleController {
 
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE})
     public List<ModuleEntityDto> getModules() {
-        return moduleService.getAll(false).stream().map(ModuleMapper::toModuleEntityDto).collect(toList());
+        return moduleService.getAll().stream().map(ModuleMapper::toModuleEntityDto).collect(toList());
     }
 
     @GetMapping(value = "/{moduleId}", produces = {MediaType.APPLICATION_JSON_VALUE})
@@ -35,7 +38,7 @@ public class ModuleController {
 
     @GetMapping(value = "/deleted", produces = {MediaType.APPLICATION_JSON_VALUE})
     public List<ModuleEntityDto> getDeletedModules() {
-        return moduleService.getAll(true).stream().map(ModuleMapper::toModuleEntityDto).collect(toList());
+        return moduleService.getAllDeleted().stream().map(ModuleMapper::toModuleEntityDto).collect(toList());
     }
 
     @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE})
@@ -53,6 +56,12 @@ public class ModuleController {
                                                   @RequestBody ModuleDto moduleDto) {
         var updatedModule = moduleService.updateModule(moduleId, toModule(moduleDto));
         return ok(toModuleDto(updatedModule));
+    }
+
+    @PatchMapping("/delete/{moduleId}")
+    public ResponseEntity<ModuleDto> delete(@PathVariable Long moduleId) {
+        var deletedModule = moduleService.delete(moduleId);
+        return ok(toModuleDto(deletedModule));
     }
 
     @DeleteMapping("/{moduleId}")

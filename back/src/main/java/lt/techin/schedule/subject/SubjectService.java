@@ -40,8 +40,7 @@ public class SubjectService {
     }
 
     public List<Subject> getAll() {
-        List<Subject> subjects =  subjectRepository.findAll().stream().filter(subject -> !subject.getDeleted()).collect(Collectors.toList());
-        return subjects;
+        return subjectRepository.findAll().stream().filter(subject -> !subject.getDeleted()).collect(Collectors.toList());
     }
 
     public List<Subject> getAllDeleted() {
@@ -92,7 +91,7 @@ public class SubjectService {
     }
 
     public List<Subject> findAllByModuleId(Long moduleId) {
-        return subjectRepository.findSubjectsByModuleId(moduleId);
+        return subjectRepository.findSubjectsByModuleId(moduleId).stream().filter(subject -> !subject.getDeleted()).collect(Collectors.toList());
     }
 
     //Not used

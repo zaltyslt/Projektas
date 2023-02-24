@@ -2,6 +2,7 @@ import { Button, Grid } from "@mui/material";
 import { Container, Stack } from "@mui/system";
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
+import "./Subject.css";
 
 export function ViewSubject() {
   const [subject, setSubject] = useState({});
@@ -30,7 +31,19 @@ export function ViewSubject() {
 
           <Grid item sm={12}>
             <h4>Modulis</h4>
-            <p>{subject.module && subject.module.name}</p>
+            <p>
+              {subject.module ? (
+                subject.module.deleted ? (
+                  <p className="Deleted">
+                    {subject.module.name} - modulis buvo ištrintas.
+                  </p>
+                ) : (
+                  subject.module.name
+                )
+              ) : (
+                <p>Nenurodytas</p>
+              )}
+            </p>
           </Grid>
 
           <Grid item sm={12}>
@@ -40,11 +53,10 @@ export function ViewSubject() {
 
           <Grid item sm={12}>
             <h4>Pageidaujamos klasės</h4>
-            {subject.classRooms && (
+            {subject.classRooms &&
               subject.classRooms.map((classRoom) => (
                 <p key={classRoom.id}>{classRoom.classroomName}</p>
-              ))
-            )}
+              ))}
           </Grid>
 
           <Grid item sm={12}>

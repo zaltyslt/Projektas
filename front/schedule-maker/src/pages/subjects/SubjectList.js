@@ -17,6 +17,7 @@ import {
   TextField,
 } from "@mui/material";
 import { Container } from "@mui/system";
+import "./Subject.css";
 
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
@@ -143,8 +144,17 @@ export function SubjectList() {
                     </Link>
                   </TableCell>
                   <TableCell>
-                    {" "}
-                    {subject.module && subject.module.name}
+                    {subject.module ? (
+                      subject.module.deleted ? (
+                        <p className="Deleted">
+                          {subject.module.name} - modulis buvo ištrintas
+                        </p>
+                      ) : (
+                        subject.module.name
+                      )
+                    ) : (
+                      <p>Nenurodytas</p>
+                    )}
                   </TableCell>
                 </TableRow>
               ))}
@@ -213,10 +223,23 @@ export function SubjectList() {
                       {subject.name}
                     </TableCell>
                     <TableCell>
-                      {subject.module && subject.module.name}
+                      {subject.module ? (
+                        subject.module.deleted ? (
+                          <p className="Deleted">
+                            {subject.module.name} - modulis buvo ištrintas
+                          </p>
+                        ) : (
+                          subject.module.name
+                        )
+                      ) : (
+                        <p>Nenurodytas</p>
+                      )}
                     </TableCell>
                     <TableCell align="center" className="activity">
-                      <Button variant = "contained" onClick={() => handleRestore(subject.id)}>
+                      <Button
+                        variant="contained"
+                        onClick={() => handleRestore(subject.id)}
+                      >
                         Atstatyti
                       </Button>
                     </TableCell>
