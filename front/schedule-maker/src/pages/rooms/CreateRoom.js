@@ -15,7 +15,7 @@ import {
   AlertTitle
 } from "@mui/material";
 import { SelectChangeEvent } from "@mui/material/Select";
-import ".././pages.css"
+import "../pages.css"
 
 
 export function CreateRoom(props) {

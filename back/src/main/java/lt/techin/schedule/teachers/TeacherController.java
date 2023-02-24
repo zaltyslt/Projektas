@@ -21,14 +21,13 @@ import java.util.Set;
 
 import static org.springframework.http.ResponseEntity.ok;
 
-@RestController
-@RequestMapping(value = "/api/v1/teachers", produces = {MediaType.APPLICATION_JSON_VALUE})
+//@RestController
+//@RequestMapping(value = "/api/v1/teachers", produces = {MediaType.APPLICATION_JSON_VALUE})
 //@RequestMapping(value = "/api/v1/teachers", produces = MediaType.APPLICATION_JSON_VALUE)
 public class TeacherController {
 
     private final ContactService contactService;
     private final TeacherService teacherService;
-    private final TeacherControllerView finder;
     private final TeacherControllerAction action;
     private final ShiftDTO repoShift;
     private  final ModuleRepository repoModule;
@@ -36,54 +35,26 @@ public class TeacherController {
     public static final Logger logger = LoggerFactory.getLogger(TeacherController.class);
     private final TeacherRepository teacherRepository;
 
-    public TeacherController(ContactService contactService, TeacherService teacherService, TeacherControllerView finder, TeacherControllerAction action, ShiftDTO repoShift, ModuleRepository repoModule, TeacherRepository teacherRepository) {
+    public TeacherController(ContactService contactService, TeacherService teacherService, TeacherControllerAction action, ShiftDTO repoShift, ModuleRepository repoModule, TeacherRepository teacherRepository) {
         this.contactService = contactService;
         this.teacherService = teacherService;
-        this.finder = finder;
         this.action = action;
         this.repoShift = repoShift;
         this.repoModule = repoModule;
         this.teacherRepository = teacherRepository;
     }
 
-    @GetMapping
-    @ResponseBody
-//    public ResponseEntity<Set<TeacherDto>> getAllTeachers(@RequestParam(value = "all", defaultValue = "true", required = false) boolean active) {
-    public ResponseEntity<Set<TeacherDto>> getAllTeachers(@RequestParam(value = "active", required = false) Optional<Boolean> isActive) {
-        try{
-        ObjectMapper objectMapper = new ObjectMapper();
-        // Serialize the object to JSON
-        var shiftas = repoShift.findById(1L);
-        var shiftas1 = objectMapper.writeValueAsString(shiftas.get());
-//        var shiftNew = objectMapper.readValue(shiftas1, Shift.class);
-            var teacher = teacherRepository.findById(1L);
-            var teacher1 = objectMapper.writeValueAsString(TeacherMapper.teacherToDto(teacher));
-//            var newTeacher = objectMapper.readValue(teacher1, TeacherDto.class);
-
-       System.out.println(shiftas1 +"\n" + teacher1);
-        }catch
-        (Exception e){
-            System.out.println(e.getMessage());
-        }
 
 
-
-
-        var result = finder.getAllTeachers(isActive);
-        return !result.isEmpty()
-                ? ResponseEntity.ok(result)
-                : ResponseEntity.noContent().build();
-    }
-
-    @GetMapping(value = "/view") //view by teacherID via path
-    public ResponseEntity<TeacherDto> getTeacherById(@RequestParam(value = "tid", required = false) Long teacherId) {
-        var result =  finder.getTeacherById(teacherId);
-
-        return result.getId() != null
-                ? ResponseEntity.ok(result)
-                : ResponseEntity.notFound().build();
-
-    }
+//    @GetMapping(value = "/view") //view by teacherID via path
+//    public ResponseEntity<TeacherDto> getTeacherById(@RequestParam(value = "tid", required = false) Long teacherId) {
+//        var result =  finder.getTeacherById(teacherId);
+//
+//        return result.getId() != null
+//                ? ResponseEntity.ok(result)
+//                : ResponseEntity.notFound().build();
+//
+//    }
 
 //    @PostMapping(value = "/create", consumes = {MediaType.APPLICATION_JSON_VALUE}) //teacher create
 //    public ResponseEntity<TeacherDto> createTeacher(@RequestBody TeacherDto teacherDto) {
