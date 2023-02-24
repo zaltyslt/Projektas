@@ -22,7 +22,7 @@ public class Classroom {
     private String description;
     private BuildingType building;
     @CreatedDate
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDateTime createdDate;
     @LastModifiedDate
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
@@ -111,7 +111,12 @@ public class Classroom {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Classroom classroom = (Classroom) o;
-        return active == classroom.active && Objects.equals(id, classroom.id) && Objects.equals(classroomName, classroom.classroomName) && Objects.equals(description, classroom.description) && building == classroom.building && Objects.equals(createdDate, classroom.createdDate) && Objects.equals(modifiedDate, classroom.modifiedDate);
+        return active == classroom.active && Objects.equals(id, classroom.id)
+                && Objects.equals(classroomName, classroom.classroomName)
+                && Objects.equals(description, classroom.description)
+                && building == classroom.building
+                && Objects.equals(createdDate, classroom.createdDate)
+                && Objects.equals(modifiedDate, classroom.modifiedDate);
     }
 
     @Override
@@ -119,5 +124,17 @@ public class Classroom {
         return Objects.hash(id, classroomName, description, building, createdDate, modifiedDate, active);
     }
 
+    @Override
+    public String toString() {
+        return "Classroom{" +
+                "id=" + id +
+                ", classroomName='" + classroomName + '\'' +
+                ", description='" + description + '\'' +
+                ", building=" + building +
+                ", createdDate=" + createdDate +
+                ", modifiedDate=" + modifiedDate +
+                ", active=" + active +
+                '}';
+    }
 }
 
