@@ -139,7 +139,7 @@ export function SubjectList() {
                       {subject.name}
                     </Link>
                   </TableCell>
-                  <TableCell>{subject.module.name}</TableCell>
+                  <TableCell> {subject.module && subject.module.name}</TableCell>
                 </TableRow>
               ))}
 

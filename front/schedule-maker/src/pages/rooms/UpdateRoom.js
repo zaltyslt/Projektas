@@ -73,7 +73,7 @@ export function UpdateClassroom() {
     } else if (!building) {
       setError("Prašome pasirinkti pastatą.");
     } else {
-      fetch(`/api/v1/classrooms/update/${params.id}`, {
+      fetch(`/api/v1/classrooms/update-classroom/${params.id}`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
@@ -94,7 +94,7 @@ export function UpdateClassroom() {
   };
 
   const disableClassroom = () => {
-    fetch(`/api/v1/classrooms/disable/${params.id}`, {
+    fetch(`/api/v1/classrooms/disable-classroom/${params.id}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
@@ -103,7 +103,7 @@ export function UpdateClassroom() {
   };
 
   const enableClassroom = () => {
-    fetch(`/api/v1/classrooms/enable/${params.id}`, {
+    fetch(`/api/v1/classrooms/enable-classroom/${params.id}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
