@@ -22,7 +22,7 @@ public class Classroom {
     private String description;
     private BuildingType building;
     @CreatedDate
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime createdDate;
     @LastModifiedDate
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")

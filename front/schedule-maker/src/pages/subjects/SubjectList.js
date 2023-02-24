@@ -5,6 +5,7 @@ import {
   FormGroup,
   Grid,
   Paper,
+  Stack,
   Table,
   TableBody,
   TableCell,
@@ -96,16 +97,18 @@ export function SubjectList() {
     <div>
       <Container maxWidth="lg">
         <Grid container rowSpacing={3}>
-          <Grid item lg={10}>
+          <Grid item sm={10}>
             <h3>Dalykų sąrašas</h3>
           </Grid>
-          <Grid item lg={2}>
+          <Grid item sm={2}>
             <Link to="/subjects/create">
-              <Button variant="contained">Pridėti naują</Button>
+              <Stack direction="row" justifyContent="flex-end">
+                <Button variant="contained">Pridėti naują</Button>
+              </Stack>
             </Link>
           </Grid>
 
-          <Grid item lg={12}>
+          <Grid item sm={12}>
             <TextField
               fullWidth
               variant="outlined"
@@ -139,7 +142,10 @@ export function SubjectList() {
                       {subject.name}
                     </Link>
                   </TableCell>
-                  <TableCell> {subject.module && subject.module.name}</TableCell>
+                  <TableCell>
+                    {" "}
+                    {subject.module && subject.module.name}
+                  </TableCell>
                 </TableRow>
               ))}
 
@@ -154,6 +160,9 @@ export function SubjectList() {
                 <TablePagination
                   labelRowsPerPage="Rodyti po"
                   rowsPerPageOptions={[10, 20, { label: "Visi", value: -1 }]}
+                  labelDisplayedRows={({ from, to, count }) =>
+                    `${from}-${to} iš ${count}`
+                  }
                   colSpan={3}
                   count={filteredSubjects.length}
                   page={page}
@@ -188,7 +197,7 @@ export function SubjectList() {
                 <TableRow>
                   <TableCell>Dalyko pavadinimas</TableCell>
                   <TableCell>Modulio pavadinimas</TableCell>
-                  <TableCell align="center">Veiksmai</TableCell>
+                  <TableCell className="activity"></TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -206,8 +215,8 @@ export function SubjectList() {
                     <TableCell>
                       {subject.module && subject.module.name}
                     </TableCell>
-                    <TableCell align="center">
-                      <Button onClick={() => handleRestore(subject.id)}>
+                    <TableCell align="center" className="activity">
+                      <Button variant = "contained" onClick={() => handleRestore(subject.id)}>
                         Atstatyti
                       </Button>
                     </TableCell>
@@ -225,6 +234,9 @@ export function SubjectList() {
                   <TablePagination
                     labelRowsPerPage="Rodyti po"
                     rowsPerPageOptions={[10, 20, { label: "Visi", value: -1 }]}
+                    labelDisplayedRows={({ from, to, count }) =>
+                      `${from}-${to} iš ${count}`
+                    }
                     colSpan={3}
                     count={deletedSubjects.length}
                     page={page}

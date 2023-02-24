@@ -37,12 +37,12 @@ public class ApiExceptionHandler {
         return "database_error";
     }
 
-    @ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "IOException occured")
-    @ExceptionHandler(IOException.class)
-    public void handleIOException() {
-        logger.error("IOException handler executed");
-        //returning 404 error code
-    }
+//    @ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "IOException occured")
+//    @ExceptionHandler(IOException.class)
+//    public void handleIOException() {
+//        logger.error("IOException handler executed");
+//        //returning 404 error code
+//    }
 
     @ExceptionHandler(DataAccessException.class)
     public ResponseEntity<ErrorDto> handleDataAccessException(HttpServletRequest request, DataAccessException dataAccessException) {
