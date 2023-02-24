@@ -1,23 +1,19 @@
 package lt.techin.schedule.teachers;
 
-import lt.techin.schedule.shift.LessonTime;
 import lt.techin.schedule.shift.Shift;
 import lt.techin.schedule.shift.ShiftDTO;
 import lt.techin.schedule.subject.Subject;
-import lt.techin.schedule.subject.SubjectEntityDto;
 import lt.techin.schedule.subject.SubjectRepository;
 import lt.techin.schedule.teachers.contacts.Contact;
-import lt.techin.schedule.teachers.contacts.ContactDto;
 import lt.techin.schedule.teachers.contacts.ContactMapper;
 import lt.techin.schedule.teachers.contacts.ContactService;
-import lt.techin.schedule.teachers.exception.TeacherException;
+import lt.techin.schedule.exceptions.TeacherException;
 import lt.techin.schedule.teachers.helpers.TeacherSubjectMapper;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.lang.reflect.Method;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;

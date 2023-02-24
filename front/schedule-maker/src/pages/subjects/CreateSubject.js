@@ -1,4 +1,5 @@
 import {
+  Alert,
   Button,
   Container,
   FormControl,
@@ -21,6 +22,7 @@ export function CreateSubject() {
   const [rooms, setRooms] = useState([]);
   const [formValid, setFormValid] = useState(false);
   const [classRooms, setClassRooms] = useState([]);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     fetch("api/v1/modules")
@@ -30,8 +32,8 @@ export function CreateSubject() {
 
   useEffect(() => {
     fetch("api/v1/classrooms")
-    .then((response) => response.json())
-    .then(setRooms);
+      .then((response) => response.json())
+      .then(setRooms);
   }, []);
 
   const clear = () => {
@@ -69,7 +71,18 @@ export function CreateSubject() {
         module,
         classRooms,
       }),
-    }).then(clear);
+    }).then((response) => {
+      // let statusCode = response.status;
+      let success = response.ok;
+
+      response.json().then((response) => {
+        if (!success) {
+          setError(response.message);
+        } else {
+          clear();
+        }
+      });
+    });
   };
 
   return (
@@ -143,6 +156,10 @@ export function CreateSubject() {
                 ))}
               </Select>
             </FormControl>
+          </Grid>
+
+          <Grid item sm={10}>
+            {error && <Alert severity="warning">{error}</Alert>}
           </Grid>
 
           <Grid item sm={10}>

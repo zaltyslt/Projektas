@@ -3,6 +3,7 @@ package lt.techin.schedule.subject;
 
 import jakarta.persistence.EntityManager;
 import lt.techin.schedule.classrooms.ClassroomRepository;
+import lt.techin.schedule.exceptions.SubjectValidationException;
 import lt.techin.schedule.module.ModuleRepository;
 import org.hibernate.Filter;
 import org.hibernate.Session;
@@ -17,6 +18,8 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import static lt.techin.schedule.subject.SubjectMapper.toSubjectDto;
 
 @Service
 public class SubjectService {
@@ -50,7 +53,18 @@ public class SubjectService {
     }
 
     public Subject create(Subject subject) {
-        return subjectRepository.save(subject);
+        var existing = subjectRepository.findAll();
+        existing = existing.stream().filter(s -> s.getName().equalsIgnoreCase(subject.getName()))
+                .filter(s -> s.getDescription().equalsIgnoreCase(subject.getDescription()))
+                .filter(s -> s.getModule().getId().equals(subject.getModule().getId()))
+                .collect(Collectors.toList());
+        if (existing.size() > 0) {
+            var subjectDto = toSubjectDto(subject);
+
+            throw new SubjectValidationException("Dalykas su tokiu pavadinimu, aprašu ir moduliu jau sukurtas.", "Subject", "Not unique", subjectDto.toString());
+        } else {
+            return subjectRepository.save(subject);
+        }
     }
 
     public Subject delete(Long subjectId) {

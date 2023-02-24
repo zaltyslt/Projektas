@@ -72,10 +72,10 @@ export function SubjectList() {
     } else {
       const filtered = subjects.filter((subject) => {
         const subjectName = subject.name.toLowerCase();
-        const subjectDescription = subject.description.toLowerCase();
+        const subjectModuleName = subject.module.name.toLowerCase();
         return (
           subjectName.includes(event.toLowerCase()) ||
-          subjectDescription.includes(event.toLowerCase())
+          subjectModuleName.includes(event.toLowerCase())
         );
       });
       setFilteredSubjects(filtered);
