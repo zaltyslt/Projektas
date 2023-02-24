@@ -45,7 +45,7 @@ export function ViewRoom() {
 
           <Grid item sm={12}>
             <Stack direction="row" spacing={2}>
-              <Link to={`/update-classroom/${classroom.id}`}>
+              <Link to={`/update/${classroom.id}`}>
                 <Button variant="contained">Redaguoti</Button>
               </Link>
               <Button variant="contained" onClick={() => navigate(-1)}>
