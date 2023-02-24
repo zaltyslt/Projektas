@@ -58,18 +58,17 @@ public class TeacherMapper {
                 .map(c -> ContactMapper.contactFromDto(c))
                 .toList();
     }
-
-
-
     // DTO to teacher
 
     public static Teacher teacherFromDto(TeacherDto dto) {
         Teacher teacher = new Teacher();
         teacher.setId(dto.getId() != null ? dto.getId() : null);
-        teacher.setfName(dto.getfName().trim());
-        teacher.setlName(dto.getlName().trim());
-        teacher.setNickName(dto.getNickName().trim());
-        teacher.setSubjects(TeacherSubjectMapper.subjectsFromDtos(dto.getSubjectsDtoList()));
+        teacher.setfName(dto.getfName() != null  ? dto.getfName().trim() :"_empty");
+        teacher.setlName(dto.getlName() != null  ? dto.getlName().trim() : "_empty");
+        teacher.setNickName(dto.getNickName() != null  ? dto.getNickName().trim(): "_empty");
+        teacher.setSubjects( dto.getSubjectsDtoList() != null
+                ? TeacherSubjectMapper.subjectsFromDtos(dto.getSubjectsDtoList())
+                : null);
         teacher.setWorkHoursPerWeek(dto.getWorkHoursPerWeek());
 //        teacher.setShift(ShiftMapper.shiftFromDto(dto.getShiftDtoNew()));
         teacher.setShift(TeacherShiftMapper.shiftFromDto(dto.getTeacherShiftDto()));
