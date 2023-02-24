@@ -61,7 +61,7 @@ export function CreateRoom(props) {
     } else if (!building) {
       setError("Prašome pasirinkti pastatą.");
     } else {
-      fetch("/api/v1/classrooms/create", {
+      fetch("/api/v1/classrooms/create-classroom", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
