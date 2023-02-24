@@ -30,8 +30,8 @@ export function EditModule() {
   }, []);
 
   const deleteModule = (id) => {
-    fetch("/api/v1/modules/" + id, {
-      method: "DELETE",
+    fetch("/api/v1/modules/delete/" + id, {
+      method: "PATCH",
       headers: {
         "Content-Type": "application/json",
       },

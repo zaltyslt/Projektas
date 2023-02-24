@@ -5,6 +5,7 @@ import {
   FormGroup,
   Grid,
   Paper,
+  Stack,
   Table,
   TableBody,
   TableCell,
@@ -16,6 +17,7 @@ import {
   TextField,
 } from "@mui/material";
 import { Container } from "@mui/system";
+import "./Subject.css";
 
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
@@ -71,10 +73,10 @@ export function SubjectList() {
     } else {
       const filtered = subjects.filter((subject) => {
         const subjectName = subject.name.toLowerCase();
-        const subjectDescription = subject.description.toLowerCase();
+        const subjectModuleName = subject.module.name.toLowerCase();
         return (
           subjectName.includes(event.toLowerCase()) ||
-          subjectDescription.includes(event.toLowerCase())
+          subjectModuleName.includes(event.toLowerCase())
         );
       });
       setFilteredSubjects(filtered);
@@ -96,16 +98,18 @@ export function SubjectList() {
     <div>
       <Container maxWidth="lg">
         <Grid container rowSpacing={3}>
-          <Grid item lg={10}>
+          <Grid item sm={10}>
             <h3>Dalykų sąrašas</h3>
           </Grid>
-          <Grid item lg={2}>
+          <Grid item sm={2}>
             <Link to="/subjects/create">
-              <Button variant="contained">Pridėti naują</Button>
+              <Stack direction="row" justifyContent="flex-end">
+                <Button variant="contained">Pridėti naują</Button>
+              </Stack>
             </Link>
           </Grid>
 
-          <Grid item lg={12}>
+          <Grid item sm={12}>
             <TextField
               fullWidth
               variant="outlined"
@@ -139,7 +143,19 @@ export function SubjectList() {
                       {subject.name}
                     </Link>
                   </TableCell>
-                  <TableCell> {subject.module && subject.module.name}</TableCell>
+                  <TableCell>
+                    {subject.module ? (
+                      subject.module.deleted ? (
+                        <p className="Deleted">
+                          {subject.module.name} - modulis buvo ištrintas
+                        </p>
+                      ) : (
+                        subject.module.name
+                      )
+                    ) : (
+                      <p>Nenurodytas</p>
+                    )}
+                  </TableCell>
                 </TableRow>
               ))}
 
@@ -154,6 +170,9 @@ export function SubjectList() {
                 <TablePagination
                   labelRowsPerPage="Rodyti po"
                   rowsPerPageOptions={[10, 20, { label: "Visi", value: -1 }]}
+                  labelDisplayedRows={({ from, to, count }) =>
+                    `${from}-${to} iš ${count}`
+                  }
                   colSpan={3}
                   count={filteredSubjects.length}
                   page={page}
@@ -186,9 +205,9 @@ export function SubjectList() {
             <Table aria-label="custom pagination table">
               <TableHead>
                 <TableRow>
-                  <TableCell colSpan={6}>Dalyko pavadinimas</TableCell>
-                  <TableCell colSpan={6}>Modulio pavadinimas</TableCell>
-                  <TableCell colSpan={2} align="center">Veiksmai</TableCell>
+                  <TableCell>Dalyko pavadinimas</TableCell>
+                  <TableCell>Modulio pavadinimas</TableCell>
+                  <TableCell className="activity"></TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -200,12 +219,27 @@ export function SubjectList() {
                   : deletedSubjects
                 ).map((subject) => (
                   <TableRow key={subject.id}>
-                    <TableCell colSpan={6} component="th" scope="row">
+                    <TableCell component="th" scope="row">
                       {subject.name}
                     </TableCell>
-                    <TableCell colSpan={6}>{subject.description}</TableCell>
-                    <TableCell colSpan={2} align="center">
-                      <Button onClick={() => handleRestore(subject.id)}>
+                    <TableCell>
+                      {subject.module ? (
+                        subject.module.deleted ? (
+                          <p className="Deleted">
+                            {subject.module.name} - modulis buvo ištrintas
+                          </p>
+                        ) : (
+                          subject.module.name
+                        )
+                      ) : (
+                        <p>Nenurodytas</p>
+                      )}
+                    </TableCell>
+                    <TableCell align="center" className="activity">
+                      <Button
+                        variant="contained"
+                        onClick={() => handleRestore(subject.id)}
+                      >
                         Atstatyti
                       </Button>
                     </TableCell>
@@ -223,6 +257,9 @@ export function SubjectList() {
                   <TablePagination
                     labelRowsPerPage="Rodyti po"
                     rowsPerPageOptions={[10, 20, { label: "Visi", value: -1 }]}
+                    labelDisplayedRows={({ from, to, count }) =>
+                      `${from}-${to} iš ${count}`
+                    }
                     colSpan={3}
                     count={deletedSubjects.length}
                     page={page}

@@ -1,27 +1,33 @@
-package lt.techin.schedule.teachers.exception;
+package lt.techin.schedule.exceptions;
 
-import org.springframework.format.annotation.DateTimeFormat;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
 public class ErrorDto {
+
     private String url;
     private String message;
     private Integer status;
     private String error;
-//    private String path;
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
+    private String path;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime timestamp;
 
-    public ErrorDto(String url, String message, Integer status, String error, LocalDateTime timestamp) {
+    public ErrorDto(String url, String message, Integer status, String error, String path, LocalDateTime timestamp) {
         this.url = url;
         this.message = message;
         this.status = status;
         this.error = error;
-
+        this.path = path;
         this.timestamp = timestamp;
+    }
+
+    public ErrorDto(Integer status, String message) {
+        this.status = status;
+        this.message = message;
     }
 
     public String getUrl() {
@@ -56,7 +62,13 @@ public class ErrorDto {
         this.error = error;
     }
 
+    public String getPath() {
+        return path;
+    }
 
+    public void setPath(String path) {
+        this.path = path;
+    }
 
     public LocalDateTime getTimestamp() {
         return timestamp;
@@ -71,23 +83,17 @@ public class ErrorDto {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ErrorDto errorDto = (ErrorDto) o;
-        return Objects.equals(url, errorDto.url) && Objects.equals(message, errorDto.message) && Objects.equals(status, errorDto.status) && Objects.equals(error, errorDto.error) && Objects.equals(timestamp, errorDto.timestamp);
+        return Objects.equals(url, errorDto.url) && Objects.equals(message, errorDto.message) && Objects.equals(status, errorDto.status) && Objects.equals(error, errorDto.error) && Objects.equals(path, errorDto.path) && Objects.equals(timestamp, errorDto.timestamp);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(url, message, status, error, timestamp);
+        return Objects.hash(url, message, status, error, path, timestamp);
     }
 
     @Override
     public String toString() {
-        return "ErrorDto{" +
-                "url='" + url + '\'' +
-                ", message='" + message + '\'' +
-                ", status=" + status +
-                ", error='" + error + '\'' +
-                ", timestamp=" + timestamp +
-                '}';
+        return "ErrorDto{" + "url='" + url + '\'' + ", message='" + message + '\'' + ", status=" + status + ", error='" + error + '\'' + ", path='" + path + '\'' + ", timestamp=" + timestamp + '}';
     }
 
 }

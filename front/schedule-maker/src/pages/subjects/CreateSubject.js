@@ -1,4 +1,5 @@
 import {
+  Alert,
   Button,
   Container,
   FormControl,
@@ -21,6 +22,7 @@ export function CreateSubject() {
   const [rooms, setRooms] = useState([]);
   const [formValid, setFormValid] = useState(false);
   const [classRooms, setClassRooms] = useState([]);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     fetch("api/v1/modules")
@@ -30,8 +32,8 @@ export function CreateSubject() {
 
   useEffect(() => {
     fetch("api/v1/classrooms")
-    .then((response) => response.json())
-    .then(setRooms);
+      .then((response) => response.json())
+      .then(setRooms);
   }, []);
 
   const clear = () => {
@@ -46,7 +48,6 @@ export function CreateSubject() {
       target: { value },
     } = event;
     setClassRooms(typeof value === "string" ? value.split(",") : value);
-    console.log(classRooms);
   };
 
   const validation = () => {
@@ -70,7 +71,18 @@ export function CreateSubject() {
         module,
         classRooms,
       }),
-    }).then(clear);
+    }).then((response) => {
+      // let statusCode = response.status;
+      let success = response.ok;
+
+      response.json().then((response) => {
+        if (!success) {
+          setError(response.message);
+        } else {
+          clear();
+        }
+      });
+    });
   };
 
   return (
@@ -78,7 +90,7 @@ export function CreateSubject() {
       <h3>Pridėti naują dalyką</h3>
       <form>
         <Grid container rowSpacing={2}>
-          <Grid item lg={10}>
+          <Grid item sm={10}>
             <TextField
               fullWidth
               required
@@ -93,7 +105,7 @@ export function CreateSubject() {
             ></TextField>
           </Grid>
 
-          <Grid item lg={10}>
+          <Grid item sm={10}>
             <TextField
               fullWidth
               multiline
@@ -105,7 +117,7 @@ export function CreateSubject() {
             ></TextField>
           </Grid>
 
-          <Grid item lg={10}>
+          <Grid item sm={10}>
             <FormControl fullWidth>
               <InputLabel id="module-label">Modulio pavadinimas</InputLabel>
               <Select
@@ -126,7 +138,7 @@ export function CreateSubject() {
             </FormControl>
           </Grid>
 
-          <Grid item lg={10}>
+          <Grid item sm={10}>
             <FormControl fullWidth>
               <InputLabel id="room-label">Klasės</InputLabel>
               <Select
@@ -146,7 +158,11 @@ export function CreateSubject() {
             </FormControl>
           </Grid>
 
-          <Grid item lg={10}>
+          <Grid item sm={10}>
+            {error && <Alert severity="warning">{error}</Alert>}
+          </Grid>
+
+          <Grid item sm={10}>
             <Stack direction="row" spacing={2}>
               <Button variant="contained" onClick={validation}>
                 Išsaugoti

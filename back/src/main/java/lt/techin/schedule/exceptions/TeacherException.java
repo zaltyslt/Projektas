@@ -1,4 +1,4 @@
-package lt.techin.schedule.teachers.exception;
+package lt.techin.schedule.exceptions;
 
 import org.springframework.http.HttpStatus;
 
