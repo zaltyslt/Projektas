@@ -45,7 +45,7 @@ export function RoomList() {
 
   const enableClassroom = (event, classroom) => {
     console.log(classroom);
-    fetch(`/api/v1/classrooms/enable/${classroom.id}`, {
+    fetch(`/api/v1/classrooms/enable-classroom/${classroom.id}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
@@ -147,7 +147,7 @@ export function RoomList() {
           </Grid>
           <Grid item sm={2}>
             <Stack direction="row" justifyContent="flex-end">
-              <Link to="/create">
+              <Link to="/create-classroom">
                 <Button variant="contained">Pridėti naują</Button>
               </Link>
             </Stack>
@@ -207,7 +207,7 @@ export function RoomList() {
                 .map((classroom) => (
                   <TableRow key={classroom.id}>
                     <TableCell component="th" scope="row">
-                      <Link to={`/classrooms/view/${classroom.id}`}>
+                      <Link to={`/classrooms/view-classroom/${classroom.id}`}>
                         {classroom.classroomName}
                       </Link>
                     </TableCell>
