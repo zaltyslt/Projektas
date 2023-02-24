@@ -139,7 +139,7 @@ export function SubjectList() {
                       {subject.name}
                     </Link>
                   </TableCell>
-                  <TableCell>{subject.module.name}</TableCell>
+                  <TableCell>{subject.module && subject.module.name}</TableCell>
                 </TableRow>
               ))}
 
@@ -186,9 +186,9 @@ export function SubjectList() {
             <Table aria-label="custom pagination table">
               <TableHead>
                 <TableRow>
-                  <TableCell colSpan={6}>Dalyko pavadinimas</TableCell>
-                  <TableCell colSpan={6}>Modulio pavadinimas</TableCell>
-                  <TableCell colSpan={2} align="center">Veiksmai</TableCell>
+                  <TableCell>Dalyko pavadinimas</TableCell>
+                  <TableCell>Modulio pavadinimas</TableCell>
+                  <TableCell align="center">Veiksmai</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -200,11 +200,13 @@ export function SubjectList() {
                   : deletedSubjects
                 ).map((subject) => (
                   <TableRow key={subject.id}>
-                    <TableCell colSpan={6} component="th" scope="row">
+                    <TableCell component="th" scope="row">
                       {subject.name}
                     </TableCell>
-                    <TableCell colSpan={6}>{subject.description}</TableCell>
-                    <TableCell colSpan={2} align="center">
+                    <TableCell>
+                      {subject.module && subject.module.name}
+                    </TableCell>
+                    <TableCell align="center">
                       <Button onClick={() => handleRestore(subject.id)}>
                         Atstatyti
                       </Button>
