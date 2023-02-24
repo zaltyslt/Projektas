@@ -2,6 +2,7 @@ import { Button, Grid } from "@mui/material";
 import { Container, Stack } from "@mui/system";
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
+import "./Subject.css";
 
 export function ViewSubject() {
   const [subject, setSubject] = useState({});
@@ -19,31 +20,46 @@ export function ViewSubject() {
     <div>
       <Container>
         <Grid container rowSpacing={4}>
-          <Grid item lg={10}>
+          <Grid item sm={10}>
             <header>
               <h1>{subject.name}</h1>
-              <h5>Paskutinį kartą redaguota: {subject.modifiedDate}</h5>
+              <span id="modified-date">
+                Paskutinį kartą redaguota: {subject.modifiedDate}
+              </span>
             </header>
           </Grid>
 
-          <Grid item lg={12}>
+          <Grid item sm={12}>
             <h4>Modulis</h4>
-            {!subject.module ? <p>Loading</p> : <p>{subject.module.name}</p>}
+            <p>
+              {subject.module ? (
+                subject.module.deleted ? (
+                  <p className="Deleted">
+                    {subject.module.name} - modulis buvo ištrintas.
+                  </p>
+                ) : (
+                  subject.module.name
+                )
+              ) : (
+                <p>Nenurodytas</p>
+              )}
+            </p>
           </Grid>
 
-          <Grid item lg={12}>
+          <Grid item sm={12}>
             <h4>Aprašymas</h4>
             <p>{subject.description}</p>
           </Grid>
 
-          <Grid item lg={12}>
+          <Grid item sm={12}>
             <h4>Pageidaujamos klasės</h4>
-            {!subject.classRooms ? <p>Loading</p> : subject.classRooms.map((classRoom) => 
-              <p key={classRoom.id}>{classRoom.classroomName}</p>
-            )}
+            {subject.classRooms &&
+              subject.classRooms.map((classRoom) => (
+                <p key={classRoom.id}>{classRoom.classroomName}</p>
+              ))}
           </Grid>
 
-          <Grid item lg={12}>
+          <Grid item sm={12}>
             <Stack direction="row" spacing={2}>
               <Link to={"/subjects/edit/" + subject.id}>
                 <Button variant="contained">Redaguoti</Button>

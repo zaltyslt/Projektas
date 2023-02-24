@@ -13,9 +13,6 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
-@SQLDelete(sql = "UPDATE module SET deleted = true WHERE id=?")
-@FilterDef(name = "deletedModuleFilter", parameters = @ParamDef(name = "isDeleted", type = org.hibernate.type.descriptor.java.BooleanJavaType.class))
-@Filter(name = "deletedModuleFilter", condition = "deleted = :isDeleted")
 public class Module {
 
     @Id

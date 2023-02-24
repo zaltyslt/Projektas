@@ -87,7 +87,7 @@ export function EditSubject() {
       <h3>{subject.name}</h3>
       <form>
         <Grid container rowSpacing={2}>
-          <Grid item lg={10}>
+          <Grid item sm={10}>
             <TextField
               fullWidth
               variant="outlined"
@@ -98,7 +98,7 @@ export function EditSubject() {
             ></TextField>
           </Grid>
 
-          <Grid item lg={10}>
+          <Grid item sm={10}>
             <TextField
               fullWidth
               multiline
@@ -110,7 +110,7 @@ export function EditSubject() {
             ></TextField>
           </Grid>
 
-          <Grid item lg={10}>
+          <Grid item sm={10}>
             <FormControl fullWidth>
               <InputLabel id="module-label">Modulio pavadinimas</InputLabel>
               <Select
@@ -129,7 +129,7 @@ export function EditSubject() {
             </FormControl>
           </Grid>
 
-          <Grid item lg={10}>
+          <Grid item sm={10}>
           <FormControl fullWidth>
               <InputLabel id="room-label">Klasės</InputLabel>
               <Select
@@ -149,7 +149,7 @@ export function EditSubject() {
             </FormControl>
           </Grid>
 
-          <Grid item lg={10}>
+          <Grid item sm={10}>
             <Stack direction="row" spacing={2}>
               <Button
                 variant="contained"

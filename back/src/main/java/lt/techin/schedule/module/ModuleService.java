@@ -2,6 +2,7 @@ package lt.techin.schedule.module;
 
 import jakarta.annotation.PostConstruct;
 import jakarta.persistence.EntityManager;
+import lt.techin.schedule.subject.Subject;
 import org.hibernate.Filter;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ModuleService {
@@ -28,13 +30,12 @@ public class ModuleService {
         this.moduleRepository = moduleRepository;
     }
 
-    public List<Module> getAll(boolean isDeleted) {
-        Session session = entityManager.unwrap(Session.class);
-        Filter filter = session.enableFilter("deletedModuleFilter");
-        filter.setParameter("isDeleted", isDeleted);
-        List<Module> modules = moduleRepository.findAll();
-        session.disableFilter("deletedModuleFilter");
-        return modules;
+    public List<Module> getAll() {
+        return moduleRepository.findAll().stream().filter(module-> !module.isDeleted()).collect(Collectors.toList());
+    }
+
+    public List<Module> getAllDeleted() {
+        return moduleRepository.findAll().stream().filter(Module::isDeleted).collect(Collectors.toList());
     }
 
     public Optional<Module> getById(Long id) {
@@ -66,6 +67,13 @@ public class ModuleService {
         return moduleRepository.save(module);
     }
 
+    public Module delete(Long moduleId) {
+        var existingSubject = moduleRepository.findById(moduleId).orElseThrow();
+        existingSubject.setDeleted(true);
+        return moduleRepository.save(existingSubject);
+    }
+
+    //Not used
     public boolean deleteById(Long id) {
         try {
             moduleRepository.deleteById(id);

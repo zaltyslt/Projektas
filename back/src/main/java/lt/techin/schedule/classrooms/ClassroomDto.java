@@ -13,7 +13,7 @@ public class ClassroomDto {
     private String description;
     private BuildingType building;
     private boolean active = true;
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime createdDate;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime modifiedDate;
