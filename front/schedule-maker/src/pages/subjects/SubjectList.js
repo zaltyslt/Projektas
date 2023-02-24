@@ -42,6 +42,7 @@ export function SubjectList() {
       .then((response) => response.json())
       .then((data) => {
         setSubjects(data);
+        
         return data;
       })
       .then((data) => setFilteredSubjects(data));
@@ -139,7 +140,8 @@ export function SubjectList() {
                       {subject.name}
                     </Link>
                   </TableCell>
-                  <TableCell>{subject.module.name}</TableCell>
+                  <TableCell> {subject.module && subject.module.name}</TableCell>
+                 
                 </TableRow>
               ))}
 
