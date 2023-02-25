@@ -29,8 +29,8 @@ export function EditModule() {
   });
 
   const badSymbols = "!@#$%^&*_+={}<>|~`\\'";
-  const moduleNumberLength = 30;
-  const moduleNameLength = 50;
+  const moduleNumberLength = 200;
+  const moduleNameLength = 200;
 
   useEffect(() => {
     fetch(`api/v1/modules/${params.id}`)
@@ -105,8 +105,9 @@ export function EditModule() {
 
   return (
     <Container>
-      <h1>Redagavimas</h1>
+      <h1 className="edit-header">Redagavimas</h1>
       <h3>{module.name}</h3>
+      <span id="modified-date">Paskutinį kartą redaguota: {module.modifiedDate}</span>
       <form>
         <Grid container rowSpacing={2}>
           <Grid item sm={10}>

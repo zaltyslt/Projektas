@@ -17,14 +17,15 @@ public class Classroom {
     @Column(name = "classroomName")
     @TextValid(textMaximumLength = 50)
     private String classroomName;
+    // TODO Sutvarkyti textMaxL
     @TextValid(textMaximumLength = 1000)
     private String description;
     private BuildingType building;
     @CreatedDate
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime createdDate;
     @LastModifiedDate
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime modifiedDate;
     private boolean active = true;
 

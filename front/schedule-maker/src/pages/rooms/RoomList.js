@@ -23,7 +23,7 @@ import {
 } from "@mui/material";
 import { Container } from "@mui/system";
 import { SelectChangeEvent } from "@mui/material/Select";
-
+import Stack from "@mui/material/Stack";
 
 export function RoomList() {
   const [classrooms, setClassrooms] = useState([]);
@@ -44,12 +44,12 @@ export function RoomList() {
   };
 
   const enableClassroom = (event, classroom) => {
-    console.log(classroom)
-    fetch(`/api/v1/classrooms/enable/${classroom.id}`, {
+    console.log(classroom);
+    fetch(`/api/v1/classrooms/enable-classroom/${classroom.id}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
-      }
+      },
     }).then(fetchClassrooms);
   };
 
@@ -58,32 +58,36 @@ export function RoomList() {
   }, []);
   const filteredClassrooms = classrooms.filter((classroom) => {
     if (building === "All") {
-      return String(classroom.classroomName)
-        .toLowerCase()
-        .includes(filter.toLowerCase())
-        && classroom.active === true;
+      return (
+        String(classroom.classroomName)
+          .toLowerCase()
+          .includes(filter.toLowerCase()) && classroom.active === true
+      );
     } else {
       return (
         String(classroom.classroomName)
           .toLowerCase()
-          .includes(filter.toLowerCase()) && classroom.building === building
-        && classroom.active === true
+          .includes(filter.toLowerCase()) &&
+        classroom.building === building &&
+        classroom.active === true
       );
     }
   });
 
   const filteredDisabledClassrooms = classrooms.filter((classroom) => {
     if (building === "All") {
-      return String(classroom.classroomName)
-        .toLowerCase()
-        .includes(filter.toLowerCase())
-        && classroom.active === false;
+      return (
+        String(classroom.classroomName)
+          .toLowerCase()
+          .includes(filter.toLowerCase()) && classroom.active === false
+      );
     } else {
       return (
         String(classroom.classroomName)
           .toLowerCase()
-          .includes(filter.toLowerCase()) && classroom.building === building
-        && classroom.active === false
+          .includes(filter.toLowerCase()) &&
+        classroom.building === building &&
+        classroom.active === false
       );
     }
   });
@@ -134,7 +138,6 @@ export function RoomList() {
     setCurrentPage(1);
   };
 
-
   return (
     <div>
       <Container maxWidth="lg">
@@ -143,50 +146,58 @@ export function RoomList() {
             <h3>Klasių sąrašas</h3>
           </Grid>
           <Grid item sm={2}>
-            <Link to="/create">
-              <Button variant="contained">Sukurti naują</Button>
-            </Link>
+            <Stack direction="row" justifyContent="flex-end">
+              <Link to="/create-classroom">
+                <Button variant="contained">Pridėti naują</Button>
+              </Link>
+            </Stack>
           </Grid>
-          <Grid container spacing={2}>
-            <Grid item sm={8}>
-              <TextField
-                fullWidth
-                variant="outlined"
-                name="search-form"
-                label="Paieška"
-                id="search-form"
-                value={filter}
-                onChange={(e) => setFilter(e.target.value)}
-              ></TextField>
-            </Grid>
-            <Grid item sm={4}>
-              <FormControl fullWidth>
-                <InputLabel id="building-label">Pastatas</InputLabel>
-                <Select
-                  labelId="building-label"
-                  id="building"
-                  label="Pastatas"
-                  value={building}
-                  onChange={handleChange}
-                >
-                  <MenuItem value="All">
-                    <em>Visi</em>
-                  </MenuItem>
-                  <MenuItem value="AKADEMIJA">AKADEMIJA</MenuItem>
-                  <MenuItem value="TECHIN">TECHIN</MenuItem>
-                </Select>
-              </FormControl>
+
+          <Grid item sm={12}>
+            <Grid container spacing={2}>
+              <Grid item sm={8}>
+                <TextField
+                  fullWidth
+                  variant="outlined"
+                  name="search-form"
+                  label="Paieška"
+                  id="search-form"
+                  value={filter}
+                  onChange={(e) => setFilter(e.target.value)}
+                ></TextField>
+              </Grid>
+              <Grid item sm={4}>
+                <FormControl fullWidth>
+                  <InputLabel id="building-label">Pastatas</InputLabel>
+                  <Select
+                    labelId="building-label"
+                    id="building"
+                    label="Pastatas"
+                    value={building}
+                    onChange={handleChange}
+                  >
+                    <MenuItem value="All">
+                      <em>Visi</em>
+                    </MenuItem>
+                    <MenuItem value="AKADEMIJA">AKADEMIJA</MenuItem>
+                    <MenuItem value="TECHIN">TECHIN</MenuItem>
+                  </Select>
+                </FormControl>
+              </Grid>
             </Grid>
           </Grid>
         </Grid>
+
         <TableContainer component={Paper}>
           <Table aria-label="custom pagination table">
             <TableHead>
               <TableRow>
                 <TableCell>Klasės pavadinimas</TableCell>
                 <TableCell>Pastatas</TableCell>
+                <TableCell className="empty-activity"></TableCell>
               </TableRow>
             </TableHead>
+
             <TableBody>
               {filteredClassrooms
                 .slice(
@@ -196,11 +207,12 @@ export function RoomList() {
                 .map((classroom) => (
                   <TableRow key={classroom.id}>
                     <TableCell component="th" scope="row">
-                      <Link to={`/classrooms/view/${classroom.id}`}>
+                      <Link to={`/classrooms/view-classroom/${classroom.id}`}>
                         {classroom.classroomName}
                       </Link>
                     </TableCell>
                     <TableCell>{classroom.building}</TableCell>
+                    <TableCell></TableCell>
                   </TableRow>
                 ))}
             </TableBody>
@@ -209,7 +221,9 @@ export function RoomList() {
                 <TablePagination
                   labelRowsPerPage="Rodyti po"
                   rowsPerPageOptions={[10, 20, { label: "Visi", value: -1 }]}
-                  labelDisplayedRows={({ from, to, count }) => `${from}-${to} iš ${count}`}
+                  labelDisplayedRows={({ from, to, count }) =>
+                    `${from}-${to} iš ${count}`
+                  }
                   count={filteredClassrooms.length}
                   page={currentPage - 1}
                   rowsPerPage={classroomsPerPage}
@@ -231,14 +245,14 @@ export function RoomList() {
             }
           />
         </FormGroup>
-        {isChecked &&
+        {isChecked && (
           <TableContainer component={Paper}>
             <Table aria-label="custom pagination table">
               <TableHead>
                 <TableRow>
                   <TableCell>Klasės pavadinimas</TableCell>
                   <TableCell>Pastatas</TableCell>
-                  <TableCell>Altyvinti</TableCell>
+                  <TableCell className="activity"></TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -254,35 +268,40 @@ export function RoomList() {
                       </TableCell>
                       <TableCell>{classroom.building}</TableCell>
                       <TableCell>
-                        <Button variant="contained"
-                          data-value='true'
+                        <Button
+                          variant="contained"
                           value={classroom}
-                          onClick={(e) => { enableClassroom(e, classroom); }}
-                        >Aktyvinti
+                          onClick={(e) => {
+                            enableClassroom(e, classroom);
+                          }}
+                        >
+                          Atstatyti
                         </Button>
                       </TableCell>
                     </TableRow>
                   ))}
               </TableBody>
+              
               <TableFooter>
                 <TableRow>
                   <TablePagination
-                    labelRowsPerPage="Rodyti po"
-                    rowsPerPageOptions={[1, 20, { label: "Visi", value: -1 }]}
-                    labelDisplayedRows={({ from, to, count }) => `${from}-${to} iš ${count}`}
-                    count={filteredDisabledClassrooms.length}
-                    page={currentPage2 - 1}
-                    rowsPerPage={classroomsPerPage2}
-                    onPageChange={(_, page) => setCurrentPage2(page + 1)}
-                    onRowsPerPageChange={(e) =>
-                      setClassroomsPerPage2(parseInt(e.target.value))
-                    }
+                     labelRowsPerPage="Rodyti po"
+                     rowsPerPageOptions={[10, 20, { label: "Visi", value: filteredDisabledClassrooms.length }]}
+                     labelDisplayedRows={({ from, to, count }) => `${from}-${to} iš ${count}`}
+                     colSpan={3}
+                     count={filteredDisabledClassrooms.length}
+                     page={currentPage2 - 1}
+                     rowsPerPage={classroomsPerPage2}
+                     onPageChange={(_, page) => setCurrentPage2(page + 1)}
+                     onRowsPerPageChange={(e) =>
+                       setClassroomsPerPage2(parseInt(e.target.value))
+                     }
                   />
                 </TableRow>
               </TableFooter>
             </Table>
           </TableContainer>
-        }
+        )}
       </Container>
     </div>
   );

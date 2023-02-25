@@ -15,6 +15,7 @@ import {
   AlertTitle
 } from "@mui/material";
 import { SelectChangeEvent } from "@mui/material/Select";
+import ".././pages.css"
 
 
 export function CreateRoom(props) {
@@ -60,7 +61,7 @@ export function CreateRoom(props) {
     } else if (!building) {
       setError("Prašome pasirinkti pastatą.");
     } else {
-      fetch("/api/v1/classrooms/create", {
+      fetch("/api/v1/classrooms/create-classroom", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -82,7 +83,7 @@ export function CreateRoom(props) {
 
   return (
     <Container>
-      <h3>Pridėti naują klasę</h3>
+      <h3 className="create-header">Pridėti naują klasę</h3>
       <form>
         <Grid container rowSpacing={2}>
           <Grid item sm={10}>
@@ -135,7 +136,7 @@ export function CreateRoom(props) {
             )}
             <Stack direction="row" spacing={2}>
               <Button variant="contained" onClick={createClassroom}>
-                Sukurti
+                Išsaugoti
               </Button>
               <Button variant="contained" onClick={() => navigate(-1)}>
                 Grįžti
