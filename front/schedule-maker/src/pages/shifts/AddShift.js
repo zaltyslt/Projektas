@@ -27,37 +27,22 @@ export function AddShift() {
 
   const isActive = true;
 
-    const [successfulPost, setSuccessfulPost] = useState();
-    const [isPostUsed, setIsPostUsed] = useState(false);
-    const [shiftErrors, setShiftErrors] = useState();
+  const [successfulPost, setSuccessfulPost] = useState();
+  const [isPostUsed, setIsPostUsed] = useState(false);
+  const [shiftErrors, setShiftErrors] = useState();
 
-  const badSymbols = "!@#$%^&*_+={}<>|~`\\\"'";
-  const maxLength = 50;
+  const badSymbols = "!@#$%^&*_+={}<>|~`\\\"\'";
+  const maxLength = 200;
 
-    const badSymbols = "!@#$%^&*_+={}<>|~`\\\"\'";
-    const maxLength = 200;
-
-    const setNameAndCheck = (name) => {
-      setName(name)
-      (name.length === 0) ? setIsNameEmpty(true) :  setIsNameEmpty(false);
+  const setNameAndCheck = (name) => {
+    setName(name)
+    (name.length === 0) ? setIsNameEmpty(true) :  setIsNameEmpty(false);
+  
+    const isValid = name.split('').some(char => badSymbols.includes(char));
+    (!isValid) ? setIsValidName(true) : setIsValidName(false);
     
-      const isValid = name.split('').some(char => badSymbols.includes(char));
-      (!isValid) ? setIsValidName(true) : setIsValidName(false);
-      
-      (name.length > maxLength) ? setIsNameTooLong(true) : setIsNameTooLong(false);
-    }
-    const isValid = name.split("").some((char) => badSymbols.includes(char));
-    if (!isValid) {
-      setIsValidName(true);
-    } else {
-      setIsValidName(false);
-    }
-    if (name.length > maxLength) {
-      setIsNameTooLong(true);
-    } else {
-      setIsNameTooLong(false);
-    }
-  };
+    (name.length > maxLength) ? setIsNameTooLong(true) : setIsNameTooLong(false);
+  }
 
   useEffect(() => {
     if (parseInt(shiftStartingTime) > parseInt(shiftEndingTime)) {
@@ -70,65 +55,48 @@ export function AddShift() {
   var startIntEnum;
   var endIntEnum;
 
-  const createShift = () => {
-    if (isValidName && !isNameEmpty) {
-      startIntEnum = shiftStartingTime;
-      endIntEnum = shiftEndingTime;
-      createShiftPostRequest();
-    }
-  };
+  const createShift = (() => {
+      if (isValidName && !isNameEmpty && !isNameTooLong) {
+          startIntEnum = shiftStartingTime;
+          endIntEnum = shiftEndingTime;
+          createShiftPostRequest();
+      }
+  })
 
-    const createShift = (() => {
-        if (isValidName && !isNameEmpty && !isNameTooLong) {
-            startIntEnum = shiftStartingTime;
-            endIntEnum = shiftEndingTime;
-            createShiftPostRequest();
-        }
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        handleAfterPost(data);
-      });
-  };
 
-    const createShiftPostRequest = async () =>  {
-        await fetch(
-            'http://localhost:8080/api/v1/shift/add-shift', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    name,
-                    startIntEnum,
-                    endIntEnum,
-                    isActive,
-                })
-            }
-        ) 
-        .then(response => response.json())
-        .then(data => {
-            handleAfterPost(data);
-        });
-    }
-    setIsPostUsed(true);
-    if (successfulPost) {
-      setName("");
-      setShiftStartingTime(1);
-      setShiftEndingTime(1);
-    }
-  };
+  const createShiftPostRequest = async () =>  {
+      await fetch(
+          'http://localhost:8080/api/v1/shift/add-shift', {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({
+                  name,
+                  startIntEnum,
+                  endIntEnum,
+                  isActive,
+              })
+          }
+      ) 
+      .then(response => response.json())
+      .then(data => {
+          handleAfterPost(data);
+    });
+  }
 
-    const handleAfterPost = ((data) => {
-        if (data.valid) {
-            setSuccessfulPost(true);
-        }
-        else {
-            setShiftErrors(data)
-            setSuccessfulPost(false);
-        }
-        setIsPostUsed(true);
-    })
+
+  const handleAfterPost = ((data) => {
+      if (data.valid) {
+          setSuccessfulPost(true);
+      }
+      else {
+          setShiftErrors(data)
+          setSuccessfulPost(false);
+      }
+      setIsPostUsed(true);
+  })
+
   const lessonTimes = [
     { value: "1", label: "1 pamoka" },
     { value: "2", label: "2 pamoka" },

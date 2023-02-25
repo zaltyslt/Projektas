@@ -1,7 +1,7 @@
 package lt.techin.schedule.teachers;
 
 import lt.techin.schedule.shift.Shift;
-import lt.techin.schedule.shift.ShiftDTO;
+import lt.techin.schedule.shift.ShiftRepository;
 import lt.techin.schedule.subject.Subject;
 import lt.techin.schedule.subject.SubjectRepository;
 import lt.techin.schedule.teachers.contacts.Contact;
@@ -22,15 +22,15 @@ import java.util.stream.Collectors;
 public class TeacherServiceDo {
     TeacherRepository teacherRepository;
     ContactService contactService;
-    private final ShiftDTO shiftDTO;
+    private final ShiftRepository shiftRepository;
     private final SubjectRepository subjectRepository;
 
     public TeacherServiceDo(TeacherRepository teacherRepository, ContactService contactService,
-                            ShiftDTO shiftDTO,
+                            ShiftRepository shiftRepository,
                             SubjectRepository subjectRepository) {
         this.teacherRepository = teacherRepository;
         this.contactService = contactService;
-        this.shiftDTO = shiftDTO;
+        this.shiftRepository = shiftRepository;
         this.subjectRepository = subjectRepository;
     }
 
@@ -68,7 +68,7 @@ public class TeacherServiceDo {
         }
 
         if (teacherDto.getTeacherShiftDto() != null) {
-            Optional<Shift> shift = shiftDTO.findById(teacherDto.getTeacherShiftDto().getId());
+            Optional<Shift> shift = shiftRepository.findById(teacherDto.getTeacherShiftDto().getId());
             if (shift.isPresent()) {
                 newTeacher.setShift(shift.get());
             }

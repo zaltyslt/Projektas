@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lt.techin.schedule.module.ModuleMapper;
 import lt.techin.schedule.module.ModuleRepository;
 import lt.techin.schedule.shift.Shift;
-import lt.techin.schedule.shift.ShiftDTO;
+import lt.techin.schedule.shift.ShiftRepository;
 import lt.techin.schedule.subject.SubjectEntityDto;
 import lt.techin.schedule.subject.SubjectMapper;
 import lt.techin.schedule.teachers.contacts.ContactService;
@@ -30,13 +30,13 @@ public class TeacherController {
     private final TeacherService teacherService;
     private final TeacherControllerView finder;
     private final TeacherControllerAction action;
-    private final ShiftDTO repoShift;
+    private final ShiftRepository repoShift;
     private  final ModuleRepository repoModule;
 
     public static final Logger logger = LoggerFactory.getLogger(TeacherController.class);
     private final TeacherRepository teacherRepository;
 
-    public TeacherController(ContactService contactService, TeacherService teacherService, TeacherControllerView finder, TeacherControllerAction action, ShiftDTO repoShift, ModuleRepository repoModule, TeacherRepository teacherRepository) {
+    public TeacherController(ContactService contactService, TeacherService teacherService, TeacherControllerView finder, TeacherControllerAction action, ShiftRepository repoShift, ModuleRepository repoModule, TeacherRepository teacherRepository) {
         this.contactService = contactService;
         this.teacherService = teacherService;
         this.finder = finder;
