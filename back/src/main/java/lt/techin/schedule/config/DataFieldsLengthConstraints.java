@@ -2,7 +2,7 @@ package lt.techin.schedule.config;
 
 public class DataFieldsLengthConstraints {
 
-    public final static int shiftNameMaximumLength = 45;
-    public final static int moduleNumberMaximumLength = 30;
-    public final static int moduleNameMaximumLength = 50;
+    public final static int TEXT_FIELD_MAXIMUM_LENGTH = 200;
+    public final static int DESCRIPTION_FIELD_MAXIMUM_LENGTH = 2000;
+
 }

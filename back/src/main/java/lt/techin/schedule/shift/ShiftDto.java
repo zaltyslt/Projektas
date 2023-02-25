@@ -13,7 +13,7 @@ public class ShiftDto {
 
     private Long id;
 
-    @TextValid(textMaximumLength = DataFieldsLengthConstraints.shiftNameMaximumLength)
+    @TextValid(textMaximumLength = DataFieldsLengthConstraints.TEXT_FIELD_MAXIMUM_LENGTH)
     private String name;
 
     private String shiftStartingTime;

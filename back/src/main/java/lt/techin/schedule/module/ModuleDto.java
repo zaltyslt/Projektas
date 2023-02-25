@@ -7,9 +7,9 @@ import java.util.Objects;
 
 public class ModuleDto {
 
-    @TextValid(textMaximumLength = DataFieldsLengthConstraints.moduleNumberMaximumLength)
+    @TextValid(textMaximumLength = DataFieldsLengthConstraints.TEXT_FIELD_MAXIMUM_LENGTH)
     private String number;
-    @TextValid(textMaximumLength = DataFieldsLengthConstraints.moduleNameMaximumLength)
+    @TextValid(textMaximumLength = DataFieldsLengthConstraints.TEXT_FIELD_MAXIMUM_LENGTH)
     private String name;
 
     public ModuleDto() {

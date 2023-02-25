@@ -82,26 +82,4 @@ public class ModuleService {
             return false;
         }
     }
-
-    @PostConstruct
-    public void loadInitialModules() {
-        var initialModulesToAdd = List.of(
-                new ModuleDto("ABC", "Java"),
-                new ModuleDto("59A", "Spring Boot"),
-                new ModuleDto("TRA", "React"),
-                new ModuleDto("ASDD", "Java"),
-                new ModuleDto("Das", "Java"),
-                new ModuleDto("fsaf", "React"),
-                new ModuleDto("sad", "Java"),
-                new ModuleDto("ewqe", "Java"),
-                new ModuleDto("TRgA", "ewqr"),
-                new ModuleDto("dsa", "fsaf"),
-                new ModuleDto("ewq", "dasa"),
-                new ModuleDto("TRsA", "ewqesdx")
-        );
-
-        initialModulesToAdd.stream()
-                .map(ModuleMapper::toModule)
-                .forEach(moduleRepository::save);
-    }
 }
