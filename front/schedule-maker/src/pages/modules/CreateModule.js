@@ -1,6 +1,14 @@
-import { Alert, Button, Container, Grid, Stack, TextField } from "@mui/material";
+import {
+  Alert,
+  Button,
+  Container,
+  Grid,
+  Stack,
+  TextField,
+} from "@mui/material";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import ".././pages.css"
 
 export function CreateModule() {
   const [number, setNumber] = useState("");
@@ -78,8 +86,9 @@ export function CreateModule() {
 
   return (
     <Container>
-      <h3>Pridėti naują modulį</h3>
+      <h3 className="create-header">Pridėti naują modulį</h3>
       <form>
+        
         <Grid container rowSpacing={2}>
           <Grid item sm={10}>
             <TextField

@@ -1,7 +1,5 @@
 package lt.techin.schedule.classrooms;
 
-import jakarta.validation.Valid;
-import org.apache.commons.lang3.Validate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -32,7 +30,7 @@ public class ClassroomController {
         return classroomService.getAll().stream().map(ClassroomMapper::toClassroomDto).toList();
     }
 
-    @PostMapping(value = "/create", consumes = {MediaType.APPLICATION_JSON_VALUE})
+    @PostMapping(value = "/create-classroom", consumes = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<ClassroomDto> createClassroom(@RequestBody ClassroomDto classroomDto) {
         var createClassroom = classroomService.create(toClassroom(classroomDto));
         if (createClassroom == null) {
@@ -41,20 +39,20 @@ public class ClassroomController {
         return ResponseEntity.status(HttpStatus.CREATED).body(toClassroomDto(createClassroom));
     }
 
-    @PatchMapping("/update/{classroomId}")
+    @PatchMapping("/update-classroom/{classroomId}")
     public ResponseEntity<ClassroomDto> updateClassroom(@PathVariable Long classroomId,
                                                         @RequestBody ClassroomDto classroomDto) {
         var updatedClassroom = classroomService.update(classroomId, toClassroom(classroomDto));
         return ok(toClassroomDto(updatedClassroom));
     }
 
-    @PatchMapping("/disable/{classroomId}")
+    @PatchMapping("/disable-classroom/{classroomId}")
     public ClassroomDto disableClassroom(@PathVariable Long classroomId) {
         var disableClassroom = classroomService.disable(classroomId);
         return toClassroomDto(disableClassroom);
     }
 
-    @PatchMapping("/enable/{classroomId}")
+    @PatchMapping("/enable-classroom/{classroomId}")
     public ClassroomDto enableClassroom(@PathVariable Long classroomId) {
         var disableClassroom = classroomService.enable(classroomId);
         return toClassroomDto(disableClassroom);
