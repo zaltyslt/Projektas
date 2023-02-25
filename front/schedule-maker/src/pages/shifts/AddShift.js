@@ -33,29 +33,16 @@ export function AddShift() {
 
 
     const badSymbols = "!@#$%^&*_+={}<>|~`\\\"\'";
-    const maxLength = 45;
+    const maxLength = 200;
 
     const setNameAndCheck = (name) => {
-        setName(name)
-        if (name.length === 0) {
-            setIsNameEmpty(true);
-        }
-        else {
-            setIsNameEmpty(false);
-        }
-        const isValid = name.split('').some(char => badSymbols.includes(char));
-        if (!isValid) {
-            setIsValidName(true);
-        }
-        else {
-            setIsValidName(false);
-        }
-        if (name.length > maxLength) {
-            setIsNameTooLong(true);
-        }
-        else {
-            setIsNameTooLong(false);
-        }
+      setName(name)
+      (name.length === 0) ? setIsNameEmpty(true) :  setIsNameEmpty(false);
+    
+      const isValid = name.split('').some(char => badSymbols.includes(char));
+      (!isValid) ? setIsValidName(true) : setIsValidName(false);
+      
+      (name.length > maxLength) ? setIsNameTooLong(true) : setIsNameTooLong(false);
     }
 
     useEffect(() => {

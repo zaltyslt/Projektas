@@ -29,8 +29,8 @@ export function EditModule() {
   });
 
   const badSymbols = "!@#$%^&*_+={}<>|~`\\'";
-  const moduleNumberLength = 30;
-  const moduleNameLength = 50;
+  const moduleNumberLength = 200;
+  const moduleNameLength = 200;
 
   useEffect(() => {
     fetch(`api/v1/modules/${params.id}`)

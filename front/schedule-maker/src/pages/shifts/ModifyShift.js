@@ -111,7 +111,7 @@ export function ModifyShift() {
     })
 
     const badSymbols = "!@#$%^&*_+={}<>|~`\\\"\'";
-    const maxShiftLength = 45;
+    const maxShiftLength = 200;
 
     const setNameAndCheck = (name) => {
         setName(name);
