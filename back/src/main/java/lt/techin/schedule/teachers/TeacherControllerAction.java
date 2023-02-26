@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping(value = "/api/v1/teachers", produces = {MediaType.APPLICATION_JSON_VALUE})
 public class TeacherControllerAction {
-    TeacherServiceDo teacherServiceDo;
+    private TeacherServiceDo teacherServiceDo;
     @Autowired
     public TeacherControllerAction(TeacherServiceDo teacherServiceDo) {
         this.teacherServiceDo = teacherServiceDo;

@@ -49,9 +49,9 @@ public class TeacherServiceGenerate {
         subjectRepository.save(subject);
     }
     }
-    //    @EventListener(ApplicationReadyEvent.class)
+        @EventListener(ApplicationReadyEvent.class)
     public void loadInitialTeacherData() {
-        var optRecNumber = 2 - this.teacherRepository.count();
+        var optRecNumber = 3 - this.teacherRepository.count();
 
         if (optRecNumber > 0) {
             String suffix = "";
