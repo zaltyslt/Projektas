@@ -30,8 +30,7 @@ export function ViewSubject() {
           </Grid>
 
           <Grid item sm={12}>
-            <h4>Modulis</h4>
-            <p>
+            <h4>Modulis</h4>            
               {subject.module ? (
                 subject.module.deleted ? (
                   <p className="Deleted">
@@ -43,7 +42,6 @@ export function ViewSubject() {
               ) : (
                 <p>Nenurodytas</p>
               )}
-            </p>
           </Grid>
 
           <Grid item sm={12}>
@@ -55,7 +53,7 @@ export function ViewSubject() {
             <h4>Pageidaujamos klasės</h4>
             {subject.classRooms &&
               subject.classRooms.map((classRoom) => (
-                <p key={classRoom.id}>{classRoom.classroomName}</p>
+                <p key={classRoom.id} className = {classRoom.active ? "" : "Deleted"}>{classRoom.classroomName}</p>
               ))}
           </Grid>
 

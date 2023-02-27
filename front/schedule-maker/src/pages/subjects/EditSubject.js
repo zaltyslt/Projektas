@@ -45,9 +45,9 @@ export function EditSubject() {
   }, []);
 
   useEffect(() => {
-    fetch("api/v1/classrooms")
-    .then((response) => response.json())
-    .then(setRooms);
+    fetch("api/v1/classrooms/active")
+      .then((response) => response.json())
+      .then(setRooms);
   }, []);
 
   const handleRoomInput = (event) => {
@@ -75,8 +75,8 @@ export function EditSubject() {
       body: JSON.stringify({
         name,
         description,
-        module, 
-        classRooms
+        module,
+        classRooms,
       }),
     }).then(() => (window.location = listUrl));
   };
@@ -130,7 +130,7 @@ export function EditSubject() {
           </Grid>
 
           <Grid item sm={10}>
-          <FormControl fullWidth>
+            <FormControl fullWidth>
               <InputLabel id="room-label">Klasės</InputLabel>
               <Select
                 multiple

@@ -25,6 +25,11 @@ public class ClassroomController {
         return ResponseEntity.ok(ClassroomMapper.toClassroomDto(classroomService.finById(id)));
     }
 
+    @GetMapping(value = "/active", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public List<ClassroomDto> getActiveClassRooms() {
+        return classroomService.getActive().stream().map(ClassroomMapper::toClassroomDto).toList();
+    }
+
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE})
     public List<ClassroomDto> getClassrooms() {
         return classroomService.getAll().stream().map(ClassroomMapper::toClassroomDto).toList();

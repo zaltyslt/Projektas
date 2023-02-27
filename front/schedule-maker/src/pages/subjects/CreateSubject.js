@@ -31,7 +31,7 @@ export function CreateSubject() {
   }, []);
 
   useEffect(() => {
-    fetch("api/v1/classrooms")
+    fetch("api/v1/classrooms/active")
       .then((response) => response.json())
       .then(setRooms);
   }, []);
@@ -108,6 +108,7 @@ export function CreateSubject() {
           <Grid item sm={10}>
             <TextField
               fullWidth
+              required
               multiline
               variant="outlined"
               label="Dalyko aprašas"
@@ -118,7 +119,7 @@ export function CreateSubject() {
           </Grid>
 
           <Grid item sm={10}>
-            <FormControl fullWidth>
+            <FormControl fullWidth required>
               <InputLabel id="module-label">Modulio pavadinimas</InputLabel>
               <Select
                 label="Modulio pavadinimas"
@@ -139,7 +140,7 @@ export function CreateSubject() {
           </Grid>
 
           <Grid item sm={10}>
-            <FormControl fullWidth>
+            <FormControl fullWidth required>
               <InputLabel id="room-label">Klasės</InputLabel>
               <Select
                 multiple

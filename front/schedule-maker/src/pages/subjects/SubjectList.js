@@ -73,11 +73,16 @@ export function SubjectList() {
     } else {
       const filtered = subjects.filter((subject) => {
         const subjectName = subject.name.toLowerCase();
-        const subjectModuleName = subject.module.name.toLowerCase();
-        return (
-          subjectName.includes(event.toLowerCase()) ||
-          subjectModuleName.includes(event.toLowerCase())
-        );
+
+        if (!subject.module) {
+          return subjectName.includes(event.toLowerCase());
+        } else {
+          const subjectModuleName = subject.module.name.toLowerCase();
+          return (
+            subjectName.includes(event.toLowerCase()) ||
+            subjectModuleName.includes(event.toLowerCase())
+          );
+        }
       });
       setFilteredSubjects(filtered);
     }
@@ -147,7 +152,7 @@ export function SubjectList() {
                     {subject.module ? (
                       subject.module.deleted ? (
                         <p className="Deleted">
-                          {subject.module.name} - modulis buvo ištrintas
+                          {subject.module.name}
                         </p>
                       ) : (
                         subject.module.name
@@ -226,7 +231,7 @@ export function SubjectList() {
                       {subject.module ? (
                         subject.module.deleted ? (
                           <p className="Deleted">
-                            {subject.module.name} - modulis buvo ištrintas
+                            {subject.module.name}
                           </p>
                         ) : (
                           subject.module.name
