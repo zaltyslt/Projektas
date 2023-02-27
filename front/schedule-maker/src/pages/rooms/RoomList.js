@@ -56,6 +56,8 @@ export function RoomList() {
   useEffect(() => {
     fetchClassrooms();
   }, []);
+
+  
   const filteredClassrooms = classrooms.filter((classroom) => {
     if (building === "All") {
       return (

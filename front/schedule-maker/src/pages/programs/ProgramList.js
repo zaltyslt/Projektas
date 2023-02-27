@@ -20,6 +20,7 @@ import {
     InputLabel,
     Select,
     MenuItem,
+    Stack
 } from "@mui/material";
 import { Container } from "@mui/system";
 import { SelectChangeEvent } from "@mui/material/Select";
@@ -120,27 +121,31 @@ export function ProgramList() {
     return (
         <div>
             <Container maxWidth="lg">
-                <Grid container rowSpacing={2}>
+                <Grid container rowSpacing={3}>
                     <Grid item sm={10}>
                         <h3>Programų sąrašas</h3>
                     </Grid>
                     <Grid item sm={2}>
-                        <Link to="/create-program">
-                            <Button variant="contained">Sukurti naują</Button>
-                        </Link>
+                        <Stack direction="row" justifyContent="flex-end">
+                            <Link to="/create-program">
+                                <Button variant="contained">Pridėti naują</Button>
+                            </Link>
+                        </Stack>
                     </Grid>
-                    <Grid container spacing={2}>
-                        <Grid item sm={8}>
-                            <TextField
-                                fullWidth
-                                variant="outlined"
-                                name="search-form"
-                                label="Paieška"
-                                id="search-form"
-                                value={filter}
-                                onChange={(e) => setFilter(e.target.value)}
-                            ></TextField>
-                        </Grid>
+
+                    <Grid item sm={12}>
+
+
+                        <TextField
+                            fullWidth
+                            variant="outlined"
+                            name="search-form"
+                            label="Paieška"
+                            id="search-form"
+                            value={filter}
+                            onChange={(e) => setFilter(e.target.value)}
+                        ></TextField>
+
                     </Grid>
                 </Grid>
                 <TableContainer component={Paper}>
@@ -148,6 +153,7 @@ export function ProgramList() {
                         <TableHead>
                             <TableRow>
                                 <TableCell>Programos pavadinimas</TableCell>
+                                <TableCell className="empty-activity"></TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
@@ -163,6 +169,7 @@ export function ProgramList() {
                                                 {program.programName}
                                             </Link>
                                         </TableCell>
+                                        <TableCell></TableCell>
                                     </TableRow>
                                 ))}
                         </TableBody>
@@ -200,8 +207,7 @@ export function ProgramList() {
                             <TableHead>
                                 <TableRow>
                                     <TableCell>Klasės pavadinimas</TableCell>
-                                    <TableCell>Pastatas</TableCell>
-                                    <TableCell>Veiksmai</TableCell>
+                                    <TableCell className="activity"></TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>

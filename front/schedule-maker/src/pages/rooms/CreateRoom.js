@@ -23,10 +23,16 @@ export function CreateRoom(props) {
   const [building, setBuilding] = useState("AKADEMIJA");
   const [description, setDescription] = useState("");
   const [error, setError] = useState();
+  const [errorEmptyName, setErrorEmptyName] = useState(false);
+  const [errorSymbolsName, setErrorSymbolsName] = useState(false);
+  const [errorEmptyDesc, setErrorEmptyDesc] = useState(false);
+  const [errorSymbolsDesc, setErrorSymbolsDesc] = useState(false);
+  const [errorBuilding, setErrorBuilding] = useState(false);
   const [success, setSuccess] = useState();
   const [active, setActive] = useState(true);
   const invalidSymbols = "!@#$%^&*_+={}<>|~`\\\"'";
   let navigate = useNavigate();
+  const [formValid, setFormValid] = useState(false);
 
   const clear = () => {
     setClassroomName("");
@@ -39,27 +45,37 @@ export function CreateRoom(props) {
       setSuccess("Sėkmingai pridėta!");
       clear();
     } else {
-      setError("Nepavyko sukurti!");
+      result.text().then(text => {
+        const response = JSON.parse(text);
+        setError(response.message)
+      }).catch(error => {
+        setError("Klasės sukurti nepavyko: ", error);
+      });
     }
   };
 
   const createClassroom = () => {
     setError("");
     setSuccess("");
+    setErrorEmptyName(false);
+    setErrorSymbolsName(false);
+    setErrorEmptyDesc(false);
+    setErrorSymbolsDesc(false);
+    setErrorBuilding(false)
     if (!classroomName) {
-      setError("Prašome užpildyti klasės pavadinimą.");
+      setErrorEmptyName(true);
     } else if (
       classroomName.split("").some((char) => invalidSymbols.includes(char))
     ) {
-      setError("Klasės pavadinimas turi neleidžiamų simbolių.");
+      setErrorSymbolsName(true);
     } else if (!description) {
-      setError("Prašome užpildyti klasės aprašą.");
+      setErrorEmptyDesc(true);
     } else if (
       description.split("").some((char) => invalidSymbols.includes(char))
     ) {
-      setError("Klasės aprašas turi neleidžiamų simbolių.");
+      setErrorSymbolsDesc(true)
     } else if (!building) {
-      setError("Prašome pasirinkti pastatą.");
+      setErrorBuilding(true);
     } else {
       fetch("/api/v1/classrooms/create-classroom", {
         method: "POST",
@@ -80,7 +96,6 @@ export function CreateRoom(props) {
     setBuilding(event.target.value);
   };
 
-
   return (
     <Container>
       <h3 className="create-header">Pridėti naują klasę</h3>
@@ -91,6 +106,9 @@ export function CreateRoom(props) {
               <InputLabel id="building-label">Pastatas</InputLabel>
               <Select
                 required
+                error={errorBuilding}
+                helperText={errorBuilding && "Prašome pasirinkti pastatą."}
+                variant="outlined"
                 labelId="building-label"
                 id="building"
                 label="Pastatas"
@@ -106,6 +124,12 @@ export function CreateRoom(props) {
             <TextField
               fullWidth
               required
+              error={errorEmptyName || errorSymbolsName}
+              helperText={errorEmptyName ? "Klasės pavadinimas yra privalomas."
+                : errorSymbolsName
+                  ? "Klasės pavadinimas turi neleidžiamų simbolių."
+                  : ""}
+              variant="outlined"
               id="classroomName"
               label="Klasės pavadinimas"
               value={classroomName}
@@ -117,6 +141,14 @@ export function CreateRoom(props) {
               fullWidth
               multiline
               required
+              error={errorEmptyDesc || errorSymbolsDesc}
+              helperText={
+                errorEmptyDesc
+                  ? "Klasės aprašas yra privalomas."
+                  : errorSymbolsDesc
+                    ? "Klasės aprašas turi neleidžiamų simbolių."
+                    : ""}
+              variant="outlined"
               label="Klasės aprašas"
               id="description"
               value={description}
@@ -125,12 +157,12 @@ export function CreateRoom(props) {
           </Grid>
           <Grid item sm={10}>
             {error && (
-                <Alert severity="warning">
+              <Alert severity="warning">
                 {error}
               </Alert>
             )}
             {success && (
-                <Alert severity="success">
+              <Alert severity="success">
                 {success}
               </Alert>
             )}
