@@ -12,7 +12,7 @@ export function ViewTeacher() {
   let navigate = useNavigate();
 
   useEffect(() => {
-    fetch(`/api/v1/teachers/view${params.id}`)
+    fetch(`/api/v1/teacher/view?tid=${teacher.id}`)
       .then((response) => response.json())
       .then((data) => {
         setTeacher(data);
@@ -52,20 +52,20 @@ export function ViewTeacher() {
 
           <Grid item sm={6}>
             <h4>Kontaktinis telefonas</h4>
-            <p>{teacher.fName}</p>
+            <p>{}</p>
           </Grid>
           <Grid item sm={6}>
             <h4>El. paštas</h4>
-            <p>{teacher.lName}</p>
+            <p>{}</p>
           </Grid>
 
           <Grid item sm={6}>
             <h4>Teams vardas</h4>
-            <p>{teacher.fName}</p>
+            <p>{}</p>
           </Grid>
           <Grid item sm={6}>
             <h4>Teams el. paštas</h4>
-            <p>{teacher.lName}</p>
+            <p>{}</p>
           </Grid>
 
           <Grid item sm={6}>
@@ -74,7 +74,7 @@ export function ViewTeacher() {
           </Grid>
           <Grid item sm={6}>
             <h4>Galima pamaina</h4>
-            <p></p>
+            <p>teacher.teacherShiftDto.name</p>
           </Grid>
 
           <Grid item sm={12}>
