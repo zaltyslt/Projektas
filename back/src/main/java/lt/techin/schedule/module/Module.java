@@ -56,6 +56,12 @@ public class Module {
         this.deleted = deleted;
     }
 
+    public Module(Long id, String number, String name) {
+        this.id = id;
+        this.number = number;
+        this.name = name;
+    }
+
     public Long getId() { return id;
     }
 
