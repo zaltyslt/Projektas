@@ -151,14 +151,14 @@ export function SubjectList() {
                   <TableCell>
                     {subject.module ? (
                       subject.module.deleted ? (
-                        <p className="Deleted">
+                        <span className="Deleted">
                           {subject.module.name}
-                        </p>
+                        </span>
                       ) : (
                         subject.module.name
                       )
                     ) : (
-                      <p>Nenurodytas</p>
+                      <span>Nenurodytas</span>
                     )}
                   </TableCell>
                 </TableRow>
@@ -230,14 +230,14 @@ export function SubjectList() {
                     <TableCell>
                       {subject.module ? (
                         subject.module.deleted ? (
-                          <p className="Deleted">
+                          <span className="Deleted">
                             {subject.module.name}
-                          </p>
+                          </span>
                         ) : (
                           subject.module.name
                         )
                       ) : (
-                        <p>Nenurodytas</p>
+                        <span>Nenurodytas</span>
                       )}
                     </TableCell>
                     <TableCell align="center" className="activity">

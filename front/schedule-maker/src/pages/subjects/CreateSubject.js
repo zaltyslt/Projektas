@@ -20,7 +20,12 @@ export function CreateSubject() {
   const [module, setModule] = useState("");
   const [description, setDescription] = useState("");
   const [rooms, setRooms] = useState([]);
-  const [formValid, setFormValid] = useState(false);
+  const [nameError, setNameError] = useState(false);
+  const [descriptionError, setDescriptionError] = useState(false);
+  const [moduleError, setModuleError] = useState(false);
+  const [classRoomError, setClassRoomError] = useState(false);
+  const [nameNotValid, setNameNotValid] = useState(false);
+  const [descriptionNotValid, setDescriptionNotValid] = useState(false);
   const [classRooms, setClassRooms] = useState([]);
   const [error, setError] = useState("");
   const [createMessage, setCreateMessage] = useState("");
@@ -45,6 +50,12 @@ export function CreateSubject() {
     fetch("api/v1/classrooms/active")
       .then((response) => response.json())
       .then(setRooms);
+    setNameError(false);
+    setDescriptionError(false);
+    setModuleError(false);
+    setClassRoomError(false);
+    setNameNotValid(false);
+    setDescriptionNotValid(false);
   };
 
   const handleRoomInput = (event) => {
@@ -55,10 +66,32 @@ export function CreateSubject() {
   };
 
   const validation = () => {
-    if (name === "") {
-      setFormValid(true);
-    } else {
-      setFormValid(false);
+    setCreateMessage("");
+    const badSymbols = "!@#$%^&*_+={}<>|~`\\'";
+    let notValidName = name.split('').some(char => badSymbols.includes(char));
+    let notValiDescription = description.split('').some(char => badSymbols.includes(char));
+
+    if (name === "" && description === "" && module === "" && classRooms.length === 0) {
+      setNameError(true);
+      setDescriptionError(true);
+      setModuleError(true);
+      setClassRoomError(true);
+    } else if (name === "") {
+      setNameError(true);
+    } else if (notValidName) {
+      setNameError(false);
+      setNameNotValid(true);
+    } else if (description === "") {
+      setDescriptionError(true);
+    } else if (notValiDescription) {
+      setDescriptionError(false);
+      setDescriptionNotValid(true);
+    } else if (module === "") {
+      setModuleError(true);
+    } else if (classRooms.length === 0) {
+      setClassRoomError(true);
+    }
+     else {
       createSubject();
     }
   };
@@ -101,8 +134,8 @@ export function CreateSubject() {
             <TextField
               fullWidth
               required
-              error={formValid}
-              helperText={formValid && "Dalyko pavadinimas yra privalomas."}
+              error={nameError || nameNotValid}
+              helperText={nameError ? "Dalyko pavadinimas yra privalomas" : (nameNotValid ? "Laukas turi negalimų simbolių. " : "")}
               variant="outlined"
               label="Dalyko pavadinimas"
               id="name"
@@ -117,6 +150,8 @@ export function CreateSubject() {
               fullWidth
               required
               multiline
+              error={descriptionError || descriptionNotValid}
+              helperText={descriptionError ? "Dalyko aprašas yra privalomas. " : (descriptionNotValid ? "Laukas turi negalimų simbolių. " : "")}
               variant="outlined"
               label="Dalyko aprašas"
               id="description"
@@ -126,8 +161,8 @@ export function CreateSubject() {
           </Grid>
 
           <Grid item sm={10}>
-            <FormControl fullWidth required>
-              <InputLabel id="module-label">Modulio pavadinimas</InputLabel>
+            <FormControl fullWidth required error={moduleError}>
+              <InputLabel id="module-label">{moduleError ? "Privaloma pasirinkti modulį. " : "Modulio pavadinimas"}</InputLabel>
               <Select
                 label="Modulio pavadinimas"
                 labelId="module-label"
@@ -147,8 +182,8 @@ export function CreateSubject() {
           </Grid>
 
           <Grid item sm={10}>
-            <FormControl fullWidth required>
-              <InputLabel id="room-label">Klasės</InputLabel>
+            <FormControl fullWidth required error={classRoomError}>
+              <InputLabel id="room-label">{classRoomError ? "Privaloma pasirinkti nors vieną klasę. " : "Klasės"}</InputLabel>
               <Select
                 multiple
                 labelId="room-label"
