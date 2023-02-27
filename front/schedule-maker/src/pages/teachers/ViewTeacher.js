@@ -61,20 +61,20 @@ export function ViewTeacher() {
 
           <Grid item sm={6}>
             <h4>Teams vardas</h4>
-            <p>{}</p>
+            {/* <p>{teacher.contacts.teams_name}</p> */}
           </Grid>
           <Grid item sm={6}>
             <h4>Teams el. paštas</h4>
-            <p>{}</p>
+            {/* <p>{teacher.contacts.teams_email}</p> */}
           </Grid>
 
           <Grid item sm={6}>
             <h4>Valandos per savaitę</h4>
-            <p>{teacher.workHoursPerWeek}</p>
+            {/* <p>{teacher.workHoursPerWeek}</p> */}
           </Grid>
           <Grid item sm={6}>
             <h4>Galima pamaina</h4>
-            <p>teacher.teacherShiftDto.name</p>
+            <p></p>
           </Grid>
 
           <Grid item sm={12}>

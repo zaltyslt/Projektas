@@ -17,14 +17,15 @@ import { ProgramList } from "./pages/programs/ProgramList";
 import { CreateRoom } from "./pages/rooms/CreateRoom";
 import { ViewRoom } from "./pages/rooms/ViewRoom";
 import { UpdateClassroom } from "./pages/rooms/UpdateRoom";
-import { CreateProgram } from "./pages/programs/CreateProgram"
+import { CreateProgram } from "./pages/programs/CreateProgram";
 import { ViewProgram } from "./pages/programs/ViewProgram";
 import { UpdateProgram } from "./pages/programs/UpdateProgram";
 import { CreateSubject } from "./pages/subjects/CreateSubject";
 import { ViewSubject } from "./pages/subjects/ViewSubject";
 import { EditSubject } from "./pages/subjects/EditSubject";
-
-
+import { ViewTeacher } from "./pages/teachers/ViewTeacher";
+import { CreateTeacher } from "./pages/teachers/CreateTeacher";
+import { EditTeacher } from "./pages/teachers/EditTeacher";
 
 function App() {
   return (
@@ -39,19 +40,25 @@ function App() {
           <Route path="/subjects" element={<SubjectList />}></Route>
           <Route path="/shifts" element={<ShiftList />}></Route>
           {/* CLASSROOMS PATHAI */}
-          <Route path='/rooms' element={<RoomList />}></Route>
-          <Route path='/create-classroom' element={<CreateRoom />}></Route>
-          <Route path='/classrooms/view-classroom/:id' element={<ViewRoom />}></Route>
-          <Route path='/update-classroom/:id' element={<UpdateClassroom />} />
+          <Route path="/rooms" element={<RoomList />}></Route>
+          <Route path="/create-classroom" element={<CreateRoom />}></Route>
+          <Route
+            path="/classrooms/view-classroom/:id"
+            element={<ViewRoom />}
+          ></Route>
+          <Route path="/update-classroom/:id" element={<UpdateClassroom />} />
           {/* SHIFTS PATHAI */}
-          <Route exact path="/add-shift" element={<AddShift/>} ></Route>
-          <Route path="/view-shift/:id" element={<ViewShift/>} ></Route>
-          <Route path="/modify-shift/:id" element={<ModifyShift/>} ></Route>
+          <Route exact path="/add-shift" element={<AddShift />}></Route>
+          <Route path="/view-shift/:id" element={<ViewShift />}></Route>
+          <Route path="/modify-shift/:id" element={<ModifyShift />}></Route>
           {/* PROGRAMS PATHAI */}
           <Route path="/programs" element={<ProgramList />}></Route>
           <Route path="/create-program" element={<CreateProgram />}></Route>
-          <Route path='/programs/view-program/:id' element={<ViewProgram />}></Route>
-          <Route path='/update-program/:id' element={<UpdateProgram />} />
+          <Route
+            path="/programs/view-program/:id"
+            element={<ViewProgram />}
+          ></Route>
+          <Route path="/update-program/:id" element={<UpdateProgram />} />
           {/* MODULES PATHAI */}
           <Route path="/modules/create" element={<CreateModule />} />
           <Route path="/modules/view/:id" element={<ViewModule />}></Route>
@@ -60,6 +67,10 @@ function App() {
           <Route path="/subjects/create" element={<CreateSubject />} />
           <Route path="/subjects/view/:id" element={<ViewSubject />}></Route>
           <Route path="/subjects/edit/:id" element={<EditSubject />}></Route>
+          {/* TEACHERS PATHAI */}
+          <Route path="/teachers/view/:id" element={<ViewTeacher />}></Route>
+          <Route path="/teachers/create" element={<CreateTeacher />}></Route>
+          <Route path="/teachers/edit/:id" element={<EditTeacher />}></Route>
         </Routes>
       </HashRouter>
     </div>
