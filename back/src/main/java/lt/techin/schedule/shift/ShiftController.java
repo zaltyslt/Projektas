@@ -35,7 +35,8 @@ public class ShiftController {
     }
 
     @PostMapping("/add-shift")
-    public @ResponseBody Map<Integer, String> addShift (@RequestBody @Valid Shift shiftToAdd, BindingResult bindingResult) {
+    public @ResponseBody Map<Integer, String> addShift (@RequestBody @Valid Shift shiftToAdd,
+                                                        BindingResult bindingResult) {
         Map<Integer, String> response = new HashMap<>();
         if (bindingResult.hasErrors()) {
             List<ObjectError> errors = bindingResult.getAllErrors();
@@ -54,6 +55,7 @@ public class ShiftController {
 
     @PatchMapping("/activate-shift/{shiftID}")
     public void activateShift(@PathVariable Long shiftID) {
+
         shiftService.changeActiveShiftStatusByID(shiftID, true);
     }
 
@@ -63,7 +65,9 @@ public class ShiftController {
     }
 
     @PutMapping("/modify-shift/{shiftID}")
-    public @ResponseBody Map<Integer, String> modifyShift(@PathVariable Long shiftID, @RequestBody @Valid Shift shiftToChange, BindingResult bindingResult) {
+    public @ResponseBody Map<Integer, String> modifyShift(@PathVariable Long shiftID,
+                                                          @RequestBody @Valid Shift shiftToChange,
+                                                          BindingResult bindingResult) {
         Map<Integer, String> response = new HashMap<>();
         if (bindingResult.hasErrors()) {
             List<ObjectError> errors = bindingResult.getAllErrors();

@@ -2,7 +2,7 @@ package lt.techin.schedule.programs;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
-import lt.techin.schedule.validators.TextValid;
+import jakarta.validation.constraints.Size;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
@@ -16,11 +16,10 @@ class Program {
     private Long id;
 
     @Column(name = "programName")
-    @TextValid
+    @Size(min = 1, max = 200)
     private String programName;
 
-    // TODO Sutvarkyti textMaxL
-    @TextValid(textMaximumLength = 1000)
+    @Size(min = 1, max = 2000)
     private String description;
 
     @CreatedDate
