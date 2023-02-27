@@ -141,7 +141,7 @@ import {
                 ).map((teacher) => (
                   <TableRow key={teacher.id}>
                     <TableCell component="th" scope="row">
-                      <Link to={"/teacher/view?tid=" + teacher.id}>
+                      <Link to={"/teachers/view/" + teacher.id}>
                         {teacher.fName +' '+ teacher.lName}
                       </Link>
                     </TableCell>
