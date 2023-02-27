@@ -18,6 +18,10 @@ public class ClassroomService {
         return classroomRepository.findAll();
     }
 
+    public List<Classroom> getActive() {
+        return classroomRepository.findAll().stream().filter(Classroom::isActive).toList();
+    }
+
     public Classroom create(Classroom classroom) {
         if (classroom.getBuilding() == null) return null;
         if (findByClassroomNameAndBuilding(classroom.getClassroomName(), classroom.getBuilding())) {
