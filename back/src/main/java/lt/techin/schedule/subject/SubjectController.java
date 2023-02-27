@@ -1,9 +1,11 @@
 package lt.techin.schedule.subject;
 
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -13,6 +15,7 @@ import static lt.techin.schedule.subject.SubjectMapper.*;
 import static org.springframework.http.ResponseEntity.ok;
 
 @RestController
+@Validated
 @RequestMapping("/api/v1/subjects")
 public class SubjectController {
 
@@ -43,7 +46,7 @@ public class SubjectController {
     }
 
     @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<SubjectDto> createSubject(@RequestBody SubjectDto subjectDto) {
+    public ResponseEntity<SubjectDto> createSubject(@Valid @RequestBody SubjectDto subjectDto) {
         var createdSubject = subjectService.create(toSubject(subjectDto));
         return ok(toSubjectDto(createdSubject));
     }

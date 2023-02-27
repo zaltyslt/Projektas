@@ -23,6 +23,7 @@ export function CreateSubject() {
   const [formValid, setFormValid] = useState(false);
   const [classRooms, setClassRooms] = useState([]);
   const [error, setError] = useState("");
+  const [createMessage, setCreateMessage] = useState("");
 
   useEffect(() => {
     fetch("api/v1/modules")
@@ -40,7 +41,10 @@ export function CreateSubject() {
     setName("");
     setDescription("");
     setModule("");
-    setRooms([]);
+    setClassRooms([]);
+    fetch("api/v1/classrooms/active")
+      .then((response) => response.json())
+      .then(setRooms);
   };
 
   const handleRoomInput = (event) => {
@@ -77,8 +81,11 @@ export function CreateSubject() {
 
       response.json().then((response) => {
         if (!success) {
+          setCreateMessage("");
           setError(response.message);
         } else {
+          setCreateMessage("Sėkmingai sukurta. ");
+          setError("");
           clear();
         }
       });
@@ -161,6 +168,7 @@ export function CreateSubject() {
 
           <Grid item sm={10}>
             {error && <Alert severity="warning">{error}</Alert>}
+            {createMessage && <Alert severity="success">{createMessage}</Alert>}
           </Grid>
 
           <Grid item sm={10}>

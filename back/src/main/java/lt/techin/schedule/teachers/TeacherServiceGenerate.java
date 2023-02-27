@@ -31,46 +31,46 @@ public class TeacherServiceGenerate {
         this.shiftRepository = shiftRepository;
     }
 
-    @EventListener(ApplicationReadyEvent.class)
-    public void doSomethingAfterStartup() {
-        System.out.println("hello world, I have just started up");
-   if(shiftRepository.count() < 2){
-     shiftRepository.save(new Shift("Pirma", LessonTime.FIRST.toString(), LessonTime.SECOND.toString(), true,1,2 ));
-    }
-    if(subjectRepository.count() < 2){
-        var subject = new Subject();
-//        subject.setId(1L);
-        subject.setName("SubJectName");
-        var teacher = new Teacher();
-        teacher.setId(1L);
-        var set = new HashSet<Teacher>();
-        set.add(teacher);
-        subject.setTeachers(set);
-        subjectRepository.save(subject);
-    }
-    }
+//    @EventListener(ApplicationReadyEvent.class)
+//    public void doSomethingAfterStartup() {
+//        System.out.println("hello world, I have just started up");
+//   if(shiftRepository.count() < 2){
+//     shiftRepository.save(new Shift("Pirma", LessonTime.FIRST.toString(), LessonTime.SECOND.toString(), true,1,2 ));
+//    }
+//    if(subjectRepository.count() < 2){
+//        var subject = new Subject();
+////        subject.setId(1L);
+//        subject.setName("SubJectName");
+//        var teacher = new Teacher();
+//        teacher.setId(1L);
+//        var set = new HashSet<Teacher>();
+//        set.add(teacher);
+//        subject.setTeachers(set);
+//        subjectRepository.save(subject);
+//    }
+//    }
     //    @EventListener(ApplicationReadyEvent.class)
-    public void loadInitialTeacherData() {
-        var optRecNumber = 2 - this.teacherRepository.count();
-
-        if (optRecNumber > 0) {
-            String suffix = "";
-            List<Teacher> teachers = new ArrayList<>();
-            for (int i = 0; i < optRecNumber; i++) {
-                suffix = Integer.toString(i);
-//                var teacher = new Teacher("Name" + suffix, "Surname" + suffix);
-                var teacher = new Teacher(0L, "Name" + suffix, "Surname" + suffix);
-                teacher.setNickName("aaa");
-                teachers.add(teacher);
-
-            }
-            try {
-                var tt = teacherRepository.saveAll(teachers);
-            } catch (Exception e) {
-            //
-            }
-
-        }
-    }
+//    public void loadInitialTeacherData() {
+//        var optRecNumber = 2 - this.teacherRepository.count();
+//
+//        if (optRecNumber > 0) {
+//            String suffix = "";
+//            List<Teacher> teachers = new ArrayList<>();
+//            for (int i = 0; i < optRecNumber; i++) {
+//                suffix = Integer.toString(i);
+////                var teacher = new Teacher("Name" + suffix, "Surname" + suffix);
+//                var teacher = new Teacher(0L, "Name" + suffix, "Surname" + suffix);
+//                teacher.setNickName("aaa");
+//                teachers.add(teacher);
+//
+//            }
+//            try {
+//                var tt = teacherRepository.saveAll(teachers);
+//            } catch (Exception e) {
+//            //
+//            }
+//
+//        }
+//    }
 
 }
