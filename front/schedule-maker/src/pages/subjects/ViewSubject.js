@@ -50,7 +50,7 @@ export function ViewSubject() {
           </Grid>
 
           <Grid item sm={12}>
-            <h4>Pageidaujamos klasės</h4>
+            <h4>Tinkamos klasės</h4>
             {subject.classRooms &&
               subject.classRooms.map((classRoom) => (
                 <p

@@ -28,7 +28,9 @@ export function SubjectList() {
   const [deletedSubjects, setDeletedSubjects] = useState([]);
 
   const [page, setPage] = useState(0);
+  const [pageInDeleted, setPageInDeleted] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [rowsPerPageInDeleted, setRowsPerPageInDeleted] = useState(10);
   const [isChecked, setChecked] = useState(false);
 
   useEffect(() => {
@@ -57,14 +59,26 @@ export function SubjectList() {
 
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - subjects.length) : 0;
-
+  
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
+  };
+
+  const emptyRowsInDeleted =
+    pageInDeleted > 0 ? Math.max(0, (1 + pageInDeleted) * rowsPerPageInDeleted - deletedSubjects.length) : 0;
+
+  const handleChangePageInDeleted = (event, newPage) => {
+    setPageInDeleted(newPage);
   };
 
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
+  };
+
+  const handleChangeRowsPerPageInDeleted = (event) => {
+    setRowsPerPageInDeleted(parseInt(event.target.value, 10));
+    setPageInDeleted(0);
   };
 
   const handleSearch = (event) => {
@@ -216,10 +230,10 @@ export function SubjectList() {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {(rowsPerPage > 0
+                {(rowsPerPageInDeleted > 0
                   ? deletedSubjects.slice(
-                      page * rowsPerPage,
-                      page * rowsPerPage + rowsPerPage
+                      pageInDeleted * rowsPerPageInDeleted,
+                      pageInDeleted * rowsPerPageInDeleted + rowsPerPageInDeleted
                     )
                   : deletedSubjects
                 ).map((subject) => (
@@ -251,8 +265,8 @@ export function SubjectList() {
                   </TableRow>
                 ))}
 
-                {emptyRows > 0 && (
-                  <TableRow style={{ height: 53 * emptyRows }}>
+                {emptyRowsInDeleted > 0 && (
+                  <TableRow style={{ height: 53 * emptyRowsInDeleted }}>
                     <TableCell colSpan={6} />
                   </TableRow>
                 )}
@@ -267,16 +281,16 @@ export function SubjectList() {
                     }
                     colSpan={3}
                     count={deletedSubjects.length}
-                    page={page}
+                    page={pageInDeleted}
                     SelectProps={{
                       inputProps: {
                         "aria-label": "Rodyti po",
                       },
                       native: true,
                     }}
-                    onPageChange={handleChangePage}
-                    rowsPerPage={rowsPerPage}
-                    onRowsPerPageChange={handleChangeRowsPerPage}
+                    onPageChange={handleChangePageInDeleted}
+                    rowsPerPage={rowsPerPageInDeleted}
+                    onRowsPerPageChange={handleChangeRowsPerPageInDeleted}
                   ></TablePagination>
                 </TableRow>
               </TableFooter>
