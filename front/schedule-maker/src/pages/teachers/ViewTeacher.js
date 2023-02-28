@@ -20,7 +20,6 @@ export function ViewTeacher() {
       .then((response) => response.json())
       .then((data) => {
         setTeacher(data);
-       
         setTeacherSubjects(data.subjectsDtoList)
         setContacts(data.contacts);
             });
