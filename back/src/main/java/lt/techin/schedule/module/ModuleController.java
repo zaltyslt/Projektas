@@ -28,12 +28,12 @@ public class ModuleController {
 
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE})
     public List<ModuleEntityDto> getModules() {
-        return moduleService.getAll(false).stream().map(ModuleMapper::toModuleEntityDto).collect(toList());
+        return moduleService.getAll().stream().map(ModuleMapper::toModuleEntityDto).collect(toList());
     }
 
     @GetMapping(value = "/deleted", produces = {MediaType.APPLICATION_JSON_VALUE})
     public List<ModuleEntityDto> getDeletedModules() {
-        return moduleService.getAll(true).stream().map(ModuleMapper::toModuleEntityDto).collect(toList());
+        return moduleService.getAllDeleted().stream().map(ModuleMapper::toModuleEntityDto).collect(toList());
     }
 
     @GetMapping(value = "/{moduleId}", produces = {MediaType.APPLICATION_JSON_VALUE})

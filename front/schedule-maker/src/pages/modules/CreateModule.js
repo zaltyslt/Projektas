@@ -143,11 +143,11 @@ export function CreateModule() {
           <Grid item sm={10}>
                 {isPostUsed ? (
                     successfulPost ? (
-                        <Alert severity="success"> Modulis sėkmingai pakeistas.</Alert>
+                        <Alert severity="success"> Modulis sėkmingai pridėtas.</Alert>
                         ) : 
                         (
                         <Grid>
-                            <Alert severity="warning">Nepavyko pakeisti modulio.</Alert>
+                            <Alert severity="warning">Nepavyko pridėti modulio.</Alert>
                             {
                                 (moduleErrors.passedValidation ?
                                     (moduleErrors.databaseErrors).map((databaseError, index) => (

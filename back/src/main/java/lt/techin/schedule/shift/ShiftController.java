@@ -37,9 +37,8 @@ public class ShiftController {
     }
 
     @PostMapping(value = "/add-shift", consumes = {MediaType.APPLICATION_JSON_VALUE})
-    public @ResponseBody ValidationDto addShift (@RequestBody ShiftDto shiftToAddDto, BindingResult bindingResult) {
+    public @ResponseBody ValidationDto addShift (@RequestBody @Valid ShiftDto shiftToAddDto, BindingResult bindingResult) {
         ValidationDto validationDto = new ValidationDto();
-        System.out.println("Asda");
         if (bindingResult.hasErrors()) {
             List<ObjectError> errors = bindingResult.getAllErrors();
             for (int x = 0; x < bindingResult.getAllErrors().size(); x++) {

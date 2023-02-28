@@ -204,9 +204,36 @@ export function AddShift() {
             </Link>
           </Stack>
         </Grid>
-        <Grid>
-          
-        </Grid>
+
+        <Grid item sm={10}>
+                {isPostUsed ? (
+                    successfulPost ? (
+                        <Alert severity="success"> Pamaina sėkmingai pridėta.</Alert>
+                        ) : 
+                        (
+                        <Grid>
+                            <Alert severity="warning">Nepavyko pridėti pamainos.</Alert>
+                            {
+                                (shiftErrors.passedValidation ?
+                                    (shiftErrors.databaseErrors).map((databaseError, index) => (
+                                        <Alert key={index} severity="warning">
+                                        {databaseError}
+                                        </Alert>
+                                    )) 
+                                    :
+                                    Object.keys(shiftErrors.validationErrors).map(key => (
+                                    <Alert key={key} severity="warning"> {shiftErrors.validationErrors[key]} {key} laukelyje.
+                                    </Alert>
+                                    ))
+                                )
+                            }
+                        </Grid>
+                        )
+                    ) : 
+                    (
+                    <div></div>
+                    )}
+            </Grid>
       </Container>
     </div>
   );

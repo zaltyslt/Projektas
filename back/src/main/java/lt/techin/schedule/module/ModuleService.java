@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ModuleService {
@@ -28,13 +29,12 @@ public class ModuleService {
         this.moduleRepository = moduleRepository;
     }
 
-    public List<Module> getAll(boolean isDeleted) {
-        Session session = entityManager.unwrap(Session.class);
-        Filter filter = session.enableFilter("deletedModuleFilter");
-        filter.setParameter("isDeleted", isDeleted);
-        List<Module> modules = moduleRepository.findAll();
-        session.disableFilter("deletedModuleFilter");
-        return modules;
+    public List<Module> getAll() {
+        return moduleRepository.findAll().stream().filter(module-> !module.isDeleted()).collect(Collectors.toList());
+    }
+
+    public List<Module> getAllDeleted() {
+        return moduleRepository.findAll().stream().filter(Module::isDeleted).collect(Collectors.toList());
     }
 
     public Optional<Module> getById(Long id) {
