@@ -151,6 +151,7 @@ export function EditSubject() {
     <Container>
       <h1>Redagavimas</h1>
       <h3>{subject.name}</h3>
+      <span id="modified-date">Paskutinį kartą redaguota: {subject.modifiedDate}</span>
       <form>
         <Grid container rowSpacing={2}>
           <Grid item sm={10}>

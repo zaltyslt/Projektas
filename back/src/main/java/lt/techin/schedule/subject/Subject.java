@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lt.techin.schedule.classrooms.Classroom;
 import lt.techin.schedule.module.Module;
 import lt.techin.schedule.teachers.Teacher;
@@ -30,6 +31,7 @@ public class Subject {
     private String name;
 
     @NotBlank
+    @Size(min = 1, max = 2000)
     private String description;
 
     @ManyToOne
@@ -84,16 +86,12 @@ public class Subject {
         deleted = false;
     }
 
-    public Subject(Long id, String name, String description, Module module, Set<Classroom> classRooms, LocalDateTime createdDate, String createdBy, LocalDateTime modifiedDate, String modifiedBy, Boolean deleted) {
+    public Subject(Long id, String name, String description, Module module, Set<Classroom> classRooms, Boolean deleted) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.module = module;
         this.classRooms = classRooms;
-        this.createdDate = createdDate;
-        this.createdBy = createdBy;
-        this.modifiedDate = modifiedDate;
-        this.modifiedBy = modifiedBy;
         this.deleted = deleted;
     }
 

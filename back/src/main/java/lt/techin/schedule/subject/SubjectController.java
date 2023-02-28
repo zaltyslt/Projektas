@@ -64,16 +64,16 @@ public class SubjectController {
     }
 
     //Not used
-    @DeleteMapping("/{subjectId}")
-    public ResponseEntity<Void> deleteSubject(@PathVariable Long subjectId) {
-        boolean deleted = subjectService.deleteById(subjectId);
-
-        if(deleted) {
-            return ResponseEntity.noContent().build();
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
+//    @DeleteMapping("/{subjectId}")
+//    public ResponseEntity<Void> deleteSubject(@PathVariable Long subjectId) {
+//        boolean deleted = subjectService.deleteById(subjectId);
+//
+//        if(deleted) {
+//            return ResponseEntity.noContent().build();
+//        } else {
+//            return ResponseEntity.notFound().build();
+//        }
+//    }
 
     @PatchMapping("/restore/{subjectId}")
     public ResponseEntity<SubjectDto> restoreSubject(@PathVariable Long subjectId) {
@@ -88,18 +88,18 @@ public class SubjectController {
     }
 
 //    Not used at demo v1/v2
-    @GetMapping("/paged")
-    @ResponseBody
-    public ResponseEntity<List<SubjectEntityDto>> findSubjectsPaged(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int pageSize) {
-        Page<Subject> pagedSubjects = subjectService.findAllPaged(page, pageSize, false);
-        int totalPageCount = pagedSubjects.getTotalPages();
-        List<SubjectEntityDto> subjects = pagedSubjects.stream()
-                .map(SubjectMapper::toSubjectEntityDto)
-                .collect(toList());
-
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.set("totalCount", Integer.toString(totalPageCount));
-        return ResponseEntity.ok().headers(httpHeaders).body(subjects);
-    }
+//    @GetMapping("/paged")
+//    @ResponseBody
+//    public ResponseEntity<List<SubjectEntityDto>> findSubjectsPaged(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int pageSize) {
+//        Page<Subject> pagedSubjects = subjectService.findAllPaged(page, pageSize, false);
+//        int totalPageCount = pagedSubjects.getTotalPages();
+//        List<SubjectEntityDto> subjects = pagedSubjects.stream()
+//                .map(SubjectMapper::toSubjectEntityDto)
+//                .collect(toList());
+//
+//        HttpHeaders httpHeaders = new HttpHeaders();
+//        httpHeaders.set("totalCount", Integer.toString(totalPageCount));
+//        return ResponseEntity.ok().headers(httpHeaders).body(subjects);
+//    }
 
 }
