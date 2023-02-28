@@ -1,9 +1,11 @@
 package lt.techin.schedule.subject;
 
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -13,6 +15,7 @@ import static lt.techin.schedule.subject.SubjectMapper.*;
 import static org.springframework.http.ResponseEntity.ok;
 
 @RestController
+@Validated
 @RequestMapping("/api/v1/subjects")
 public class SubjectController {
 
@@ -43,7 +46,7 @@ public class SubjectController {
     }
 
     @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<SubjectDto> createSubject(@RequestBody SubjectDto subjectDto) {
+    public ResponseEntity<SubjectDto> createSubject(@Valid @RequestBody SubjectDto subjectDto) {
         var createdSubject = subjectService.create(toSubject(subjectDto));
         return ok(toSubjectDto(createdSubject));
     }
@@ -61,16 +64,16 @@ public class SubjectController {
     }
 
     //Not used
-    @DeleteMapping("/{subjectId}")
-    public ResponseEntity<Void> deleteSubject(@PathVariable Long subjectId) {
-        boolean deleted = subjectService.deleteById(subjectId);
-
-        if(deleted) {
-            return ResponseEntity.noContent().build();
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
+//    @DeleteMapping("/{subjectId}")
+//    public ResponseEntity<Void> deleteSubject(@PathVariable Long subjectId) {
+//        boolean deleted = subjectService.deleteById(subjectId);
+//
+//        if(deleted) {
+//            return ResponseEntity.noContent().build();
+//        } else {
+//            return ResponseEntity.notFound().build();
+//        }
+//    }
 
     @PatchMapping("/restore/{subjectId}")
     public ResponseEntity<SubjectDto> restoreSubject(@PathVariable Long subjectId) {
@@ -85,18 +88,18 @@ public class SubjectController {
     }
 
 //    Not used at demo v1/v2
-    @GetMapping("/paged")
-    @ResponseBody
-    public ResponseEntity<List<SubjectEntityDto>> findSubjectsPaged(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int pageSize) {
-        Page<Subject> pagedSubjects = subjectService.findAllPaged(page, pageSize, false);
-        int totalPageCount = pagedSubjects.getTotalPages();
-        List<SubjectEntityDto> subjects = pagedSubjects.stream()
-                .map(SubjectMapper::toSubjectEntityDto)
-                .collect(toList());
-
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.set("totalCount", Integer.toString(totalPageCount));
-        return ResponseEntity.ok().headers(httpHeaders).body(subjects);
-    }
+//    @GetMapping("/paged")
+//    @ResponseBody
+//    public ResponseEntity<List<SubjectEntityDto>> findSubjectsPaged(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int pageSize) {
+//        Page<Subject> pagedSubjects = subjectService.findAllPaged(page, pageSize, false);
+//        int totalPageCount = pagedSubjects.getTotalPages();
+//        List<SubjectEntityDto> subjects = pagedSubjects.stream()
+//                .map(SubjectMapper::toSubjectEntityDto)
+//                .collect(toList());
+//
+//        HttpHeaders httpHeaders = new HttpHeaders();
+//        httpHeaders.set("totalCount", Integer.toString(totalPageCount));
+//        return ResponseEntity.ok().headers(httpHeaders).body(subjects);
+//    }
 
 }

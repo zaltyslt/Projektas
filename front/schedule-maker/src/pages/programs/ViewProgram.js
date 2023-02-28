@@ -29,13 +29,19 @@ export function ViewProgram() {
           <Grid item sm={10}>
             <header>
               <h1>{program.programName}</h1>
-              <h5>Paskutinį kartą redaguota: {program.modifiedDate}</h5>
+              <div>
+                <span id="created-date">Sukurta: {program.createdDate}</span>
+                </div>
+              <div>
+                <span id="modified-date">Paskutinį kartą redaguota: {program.modifiedDate}</span>
+              </div>
             </header>
           </Grid>
           <Grid item sm={12}>
             <h4>Programos aprašas</h4>
             <p>{program.description}</p>
           </Grid>
+
           <Grid item sm={12}>
             <Stack direction="row" spacing={2}>
               <Link to={`/update-program/${program.id}`}>

@@ -65,6 +65,7 @@ public class ShiftController {
 
     @PatchMapping("/activate-shift/{shiftID}")
     public void activateShift(@PathVariable Long shiftID) {
+
         shiftService.changeActiveShiftStatusByID(shiftID, true);
     }
 

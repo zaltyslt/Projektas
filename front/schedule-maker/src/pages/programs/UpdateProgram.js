@@ -24,6 +24,10 @@ export function UpdateProgram() {
     const [programName, setProgramName] = useState("");
     const [description, setDescription] = useState("");
     const invalidSymbols = "!@#$%^&*_+={}<>|~`\\\"'";
+    const [errorEmptyName, setErrorEmptyName] = useState(false);
+    const [errorSymbolsName, setErrorSymbolsName] = useState(false);
+    const [errorEmptyDesc, setErrorEmptyDesc] = useState(false);
+    const [errorSymbolsDesc, setErrorSymbolsDesc] = useState(false);
 
     const handleCNameeChange = (event) => {
         setProgramName(event.target.value);
@@ -52,18 +56,22 @@ export function UpdateProgram() {
     const updateProgram = () => {
         setError("");
         setSuccess("");
+        setErrorEmptyName(false);
+        setErrorSymbolsName(false);
+        setErrorEmptyDesc(false);
+        setErrorSymbolsDesc(false);
         if (!programName) {
-            setError("Prašome užpildyti programos pavadinimą.");
+            setErrorEmptyName(true);
         } else if (
             programName.split("").some((char) => invalidSymbols.includes(char))
         ) {
-            setError("Programos pavadinimas turi neleidžiamų simbolių.");
+            setErrorSymbolsName(true);
         } else if (!description) {
-            setError("Prašome užpildyti programos aprašą.");
+            setErrorEmptyDesc(true);
         } else if (
             description.split("").some((char) => invalidSymbols.includes(char))
         ) {
-            setError("Programos aprašas turi neleidžiamų simbolių.");
+            setErrorSymbolsDesc(true);
         } else {
             fetch(`/api/v1/programs/update-program/${params.id}`, {
                 method: "PATCH",
@@ -113,15 +121,23 @@ export function UpdateProgram() {
     return (
         <div>
             <Container>
-                <h1>Redagavimas</h1>
+                <h1 className="edit-header">Redagavimas</h1>
                 <h3>{program.programName}</h3>
-                <h5>Paskutinį kartą redaguota: {program.modifiedDate}</h5>
+                <span id="modified-date">
+            Paskutinį kartą redaguota: {program.modifiedDate}
+          </span>
                 <form>
-                    <Grid container rowSpacing={2}>
-                        <Grid item sm={10}>
+                <Grid container rowSpacing={3}>
+            <Grid item sm={10}>
                             <TextField
                                 fullWidth
                                 required
+                                error={errorEmptyName || errorSymbolsName}
+                                helperText={errorEmptyName ? "Programos pavadinimas yra privalomas."
+                                  : errorSymbolsName
+                                    ? "Programos pavadinimas turi neleidžiamų simbolių."
+                                    : ""}
+                                variant="outlined"
                                 id="programName"
                                 label="Programos pavadinimas"
                                 value={programName}
@@ -133,6 +149,14 @@ export function UpdateProgram() {
                                 fullWidth
                                 multiline
                                 required
+                                error={errorEmptyDesc || errorSymbolsDesc}
+                                helperText={
+                                  errorEmptyDesc
+                                    ? "Programos aprašas yra privalomas."
+                                    : errorSymbolsDesc
+                                      ? "Programos aprašas turi neleidžiamų simbolių."
+                                      : ""}
+                                variant="outlined"
                                 label="Programos aprašas"
                                 id="description"
                                 value={description}

@@ -24,6 +24,11 @@ export function UpdateClassroom() {
   const [description, setDescription] = useState("");
   const [building, setBuilding] = useState("AKADEMIJA");
   const invalidSymbols = "!@#$%^&*_+={}<>|~`\\\"'";
+  const [errorEmptyName, setErrorEmptyName] = useState(false);
+  const [errorSymbolsName, setErrorSymbolsName] = useState(false);
+  const [errorEmptyDesc, setErrorEmptyDesc] = useState(false);
+  const [errorSymbolsDesc, setErrorSymbolsDesc] = useState(false);
+  const [errorBuilding, setErrorBuilding] = useState(false);
 
   const handleDescriptionChange = (event) => {
     setDescription(event.target.value);
@@ -58,20 +63,25 @@ export function UpdateClassroom() {
   const updateClassroom = () => {
     setError("");
     setSuccess("");
+    setErrorEmptyName(false);
+    setErrorSymbolsName(false);
+    setErrorEmptyDesc(false);
+    setErrorSymbolsDesc(false);
+    setErrorBuilding(false)
     if (!classroomName) {
-      setError("Prašome užpildyti klasės pavadinimą.");
+      setErrorEmptyName(true);
     } else if (
       classroomName.split("").some((char) => invalidSymbols.includes(char))
     ) {
-      setError("Klasės pavadinimas turi neleidžiamų simbolių.");
+      setErrorSymbolsName(true);
     } else if (!description) {
-      setError("Prašome užpildyti klasės aprašą.");
+      setErrorEmptyDesc(true);
     } else if (
       description.split("").some((char) => invalidSymbols.includes(char))
     ) {
-      setError("Klasės aprašas turi neleidžiamų simbolių.");
+      setErrorSymbolsDesc(true);
     } else if (!building) {
-      setError("Prašome pasirinkti pastatą.");
+      setErrorBuilding(true);
     } else {
       fetch(`/api/v1/classrooms/update-classroom/${params.id}`, {
         method: "PATCH",
@@ -85,7 +95,12 @@ export function UpdateClassroom() {
         }),
       }).then((result) => {
         if (!result.ok) {
-          setError("Redaguoti nepavyko!");
+          result.text().then(text => {
+            const response = JSON.parse(text);
+            setError(response.message)
+          }).catch(error => {
+            setError("Klasės sukurti nepavyko: ", error);
+          });
         } else {
           setSuccess("Sėkmingai atnaujinote!");
         }
@@ -121,17 +136,21 @@ export function UpdateClassroom() {
   return (
     <div>
       <Container>
-          <h1 className="edit-header">Redagavimas</h1>
-          <h3>{classroom.classroomName}</h3>
-          <span id="modified-date">
-            Paskutinį kartą redaguota: {classroom.modifiedDate}
-          </span>
+        <h1 className="edit-header">Redagavimas</h1>
+        <h3>{classroom.classroomName}</h3>
+        <span id="modified-date">
+          Paskutinį kartą redaguota: {classroom.modifiedDate}
+        </span>
         <form>
           <Grid container rowSpacing={3}>
             <Grid item sm={10}>
               <FormControl fullWidth>
                 <InputLabel id="building-label">Pastatas</InputLabel>
                 <Select
+                  required
+                  error={errorBuilding}
+                  helperText={errorBuilding && "Prašome pasirinkti pastatą."}
+                  variant="outlined"
                   labelId="building-label"
                   id="building"
                   label="Pastatas"
@@ -146,6 +165,12 @@ export function UpdateClassroom() {
             <Grid item sm={10}>
               <TextField
                 fullWidth
+                required
+                error={errorEmptyName || errorSymbolsName}
+                helperText={errorEmptyName ? "Klasės pavadinimas yra privalomas."
+                  : errorSymbolsName
+                    ? "Klasės pavadinimas turi neleidžiamų simbolių."
+                    : ""}
                 variant="outlined"
                 id="classroomName"
                 label="Klasės pavadinimas"
@@ -157,6 +182,14 @@ export function UpdateClassroom() {
               <TextField
                 fullWidth
                 multiline
+                required
+                error={errorEmptyDesc || errorSymbolsDesc}
+                helperText={
+                  errorEmptyDesc
+                    ? "Klasės aprašas yra privalomas."
+                    : errorSymbolsDesc
+                      ? "Klasės aprašas turi neleidžiamų simbolių."
+                      : ""}
                 variant="outlined"
                 label="Klasės aprašas"
                 id="description"
@@ -170,37 +203,37 @@ export function UpdateClassroom() {
               {error && <Alert severity="warning">{error}</Alert>}
               {success && <Alert severity="success">{success}</Alert>}
             </Grid>
-              <Stack direction="row" spacing={2}>
-                <Button variant="contained" onClick={updateClassroom}>
-                  Išsaugoti
+            <Stack direction="row" spacing={2}>
+              <Button variant="contained" onClick={updateClassroom}>
+                Išsaugoti
+              </Button>
+              {!classroom.active && (
+                <Button
+                  variant="contained"
+                  data-value="true"
+                  value={params.id}
+                  onClick={enableClassroom}
+                >
+                  Aktyvuoti
                 </Button>
-                {!classroom.active && (
+              )}
+              {classroom.active && (
+                <Link to="/rooms">
                   <Button
                     variant="contained"
                     data-value="true"
                     value={params.id}
-                    onClick={enableClassroom}
+                    onClick={disableClassroom}
                   >
-                    Aktyvuoti
+                    Ištrinti
                   </Button>
-                )}
-                {classroom.active && (
-                  <Link to="/rooms">
-                    <Button
-                      variant="contained"
-                      data-value="true"
-                      value={params.id}
-                      onClick={disableClassroom}
-                    >
-                      Ištrinti
-                    </Button>
-                  </Link>
-                )}
-                <Link to="/rooms">
-                  <Button variant="contained">Grįžti</Button>
                 </Link>
-              </Stack>
-            </Grid>
+              )}
+              <Link to="/rooms">
+                <Button variant="contained">Grįžti</Button>
+              </Link>
+            </Stack>
+          </Grid>
         </form>
       </Container>
     </div>

@@ -1,4 +1,4 @@
-import { Button, Grid } from "@mui/material";
+import { Button, Grid, Typography } from "@mui/material";
 import { Container, Stack } from "@mui/system";
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
@@ -31,19 +31,17 @@ export function ViewSubject() {
 
           <Grid item sm={12}>
             <h4>Modulis</h4>
-            <p>
-              {subject.module ? (
-                subject.module.deleted ? (
-                  <p className="Deleted">
-                    {subject.module.name} - modulis buvo ištrintas.
-                  </p>
-                ) : (
-                  subject.module.name
-                )
+            {subject.module ? (
+              subject.module.deleted ? (
+                <p className="Deleted">
+                  {subject.module.name} - modulis buvo ištrintas.
+                </p>
               ) : (
-                <p>Nenurodytas</p>
-              )}
-            </p>
+                subject.module.name
+              )
+            ) : (
+              <p>Nenurodytas</p>
+            )}
           </Grid>
 
           <Grid item sm={12}>
@@ -52,10 +50,15 @@ export function ViewSubject() {
           </Grid>
 
           <Grid item sm={12}>
-            <h4>Pageidaujamos klasės</h4>
+            <h4>Tinkamos klasės</h4>
             {subject.classRooms &&
               subject.classRooms.map((classRoom) => (
-                <p key={classRoom.id}>{classRoom.classroomName}</p>
+                <p
+                  key={classRoom.id}
+                  className={classRoom.active ? "" : "Deleted"}
+                >
+                  {classRoom.classroomName}
+                </p>
               ))}
           </Grid>
 
