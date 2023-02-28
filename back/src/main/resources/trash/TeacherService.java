@@ -1,4 +1,4 @@
-package lt.techin.schedule.teachers;
+package trash;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.PostConstruct;
@@ -64,10 +64,10 @@ public class TeacherService implements ITeacher<Teacher> {
     public Set<TeacherDto> getTeachersByActiveStatus(boolean status) {
         return finder.getTeachersByActiveStatus(status);
     }
-    public TeacherDto createTeacher(TeacherDto teacherDto) {
-
-        return null;
-    }
+//    public TeacherDto createTeacher(TeacherDto teacherDto) {
+//
+//        return null;
+//    }
 
 
 //    @PostConstruct

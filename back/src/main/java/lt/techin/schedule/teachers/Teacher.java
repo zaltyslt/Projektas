@@ -103,10 +103,11 @@ public class Teacher implements Serializable {
     }
 
 
-    public Teacher(Long id, String fName, String lName) {
+    public Teacher(Long id, String fName, String lName, Boolean isActive) {
         this.id = id;
         this.fName = fName;
         this.lName = lName;
+        this.isActive = isActive;
     }
 
     public Integer getHashCode() {

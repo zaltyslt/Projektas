@@ -1,9 +1,6 @@
-package lt.techin.schedule.teachers;
+package trash;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import lt.techin.schedule.module.ModuleMapper;
 import lt.techin.schedule.module.ModuleRepository;
-import lt.techin.schedule.shift.Shift;
 import lt.techin.schedule.shift.ShiftDTO;
 import lt.techin.schedule.subject.SubjectEntityDto;
 import lt.techin.schedule.subject.SubjectMapper;
@@ -11,13 +8,10 @@ import lt.techin.schedule.teachers.contacts.ContactService;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.Set;
 
 import static org.springframework.http.ResponseEntity.ok;
 

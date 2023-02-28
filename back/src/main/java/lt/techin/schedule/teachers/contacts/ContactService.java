@@ -21,7 +21,7 @@ public class ContactService {
     public ContactService(ContactRepository contactRepository, TeacherRepository teacherRepository) {
         this.contactRepository = contactRepository;
         this.teacherRepository = teacherRepository;
-       dummyTeacher = new Teacher(0L, "_Dummy", "_Dummy");
+       dummyTeacher = new Teacher(0L, "_Dummy", "_Dummy", true);
     }
 
     @PostConstruct

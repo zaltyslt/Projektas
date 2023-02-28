@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -30,7 +31,7 @@ public class TeacherServiceFind {
     }
 
     protected Set<TeacherDto> getAllTeachers() {
-        var teachers = teacherRepository.findAll();
+        List<Teacher> teachers = teacherRepository.findAll();
         return TeacherMapper.teacherToDto(teachers);
     }
 

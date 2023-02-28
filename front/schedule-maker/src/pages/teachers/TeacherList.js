@@ -40,7 +40,6 @@ export function TeacherList() {
 
   useEffect(() => {
     fetchSubjects();
-    console.log("Boom!");
   }, []);
 
   const fetchTeachers = async () => {
@@ -64,7 +63,7 @@ export function TeacherList() {
     fetch("/api/v1/subjects")
       .then((response) => response.json())
       .then(setSubjects);
-    console.log(subjects);
+    // console.log(subjects);
   };
 
   const emptyRows =
@@ -140,6 +139,7 @@ export function TeacherList() {
                 <TableCell>Žyma</TableCell>
                 <TableCell>Dėstomi dalykai</TableCell>
                 <TableCell>Pamaina</TableCell>
+                {/* <TableCell>Kontaktai</TableCell> */}
               </TableRow>
             </TableHead>
             <TableBody>
@@ -152,7 +152,7 @@ export function TeacherList() {
               ).map((teacher) => (
                 <TableRow key={teacher.id}>
                   <TableCell component="th" scope="row">
-                    <Link to={"/teacher/view?tid=" + teacher.id}>
+                    <Link to={"/teachers/view/" + teacher.id}>
                       {teacher.fName + " " + teacher.lName}
                     </Link>
                   </TableCell>
@@ -186,9 +186,23 @@ export function TeacherList() {
                       ? teacher.teacherShiftDto.name
                       : "** Nepriskirta"}
                   </TableCell>
+
+                  {/* <TableCell>
+<p>Kontaktai</p>
+<p>{teacher.contacts && teacher.contacts.phoneNumber && teacher.contacts.phoneNumber }</p>
+<p>{teacher.contacts != null && teacher.contacts.directEmail && teacher.contacts.directEmail }</p>
+<p>{teacher.contacts != null && teacher.contacts.teamsEmail && teacher.contacts.teamsEmail }</p>
+<p>{teacher.contacts != null && teacher.contacts.teamsName && teacher.contacts.teamsName }</p>
+
+
+</TableCell> */}
+
                 </TableRow>
               ))}
+              {/* [
+    
 
+{/* //////////////////////////// */}
               {emptyRows > 0 && (
                 <TableRow style={{ height: 53 * emptyRows }}>
                   <TableCell colSpan={6} />

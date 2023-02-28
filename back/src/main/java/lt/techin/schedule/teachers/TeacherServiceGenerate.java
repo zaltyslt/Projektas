@@ -59,7 +59,7 @@ public class TeacherServiceGenerate {
             for (int i = 0; i < optRecNumber; i++) {
                 suffix = Integer.toString(i);
 //                var teacher = new Teacher("Name" + suffix, "Surname" + suffix);
-                var teacher = new Teacher(0L, "Name" + suffix, "Surname" + suffix);
+                var teacher = new Teacher(0L, "Name" + suffix, "Surname" + suffix, i % 2 == 0);
                 teacher.setNickName("aaa");
                 teachers.add(teacher);
 

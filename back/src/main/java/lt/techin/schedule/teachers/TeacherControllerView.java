@@ -51,10 +51,13 @@ public class TeacherControllerView {
 
     }
 
-//    public TeacherDto getTeacherById(Long teacherId) {
-//        var result =  teacherService.getTeacherById(teacherId);
-//
-//        return result;
-//
-//    }
+    @GetMapping(value = "/view") //view by teacherID via path
+    public ResponseEntity<TeacherDto> getTeacherById(@RequestParam(value = "tid", required = false) Long teacherId) {
+        var result =  teacherFinder.getTeacherById(teacherId);
+
+        return result.getId() != null
+                ? ResponseEntity.ok(result)
+                : ResponseEntity.notFound().build();
+
+    }
 }

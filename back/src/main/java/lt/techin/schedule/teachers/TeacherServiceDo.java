@@ -5,6 +5,7 @@ import lt.techin.schedule.shift.ShiftDTO;
 import lt.techin.schedule.subject.Subject;
 import lt.techin.schedule.subject.SubjectRepository;
 import lt.techin.schedule.teachers.contacts.Contact;
+import lt.techin.schedule.teachers.contacts.ContactDto2;
 import lt.techin.schedule.teachers.contacts.ContactMapper;
 import lt.techin.schedule.teachers.contacts.ContactService;
 import lt.techin.schedule.exceptions.TeacherException;
@@ -39,7 +40,7 @@ public class TeacherServiceDo {
         int newTeacherHash = Objects.hash(newTeacher.getfName().toLowerCase(), newTeacher.getlName().toLowerCase());
         newTeacher.setId(null);
 
-        isNotDublicate(newTeacher);
+        isNotDuplicate(newTeacher);
 
 
         newTeacher.setContacts(null);
@@ -48,13 +49,16 @@ public class TeacherServiceDo {
         newTeacher.setId(null);
         newTeacher = teacherRepository.save(newTeacher);
 
-        if (!teacherDto.getContacts().isEmpty()) {
-            List<Contact> contactsList = ContactMapper.contactFromDto(teacherDto.getContacts());
-            if (!contactsList.isEmpty()) {
-                var contacts = contactService.createContacts(newTeacher, contactsList);
-                newTeacher.setContacts(contacts);
-            }
-        }
+//        if (!teacherDto.getContacts().isE()) {
+//            List<Contact> contactsList = ContactMapper.contactFromDto(teacherDto.getContacts());
+//            if (!contactsList.isEmpty()) {
+//                var contacts = contactService.createContacts(newTeacher, contactsList);
+//                newTeacher.setContacts(contacts);
+//            }
+//        }
+        ContactDto2 contactsDto = teacherDto.getContacts();
+        newTeacher.setContacts(ContactMapper.contactFromDto2(contactsDto));
+
         if (!teacherDto.getSubjectsDtoList().isEmpty()) {
             Set<Subject> subjectsFromDto = TeacherSubjectMapper.subjectsFromDtos(teacherDto.getSubjectsDtoList());
 
@@ -94,7 +98,7 @@ public class TeacherServiceDo {
 
         int newTeacherHash = Objects.hash(newTeacher.getfName().toLowerCase(), newTeacher.getlName().toLowerCase());
 
-        isNotDublicate(newTeacher);
+        isNotDuplicate(newTeacher);
 
         contactService.createContacts(newTeacher, newTeacher.getContacts());
         newTeacher = teacherRepository.save(newTeacher);
@@ -112,17 +116,21 @@ public class TeacherServiceDo {
     }
 
 
-    public boolean isNotDublicate(Teacher newTeacher) {
+    public boolean isNotDuplicate(Teacher newTeacher) {
         int teacherHash = Objects.hash(newTeacher.getfName().toLowerCase(), newTeacher.getlName().toLowerCase());
         Map<Long, Teacher> teachers = teacherRepository.findTeachersByHashCode(teacherHash)
                 .stream()
                 .collect(Collectors.toMap(t -> t.getId(), Function.identity()));
+       //If no maches
         if (teachers.isEmpty()) {
             return true;
         }
-
+        //If teacher looked and found is the same
         if (newTeacher.getId() != null) {
             teachers.remove(newTeacher.getId());
+            if(teachers.isEmpty()){
+                return true;
+            }
         }
 
         if (!teachers.isEmpty() && newTeacher.getNickName().isBlank()) {

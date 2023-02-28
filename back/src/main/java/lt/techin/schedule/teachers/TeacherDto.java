@@ -2,6 +2,7 @@ package lt.techin.schedule.teachers;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lt.techin.schedule.teachers.contacts.ContactDto;
+import lt.techin.schedule.teachers.contacts.ContactDto2;
 import lt.techin.schedule.teachers.helpers.TeacherShiftDto;
 import lt.techin.schedule.teachers.helpers.TeacherSubjectsDto;
 
@@ -20,7 +21,8 @@ public class TeacherDto implements Serializable {
     private String lName;
     private String nickName;
     private Set<TeacherSubjectsDto> subjectsDtoList;
-    private List<ContactDto> contacts;
+//    private List<ContactDto> contacts;
+    private ContactDto2 contacts;
     private TeacherShiftDto teacherShiftDto;
     //    private String savedSubjectsList;
     private Integer workHoursPerWeek;
@@ -110,11 +112,11 @@ public class TeacherDto implements Serializable {
         this.dateCreated = dateCreated;
     }
 
-    public List<ContactDto> getContacts() {
+    public ContactDto2 getContacts() {
         return contacts;
     }
 
-    public void setContacts(List<ContactDto> contacts) {
+    public void setContacts(ContactDto2 contacts) {
         this.contacts = contacts;
     }
 
