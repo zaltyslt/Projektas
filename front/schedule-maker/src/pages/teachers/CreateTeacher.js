@@ -2,42 +2,63 @@ import {
   Alert,
   Button,
   Container,
+  FormControl,
+  InputLabel,
   Grid,
+  MenuItem,
+  Paper,
+  Select,
   Stack,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
   TextField,
 } from "@mui/material";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import ".././pages.css";
+import "../teachers/Teacher.css";
 import { useNavigate } from "react-router-dom";
+import { width } from "@mui/system";
 
 export function CreateTeacher() {
   const [fName, setFName] = useState("");
   const [lName, setLName] = useState("");
   const [nickName, setNickName] = useState("");
-  const [active, setActive] = useState("");
+
   const [phone_number, setPhone_number] = useState("");
   const [direct_email, setDirect_email] = useState("");
   const [teams_name, setTeams_name] = useState("");
   const [teams_email, setTeams_email] = useState("");
-  const [workHoursPerWeek, setWorkHoursPerWeek] = useState("");
+
+  const [workHours, setWorkHours] = useState("");
+  const [active, setActive] = useState("");
+
+  const [subjects, setSubjects] = useState("");
+
   let navigate = useNavigate();
 
   const clear = () => {
     setFName("");
     setLName("");
     setNickName("");
-    setActive("");
+
     setPhone_number("");
     setDirect_email("");
     setTeams_email("");
     setTeams_name("");
-    setWorkHoursPerWeek("");
+
+    setWorkHours("");
+    setActive("");
+    setSubjects("");
   };
 
   const isActive = [
-    {value: "true", label: "aktyvus"},
-    {value: "true", label: "neaktyvus"}
+    { value: "true", label: "Aktyvus" },
+    { value: "false", label: "Neaktyvus" },
   ];
 
   const applyResult = (result) => {
@@ -49,7 +70,7 @@ export function CreateTeacher() {
     }
   };
 
-  const createTeacher = () => {
+  const createTeacher = async () => {
     fetch("/api/v1/teachers", {
       method: "POST",
       headers: {
@@ -57,18 +78,27 @@ export function CreateTeacher() {
       },
       body: JSON.stringify({
         fName,
-        lname,
+        lName,
         nickName,
       }),
     }).then(applyResult);
   };
-
+  const row1 = 3.5;
+  const row2 = 3.5;
+  const row3 = 3.5;
   return (
-    <Container>
-      <h3 className="create-header">Pridėti naują dėstytoją</h3>
+    
+    <Container style={{ maxWidth: "75rem" }}>
       <form>
-        <Grid container rowSpacing={2}>
-          <Grid item sm={5} id="grid-selector">
+        <h3 className="create-header">Pridėti naują dėstytoją</h3>
+        <Grid
+          container
+          direction="row"
+          justifyContent="space-between"
+          alignItems="center"
+          rowSpacing={3}
+        >
+          <Grid item sm={row1}>
             <TextField
               fullWidth
               required
@@ -80,7 +110,7 @@ export function CreateTeacher() {
             ></TextField>
           </Grid>
 
-          <Grid item sm={5}>
+          <Grid item sm={row1}>
             <TextField
               fullWidth
               required
@@ -92,37 +122,19 @@ export function CreateTeacher() {
             ></TextField>
           </Grid>
 
-          <Grid item sm={5} id="grid-selector">
+          <Grid item sm={row1}>
             <TextField
               fullWidth
-              required
               variant="outlined"
-              label="Nickas"
+              label="Žyma"
               id="nickName"
               value={nickName}
               onChange={(e) => setNickName(e.target.value)}
             ></TextField>
           </Grid>
 
-          <Grid item sm={5}>
-          <Select
-              fullWidth
-              multiline
-              variant="outlined"
-              label="Būsena"
-              id="active"
-              value={active}
-              onChange={(e) => setActive(e.target.value)}
-            >
-              {isActive.map((isActive) => (
-                <MenuItem key={isActive.value} value={isActive.value}>
-                  {isActive.label}
-                </MenuItem>
-              ))}
-            </Select>
-          </Grid>
-
-          <Grid item sm={5} id="grid-selector">
+          <Grid item sm={row2}>
+         
             <TextField
               fullWidth
               required
@@ -134,7 +146,7 @@ export function CreateTeacher() {
             ></TextField>
           </Grid>
 
-          <Grid item sm={5}>
+          <Grid item sm={row2}>
             <TextField
               fullWidth
               required
@@ -146,7 +158,7 @@ export function CreateTeacher() {
             ></TextField>
           </Grid>
 
-          <Grid item sm={5} id="grid-selector">
+          <Grid item sm={row2}>
             <TextField
               fullWidth
               required
@@ -158,7 +170,7 @@ export function CreateTeacher() {
             ></TextField>
           </Grid>
 
-          <Grid item sm={5}>
+          <Grid item sm={row2}>
             <TextField
               fullWidth
               required
@@ -170,19 +182,19 @@ export function CreateTeacher() {
             ></TextField>
           </Grid>
 
-          <Grid item sm={5} id="grid-selector">
+          <Grid item sm={row3}>
             <TextField
               fullWidth
               required
               variant="outlined"
               label="Valandos per savaitę"
-              id="workHoursPerWeek"
-              value={workHoursPerWeek}
-              onChange={(e) => setWorkHoursPerWeek(e.target.value)}
+              id="workHours"
+              value={workHours}
+              onChange={(e) => setWorkHours(e.target.value)}
             ></TextField>
           </Grid>
 
-          <Grid item sm={5}>
+          <Grid item sm={row3}>
             <TextField
               fullWidth
               required
@@ -193,7 +205,57 @@ export function CreateTeacher() {
               onChange={(e) => setTeams_email(e.target.value)}
             ></TextField>
           </Grid>
+          <Grid item sm={row3}>
+            <FormControl fullWidth>
+              <InputLabel id="demo-simple-select-label">Būsena</InputLabel>
+              <Select
+                label="isActive"
+                id="active"
+                fullWidth
+                required
+                multiline
+                value={active}
+                variant="outlined"
+                displayEmpty
+                inputProps={{ "aria-label": "Without label" }}
+                onChange={(e) => setActive(e.target.value)}
+              >
+                {isActive.map((isActive) => (
+                  <MenuItem key={isActive.value} value={isActive.value}>
+                    {isActive.label}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Grid>
 
+          
+          <Grid item sm={12}>
+          <TableContainer component={Paper}>
+            <Table aria-label="custom pagination table">
+           
+              <TableHead>
+                <TableRow>
+                  <TableCell>Dėstomi dalykai</TableCell>
+                  <TableCell></TableCell>
+                  <TableCell></TableCell>
+                </TableRow>
+              </TableHead>
+              
+              <TableBody>
+                <TableRow>
+                  <TableCell component="th" scope="row">
+                    sssss
+                  </TableCell>
+                  <TableCell>ffffff</TableCell>
+                  <TableCell> <Button variant="contained" onClick={createTeacher}>
+                Išmesti
+              </Button></TableCell>
+                </TableRow>
+              </TableBody>
+            </Table>
+          </TableContainer>
+</Grid>
           <Grid item sm={12}>
             <Stack direction="row" spacing={2}>
               <Button variant="contained" onClick={createTeacher}>

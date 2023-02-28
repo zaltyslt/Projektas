@@ -114,16 +114,16 @@ export function TeacherList() {
     <div>
       <Container maxWidth="lg">
         <Grid container rowSpacing={3}>
-          <Grid item lg={10}>
+          <Grid item sm={10}>
             <h3>Mokytojų sąrašas</h3>
           </Grid>
-          <Grid item lg={2}>
+          <Grid item sm={2}>
             <Link to="/teachers/create">
               <Button variant="contained">Pridėti naują</Button>
             </Link>
           </Grid>
 
-          <Grid item lg={12}>
+          <Grid item sm={12}>
             <TextField
               fullWidth
               variant="outlined"
@@ -162,14 +162,6 @@ export function TeacherList() {
                   </TableCell>
 
                   <TableCell>{teacher.nickName && teacher.nickName}</TableCell>
-
-                  {/* 
-                "subjectsDtoList": 
-                 [
-                  {"subjectId": 2},
-                  {"subjectId": 1}
-                 ]
-                 */}
 
                   <TableCell>
                     {/* ////////////////////////////////////// */}

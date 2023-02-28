@@ -32,6 +32,7 @@ public class TeacherMapper {
                 ? ContactMapper.contactToDto2(teacher.getContacts()) : new ContactDto2());
 
         dto.setDateCreated(teacher.getCreatedDateTime());
+        dto.setDateMotified(teacher.getModifiedDateAndTime());
 
         return dto;
 

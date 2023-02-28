@@ -11,8 +11,6 @@ import { AddShift } from "./pages/shifts/AddShift";
 import { ViewShift } from "./pages/shifts/ViewShift";
 import { ModifyShift } from "./pages/shifts/ModifyShift";
 import { SubjectList } from "./pages/subjects/SubjectList";
-import { TeacherList } from "./pages/teachers/TeacherList";
-import { ViewTeacher } from "./pages/teachers/ViewTeacher";
 import { GroupList } from "./pages/groups/GroupList";
 import { ProgramList } from "./pages/programs/ProgramList";
 import { CreateRoom } from "./pages/rooms/CreateRoom";
@@ -24,9 +22,10 @@ import { UpdateProgram } from "./pages/programs/UpdateProgram";
 import { CreateSubject } from "./pages/subjects/CreateSubject";
 import { ViewSubject } from "./pages/subjects/ViewSubject";
 import { EditSubject } from "./pages/subjects/EditSubject";
+import { TeacherList } from "./pages/teachers/TeacherList";
 import { ViewTeacher } from "./pages/teachers/ViewTeacher";
 import { CreateTeacher } from "./pages/teachers/CreateTeacher";
-import { EditTeacher } from "./pages/teachers/EditTeacher";
+// import { EditTeacher } from "./pages/teachers/EditTeacher";
 
 function App() {
   return (
@@ -39,13 +38,11 @@ function App() {
           <Route path="/modules" element={<ModuleList />}></Route>
           <Route path="/subjects" element={<SubjectList />}></Route>
           <Route path="/shifts" element={<ShiftList />}></Route>
+        
           {/* CLASSROOMS PATHAI */}
           <Route path="/rooms" element={<RoomList />}></Route>
           <Route path="/create-classroom" element={<CreateRoom />}></Route>
-          <Route
-            path="/classrooms/view-classroom/:id"
-            element={<ViewRoom />}
-          ></Route>
+          <Route path="/classrooms/view-classroom/:id" element={<ViewRoom />}></Route>
           <Route path="/update-classroom/:id" element={<UpdateClassroom />} />
           {/* SHIFTS PATHAI */}
           <Route exact path="/add-shift" element={<AddShift />}></Route>
@@ -68,9 +65,10 @@ function App() {
           <Route path="/subjects/view/:id" element={<ViewSubject />}></Route>
           <Route path="/subjects/edit/:id" element={<EditSubject />}></Route>
           {/* TEACHERS PATHAI */}
+          <Route path="/teachers" element={<TeacherList />}></Route>
           <Route path="/teachers/view/:id" element={<ViewTeacher />}></Route>
           <Route path="/teachers/create" element={<CreateTeacher />}></Route>
-          <Route path="/teachers/edit/:id" element={<EditTeacher />}></Route>
+          {/* <Route path="/teachers/edit/:id" element={<EditTeacher />}></Route> */}
         </Routes>
       </HashRouter>
     </div>

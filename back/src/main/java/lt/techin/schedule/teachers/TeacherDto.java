@@ -30,6 +30,8 @@ public class TeacherDto implements Serializable {
 
     @JsonFormat(pattern = "yyyy.MM.dd HH:mm")
     private LocalDateTime dateCreated;
+    @JsonFormat(pattern = "yyyy.MM.dd HH:mm")
+    private LocalDateTime dateMotified;
 
     private String message;
 
@@ -58,6 +60,14 @@ public class TeacherDto implements Serializable {
 
     public String getlName() {
         return lName;
+    }
+
+    public LocalDateTime getDateMotified() {
+        return dateMotified;
+    }
+
+    public void setDateMotified(LocalDateTime dateMotified) {
+        this.dateMotified = dateMotified;
     }
 
     public void setlName(String lName) {
