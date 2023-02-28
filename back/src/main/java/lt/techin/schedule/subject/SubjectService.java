@@ -95,30 +95,30 @@ public class SubjectService {
     }
 
     //Not used
-    public boolean deleteById(Long id) {
-        try {
-            subjectRepository.deleteById(id);
-            return true;
-        } catch (EmptyResultDataAccessException exception) {
-            return false;
-        }
-    }
+//    public boolean deleteById(Long id) {
+//        try {
+//            subjectRepository.deleteById(id);
+//            return true;
+//        } catch (EmptyResultDataAccessException exception) {
+//            return false;
+//        }
+//    }
 
     //Not used (pagination done only from frontend)
-    private Pageable pageable(int page, int pageSize, String sortField, Sort.Direction sortDirection) {
-        return PageRequest.of(page, pageSize, sortDirection, sortField);
-    }
+//    private Pageable pageable(int page, int pageSize, String sortField, Sort.Direction sortDirection) {
+//        return PageRequest.of(page, pageSize, sortDirection, sortField);
+//    }
 
     //Not used
-    public Page<Subject> findAllPaged(int page, int pageSize, boolean isDeleted) {
-
-        Pageable pageable = PageRequest.of(page, pageSize);
-
-        Session session = entityManager.unwrap(Session.class);
-        Filter filter = session.enableFilter("deletedSubjectFilter");
-        filter.setParameter("isDeleted", isDeleted);
-        Page<Subject> subjects =  subjectRepository.findAll(pageable);
-        session.disableFilter("deletedSubjectFilter");
-        return subjects;
-    }
+//    public Page<Subject> findAllPaged(int page, int pageSize, boolean isDeleted) {
+//
+//        Pageable pageable = PageRequest.of(page, pageSize);
+//
+//        Session session = entityManager.unwrap(Session.class);
+//        Filter filter = session.enableFilter("deletedSubjectFilter");
+//        filter.setParameter("isDeleted", isDeleted);
+//        Page<Subject> subjects =  subjectRepository.findAll(pageable);
+//        session.disableFilter("deletedSubjectFilter");
+//        return subjects;
+//    }
 }
