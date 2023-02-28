@@ -3,6 +3,7 @@ package lt.techin.schedule.shift;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lt.techin.schedule.config.DataFieldsLengthConstraints;
 import lt.techin.schedule.teachers.Teacher;
+import lt.techin.schedule.teachers.TeacherDto;
 import lt.techin.schedule.validators.TextValid;
 
 import java.time.LocalDateTime;
@@ -28,7 +29,7 @@ public class ShiftDto {
     private Integer startIntEnum;
     private Integer endIntEnum;
     private Boolean isActive;
-    private Set<Teacher> teachers;
+    private Set<TeacherDto> teachers = null;
 
     public ShiftDto() {
     }
@@ -105,11 +106,11 @@ public class ShiftDto {
         isActive = active;
     }
 
-    public Set<Teacher> getTeachers() {
+    public Set<TeacherDto> getTeachers() {
         return teachers;
 }
 
-    public void setTeachers(Set<Teacher> teachers) {
+    public void setTeachers(Set<TeacherDto> teachers) {
         this.teachers = teachers;
     }
 

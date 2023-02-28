@@ -2,6 +2,7 @@ package lt.techin.schedule.shift;
 
 import jakarta.validation.Valid;
 import lt.techin.schedule.validators.ValidationDto;
+import org.springframework.http.MediaType;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
@@ -35,9 +36,10 @@ public class ShiftController {
         return shiftService.getShiftByID(shiftID);
     }
 
-    @PostMapping("/add-shift")
-    public @ResponseBody ValidationDto addShift (@RequestBody @Valid ShiftDto shiftToAddDto, BindingResult bindingResult) {
+    @PostMapping(value = "/add-shift", consumes = {MediaType.APPLICATION_JSON_VALUE})
+    public @ResponseBody ValidationDto addShift (@RequestBody ShiftDto shiftToAddDto, BindingResult bindingResult) {
         ValidationDto validationDto = new ValidationDto();
+        System.out.println("Asda");
         if (bindingResult.hasErrors()) {
             List<ObjectError> errors = bindingResult.getAllErrors();
             for (int x = 0; x < bindingResult.getAllErrors().size(); x++) {
@@ -71,8 +73,9 @@ public class ShiftController {
         shiftService.changeActiveShiftStatusByID(shiftID, false);
     }
 
-    @PutMapping("/modify-shift/{shiftID}")
+    @PutMapping(value = "/modify-shift/{shiftID}", consumes = {MediaType.APPLICATION_JSON_VALUE})
     public @ResponseBody ValidationDto modifyShift(@PathVariable Long shiftID, @RequestBody @Valid ShiftDto shiftToChangeDto, BindingResult bindingResult) {
+        ShiftDto shiftDto = shiftToChangeDto;
         ValidationDto validationDto = new ValidationDto();
         if (bindingResult.hasErrors()) {
             List<ObjectError> errors = bindingResult.getAllErrors();

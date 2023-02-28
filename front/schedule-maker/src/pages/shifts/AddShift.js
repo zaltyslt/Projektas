@@ -35,7 +35,7 @@ export function AddShift() {
   const maxLength = 200;
 
   const setNameAndCheck = (name) => {
-    setName(name)
+    setName(name);
     (name.length === 0) ? setIsNameEmpty(true) :  setIsNameEmpty(false);
   
     const isValid = name.split('').some(char => badSymbols.includes(char));
@@ -63,7 +63,6 @@ export function AddShift() {
       }
   })
 
-
   const createShiftPostRequest = async () =>  {
       await fetch(
           'http://localhost:8080/api/v1/shift/add-shift', {
@@ -75,15 +74,15 @@ export function AddShift() {
                   name,
                   startIntEnum,
                   endIntEnum,
-                  isActive,
+                  isActive
               })
           }
       ) 
       .then(response => response.json())
       .then(data => {
           handleAfterPost(data);
-    });
-  }
+    })
+  };
 
 
   const handleAfterPost = ((data) => {
@@ -206,23 +205,7 @@ export function AddShift() {
           </Stack>
         </Grid>
         <Grid>
-          {isPostUsed ? (
-            successfulPost ? (
-              <Alert severity="success"> Pamaina sėkmingai pridėta.</Alert>
-            ) : (
-              <Grid>
-                <Alert severity="warning">Nepavyko sukurti pamainos.</Alert>
-                {Object.keys(shiftCreateMessageError).map((key) => (
-                  <Alert severity="warning" key={key} id="error-text">
-                    {" "}
-                    {shiftCreateMessageError[key]}{" "}
-                  </Alert>
-                ))}
-              </Grid>
-            )
-          ) : (
-            <div></div>
-          )}
+          
         </Grid>
       </Container>
     </div>
