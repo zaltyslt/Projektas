@@ -12,6 +12,7 @@ import { ViewShift } from "./pages/shifts/ViewShift";
 import { ModifyShift } from "./pages/shifts/ModifyShift";
 import { SubjectList } from "./pages/subjects/SubjectList";
 import { TeacherList } from "./pages/teachers/TeacherList";
+import { ViewTeacher } from "./pages/teachers/ViewTeacher";
 import { GroupList } from "./pages/groups/GroupList";
 import { ProgramList } from "./pages/programs/ProgramList";
 import { CreateRoom } from "./pages/rooms/CreateRoom";
@@ -33,7 +34,6 @@ function App() {
         <Menu />
         <Routes>
           <Route path="/"></Route>
-          <Route path="/teachers" element={<TeacherList />}></Route>
           <Route path="/groups" element={<GroupList />}></Route>
           <Route path="/modules" element={<ModuleList />}></Route>
           <Route path="/subjects" element={<SubjectList />}></Route>
@@ -60,6 +60,10 @@ function App() {
           <Route path="/subjects/create" element={<CreateSubject />} />
           <Route path="/subjects/view/:id" element={<ViewSubject />}></Route>
           <Route path="/subjects/edit/:id" element={<EditSubject />}></Route>
+
+          {/* TEACHERS PATHAI */}
+          <Route path="/teachers" element={<TeacherList />}></Route>
+          <Route path="/teachers/view/:id" element={<ViewTeacher />}></Route>
         </Routes>
       </HashRouter>
     </div>

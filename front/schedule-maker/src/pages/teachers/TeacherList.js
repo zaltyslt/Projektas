@@ -50,7 +50,8 @@ export function TeacherList() {
 
         return data;
       })
-      .then((data) => setFilteredTeachers(data));
+      .then((data) => {setFilteredTeachers(data);
+     });
   };
 
   const fetchDeletedTeachers = async () => {
@@ -83,11 +84,14 @@ export function TeacherList() {
       setFilteredTeachers(teachers);
     } else {
       const filtered = teachers.filter((teacher) => {
-        const teacherName = teacher.name.toLowerCase();
-        const teacherDescription = teacher.description.toLowerCase();
+        const teacherFName = teacher.fName.toLowerCase();
+        // const teacherSurname = teacher
+        const teacherLName = teacher.lName.toLowerCase();
+        const teacherNick = teacher.nickName.toLowerCase();
         return (
-          teacherName.includes(event.toLowerCase()) ||
-          teacherDescription.includes(event.toLowerCase())
+          teacherFName.includes(event.toLowerCase()) ||
+          teacherLName.includes(event.toLowerCase()) ||
+          teacherNick.includes(event.toLowerCase())
         );
       });
       setFilteredTeachers(filtered);
@@ -169,7 +173,7 @@ export function TeacherList() {
 
                   <TableCell>
                     {/* ////////////////////////////////////// */}
-                    {teacher.subjectsDtoList.length > 0
+                    {teacher.subjectsDtoList && teacher.subjectsDtoList.length > 0
                       ? (teacher.subjectsDtoList.map((subjectItem, index) => {
                           const subject = subjects.find(
                             (s) => s.id === subjectItem.subjectId
@@ -187,15 +191,7 @@ export function TeacherList() {
                       : "** Nepriskirta"}
                   </TableCell>
 
-                  {/* <TableCell>
-<p>Kontaktai</p>
-<p>{teacher.contacts && teacher.contacts.phoneNumber && teacher.contacts.phoneNumber }</p>
-<p>{teacher.contacts != null && teacher.contacts.directEmail && teacher.contacts.directEmail }</p>
-<p>{teacher.contacts != null && teacher.contacts.teamsEmail && teacher.contacts.teamsEmail }</p>
-<p>{teacher.contacts != null && teacher.contacts.teamsName && teacher.contacts.teamsName }</p>
-
-
-</TableCell> */}
+                  
 
                 </TableRow>
               ))}

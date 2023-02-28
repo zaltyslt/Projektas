@@ -51,7 +51,7 @@ public class TeacherControllerView {
 
     }
 
-    @GetMapping(value = "/view") //view by teacherID via path
+    @GetMapping(value = "/view") //view by teacherID via params
     public ResponseEntity<TeacherDto> getTeacherById(@RequestParam(value = "tid", required = false) Long teacherId) {
         var result =  teacherFinder.getTeacherById(teacherId);
 
