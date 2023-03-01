@@ -27,16 +27,16 @@ public class GroupService {
 
     private final Comparator<Group> compareGroupByName = Comparator.comparing(o -> o.getName().toLowerCase());
 
-    public List<Shift> getActiveShifts() {
+    public List<Group> getActiveGroups() {
         return groupRepository.findAll().stream().filter(Group::getIsActive).sorted(compareGroupByName).collect(Collectors.toList());
     }
 
-    public List<Shift> getInactiveShifts() {
+    public List<Group> getInactiveGroups() {
         return groupRepository.findAll().stream().filter(s -> !s.getIsActive()).sorted(compareGroupByName).collect(Collectors.toList());
     }
 
-    public Shift getShiftByID(Long shiftID) {
-        return groupRepository.findAll().stream().filter(s -> Objects.equals(s.getId(), shiftID)).findAny().orElse(null);
+    public Group getGroupByID(Long groupID) {
+        return groupRepository.findById(groupID).orElse(null);
     }
 
     private Optional<Group> findGroupByName(String name) {

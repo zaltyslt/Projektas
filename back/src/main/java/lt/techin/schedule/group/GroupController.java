@@ -24,12 +24,12 @@ public class GroupController {
     }
 
     @GetMapping("/get-inactive")
-    public List<Shift> getInactiveGroups() {
+    public List<Group> getInactiveGroups() {
         return groupService.getInactiveGroups();
     }
 
     @GetMapping("/view-group/{groupID}")
-    public Shift getShift(@PathVariable Long groupID) {
+    public Group getGroup(@PathVariable Long groupID) {
         return groupService.getGroupByID(groupID);
     }
 }

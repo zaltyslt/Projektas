@@ -26,6 +26,7 @@ public class GroupMapper {
                 groupDto.getName(),
                 groupDto.getYear(),
                 groupDto.getStudentAmount(),
+                groupDto.getIsActive(),
                 ProgramMapper.toProgram(groupDto.getProgram()),
                 ShiftMapper.dtoToShift(groupDto.getShift()),
                 groupDto.getCreatedDate(),
