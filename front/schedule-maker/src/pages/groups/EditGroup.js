@@ -1,7 +1,7 @@
 export function EditGroup() {
     return (
         <div>
-            Edit group
+            Edit
         </div>
     );
 }

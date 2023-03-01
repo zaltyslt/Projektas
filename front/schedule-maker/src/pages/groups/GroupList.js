@@ -145,7 +145,7 @@ export function GroupList() {
                   </TableCell>
                   <TableCell>{group.program}</TableCell>
                   <TableCell align="center">{group.year}</TableCell>
-                  <TableCell align="center">{group.count}</TableCell>
+                  <TableCell align="center">{group.studentAmount}</TableCell>
                 </TableRow>
               ))}
 
@@ -216,7 +216,7 @@ export function GroupList() {
                     <TableCell component="th" scope="row">{group.name}</TableCell>
                     <TableCell>{group.program}</TableCell>
                     <TableCell align="center">{group.year}</TableCell>
-                    <TableCell align="center">{group.count}</TableCell>
+                    <TableCell align="center">{group.studentAmount}</TableCell>
                     <TableCell align="center" className="activity">
                       <Button
                         variant="contained"
