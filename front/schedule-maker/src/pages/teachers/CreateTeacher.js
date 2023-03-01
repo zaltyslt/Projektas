@@ -27,9 +27,12 @@ import { width } from "@mui/system";
 export function CreateTeacher() {
   const [subjects, setSubjects] = useState([]);
   const [showSubjSelect, setShowSubjSelect] = useState(false);
-  
+
   const [subject, setSubject] = useState("");
   const [chosenSubjects, setChosenSubjects] = useState([]);
+
+  const [shifts, setShifts] = useState([]);
+  const [selectedShift, setSelectedShift] = useState("");
 
   const [fName, setFName] = useState("");
   const [lName, setLName] = useState("");
@@ -49,6 +52,7 @@ export function CreateTeacher() {
     setFName("");
     setLName("");
     setNickName("");
+    setSelectedShift("");
 
     setPhone_number("");
     setDirect_email("");
@@ -62,6 +66,12 @@ export function CreateTeacher() {
 
   useEffect(() => {
     fetchSubjects();
+  }, []);
+
+  useEffect(() => {
+    fetch("api/v1/shift/get-active")
+      .then((response) => response.json())
+      .then(setShifts);
   }, []);
 
   const fetchSubjects = () => {
@@ -88,33 +98,31 @@ export function CreateTeacher() {
       setError("Nepavyko sukurti!");
     }
   };
-  const handleShowSubjects  = () => {
-    setShowSubjSelect (!showSubjSelect);
+  const handleShowSubjects = () => {
+    setShowSubjSelect(!showSubjSelect);
   };
 
-  const handleChosenSubjects  = (subjectNew) => {
+  const handleChosenSubjects = (subjectNew) => {
     // console.log(event.name +" " +event.id);
-    const sub =  chosenSubjects.push(subjectNew);
+    const sub = chosenSubjects.push(subjectNew);
     console.log(chosenSubjects);
 
     setShowSubjSelect(false);
 
-// Find the index of the object with id = 3
-   const index = subjects.findIndex(subjectNew => subjectNew.id);
+    // Find the index of the object with id = 3
+    const index = subjects.findIndex((subjectNew) => subjectNew.id);
 
-// Remove the object at the specified index
-subjects.splice(index, 1);
+    // Remove the object at the specified index
+    subjects.splice(index, 1);
 
-
-  // const subjects = [...chosenSubjects, event];
-  //   setChosenSubjects (subject);
+    // const subjects = [...chosenSubjects, event];
+    //   setChosenSubjects (subject);
   };
   // const handleRoomInput = (event) => {
   //   const {
   //     target: { value },  } = event;
   //   setClassRooms(typeof value === "string" ? value.split(",") : value);
   // };
-
 
   const createTeacher = async () => {
     fetch("/api/v1/teachers", {
@@ -126,6 +134,7 @@ subjects.splice(index, 1);
         fName,
         lName,
         nickName,
+        selectedShift,
       }),
     }).then(applyResult);
   };
@@ -239,15 +248,24 @@ subjects.splice(index, 1);
           </Grid>
 
           <Grid item sm={row3}>
-            <TextField
-              fullWidth
-              required
-              variant="outlined"
-              label="Galima pamaina"
-              id=""
-              value={teams_email}
-              onChange={(e) => setTeams_email(e.target.value)}
-            ></TextField>
+            <FormControl required fullWidth>
+              <InputLabel id="shift-label">Galima pamaina</InputLabel>
+              <Select
+                label="Galima pamaina"
+                labelId="shift-label"
+                id="shift"
+                value={selectedShift}
+                onChange={(e) => {
+                  setSelectedShift(e.target.value);
+                }}
+              >
+                {shifts.map((shift) => (
+                  <MenuItem key={shift.id} value={shift}>
+                    {shift.name}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
           </Grid>
           <Grid item sm={row3}>
             <FormControl fullWidth>
@@ -273,25 +291,26 @@ subjects.splice(index, 1);
             </FormControl>
           </Grid>
 
-         <Grid item sm={12} >
-         { showSubjSelect && (<FormControl fullWidth>
-              <InputLabel id="subjects-label">Dalykai</InputLabel>
-              <Select
-                label="Dalyko pavadinimas"
-                labelId="subject-label"
-                id="subject"
-                value={subject}
-                onChange={(e) => handleChosenSubjects(e.target.value)}
-              >
-                {subjects.map((subject) => (
-                  <MenuItem key={subject.id} value={subject}>
-                    {subject.name}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>)
-          }
-           
+          <Grid item sm={12}>
+            {showSubjSelect && (
+              <FormControl fullWidth>
+                <InputLabel id="subjects-label">Dalykai</InputLabel>
+                <Select
+                  label="Dalyko pavadinimas"
+                  labelId="subject-label"
+                  id="subject"
+                  value={subject}
+                  onChange={(e) => handleChosenSubjects(e.target.value)}
+                >
+                  {subjects.map((subject) => (
+                    <MenuItem key={subject.id} value={subject}>
+                      {subject.name}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            )}
+
             <TableContainer component={Paper}>
               <Table aria-label="custom pagination table">
                 <TableHead>
@@ -299,7 +318,7 @@ subjects.splice(index, 1);
                     <TableCell>Dėstomi dalykai</TableCell>
                     <TableCell></TableCell>
                     <TableCell>
-                    <Button variant="contained" onClick={handleShowSubjects}>
+                      <Button variant="contained" onClick={handleShowSubjects}>
                         Pridėti
                       </Button>
                     </TableCell>
@@ -321,44 +340,39 @@ subjects.splice(index, 1);
                     </TableCell>
                   </TableRow> */}
 
-                 { 
-                  
-                  (chosenSubjects).map((subject) => (
-                  <TableRow key={subject.id}>
-                    <TableCell component="th" scope="row">
-                      {subject.name}
-                    </TableCell>
-                    <TableCell>
-                      {subject.module ? (
-                        subject.module.deleted ? (
-                          <p className="Deleted">
-                            {subject.module.name} - modulis buvo ištrintas
-                          </p>
+                  {chosenSubjects.map((subject) => (
+                    <TableRow key={subject.id}>
+                      <TableCell component="th" scope="row">
+                        {subject.name}
+                      </TableCell>
+                      <TableCell>
+                        {subject.module ? (
+                          subject.module.deleted ? (
+                            <p className="Deleted">
+                              {subject.module.name} - modulis buvo ištrintas
+                            </p>
+                          ) : (
+                            subject.module.name
+                          )
                         ) : (
-                          subject.module.name
-                        )
-                      ) : (
-                        <p>Nenurodytas</p>
-                      )}
-                    </TableCell>
-                    <TableCell align="center" className="activity">
-                      <Button
-                        variant="contained"
-                        onClick={() => handleRestore(subject.id)}
-                      >
-                        Atstatyti
-                      </Button>
-                    </TableCell>
-                  </TableRow>
-                ))}
-                
-                 }
+                          <p>Nenurodytas</p>
+                        )}
+                      </TableCell>
+                      <TableCell align="center" className="activity">
+                        <Button
+                          variant="contained"
+                          onClick={() => handleRestore(subject.id)}
+                        >
+                          Atstatyti
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  ))}
                 </TableBody>
               </Table>
             </TableContainer>
           </Grid>
-          
-          
+
           <Grid item sm={12}>
             <Stack direction="row" spacing={2}>
               <Button variant="contained" onClick={createTeacher}>

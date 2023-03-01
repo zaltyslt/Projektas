@@ -47,13 +47,16 @@ public class Teacher implements Serializable {
     @JsonManagedReference
     private Set<Subject> subjects;
 
-    @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
-    @JoinTable(
-            name = "teacher_shifts",
-            joinColumns = @JoinColumn(name = "teacher_id", referencedColumnName = "teacher_id"),
-            inverseJoinColumns = @JoinColumn(name = "shift_id", referencedColumnName = "id"))
-    @JsonManagedReference
+//    @JsonIgnore
+//    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+//    @JoinTable(
+//            name = "teacher_shifts",
+//            joinColumns = @JoinColumn(name = "teacher_id", referencedColumnName = "teacher_id"),
+//            inverseJoinColumns = @JoinColumn(name = "shift_id", referencedColumnName = "id"))
+//    @JsonManagedReference
+//    private Shift shift;
+    @ManyToOne
+    @JoinColumn(name = "shift_id")
     private Shift shift;
 
     @NotBlank

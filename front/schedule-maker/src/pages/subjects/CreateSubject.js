@@ -160,7 +160,7 @@ export function CreateSubject() {
             ></TextField>
           </Grid>
 
-          <Grid item sm={10}>
+          <Grid item sm={10}> 
             <FormControl fullWidth required error={moduleError}>
               <InputLabel id="module-label">{moduleError ? "Privaloma pasirinkti modulį. " : "Modulio pavadinimas"}</InputLabel>
               <Select
