@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
+public
 class Program {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
