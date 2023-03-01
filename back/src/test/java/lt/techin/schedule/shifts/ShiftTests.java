@@ -45,7 +45,6 @@ public class ShiftTests {
         Assertions.assertTrue(shift.getIsActive(), "Is active boolean assigned in the constructor is wrong.");
         Assertions.assertEquals(2, shift.getStartIntEnum(), "Start int enum assigned in the constructor is wrong.");
         Assertions.assertEquals(5, shift.getEndIntEnum(), "End int enum assigned in the constructor is wrong.");
-        Assertions.assertEquals("10:00-15:00", shift.getShiftTime(), "End int enum assigned in the constructor is wrong.");
 
         Assertions.assertNull(shift.getCreatedDate(), "Created date should be null.");
         Assertions.assertNull(shift.getModifiedDate(), "Modified date should be null.");

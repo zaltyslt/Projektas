@@ -106,11 +106,6 @@ public class Shift {
         this.shiftEndingTime = shiftEndingTime;
     }
 
-    @JsonIgnore
-    public String getShiftTime() {
-        return shiftStartingTime + "-" + shiftEndingTime;
-    }
-
     public boolean getIsActive() {
         return isActive;
     }
