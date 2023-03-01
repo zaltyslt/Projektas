@@ -111,6 +111,11 @@ public class GroupDto {
         this.program = program;
     }
 
+    public void setCreatedDate(LocalDateTime createdDate) {
+        this.createdDate = createdDate;
+    }
+
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

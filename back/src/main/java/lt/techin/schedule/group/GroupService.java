@@ -53,7 +53,32 @@ public class GroupService {
         }
     }
 
+    public void changeActiveGroupStatusByID(Long shiftID, boolean activeStatus) {
+        Optional<Group> groupToActivate = groupRepository.findById(shiftID);
+        if (groupToActivate.isPresent()) {
+            groupToActivate.get().setIsActive(activeStatus);
+            groupRepository.save(groupToActivate.get());
+        }
+    }
 
-
+    //Explained in shifts
+    public String modifyExistingGroup(Long groupID, GroupDto groupDto) {
+        if (groupRepository.findById(groupID).isPresent()) {
+            Optional<Group> foundGroup = findGroupByName(groupDto.getName());
+            if(foundGroup.isPresent() && !foundGroup.get().getId().equals(groupID)) {
+                return "Grupės pavadinimas turi būti unikalus.";
+            }
+            if (groupDto.getId() == null) {
+                groupDto.setId(groupID);
+            }
+            if (groupDto.getCreatedDate() == null) {
+                groupDto.setCreatedDate(groupRepository.findById(groupID).get().getCreatedDate());
+            }
+            Group groupToSave = GroupMapper.dtoToGroup(groupDto);
+            groupRepository.save(groupToSave);
+            return "";
+        }
+        return "Grupės pakeisti nepavyko.";
+    }
 }
 
