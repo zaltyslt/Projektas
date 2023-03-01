@@ -16,7 +16,7 @@ public class ShiftMapper {
         return shiftDto;
     }
 
-    public static Shift shiftFromDto(ShiftDto shiftDto){
+    public static Shift dtoToShift(ShiftDto shiftDto){
         Shift shift = new Shift();
         shift.setId(shiftDto.getId());
         shift.setName(shiftDto.getName());

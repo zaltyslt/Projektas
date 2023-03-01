@@ -39,7 +39,7 @@ public class ShiftService {
             return "Pamainos pavadinimas turi būti unikalus.";
         }
         else {
-            Shift shiftToSave = ShiftMapper.shiftFromDto(setShiftDtoStringFields(shiftDto));
+            Shift shiftToSave = ShiftMapper.dtoToShift(setShiftDtoStringFields(shiftDto));
             shiftDatabase.save(shiftToSave);
             return "";
         }
@@ -78,7 +78,7 @@ public class ShiftService {
             if (shiftDto.getCreatedDate() == null) {
                 shiftDto.setCreatedDate(shiftDatabase.findById(shiftID).get().getCreatedDate());
             }
-            Shift shiftToSave = ShiftMapper.shiftFromDto(setShiftDtoStringFields(shiftDto));
+            Shift shiftToSave = ShiftMapper.dtoToShift(setShiftDtoStringFields(shiftDto));
             shiftDatabase.save(shiftToSave);
             return "";
         }
