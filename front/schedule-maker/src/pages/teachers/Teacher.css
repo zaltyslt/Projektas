@@ -1,0 +1,14 @@
+#grid-input, #grid-selector {
+    /* margin-top: 1rem; */
+    margin-bottom: 1.5rem;
+}
+
+#grid-selector {
+    width: 12rem;
+    margin-right: 3rem;
+}
+
+#grid-input {
+    width: 33.75rem;
+}
+

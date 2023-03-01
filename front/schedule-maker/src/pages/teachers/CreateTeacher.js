@@ -17,7 +17,7 @@ import {
   TableRow,
   TextField,
 } from "@mui/material";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import ".././pages.css";
 import "../teachers/Teacher.css";
@@ -25,6 +25,12 @@ import { useNavigate } from "react-router-dom";
 import { width } from "@mui/system";
 
 export function CreateTeacher() {
+  const [subjects, setSubjects] = useState([]);
+  const [showSubjSelect, setShowSubjSelect] = useState(false);
+  
+  const [subject, setSubject] = useState("");
+  const [chosenSubjects, setChosenSubjects] = useState([]);
+
   const [fName, setFName] = useState("");
   const [lName, setLName] = useState("");
   const [nickName, setNickName] = useState("");
@@ -36,8 +42,6 @@ export function CreateTeacher() {
 
   const [workHours, setWorkHours] = useState("");
   const [active, setActive] = useState("");
-
-  const [subjects, setSubjects] = useState("");
 
   let navigate = useNavigate();
 
@@ -56,6 +60,21 @@ export function CreateTeacher() {
     setSubjects("");
   };
 
+  useEffect(() => {
+    fetchSubjects();
+  }, []);
+
+  const fetchSubjects = () => {
+    fetch("api/v1/subjects")
+      .then((response) => response.json())
+      .then((data) => {
+        setSubjects(data);
+        return data;
+      })
+      // .then((data) => setFilteredSubjects(data))
+      .then((data) => console.log(data));
+  };
+
   const isActive = [
     { value: "true", label: "Aktyvus" },
     { value: "false", label: "Neaktyvus" },
@@ -69,6 +88,33 @@ export function CreateTeacher() {
       setError("Nepavyko sukurti!");
     }
   };
+  const handleShowSubjects  = () => {
+    setShowSubjSelect (!showSubjSelect);
+  };
+
+  const handleChosenSubjects  = (subjectNew) => {
+    // console.log(event.name +" " +event.id);
+    const sub =  chosenSubjects.push(subjectNew);
+    console.log(chosenSubjects);
+
+    setShowSubjSelect(false);
+
+// Find the index of the object with id = 3
+   const index = subjects.findIndex(subjectNew => subjectNew.id);
+
+// Remove the object at the specified index
+subjects.splice(index, 1);
+
+
+  // const subjects = [...chosenSubjects, event];
+  //   setChosenSubjects (subject);
+  };
+  // const handleRoomInput = (event) => {
+  //   const {
+  //     target: { value },  } = event;
+  //   setClassRooms(typeof value === "string" ? value.split(",") : value);
+  // };
+
 
   const createTeacher = async () => {
     fetch("/api/v1/teachers", {
@@ -87,7 +133,6 @@ export function CreateTeacher() {
   const row2 = 3.5;
   const row3 = 3.5;
   return (
-    
     <Container style={{ maxWidth: "75rem" }}>
       <form>
         <h3 className="create-header">Pridėti naują dėstytoją</h3>
@@ -134,7 +179,6 @@ export function CreateTeacher() {
           </Grid>
 
           <Grid item sm={row2}>
-         
             <TextField
               fullWidth
               required
@@ -229,33 +273,92 @@ export function CreateTeacher() {
             </FormControl>
           </Grid>
 
-          
-          <Grid item sm={12}>
-          <TableContainer component={Paper}>
-            <Table aria-label="custom pagination table">
+         <Grid item sm={12} >
+         { showSubjSelect && (<FormControl fullWidth>
+              <InputLabel id="subjects-label">Dalykai</InputLabel>
+              <Select
+                label="Dalyko pavadinimas"
+                labelId="subject-label"
+                id="subject"
+                value={subject}
+                onChange={(e) => handleChosenSubjects(e.target.value)}
+              >
+                {subjects.map((subject) => (
+                  <MenuItem key={subject.id} value={subject}>
+                    {subject.name}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>)
+          }
            
-              <TableHead>
-                <TableRow>
-                  <TableCell>Dėstomi dalykai</TableCell>
-                  <TableCell></TableCell>
-                  <TableCell></TableCell>
-                </TableRow>
-              </TableHead>
-              
-              <TableBody>
-                <TableRow>
-                  <TableCell component="th" scope="row">
-                    sssss
-                  </TableCell>
-                  <TableCell>ffffff</TableCell>
-                  <TableCell> <Button variant="contained" onClick={createTeacher}>
-                Išmesti
-              </Button></TableCell>
-                </TableRow>
-              </TableBody>
-            </Table>
-          </TableContainer>
-</Grid>
+            <TableContainer component={Paper}>
+              <Table aria-label="custom pagination table">
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Dėstomi dalykai</TableCell>
+                    <TableCell></TableCell>
+                    <TableCell>
+                    <Button variant="contained" onClick={handleShowSubjects}>
+                        Pridėti
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                </TableHead>
+
+                <TableBody>
+                  {/* <TableRow>
+                    <TableCell component="th" scope="row">
+                      sssss
+                    </TableCell>
+                    <TableCell>
+                    ffffff
+                    </TableCell>
+                    <TableCell>
+                      <Button variant="contained" onClick={createTeacher}>
+                        Išmesti
+                      </Button>
+                    </TableCell>
+                  </TableRow> */}
+
+                 { 
+                  
+                  (chosenSubjects).map((subject) => (
+                  <TableRow key={subject.id}>
+                    <TableCell component="th" scope="row">
+                      {subject.name}
+                    </TableCell>
+                    <TableCell>
+                      {subject.module ? (
+                        subject.module.deleted ? (
+                          <p className="Deleted">
+                            {subject.module.name} - modulis buvo ištrintas
+                          </p>
+                        ) : (
+                          subject.module.name
+                        )
+                      ) : (
+                        <p>Nenurodytas</p>
+                      )}
+                    </TableCell>
+                    <TableCell align="center" className="activity">
+                      <Button
+                        variant="contained"
+                        onClick={() => handleRestore(subject.id)}
+                      >
+                        Atstatyti
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
+                
+                 }
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </Grid>
+          
+          
           <Grid item sm={12}>
             <Stack direction="row" spacing={2}>
               <Button variant="contained" onClick={createTeacher}>
