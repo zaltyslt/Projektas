@@ -21,6 +21,8 @@ public class GroupDto {
 
     private int studentAmount;
 
+    private boolean isActive;
+
     private ProgramDto program;
     private ShiftDto shift;
 
@@ -33,11 +35,12 @@ public class GroupDto {
 
     public GroupDto() {}
 
-    public GroupDto(Long id, String name, int year, int studentAmount, ProgramDto program, ShiftDto shift, LocalDateTime createdDate, LocalDateTime modifiedDate) {
+    public GroupDto(Long id, String name, int year, int studentAmount, boolean isActive, ProgramDto program, ShiftDto shift, LocalDateTime createdDate, LocalDateTime modifiedDate) {
         this.id = id;
         this.name = name;
         this.year = year;
         this.studentAmount = studentAmount;
+        this.isActive = isActive;
         this.program = program;
         this.shift = shift;
         this.createdDate = createdDate;
@@ -58,6 +61,10 @@ public class GroupDto {
 
     public int getStudentAmount() {
         return studentAmount;
+    }
+
+    public boolean getIsActive() {
+        return isActive;
     }
 
     public ShiftDto getShift() {
@@ -90,6 +97,10 @@ public class GroupDto {
 
     public void setStudentAmount(int studentAmount) {
         this.studentAmount = studentAmount;
+    }
+
+    public void setIsActive(boolean active) {
+        isActive = active;
     }
 
     public void setShift(ShiftDto shift) {

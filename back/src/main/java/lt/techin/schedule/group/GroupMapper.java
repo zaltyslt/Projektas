@@ -12,6 +12,7 @@ public class GroupMapper {
                 group.getName(),
                 group.getYear(),
                 group.getStudentAmount(),
+                group.getIsActive(),
                 ProgramMapper.toProgramDto(group.getProgram()),
                 ShiftMapper.shiftToDto(group.getShift()),
                 group.getCreatedDate(),

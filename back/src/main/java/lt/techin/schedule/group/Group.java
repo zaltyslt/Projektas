@@ -22,6 +22,8 @@ public class Group {
 
     private int studentAmount;
 
+    private Boolean isActive;
+
     @ManyToOne
     @JoinColumn(name = "program_id")
     private Program program;
@@ -39,11 +41,12 @@ public class Group {
 
     public Group() { }
 
-    public Group(Long id, String name, int year, int studentAmount, Program program, Shift shift, LocalDateTime createdDate, LocalDateTime modifiedDate) {
+    public Group(Long id, String name, int year, int studentAmount, boolean isActive, Program program, Shift shift, LocalDateTime createdDate, LocalDateTime modifiedDate) {
         this.id = id;
         this.name = name;
         this.year = year;
         this.studentAmount = studentAmount;
+        this.isActive = isActive;
         this.program = program;
         this.shift = shift;
         this.createdDate = createdDate;
@@ -58,6 +61,10 @@ public class Group {
         return modifiedDate;
     }
 
+    public Long getId() {
+        return id;
+    }
+
     public String getName() {
         return name;
     }
@@ -70,8 +77,8 @@ public class Group {
         return studentAmount;
     }
 
-    public Long getId() {
-        return id;
+    public Boolean getIsActive() {
+        return isActive;
     }
 
     public Program getProgram() {
@@ -94,6 +101,9 @@ public class Group {
         modifiedDate = LocalDateTime.now();
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public void setName(String name) {
         this.name = name;
@@ -107,10 +117,9 @@ public class Group {
         this.studentAmount = studentAmount;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setIsActive(Boolean active) {
+        isActive = active;
     }
-
 
     public void setProgram(Program program) {
         this.program = program;
