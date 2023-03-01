@@ -16,6 +16,7 @@ public class Classroom {
     private Long id;
     @Column(name = "classroomName")
     @Size(min = 1, max = 200)
+
     private String classroomName;
     @Size(min = 1, max = 2000)
     private String description;

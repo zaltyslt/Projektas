@@ -29,30 +29,20 @@ export function AddShift() {
 
   const [successfulPost, setSuccessfulPost] = useState();
   const [isPostUsed, setIsPostUsed] = useState(false);
-  const [shiftCreateMessageError, setShiftCreateMessageError] = useState([]);
+  const [shiftErrors, setShiftErrors] = useState();
 
-  const badSymbols = "!@#$%^&*_+={}<>|~`\\\"'";
-  const maxLength = 50;
+  const badSymbols = "!@#$%^&*_+={}<>|~`\\\"\'";
+  const maxLength = 200;
 
   const setNameAndCheck = (name) => {
     setName(name);
-    if (name.length === 0) {
-      setIsNameEmpty(true);
-    } else {
-      setIsNameEmpty(false);
-    }
-    const isValid = name.split("").some((char) => badSymbols.includes(char));
-    if (!isValid) {
-      setIsValidName(true);
-    } else {
-      setIsValidName(false);
-    }
-    if (name.length > maxLength) {
-      setIsNameTooLong(true);
-    } else {
-      setIsNameTooLong(false);
-    }
-  };
+    (name.length === 0) ? setIsNameEmpty(true) :  setIsNameEmpty(false);
+  
+    const isValid = name.split('').some(char => badSymbols.includes(char));
+    (!isValid) ? setIsValidName(true) : setIsValidName(false);
+    
+    (name.length > maxLength) ? setIsNameTooLong(true) : setIsNameTooLong(false);
+  }
 
   useEffect(() => {
     if (parseInt(shiftStartingTime) > parseInt(shiftEndingTime)) {
@@ -65,47 +55,46 @@ export function AddShift() {
   var startIntEnum;
   var endIntEnum;
 
-  const createShift = () => {
-    if (isValidName && !isNameEmpty) {
-      startIntEnum = shiftStartingTime;
-      endIntEnum = shiftEndingTime;
-      createShiftPostRequest();
-    }
-  };
+  const createShift = (() => {
+      if (isValidName && !isNameEmpty && !isNameTooLong) {
+          startIntEnum = shiftStartingTime;
+          endIntEnum = shiftEndingTime;
+          createShiftPostRequest();
+      }
+  })
 
-  const createShiftPostRequest = () => {
-    fetch("http://localhost:8080/api/v1/shift/add-shift", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        name,
-        startIntEnum,
-        endIntEnum,
-        isActive,
-      }),
+  const createShiftPostRequest = async () =>  {
+      await fetch(
+          'http://localhost:8080/api/v1/shift/add-shift', {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({
+                  name,
+                  startIntEnum,
+                  endIntEnum,
+                  isActive
+              })
+          }
+      ) 
+      .then(response => response.json())
+      .then(data => {
+          handleAfterPost(data);
     })
-      .then((response) => response.json())
-      .then((data) => {
-        handleAfterPost(data);
-      });
   };
 
-  const handleAfterPost = (data) => {
-    if (Object.keys(data).length === 0) {
-      setSuccessfulPost(true);
-    } else {
-      setSuccessfulPost(false);
-      setShiftCreateMessageError(data);
-    }
-    setIsPostUsed(true);
-    if (successfulPost) {
-      setName("");
-      setShiftStartingTime(1);
-      setShiftEndingTime(1);
-    }
-  };
+
+  const handleAfterPost = ((data) => {
+      if (data.valid) {
+          setSuccessfulPost(true);
+      }
+      else {
+          setShiftErrors(data)
+          setSuccessfulPost(false);
+      }
+      setIsPostUsed(true);
+  })
 
   const lessonTimes = [
     { value: "1", label: "1 pamoka" },
@@ -215,25 +204,36 @@ export function AddShift() {
             </Link>
           </Stack>
         </Grid>
-        <Grid>
-          {isPostUsed ? (
-            successfulPost ? (
-              <Alert severity="success"> Pamaina sėkmingai pridėta.</Alert>
-            ) : (
-              <Grid>
-                <Alert severity="warning">Nepavyko sukurti pamainos.</Alert>
-                {Object.keys(shiftCreateMessageError).map((key) => (
-                  <Alert severity="warning" key={key} id="error-text">
-                    {" "}
-                    {shiftCreateMessageError[key]}{" "}
-                  </Alert>
-                ))}
-              </Grid>
-            )
-          ) : (
-            <div></div>
-          )}
-        </Grid>
+
+        <Grid item sm={10}>
+                {isPostUsed ? (
+                    successfulPost ? (
+                        <Alert severity="success"> Pamaina sėkmingai pridėta.</Alert>
+                        ) : 
+                        (
+                        <Grid>
+                            <Alert severity="warning">Nepavyko pridėti pamainos.</Alert>
+                            {
+                                (shiftErrors.passedValidation ?
+                                    (shiftErrors.databaseErrors).map((databaseError, index) => (
+                                        <Alert key={index} severity="warning">
+                                        {databaseError}
+                                        </Alert>
+                                    )) 
+                                    :
+                                    Object.keys(shiftErrors.validationErrors).map(key => (
+                                    <Alert key={key} severity="warning"> {shiftErrors.validationErrors[key]} {key} laukelyje.
+                                    </Alert>
+                                    ))
+                                )
+                            }
+                        </Grid>
+                        )
+                    ) : 
+                    (
+                    <div></div>
+                    )}
+            </Grid>
       </Container>
     </div>
   );

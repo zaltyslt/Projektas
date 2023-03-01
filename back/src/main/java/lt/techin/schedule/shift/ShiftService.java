@@ -9,9 +9,9 @@ import java.util.stream.Collectors;
 @Service
 public class ShiftService {
 
-    private final ShiftDTO shiftDatabase;
+    private final ShiftRepository shiftDatabase;
 
-    public ShiftService(ShiftDTO shiftDatabase) {
+    public ShiftService(ShiftRepository shiftDatabase) {
         this.shiftDatabase = shiftDatabase;
     }
 
@@ -23,19 +23,24 @@ public class ShiftService {
         return shiftDatabase.findAll().stream().filter(s -> s.getName().equalsIgnoreCase(name)).findFirst();
     }
 
-    public String addUniqueShift(Shift shift) {
-        if(findShiftByName(shift.getName()).isPresent()) {
+    private static ShiftDto setShiftDtoStringFields (ShiftDto shiftDto) {
+        //These values are null, because client sets int enums only.
+        if (shiftDto.getShiftStartingTime() == null || shiftDto.getShiftStartingTime().isEmpty()) {
+            shiftDto.setShiftStartingTime(LessonTime.getLessonTimeByInt(shiftDto.getStartIntEnum()).getLessonStart());
+        }
+        if (shiftDto.getShiftEndingTime() == null || shiftDto.getShiftEndingTime().isEmpty()) {
+            shiftDto.setShiftEndingTime(LessonTime.getLessonTimeByInt(shiftDto.getEndIntEnum()).getLessonEnd());
+        }
+        return shiftDto;
+    }
+
+    public String addUniqueShift(ShiftDto shiftDto) {
+        if(findShiftByName(shiftDto.getName()).isPresent()) {
             return "Pamainos pavadinimas turi būti unikalus.";
         }
         else {
-            int startInteger = shift.getStartIntEnum();
-            int endingInteger = shift.getEndIntEnum();
-            shiftDatabase.save(new Shift(shift.getName(),
-                    LessonTime.getLessonTimeByInt(startInteger).getLessonStart(),
-                    LessonTime.getLessonTimeByInt(endingInteger).getLessonEnd(),
-                    shift.getIsActive(),
-                    startInteger,
-                    endingInteger));
+            Shift shiftToSave = ShiftMapper.shiftFromDto(setShiftDtoStringFields(shiftDto));
+            shiftDatabase.save(shiftToSave);
             return "";
         }
     }
@@ -54,21 +59,27 @@ public class ShiftService {
         return shiftDatabase.findAll().stream().filter(s -> Objects.equals(s.getId(), shiftID)).findAny().orElse(null);
     }
 
-    public String modifyExistingShift(Long shiftID, Shift shift) {
+    public String modifyExistingShift(Long shiftID, ShiftDto shiftDto) {
+        //Checks whether a shift with the same ID is present in a database
         if (shiftDatabase.findById(shiftID).isPresent()) {
-            Optional<Shift> foundShift = findShiftByName(shift.getName());
+            Optional<Shift> foundShift = findShiftByName(shiftDto.getName());
+            /*
+            Checks whether there is a shift with a same name present in a database
+            If there is, checks if this is the same shift being modified
+            (You can modify other shift fields leaving the name unchanged)
+            If that name is not present in a database or this is the same shift it doesn't return string here
+             */
             if(foundShift.isPresent() && !foundShift.get().getId().equals(shiftID)) {
                 return "Pamainos pavadinimas turi būti unikalus.";
             }
-            if (shift.getId() == null) {
-                shift.setId(shiftID);
+            if (shiftDto.getId() == null) {
+                shiftDto.setId(shiftID);
             }
-            if (shift.getCreatedDate() == null) {
-                shift.setCreatedDate(shiftDatabase.findById(shiftID).get().getCreatedDate());
+            if (shiftDto.getCreatedDate() == null) {
+                shiftDto.setCreatedDate(shiftDatabase.findById(shiftID).get().getCreatedDate());
             }
-            shift.setShiftStartingTime(LessonTime.getLessonTimeByInt(shift.getStartIntEnum()).getLessonStart());
-            shift.setShiftEndingTime(LessonTime.getLessonTimeByInt(shift.getEndIntEnum()).getLessonEnd());
-            shiftDatabase.save(shift);
+            Shift shiftToSave = ShiftMapper.shiftFromDto(setShiftDtoStringFields(shiftDto));
+            shiftDatabase.save(shiftToSave);
             return "";
         }
         return "Pamainos pakeisti nepavyko.";

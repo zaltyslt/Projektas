@@ -1,7 +1,8 @@
 package lt.techin.schedule.shifts;
 
 import lt.techin.schedule.shift.Shift;
-import lt.techin.schedule.shift.ShiftDTO;
+import lt.techin.schedule.shift.ShiftMapper;
+import lt.techin.schedule.shift.ShiftRepository;
 import lt.techin.schedule.shift.ShiftService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,7 +13,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -22,7 +22,7 @@ public class ShiftServiceTests {
     private ShiftService shiftService;
 
     @Mock
-    private ShiftDTO shiftDatabase;
+    private ShiftRepository shiftDatabase;
 
     @BeforeEach
     public void setUp() {
@@ -32,7 +32,7 @@ public class ShiftServiceTests {
     @Test
     public void testAddUniqueShiftWithUniqueName() {
         Shift shift1 = new Shift("Shift 2", "8:00", "16:00", true, 1, 8);
-        String result = shiftService.addUniqueShift(shift1);
+        String result = shiftService.addUniqueShift(ShiftMapper.shiftToDto(shift1));
         assertEquals("", result);
     }
 
@@ -43,7 +43,7 @@ public class ShiftServiceTests {
 
         when(shiftDatabase.findAll()).thenReturn(Arrays.asList(shift1));
 
-        String result = shiftService.addUniqueShift(shift2);
+        String result = shiftService.addUniqueShift(ShiftMapper.shiftToDto(shift2));
         assertEquals("Pamainos pavadinimas turi būti unikalus.", result);
     }
 
@@ -98,7 +98,7 @@ public class ShiftServiceTests {
         when(shiftDatabase.findById(shift2.getId())).thenReturn(Optional.of(shift2));
         when(shiftDatabase.findAll()).thenReturn(Arrays.asList(shift1, shift2));
 
-        String result = shiftService.modifyExistingShift(shift3.getId(), shift3);
+        String result = shiftService.modifyExistingShift(shift3.getId(), ShiftMapper.shiftToDto(shift3));
         assertEquals("", result);
     }
 
@@ -115,7 +115,7 @@ public class ShiftServiceTests {
         when(shiftDatabase.findById(shift2.getId())).thenReturn(Optional.of(shift2));
         when(shiftDatabase.findAll()).thenReturn(Arrays.asList(shift1, shift2));
 
-        String result = shiftService.modifyExistingShift(shift3.getId(), shift3);
+        String result = shiftService.modifyExistingShift(shift3.getId(), ShiftMapper.shiftToDto(shift3));
         assertEquals("Pamainos pavadinimas turi būti unikalus.", result);
     }
 }

@@ -2,7 +2,7 @@ package lt.techin.schedule.teachers;
 
 import lt.techin.schedule.shift.LessonTime;
 import lt.techin.schedule.shift.Shift;
-import lt.techin.schedule.shift.ShiftDTO;
+import lt.techin.schedule.shift.ShiftRepository;
 import lt.techin.schedule.shift.ShiftService;
 import lt.techin.schedule.subject.Subject;
 import lt.techin.schedule.subject.SubjectRepository;
@@ -22,9 +22,9 @@ public class TeacherServiceGenerate {
     private final TeacherRepository teacherRepository;
     private final SubjectRepository subjectRepository;
     private final ShiftService shiftService;
-    private final ShiftDTO shiftRepository;
+    private final ShiftRepository shiftRepository;
 
-    public TeacherServiceGenerate(TeacherRepository teacherRepository, SubjectRepository subjectRepository, ShiftService shiftService, ShiftDTO shiftRepository) {
+    public TeacherServiceGenerate(TeacherRepository teacherRepository, SubjectRepository subjectRepository, ShiftService shiftService, ShiftRepository shiftRepository) {
         this.teacherRepository = teacherRepository;
         this.subjectRepository = subjectRepository;
         this.shiftService = shiftService;

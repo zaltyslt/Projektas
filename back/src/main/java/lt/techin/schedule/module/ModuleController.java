@@ -1,17 +1,19 @@
 package lt.techin.schedule.module;
 
-import lt.techin.schedule.subject.SubjectDto;
-import lt.techin.schedule.subject.SubjectMapper;
+import jakarta.validation.Valid;
+import lt.techin.schedule.validators.ValidationDto;
 import org.springframework.data.domain.Page;
 import org.springframework.http.*;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Objects;
 
 import static java.util.stream.Collectors.toList;
 import static lt.techin.schedule.module.ModuleMapper.toModule;
 import static lt.techin.schedule.module.ModuleMapper.toModuleDto;
-import static lt.techin.schedule.subject.SubjectMapper.toSubjectDto;
 import static org.springframework.http.ResponseEntity.ok;
 
 @RestController
@@ -29,39 +31,65 @@ public class ModuleController {
         return moduleService.getAll().stream().map(ModuleMapper::toModuleEntityDto).collect(toList());
     }
 
-    @GetMapping(value = "/{moduleId}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<Module> getModule(@PathVariable Long moduleId) {
-        var moduleOptional = moduleService.getById(moduleId);
-        var responseEntity = moduleOptional.map(module -> ok(module)).orElseGet(() -> ResponseEntity.notFound().build());
-        return responseEntity;
-    }
-
     @GetMapping(value = "/deleted", produces = {MediaType.APPLICATION_JSON_VALUE})
     public List<ModuleEntityDto> getDeletedModules() {
         return moduleService.getAllDeleted().stream().map(ModuleMapper::toModuleEntityDto).collect(toList());
     }
 
-    @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<ModuleDto> createModule(@RequestBody ModuleDto moduleDto) {
-        var createdModule = moduleService.create(toModule(moduleDto));
-        if (createdModule == null) {
-          return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+    @GetMapping(value = "/{moduleId}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<Module> getModule(@PathVariable Long moduleId) {
+        var moduleOptional = moduleService.getById(moduleId);
+        return moduleOptional.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @PostMapping("/create")
+    public @ResponseBody ValidationDto createModule(@RequestBody @Valid ModuleDto moduleDto, BindingResult bindingResult) {
+        ValidationDto validationDto = new ValidationDto();
+        if (bindingResult.hasErrors()) {
+            List<ObjectError> errors = bindingResult.getAllErrors();
+            for (int x = 0; x < bindingResult.getAllErrors().size(); x++) {
+                validationDto.addValidationError(
+                        "\"" + Objects.requireNonNull(bindingResult.getFieldError()).getField() + "\"",
+                        errors.get(x).getDefaultMessage());
+            }
+            validationDto.setPassedValidation(false);
+            validationDto.setValid(false);
         } else {
-            return ok(toModuleDto(createdModule));
+            String modifyResponse = moduleService.create(toModule(moduleDto));
+            validationDto.setPassedValidation(true);
+            if (modifyResponse.isEmpty()) {
+                validationDto.setValid(true);
+            } else {
+                validationDto.setValid(false);
+                validationDto.addDatabaseError(modifyResponse);
+            }
         }
+        return validationDto;
     }
 
-    @PatchMapping("/{moduleId}")
-    public ResponseEntity<ModuleDto> updateModule(@PathVariable Long moduleId,
-                                                  @RequestBody ModuleDto moduleDto) {
-        var updatedModule = moduleService.updateModule(moduleId, toModule(moduleDto));
-        return ok(toModuleDto(updatedModule));
-    }
-
-    @PatchMapping("/delete/{moduleId}")
-    public ResponseEntity<ModuleDto> delete(@PathVariable Long moduleId) {
-        var deletedModule = moduleService.delete(moduleId);
-        return ok(toModuleDto(deletedModule));
+    @PutMapping("/update/{moduleId}")
+    public @ResponseBody ValidationDto updateModule(@PathVariable Long moduleId, @RequestBody @Valid ModuleDto moduleDto, BindingResult bindingResult) {
+        ValidationDto validationDto = new ValidationDto();
+        if (bindingResult.hasErrors()) {
+            List<ObjectError> errors = bindingResult.getAllErrors();
+            for (int x = 0; x < bindingResult.getAllErrors().size(); x++) {
+                validationDto.addValidationError(
+                        "\"" + Objects.requireNonNull(bindingResult.getFieldError()).getField() + "\"",
+                        errors.get(x).getDefaultMessage());
+            }
+            validationDto.setPassedValidation(false);
+            validationDto.setValid(false);
+        } else {
+            String modifyResponse = moduleService.updateModule(moduleId, toModule(moduleDto));
+            validationDto.setPassedValidation(true);
+            if (modifyResponse.isEmpty()) {
+                validationDto.setValid(true);
+            } else {
+                validationDto.setValid(false);
+                validationDto.addDatabaseError(modifyResponse);
+            }
+        }
+        return validationDto;
     }
 
     @DeleteMapping("/{moduleId}")
@@ -79,16 +107,5 @@ public class ModuleController {
         var restoredModule = moduleService.restoreModule(moduleId);
         return ok(toModuleDto(restoredModule));
     }
-
-    @GetMapping("/paged")
-    @ResponseBody
-    public ResponseEntity<List<ModuleEntityDto>> findModulesPaged(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int pageSize) {
-        Page<Module> pagedModules = moduleService.findAllPaged(page, pageSize, false);
-        int totalPageCount = pagedModules.getTotalPages();
-        List<ModuleEntityDto> modules = pagedModules.stream().map(ModuleMapper::toModuleEntityDto).collect(toList());
-
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.set("totalCount", Integer.toString(totalPageCount));
-        return ResponseEntity.ok().headers(httpHeaders).body(modules);
-    }
 }
+

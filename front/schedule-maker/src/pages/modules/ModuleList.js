@@ -38,8 +38,8 @@ export function ModuleList() {
     fetchDeletedModules();
   }, []);
 
-  const fetchModules = () => {
-    fetch("api/v1/modules")
+  const fetchModules = async () => {
+    await fetch("api/v1/modules")
       .then((response) => response.json())
       .then((data) => {
         setModules(data);
@@ -48,8 +48,8 @@ export function ModuleList() {
       .then((data) => setFilteredModules(data));
   };
 
-  const fetchDeletedModules = () => {
-    fetch("api/v1/modules/deleted")
+  const fetchDeletedModules = async () => {
+    await fetch("api/v1/modules/deleted")
       .then((response) => response.json())
       .then(setDeletedModules);
   };
@@ -78,8 +78,8 @@ export function ModuleList() {
     }
   };
 
-  const handleRestore = (id) => {
-    fetch("/api/v1/modules/restore/" + id, {
+  const handleRestore = async (id) => {
+    await fetch("/api/v1/modules/restore/" + id, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",

@@ -1,10 +1,15 @@
 package lt.techin.schedule.module;
 
+import lt.techin.schedule.config.DataFieldsLengthConstraints;
+import lt.techin.schedule.validators.TextValid;
+
 import java.util.Objects;
 
 public class ModuleDto {
 
+    @TextValid(textMaximumLength = DataFieldsLengthConstraints.TEXT_FIELD_MAXIMUM_LENGTH)
     private String number;
+    @TextValid(textMaximumLength = DataFieldsLengthConstraints.TEXT_FIELD_MAXIMUM_LENGTH)
     private String name;
 
     public ModuleDto() {
