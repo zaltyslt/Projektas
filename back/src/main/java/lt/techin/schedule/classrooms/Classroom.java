@@ -2,7 +2,7 @@ package lt.techin.schedule.classrooms;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
-import lt.techin.schedule.validators.TextValid;
+import jakarta.validation.constraints.Size;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
@@ -15,10 +15,10 @@ public class Classroom {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
     @Column(name = "classroomName")
-    @TextValid
+    @Size(min = 1, max = 200)
+
     private String classroomName;
-    // TODO Sutvarkyti textMaxL
-    @TextValid(textMaximumLength = 1000)
+    @Size(min = 1, max = 2000)
     private String description;
     private BuildingType building;
     @CreatedDate

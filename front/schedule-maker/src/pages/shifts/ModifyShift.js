@@ -9,7 +9,7 @@ import {
   } from "@mui/material";
 import { Container, Stack } from "@mui/system";
 
-import { Link } from "react-router-dom";
+import { Link, useHref } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import './ModifyShift.css';
@@ -22,17 +22,18 @@ export function ModifyShift() {
 
     const [isValidName, setIsValidName] = useState(true);
     const [isNameEmpty, setIsNameEmpty] = useState(false);
+    const [isNameTooLong, setIsNameTooLong] = useState(false);
 
     const [isValidShiftTime, setIsValidShiftTime] = useState(true);
 
     const [name, setName] = useState("");
     const [shiftStartingTime, setShiftStartingTime] = useState("1");
     const [shiftEndingTime, setShiftEndingTime] = useState("1");
+    const [isActive, setIsActive] = useState("");
 
     const [successfulPost, setSuccessfulPost] = useState();
     const [isPostUsed, setIsPostUsed] = useState(false);
-    const [shiftCreateMessageError, setShiftCreateMessageError] = useState([]);
-    const [isActive, setIsActive] = useState("");
+    const [shiftErrors, setShiftErrors] = useState();
 
 
     useEffect(() => {
@@ -43,16 +44,18 @@ export function ModifyShift() {
         });
     }, []);
 
-    const deactivateShift = ((shiftID) => {
+    const listUrl = useHref("/shifts");
+
+    const deactivateShift = (shiftID) => {
         fetch(
             'http://localhost:8080/api/v1/shift/deactivate-shift/' + shiftID, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json'
                 }
-            }
-        )
-    })
+            })
+        .then(() => (window.location = listUrl));
+    }
 
     var startIntEnum;
     var endIntEnum;
@@ -76,7 +79,7 @@ export function ModifyShift() {
                     name,
                     startIntEnum,
                     endIntEnum,
-                    isActive,
+                    isActive
                 })
             }
         )
@@ -97,33 +100,27 @@ export function ModifyShift() {
 
 
     const handleAfterPost = ((data) => {
-        if ((Object.keys(data).length) === 0) {
+        if (data.valid) {
             setSuccessfulPost(true);
         }
         else {
+            setShiftErrors(data)
             setSuccessfulPost(false);
-            setShiftCreateMessageError(data);
         }
         setIsPostUsed(true);
     })
 
     const badSymbols = "!@#$%^&*_+={}<>|~`\\\"\'";
+    const maxShiftLength = 200;
 
     const setNameAndCheck = (name) => {
         setName(name);
-        if (name.length === 0) {
-            setIsNameEmpty(true);
-        }
-        else {
-            setIsNameEmpty(false);
-        }
+        (name.length === 0) ? setIsNameEmpty(true) : setIsNameEmpty(false);
+
         const isValid = name.split('').some(char => badSymbols.includes(char));
-        if (isValid) {
-            setIsValidName(false);
-        }
-        else {
-            setIsValidName(true);
-        }
+        (isValid) ? setIsValidName(false) : setIsValidName(true);
+     
+        (name.length > maxShiftLength) ? setIsNameTooLong(true) : setIsNameTooLong(false);
     }
 
     useEffect(() => {
@@ -163,10 +160,12 @@ export function ModifyShift() {
                     <TextField
                     fullWidth
                     required
-                    error={!isValidName || isNameEmpty}
+                    error={!isValidName || isNameEmpty || isNameTooLong}
                     helperText={
                         !isValidName ? "Pavadinimas turi neleidžiamų simbolių." : 
-                        isNameEmpty ? "Pavadinimas negali būti tuščias" : null
+                        isNameEmpty ? "Pavadinimas negali būti tuščias" :
+                        isNameTooLong ? `Pavadinimas negali būti ilgesnis nei ${maxShiftLength} simboliai` 
+                        : null
                     }
                     variant="outlined"
                     label="Pamainos pavadinimas"
@@ -231,11 +230,9 @@ export function ModifyShift() {
                     <Button variant="contained" onClick={modifyShift}>
                         Išsaugoti
                     </Button>
-                    <Link to="/shifts">
-                        <Button variant="contained" onClick={() => deactivateShift(currentShift.id)}> 
-                            Ištrinti
-                        </Button>
-                    </Link> 
+                    <Button variant="contained" onClick={() => deactivateShift(currentShift.id)}> 
+                        Ištrinti
+                    </Button>
                     <Link to="/shifts">
                         <Button variant="contained">Grįžti</Button>
                     </Link>     
@@ -249,9 +246,20 @@ export function ModifyShift() {
                         (
                         <Grid>
                             <Alert severity="warning">Nepavyko pakeisti pamainos.</Alert>
-                            {Object.keys(shiftCreateMessageError).map(key => (
-                            <Alert key={key} severity="warning"> {shiftCreateMessageError[key]} </Alert>
-                            ))}
+                            {
+                                (shiftErrors.passedValidation ?
+                                    (shiftErrors.databaseErrors).map((databaseError, index) => (
+                                        <Alert key={index} severity="warning">
+                                        {databaseError}
+                                        </Alert>
+                                    )) 
+                                    :
+                                    Object.keys(shiftErrors.validationErrors).map(key => (
+                                    <Alert key={key} severity="warning"> {shiftErrors.validationErrors[key]} {key} laukelyje.
+                                    </Alert>
+                                    ))
+                                )
+                            }
                         </Grid>
                         )
                     ) : 

@@ -13,45 +13,28 @@ import ".././pages.css"
 export function CreateModule() {
   const [number, setNumber] = useState("");
   const [name, setName] = useState("");
-  const [success, setSuccess] = useState("");
-  const [error, setError] = useState("");
 
-  const invalidSymbols = "!@#$%^&*_+={}<>|~`\\'";
+  const [isValidNumber, setIsValidNumber] = useState(true);
+  const [isNumberEmpty, setIsNumberEmpty] = useState(false);
+  const [isNumberTooLong, setIsNumberTooLong] = useState(false);
 
-  const clear = () => {
-    setNumber("");
-    setName("");
-  };
+  const [isValidName, setIsValidName] = useState(true);
+  const [isNameEmpty, setIsNameEmpty] = useState(false);
+  const [isNameTooLong, setIsNameTooLong] = useState(false);
+
+  const [successfulPost, setSuccessfulPost] = useState();
+  const [isPostUsed, setIsPostUsed] = useState(false);
+  const [moduleErrors, setModuleErrors] = useState();
+
 
   const validation = () => {
-    setError("");
-    setSuccess("");
-    if (!number) {
-      setError("Prašome užpildyti modulio kodą.");
-    } else if (number.split("").some((char) => invalidSymbols.includes(char))) {
-      setError("Modulio numeris turi neleidžiamų simbolių.");
-    } else if (!name) {
-      setError("Prašome užpildyti modulio pavadinimą.");
-    } else if (name.split("").some((char) => invalidSymbols.includes(char))) {
-      setError("Modulio pavadinimas turi neleidžiamų simbolių.");
-    } else {
+    if (isValidNumber && isValidName && !isNumberEmpty && !isNameEmpty && !isNumberTooLong && !isNameTooLong) {
       createModule();
     }
   };
 
-  const applyResult = (result) => {
-    if (result.ok) {
-      setSuccess("Sėkmingai pridėta");
-      clear();
-    } else if (result.status === 400) {
-      setError("Modulis su tokiu numeriu jau egzistuoja");
-    } else {
-      setError("Nepavyko pridėti");
-    }
-  };
-
-  const createModule = () => {
-    fetch("/api/v1/modules", {
+  const createModule = async () => {
+    await fetch("/api/v1/modules/create", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -60,8 +43,46 @@ export function CreateModule() {
         number,
         name,
       }),
-    }).then(applyResult);
+    })
+    .then(response => response.json())
+    .then(applyResult);
   };
+
+  const applyResult = (data) => {
+    if (data.valid) {
+      setSuccessfulPost(true);
+    }
+    else {
+        setModuleErrors(data)
+        setSuccessfulPost(false);
+    }
+    setIsPostUsed(true);
+  };
+
+  const badSymbols = "!@#$%^&*_+={}<>|~`\\'";
+  const moduleNumberLength = 200;
+  const moduleNameLength = 200;
+
+
+  const setNumberOnChange = (number) => {
+    setNumber(number);
+    (number.length === 0) ? setIsNumberEmpty(true) : setIsNumberEmpty(false);
+   
+    const isValid = number.split('').some(char => badSymbols.includes(char));
+    (isValid) ? setIsValidNumber(false) : setIsValidNumber(true);
+ 
+    (number.length > moduleNumberLength) ? setIsNumberTooLong(true) : setIsNumberTooLong(false);
+  }
+
+  const setNameOnChange = (name) => {
+    setName(name);
+    (name.length === 0) ? setIsNameEmpty(true) : setIsNameEmpty(false);
+   
+    const isValid = name.split('').some(char => badSymbols.includes(char));
+    (isValid) ? setIsValidName(false) : setIsValidName(true);
+  
+    (name.length > moduleNameLength) ? setIsNameTooLong(true) : setIsNameTooLong(false);
+  }
 
   return (
     <Container>
@@ -74,10 +95,17 @@ export function CreateModule() {
               fullWidth
               required
               variant="outlined"
+              error={!isValidNumber || isNumberEmpty || isNumberTooLong}
+              helperText={
+                !isValidNumber ? "Modulio kodas turi neleidžiamų simbolių." : 
+                isNumberEmpty ? "Modulio kodas negali būti tuščias" :
+                isNumberTooLong ? `Modulio kodas negali būti ilgesnis nei ${moduleNumberLength} simbolių` 
+                : null
+              }
               label="Modulio kodas"
               id="number"
               value={number}
-              onChange={(e) => setNumber(e.target.value)}
+              onChange={(e) => setNumberOnChange(e.target.value)}
             ></TextField>
           </Grid>
 
@@ -86,16 +114,21 @@ export function CreateModule() {
               fullWidth
               required
               variant="outlined"
+              error={!isValidName || isNameEmpty || isNameTooLong}
+              helperText={
+                !isValidName ? "Modulio pavadinimas turi neleidžiamų simbolių." : 
+                isNameEmpty ? "Modulio pavadinimas negali būti tuščias" :
+                isNameTooLong ? `Modulio pavadinimas negali būti ilgesnis nei ${moduleNameLength} simbolių` 
+                : null
+              }
               label="Modulio pavadinimas"
               id="name"
               value={name}
-              onChange={(e) => setName(e.target.value)}
+              onChange={(e) => setNameOnChange(e.target.value)}
             ></TextField>
           </Grid>
 
           <Grid item sm={10}>
-            {error && <Alert severity="warning">{error}</Alert>}
-            {success && <Alert severity="success">{success}</Alert>}
             <Stack direction="row" spacing={2}>
               <Button variant="contained" onClick={validation}>
                 Išsaugoti
@@ -106,6 +139,36 @@ export function CreateModule() {
               </Link>
             </Stack>
           </Grid>
+
+          <Grid item sm={10}>
+                {isPostUsed ? (
+                    successfulPost ? (
+                        <Alert severity="success"> Modulis sėkmingai pridėtas.</Alert>
+                        ) : 
+                        (
+                        <Grid>
+                            <Alert severity="warning">Nepavyko pridėti modulio.</Alert>
+                            {
+                                (moduleErrors.passedValidation ?
+                                    (moduleErrors.databaseErrors).map((databaseError, index) => (
+                                        <Alert key={index} severity="warning">
+                                        {databaseError}
+                                        </Alert>
+                                    )) 
+                                    :
+                                    Object.keys(moduleErrors.validationErrors).map(key => (
+                                    <Alert key={key} severity="warning"> {moduleErrors.validationErrors[key]} {key} laukelyje.
+                                    </Alert>
+                                    ))
+                                )
+                            }
+                        </Grid>
+                        )
+                    ) : 
+                    (
+                    <div></div>
+                    )}
+            </Grid>
         </Grid>
       </form>
     </Container>

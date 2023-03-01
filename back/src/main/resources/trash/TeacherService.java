@@ -72,9 +72,9 @@ public class TeacherService implements ITeacher<Teacher> {
 
 //    @PostConstruct
     //FIXME for dev purpose
-    public void generateTeachers(Long count){
-        generator.loadInitialTeacherData();
-    }
+//    public void generateTeachers(Long count){
+//        generator.loadInitialTeacherData();
+//    }
 
 
 

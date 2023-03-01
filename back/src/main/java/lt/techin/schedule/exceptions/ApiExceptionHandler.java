@@ -1,6 +1,7 @@
 package lt.techin.schedule.exceptions;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.ConstraintViolationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -13,6 +14,23 @@ import java.time.LocalDateTime;
 @ControllerAdvice
 public class ApiExceptionHandler {
     private static final Logger logger = LoggerFactory.getLogger(ApiExceptionHandler.class);
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<ErrorDto> handleConstraintViolationException(HttpServletRequest request, ConstraintViolationException constraintViolationException) {
+        logger.error("constraintViolationException: {}, cause: {}", constraintViolationException.getMessage(), constraintViolationException.getCause());
+
+        var errorStatus = HttpStatus.BAD_REQUEST;
+
+        var errorDto = new ErrorDto(
+                request.getRequestURL().toString(),
+               "Sukurti nepavyko. Neužpildyti privalomi laukai. ",
+                errorStatus.value(),
+                errorStatus.getReasonPhrase(),
+                request.getRequestURL().toString(),
+                LocalDateTime.now()
+        );
+        return ResponseEntity.badRequest().body(errorDto);
+    }
 
     @ExceptionHandler(SubjectValidationException.class)
     public ResponseEntity<ErrorDto> handleSubjectValidationException(HttpServletRequest request, SubjectValidationException subjectValidationException) {

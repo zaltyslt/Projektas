@@ -24,7 +24,10 @@ export function CreateProgram(props) {
     const [active, setActive] = useState(true);
     const invalidSymbols = "!@#$%^&*_+={}<>|~`\\\"'";
     let navigate = useNavigate();
-    const [formValid, setFormValid] = useState(false);
+    const [errorEmptyName, setErrorEmptyName] = useState(false);
+    const [errorSymbolsName, setErrorSymbolsName] = useState(false);
+    const [errorEmptyDesc, setErrorEmptyDesc] = useState(false);
+    const [errorSymbolsDesc, setErrorSymbolsDesc] = useState(false);
 
     const clear = () => {
         setProgramName("");
@@ -43,18 +46,22 @@ export function CreateProgram(props) {
       const createProgram = () => {
         setError("");
         setSuccess("");
+        setErrorEmptyName(false);
+        setErrorSymbolsName(false);
+        setErrorEmptyDesc(false);
+        setErrorSymbolsDesc(false);
         if (!programName) {
-          setError("Prašome užpildyti programos pavadinimą.");
+          setErrorEmptyName(true);
         } else if (
             programName.split("").some((char) => invalidSymbols.includes(char))
         ) {
-          setError("Programos pavadinimas turi neleidžiamų simbolių.");
+          setErrorSymbolsName(true);
         } else if (!description) {
-          setError("Prašome užpildyti programos aprašą.");
+          setErrorEmptyDesc(true);
         } else if (
           description.split("").some((char) => invalidSymbols.includes(char))
         ) {
-          setError("Programos aprašas turi neleidžiamų simbolių.");
+          setErrorSymbolsDesc(true);
         } else {
           fetch("/api/v1/programs/create-program", {
             method: "POST",
@@ -78,15 +85,19 @@ export function CreateProgram(props) {
     return (
         <div>
     <Container>
-      <h3>Pridėti naują programą</h3>
+      <h3 className="create-header">Pridėti naują programą</h3>
       <form>
         <Grid container rowSpacing={2}>
           <Grid item sm={10}>
             <TextField
               fullWidth
               required
-              error={formValid}
-              helperText={formValid && 'Programos pavadinimas yra privalomas.'}
+              error={errorEmptyName || errorSymbolsName}
+              helperText={errorEmptyName ? "Programos pavadinimas yra privalomas."
+                : errorSymbolsName
+                  ? "Programos pavadinimas turi neleidžiamų simbolių."
+                  : ""}
+              variant="outlined"
               id="programName"
               label="Programos pavadinimas"
               value={programName}
@@ -98,8 +109,14 @@ export function CreateProgram(props) {
               fullWidth
               multiline
               required
-              error={formValid}
-              helperText={formValid && 'Programos aprašas yra privalomas.'}
+              error={errorEmptyDesc || errorSymbolsDesc}
+              helperText={
+                errorEmptyDesc
+                  ? "Programos aprašas yra privalomas."
+                  : errorSymbolsDesc
+                    ? "Programos aprašas turi neleidžiamų simbolių."
+                    : ""}
+              variant="outlined"
               label="Programos aprašas"
               id="description"
               value={description}
