@@ -3,7 +3,6 @@ import { Container, Stack } from "@mui/system";
 
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
-import './ViewShift.css';
 
 export function ViewShift() {
     
