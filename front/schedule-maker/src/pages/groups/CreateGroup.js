@@ -30,7 +30,6 @@ export function CreateGroup() {
 
   const [nameNotValid, setNameNotValid] = useState(false);
   const [yearNotValid, setYearNotValid] = useState(false);
-  const [studentAmountNotValid, setStudentAmountNotValid] = useState(false);
 
   const [error, setError] = useState("");
   const [createMessage, setCreateMessage] = useState("");
