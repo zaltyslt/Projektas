@@ -61,9 +61,21 @@ export function ModuleList() {
     setPage(newPage);
   };
 
+  const emptyRowsInDeleted =
+  pageInDeleted > 0 ? Math.max(0, (1 + pageInDeleted) * rowsPerPageInDeleted - deletedModules.length) : 0;
+  
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
+  };
+
+  const handleChangePageInDeleted = (event, newPage) => {
+    setPageInDeleted(newPage);
+  };
+
+  const handleChangeRowsPerPageInDeleted = (event) => {
+    setRowsPerPageInDeleted(parseInt(event.target.value, 10));
+    setPageInDeleted(0);
   };
 
   const handleSearch = (event) => {
@@ -200,8 +212,8 @@ export function ModuleList() {
               <TableBody>
                 {(rowsPerPage > 0
                   ? deletedModules.slice(
-                      page * rowsPerPage,
-                      page * rowsPerPage + rowsPerPage
+                      pageInDeleted * rowsPerPageInDeleted,
+                      pageInDeleted * rowsPerPageInDeleted + rowsPerPageInDeleted
                     )
                   : deletedModules
                 ).map((module) => (
@@ -221,8 +233,8 @@ export function ModuleList() {
                   </TableRow>
                 ))}
 
-                {emptyRows > 0 && (
-                  <TableRow style={{ height: 53 * emptyRows }}>
+                {emptyRowsInDeleted > 0 && (
+                  <TableRow style={{ height: 53 * emptyRowsInDeleted }}>
                     <TableCell colSpan={6} />
                   </TableRow>
                 )}
@@ -237,16 +249,16 @@ export function ModuleList() {
                     }
                     colSpan={3}
                     count={deletedModules.length}
-                    page={page}
+                    page={pageInDeleted}
                     SelectProps={{
                       inputProps: {
                         "aria-label": "Rodyti po",
                       },
                       native: true,
                     }}
-                    onPageChange={handleChangePage}
-                    rowsPerPage={rowsPerPage}
-                    onRowsPerPageChange={handleChangeRowsPerPage}
+                    onPageChange={handleChangePageInDeleted}
+                    rowsPerPage={rowsPerPageInDeleted}
+                    onRowsPerPageChange={handleChangeRowsPerPageInDeleted}
                   ></TablePagination>
                 </TableRow>
               </TableFooter>
