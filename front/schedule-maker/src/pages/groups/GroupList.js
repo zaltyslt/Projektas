@@ -39,16 +39,15 @@ export function GroupList() {
   }, []);
 
 
-
   const fetchDeletedGroups = () => {
-    fetch("api/vi/group/get-inactive")
+    fetch("api/v1/group/get-inactive")
       .then((response) => response.json())
       .then(setDeletedGroups);
   };
 
   const fetchGroups = () => {
     fetch("api/v1/group/get-active")
-      .then((response) => response.json)
+      .then((response) => response.json())
       .then((data) => {
         console.log(data)
         setGroups(data);
