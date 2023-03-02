@@ -17,7 +17,7 @@ public class GroupDto {
     @TextValid(textMaximumLength = DataFieldsLengthConstraints.TEXT_FIELD_MAXIMUM_LENGTH)
     private String name;
 
-    private int year;
+    private String year;
 
     private int studentAmount;
 
@@ -35,7 +35,7 @@ public class GroupDto {
 
     public GroupDto() {}
 
-    public GroupDto(Long id, String name, int year, int studentAmount, boolean isActive, ProgramDto program, ShiftDto shift, LocalDateTime createdDate, LocalDateTime modifiedDate) {
+    public GroupDto(Long id, String name, String year, int studentAmount, boolean isActive, ProgramDto program, ShiftDto shift, LocalDateTime createdDate, LocalDateTime modifiedDate) {
         this.id = id;
         this.name = name;
         this.year = year;
@@ -55,7 +55,7 @@ public class GroupDto {
         return name;
     }
 
-    public int getYear() {
+    public String getYear() {
         return year;
     }
 
@@ -91,7 +91,7 @@ public class GroupDto {
         this.name = name;
     }
 
-    public void setYear(int year) {
+    public void setYear(String year) {
         this.year = year;
     }
 

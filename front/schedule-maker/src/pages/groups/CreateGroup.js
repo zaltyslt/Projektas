@@ -90,7 +90,7 @@ export function CreateGroup() {
   };
 
   const createGroup = () => {
-    fetch("api/v1/groups/add-group", {
+    fetch("api/v1/group/add-group", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

@@ -31,13 +31,13 @@ export function GroupList() {
   const [isChecked, setChecked] = useState(false);
 
   const fetchDeletedGroups = () => {
-    fetch("api/vi/groups/deleted")
+    fetch("api/vi/groups/get-inactive")
       .then((response) => response.json())
       .then(setDeletedGroups);
   };
 
   const fetchGroups = () => {
-    fetch("api/v1/groups")
+    fetch("api/v1/group/get-active")
       .then((response) => response.json)
       .then((data) => {
         setGruoups(data);

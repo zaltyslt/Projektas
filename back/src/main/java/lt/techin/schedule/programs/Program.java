@@ -24,7 +24,7 @@ class Program {
     private String description;
 
     @CreatedDate
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime createdDate;
 
     @LastModifiedDate

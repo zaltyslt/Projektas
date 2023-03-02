@@ -44,11 +44,15 @@ public class GroupService {
     }
 
     public String addUniqueGroup(GroupDto groupDto) {
+        System.out.println("Adding thing");
         if(findGroupByName(groupDto.getName()).isPresent()) {
             return "Grupės pavadinimas turi būti unikalus.";
         }
         else {
-            groupRepository.save(GroupMapper.dtoToGroup(groupDto));
+            System.out.println("hehe");
+            Group groupToAdd = GroupMapper.dtoToGroup(groupDto);
+            System.out.println(groupToAdd);
+            groupRepository.save(groupToAdd);
             return "";
         }
     }

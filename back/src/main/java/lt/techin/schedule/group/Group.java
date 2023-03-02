@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import lt.techin.schedule.programs.Program;
 import lt.techin.schedule.programs.ProgramDto;
 import lt.techin.schedule.shift.Shift;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -19,7 +21,7 @@ public class Group {
 
     private String name;
 
-    private int year;
+    private String year;
 
     private int studentAmount;
 
@@ -33,16 +35,18 @@ public class Group {
     @JoinColumn(name = "shift_id")
     private Shift shift;
 
+    @CreatedDate
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime createdDate;
 
+    @LastModifiedDate
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime modifiedDate;
 
 
     public Group() { }
 
-    public Group(Long id, String name, int year, int studentAmount, boolean isActive, Program program, Shift shift, LocalDateTime createdDate, LocalDateTime modifiedDate) {
+    public Group(Long id, String name, String year, int studentAmount, boolean isActive, Program program, Shift shift, LocalDateTime createdDate, LocalDateTime modifiedDate) {
         this.id = id;
         this.name = name;
         this.year = year;
@@ -70,7 +74,7 @@ public class Group {
         return name;
     }
 
-    public int getYear() {
+    public String getYear() {
         return year;
     }
 
@@ -110,7 +114,7 @@ public class Group {
         this.name = name;
     }
 
-    public void setYear(int year) {
+    public void setYear(String year) {
         this.year = year;
     }
 
