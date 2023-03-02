@@ -10,7 +10,7 @@ public class GroupMapper {
         return new GroupDto(
                 group.getId(),
                 group.getName(),
-                group.getYear(),
+                group.getSchoolYear(),
                 group.getStudentAmount(),
                 group.getIsActive(),
                 ProgramMapper.toProgramDto(group.getProgram()),
@@ -24,7 +24,7 @@ public class GroupMapper {
         return new Group(
                 groupDto.getId(),
                 groupDto.getName(),
-                groupDto.getYear(),
+                groupDto.getSchoolYear(),
                 groupDto.getStudentAmount(),
                 groupDto.getIsActive(),
                 ProgramMapper.toProgram(groupDto.getProgram()),

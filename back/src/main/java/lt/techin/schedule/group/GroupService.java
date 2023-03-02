@@ -28,10 +28,12 @@ public class GroupService {
     private final Comparator<Group> compareGroupByName = Comparator.comparing(o -> o.getName().toLowerCase());
 
     public List<Group> getActiveGroups() {
+        System.out.println("Getting active");
         return groupRepository.findAll().stream().filter(Group::getIsActive).sorted(compareGroupByName).collect(Collectors.toList());
     }
 
     public List<Group> getInactiveGroups() {
+        System.out.println("Getting inactive");
         return groupRepository.findAll().stream().filter(s -> !s.getIsActive()).sorted(compareGroupByName).collect(Collectors.toList());
     }
 
@@ -44,15 +46,12 @@ public class GroupService {
     }
 
     public String addUniqueGroup(GroupDto groupDto) {
-        System.out.println("Adding thing");
         if(findGroupByName(groupDto.getName()).isPresent()) {
             return "Grupės pavadinimas turi būti unikalus.";
         }
         else {
-            System.out.println("hehe");
-            Group groupToAdd = GroupMapper.dtoToGroup(groupDto);
-            System.out.println(groupToAdd);
-            groupRepository.save(groupToAdd);
+            groupDto.setIsActive(true);
+            groupRepository.save(GroupMapper.dtoToGroup(groupDto));
             return "";
         }
     }

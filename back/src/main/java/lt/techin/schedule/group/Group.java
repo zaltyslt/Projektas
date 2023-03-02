@@ -3,7 +3,6 @@ package lt.techin.schedule.group;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lt.techin.schedule.programs.Program;
-import lt.techin.schedule.programs.ProgramDto;
 import lt.techin.schedule.shift.Shift;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -12,6 +11,7 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
+@Table(name = "someThing")
 public class Group {
 
     @Id
@@ -21,18 +21,20 @@ public class Group {
 
     private String name;
 
-    private String year;
+    private String schoolYear;
 
     private int studentAmount;
 
     private Boolean isActive;
 
     @ManyToOne
-    @JoinColumn(name = "program_id")
+    @JoinColumn(name = "program_group")
     private Program program;
 
+//    private String program;
+
     @ManyToOne
-    @JoinColumn(name = "shift_id")
+    @JoinColumn(name = "shift_group")
     private Shift shift;
 
     @CreatedDate
@@ -46,10 +48,10 @@ public class Group {
 
     public Group() { }
 
-    public Group(Long id, String name, String year, int studentAmount, boolean isActive, Program program, Shift shift, LocalDateTime createdDate, LocalDateTime modifiedDate) {
+    public Group(Long id, String name, String schoolYear, int studentAmount, boolean isActive, Program program, Shift shift, LocalDateTime createdDate, LocalDateTime modifiedDate) {
         this.id = id;
         this.name = name;
-        this.year = year;
+        this.schoolYear = schoolYear;
         this.studentAmount = studentAmount;
         this.isActive = isActive;
         this.program = program;
@@ -74,8 +76,8 @@ public class Group {
         return name;
     }
 
-    public String getYear() {
-        return year;
+    public String getSchoolYear() {
+        return schoolYear;
     }
 
     public int getStudentAmount() {
@@ -114,8 +116,8 @@ public class Group {
         this.name = name;
     }
 
-    public void setYear(String year) {
-        this.year = year;
+    public void setSchoolYear(String schoolYear) {
+        this.schoolYear = schoolYear;
     }
 
     public void setStudentAmount(int studentAmount) {
@@ -138,12 +140,12 @@ public class Group {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Group group)) return false;
-        return year == group.year && studentAmount == group.studentAmount && id.equals(group.id) && name.equals(group.name) && isActive.equals(group.isActive) && Objects.equals(program, group.program) && Objects.equals(shift, group.shift) && Objects.equals(createdDate, group.createdDate) && Objects.equals(modifiedDate, group.modifiedDate);
+        return schoolYear == group.schoolYear && studentAmount == group.studentAmount && id.equals(group.id) && name.equals(group.name) && isActive.equals(group.isActive) && Objects.equals(program, group.program) && Objects.equals(shift, group.shift) && Objects.equals(createdDate, group.createdDate) && Objects.equals(modifiedDate, group.modifiedDate);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, year, studentAmount, isActive, program, shift, createdDate, modifiedDate);
+        return Objects.hash(id, name, schoolYear, studentAmount, isActive, program, shift, createdDate, modifiedDate);
     }
 
     @Override
@@ -151,7 +153,7 @@ public class Group {
         return "Group{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", year=" + year +
+                ", year=" + schoolYear +
                 ", studentAmount=" + studentAmount +
                 ", isActive=" + isActive +
                 ", program=" + program +

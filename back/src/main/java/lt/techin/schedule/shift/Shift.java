@@ -30,7 +30,7 @@ public class Shift {
     private Set<Teacher> teachers;
 
     @OneToMany
-    @JoinColumn(name = "shift_id")
+    @JoinColumn(name = "shift_group")
     private Set<Group> groups;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")

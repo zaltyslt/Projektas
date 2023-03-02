@@ -3,11 +3,13 @@ package lt.techin.schedule.programs;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
+import lt.techin.schedule.group.Group;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 public
@@ -30,6 +32,10 @@ class Program {
     @LastModifiedDate
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime modifiedDate;
+
+    @OneToMany
+    @JoinColumn(name = "program_group")
+    private Set<Group> groups;
 
     private boolean active = true;
 

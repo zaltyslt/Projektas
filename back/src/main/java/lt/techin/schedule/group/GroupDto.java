@@ -3,7 +3,6 @@ package lt.techin.schedule.group;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lt.techin.schedule.config.DataFieldsLengthConstraints;
 import lt.techin.schedule.programs.ProgramDto;
-import lt.techin.schedule.shift.Shift;
 import lt.techin.schedule.shift.ShiftDto;
 import lt.techin.schedule.validators.TextValid;
 
@@ -17,7 +16,7 @@ public class GroupDto {
     @TextValid(textMaximumLength = DataFieldsLengthConstraints.TEXT_FIELD_MAXIMUM_LENGTH)
     private String name;
 
-    private String year;
+    private String schoolYear;
 
     private int studentAmount;
 
@@ -35,10 +34,10 @@ public class GroupDto {
 
     public GroupDto() {}
 
-    public GroupDto(Long id, String name, String year, int studentAmount, boolean isActive, ProgramDto program, ShiftDto shift, LocalDateTime createdDate, LocalDateTime modifiedDate) {
+    public GroupDto(Long id, String name, String schoolYear, int studentAmount, boolean isActive, ProgramDto program, ShiftDto shift, LocalDateTime createdDate, LocalDateTime modifiedDate) {
         this.id = id;
         this.name = name;
-        this.year = year;
+        this.schoolYear = schoolYear;
         this.studentAmount = studentAmount;
         this.isActive = isActive;
         this.program = program;
@@ -55,8 +54,8 @@ public class GroupDto {
         return name;
     }
 
-    public String getYear() {
-        return year;
+    public String getSchoolYear() {
+        return schoolYear;
     }
 
     public int getStudentAmount() {
@@ -91,8 +90,8 @@ public class GroupDto {
         this.name = name;
     }
 
-    public void setYear(String year) {
-        this.year = year;
+    public void setSchoolYear(String schoolYear) {
+        this.schoolYear = schoolYear;
     }
 
     public void setStudentAmount(int studentAmount) {
@@ -120,12 +119,12 @@ public class GroupDto {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof GroupDto groupDto)) return false;
-        return year == groupDto.year && studentAmount == groupDto.studentAmount && id.equals(groupDto.id) && name.equals(groupDto.name) && program.equals(groupDto.program) && shift.equals(groupDto.shift);
+        return schoolYear == groupDto.schoolYear && studentAmount == groupDto.studentAmount && id.equals(groupDto.id) && name.equals(groupDto.name) && program.equals(groupDto.program) && shift.equals(groupDto.shift);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, year, studentAmount, program, shift);
+        return Objects.hash(id, name, schoolYear, studentAmount, program, shift);
     }
 
     @Override
@@ -133,7 +132,7 @@ public class GroupDto {
         return "GroupDto{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", year=" + year +
+                ", year=" + schoolYear +
                 ", studentAmount=" + studentAmount +
                 ", program=" + program +
                 ", shift=" + shift +

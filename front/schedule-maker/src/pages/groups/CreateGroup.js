@@ -14,7 +14,7 @@ import { Link } from "react-router-dom";
 
 export function CreateGroup() {
   const [name, setName] = useState("");
-  const [year, setYear] = useState("");
+  const [schoolYear, setSchoolYear] = useState("");
   const [studentAmount, setStudentAmount] = useState("");
   const [program, setProgram] = useState("");
   const [shift, setShift] = useState("");
@@ -54,11 +54,11 @@ export function CreateGroup() {
     setCreateMessage("");
     const badSymbols = "!@#$%^&*_+={}<>|~`\\'";
     let notValidName = name.split("").some((char) => badSymbols.includes(char));
-    let notValidYear = year.split("").some((char) => badSymbols.includes(char));
+    let notValidYear = schoolYear.split("").some((char) => badSymbols.includes(char));
 
     if (
       name === "" &&
-      year === "" &&
+      schoolYear === "" &&
       studentAmount === "" &&
       program === "" &&
       shift === ""
@@ -73,7 +73,7 @@ export function CreateGroup() {
     } else if (notValidName) {
       setNameError(false);
       setNameNotValid(true);
-    } else if (year === "") {
+    } else if (schoolYear === "") {
       setYearError(true);
     } else if (notValidYear) {
       setYearError(false);
@@ -97,7 +97,7 @@ export function CreateGroup() {
       },
       body: JSON.stringify({
         name,
-        year,
+        schoolYear,
         studentAmount,
         program,
         shift,
@@ -121,7 +121,7 @@ export function CreateGroup() {
 
   const clear = () => {
     setName("");
-    setYear("");
+    setSchoolYear("");
     setStudentAmount("");
     fetchPrograms();
     fetchShifts();
@@ -173,10 +173,10 @@ export function CreateGroup() {
                   }
                 variant="outlined"
                 label="Mokslo metai"
-                id="year"
-                name="year"
-                value={year}
-                onChange={(e) => setYear(e.target.value)}
+                id="schoolYear"
+                name="schoolYear"
+                value={schoolYear}
+                onChange={(e) => setSchoolYear(e.target.value)}
               ></TextField>
             </Grid>
 

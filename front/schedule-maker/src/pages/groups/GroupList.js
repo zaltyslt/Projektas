@@ -31,7 +31,7 @@ export function GroupList() {
   const [isChecked, setChecked] = useState(false);
 
   const fetchDeletedGroups = () => {
-    fetch("api/vi/groups/get-inactive")
+    fetch("api/vi/group/get-inactive")
       .then((response) => response.json())
       .then(setDeletedGroups);
   };
@@ -46,7 +46,7 @@ export function GroupList() {
   };
 
   const handleRestore = (id) => {
-    fetch("/api/v1/groups/restore/" + id, {
+    fetch("/api/v1/group/restore/" + id, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
@@ -84,6 +84,7 @@ export function GroupList() {
     setRowsPerPageInDeleted(parseInt(event.target.value, 10));
     setPageInDeleted(0);
   };
+
 
   return (
     <div>
@@ -144,7 +145,7 @@ export function GroupList() {
                     <Link to={"/groups/view/" + group.id}>{group.name}</Link>
                   </TableCell>
                   <TableCell>{group.program}</TableCell>
-                  <TableCell align="center">{group.year}</TableCell>
+                  <TableCell align="center">{group.schoolYear}</TableCell>
                   <TableCell align="center">{group.studentAmount}</TableCell>
                 </TableRow>
               ))}
