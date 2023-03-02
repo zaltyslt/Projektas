@@ -10,6 +10,7 @@ import java.util.List;
 public class ProgramService {
     private final ProgramRepository programRepository;
 
+
     @Autowired
 
     public ProgramService(ProgramRepository programRepository) {
@@ -32,6 +33,7 @@ public class ProgramService {
             existingProgram.setProgramName(program.getProgramName());
             existingProgram.setDescription(program.getDescription());
             existingProgram.setActive(program.isActive());
+
             existingProgram.setSubjectHoursList(program.getSubjectHoursList());
             return programRepository.save(existingProgram);
         }
@@ -39,7 +41,7 @@ public class ProgramService {
     }
 
     public Program finById(Long id) {
-        return programRepository.findById(id).orElse(new Program());
+        return programRepository.findById(id).orElse(null);
     }
 
     public Program disable(Long id) {
