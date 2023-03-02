@@ -92,7 +92,7 @@ export function CreateTeacher() {
 
   const isActive = [
     { value: "true", label: "Aktyvus" },
-    { value: "false", label: "Neaktyvus" },
+    { value: "false", label: "Neaktyvus" }
   ];
 
   const applyResult = (result) => {

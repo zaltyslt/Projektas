@@ -1,7 +1,6 @@
 package lt.techin.schedule.teachers;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import lt.techin.schedule.shift.ShiftDto;
 import lt.techin.schedule.teachers.contacts.ContactDto2;
 import lt.techin.schedule.teachers.helpers.TeacherShiftDto;
 import lt.techin.schedule.teachers.helpers.TeacherSubjectsDto;
@@ -30,7 +29,7 @@ public class TeacherDto implements Serializable {
     @JsonFormat(pattern = "yyyy.MM.dd HH:mm")
     private LocalDateTime dateCreated;
     @JsonFormat(pattern = "yyyy.MM.dd HH:mm")
-    private LocalDateTime dateMotified;
+    private LocalDateTime dateModified;
 
     private String message;
 
@@ -129,12 +128,12 @@ public class TeacherDto implements Serializable {
         this.dateCreated = dateCreated;
     }
 
-    public LocalDateTime getDateMotified() {
-        return dateMotified;
+    public LocalDateTime getDateModified() {
+        return dateModified;
     }
 
-    public void setDateMotified(LocalDateTime dateMotified) {
-        this.dateMotified = dateMotified;
+    public void setDateModified(LocalDateTime dateModified) {
+        this.dateModified = dateModified;
     }
 
     public String getMessage() {
@@ -159,7 +158,7 @@ public class TeacherDto implements Serializable {
                 ", teacherShiftDto=" + teacherShiftDto +
 
                 ", dateCreated=" + dateCreated +
-                ", dateMotified=" + dateMotified +
+                ", dateMotified=" + dateModified +
                 ", message='" + message + '\'' +
                 '}';
     }

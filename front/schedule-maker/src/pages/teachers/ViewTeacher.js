@@ -73,7 +73,7 @@ export function ViewTeacher() {
             <header>
               <h1>{teacher.fName}</h1>
               <span id="modified-date">
-                Paskutinį kartą redaguota: {teacher.dateMotified}
+                Paskutinį kartą redaguota: {teacher.dateModified}
               </span>
             </header>
           </Grid>

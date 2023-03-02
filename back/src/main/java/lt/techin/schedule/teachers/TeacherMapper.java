@@ -1,8 +1,6 @@
 package lt.techin.schedule.teachers;
 
-import lt.techin.schedule.shift.ShiftMapper;
 import lt.techin.schedule.teachers.contacts.Contact;
-import lt.techin.schedule.teachers.contacts.ContactDto;
 import lt.techin.schedule.teachers.contacts.ContactDto2;
 import lt.techin.schedule.teachers.contacts.ContactMapper;
 import lt.techin.schedule.teachers.helpers.TeacherShiftMapper;
@@ -34,7 +32,7 @@ public class TeacherMapper {
                 ? ContactMapper.contactToDto2(teacher.getContacts()) : new ContactDto2());
 
         dto.setDateCreated(teacher.getCreatedDateTime());
-        dto.setDateMotified(teacher.getModifiedDateAndTime());
+        dto.setDateModified(teacher.getModifiedDateAndTime());
 
         return dto;
 

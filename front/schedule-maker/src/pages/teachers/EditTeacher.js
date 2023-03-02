@@ -25,12 +25,14 @@ import {
   import { width } from "@mui/system";
   
   export function EditTeacher() {
+   
     const [teacher, setTeacher] =useState(''); 
     const params = useParams();
     
     const [fName, setFName] = useState("");
     const [lName, setLName] = useState("");
     const [nickName, setNickName] = useState("");
+    const [dateModified, setDateModified] = useState("");
     
     const [workHours, setWorkHours] = useState("");
     const [active, setActive] = useState(true);
@@ -43,8 +45,7 @@ import {
         
     const [shifts, setShifts] = useState([]);
     const [selectedShift, setSelectedShift] = useState("");
-    
-    
+        
     const [subject, setSubject] = useState("");
     const [subjects, setSubjects] = useState([]);
     const [showSubjSelect, setShowSubjSelect] = useState(false);
@@ -73,19 +74,22 @@ import {
     };
   
     useEffect(() => {
-      fetchSubjects();
-    }, []);
-
-    useEffect(() => {
         fetch("api/v1/teachers/view?tid=" + params.id)
           .then((response) => response.json())
-          .then(setTeacher)
-          .then(()=>
-            {
-                console.log(params);
-            console.log(teacher);
-        });
+          .then((data)=>{
+            console.log(data);
+            setTeacher(data);
+            setUpTeacher(data);
+            });
+              
       }, []);
+
+      useEffect(() => {
+        fetchSubjects();
+      }, []);
+
+      // useEffect(() => {
+      //   },[teacher]);
   
     useEffect(() => {
       fetch("api/v1/shift/get-active")
@@ -98,12 +102,27 @@ import {
         .then((response) => response.json())
         .then((data) => {
           setSubjects(data);
-          return data;
+          // return data;
         })
         // .then((data) => setFilteredSubjects(data))
         // .then((data) => console.log(data));
     };
-  
+    const setUpTeacher = (data) =>{
+      setFName(data.fName);
+      setLName(data.lName);
+      setNickName(data.nickName);
+      // console.log(data.dateModified);
+      setDateModified(data.dateModified);
+      setPhone_number(data.contacts.phoneNumber);
+      setDirect_email(data.contacts.directEmail);
+      setTeams_name(data.contacts.teamsName);
+      setTeams_email(data.contacts.teamsEmail);
+      setWorkHours(data.workHoursPerWeek);
+      setSelectedShift(data.teacherShiftDto);
+      setActive(data.active);
+
+      
+    };
     const isActive = [
       { value: "true", label: "Aktyvus" },
       { value: "false", label: "Neaktyvus" },
@@ -128,7 +147,7 @@ import {
       setShowSubjSelect(false);
     };
   const handleRemoveChosen = (subjectRem)=> {
-    console.log(subjectRem);
+    // console.log(subjectRem);
     setSubjects([...subjects, subjectRem]);
     const removed = chosenSubjects.filter(subject => subject.id != subjectRem.id);
     setChosenSubjects(removed);
@@ -148,7 +167,7 @@ import {
         "name": selectedShift.name
       };
   
-      console.log(chosenSubjects);
+      // console.log(chosenSubjects);
       
       const chosenSubjectsDto = chosenSubjects.map(({ id }) => ({ "subjectId": id }));
       const subjectIds = chosenSubjectsDto.map(obj => obj.subjectId);
@@ -173,18 +192,19 @@ import {
     
   
         }),
-      }).then(applyResult)
-      .then(console.log( active));
+      }).then(applyResult);
     };
     const row1 = 3.5;
     const row2 = 3.5;
     const row3 = 3.5;
+    
+        
     return (
       <Container style={{ maxWidth: "75rem" }}>
         <form>
           <h3 className="create-header">Redagavimas</h3>
-          <h3>{teacher.fName + " " + teacher.lName}</h3>
-         <span id="modified-date">Paskutinį kartą redaguota: {teacher.dateMotified}</span>
+          <h3>{fName + " " + lName}</h3>
+         <span id="modified-date">Paskutinį kartą redaguota: {dateModified}</span>
           {<p className="Deleted">Error:   {error&&error}   </p>}
           {<p className="Deleted">Success:   {success && success}   </p>}
   
@@ -205,7 +225,7 @@ import {
                 variant="outlined"
                 label="Vardas"
                 id="fname"
-                value={teacher.fName}
+                value={fName}
                 onChange={(e) => setFName(e.target.value)}
               ></TextField>
             </Grid>
@@ -217,7 +237,7 @@ import {
                 variant="outlined"
                 label="Pavardė"
                 id="lname"
-                value={teacher.lName}
+                value={lName}
                 onChange={(e) => setLName(e.target.value)}
               ></TextField>
             </Grid>
@@ -300,7 +320,8 @@ import {
                   label="Galima pamaina"
                   labelId="shift-label"
                   id="shift"
-                  value={selectedShift}
+                  defaultValue={selectedShift}
+                  value={"aa", shifts}
                   onChange={(e) => {
                     setSelectedShift(e.target.value);
                   }}
@@ -313,6 +334,8 @@ import {
                 </Select>
               </FormControl>
             </Grid>
+            
+            
             <Grid item sm={row3}>
               <FormControl fullWidth>
                 <InputLabel id="demo-simple-select-label">Būsena</InputLabel>
