@@ -75,6 +75,9 @@ public class GroupService {
             if (groupDto.getCreatedDate() == null) {
                 groupDto.setCreatedDate(groupRepository.findById(groupID).get().getCreatedDate());
             }
+            if (!groupDto.getIsActive()) {
+                groupDto.setIsActive(true);
+            }
             Group groupToSave = GroupMapper.dtoToGroup(groupDto);
             groupRepository.save(groupToSave);
             return "";

@@ -55,7 +55,7 @@ export function GroupList() {
   };
 
   const handleRestore = (id) => {
-    fetch("api/v1/group/restore/" + id, {
+    fetch("api/v1/group/activate-group/" + id, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",

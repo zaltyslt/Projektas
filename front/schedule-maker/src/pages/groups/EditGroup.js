@@ -15,7 +15,7 @@ import { Link, useHref, useParams } from "react-router-dom";
 export function EditGroup() {
   const [group, setGroup] = useState({
     name: "",
-    year: "",
+    schoolYear: "",
     studentAmount: 0,
     program: {},
     shift: {},
@@ -23,7 +23,7 @@ export function EditGroup() {
   const params = useParams();
 
   const [name, setName] = useState("");
-  const [year, setYear] = useState("");
+  const [schoolYear, setSchoolYear] = useState("");
   const [studentAmount, setStudentAmount] = useState("");
   const [program, setProgram] = useState("");
   const [shift, setShift] = useState("");
@@ -52,12 +52,12 @@ export function EditGroup() {
   useEffect(() => fetchShifts, []);
 
   const fetchGroup = () => {
-    fetch("api/v1/group/" + params.id)
+    fetch("api/v1/group/view-group/" + params.id)
       .then((response) => response.json())
       .then((data) => {
         setGroup(data);
         setName(data.name);
-        setYear(data.year);
+        setSchoolYear(data.schoolYear);
         setStudentAmount(data.studentAmount);
       });
   };
@@ -78,11 +78,11 @@ export function EditGroup() {
     setCreateMessage("");
     const badSymbols = "!@#$%^&*_+={}<>|~`\\'";
     let notValidName = name.split("").some((char) => badSymbols.includes(char));
-    let notValidYear = year.split("").some((char) => badSymbols.includes(char));
+    let notValidYear = schoolYear.split("").some((char) => badSymbols.includes(char));
 
     if (
       name === "" &&
-      year === "" &&
+      schoolYear === "" &&
       studentAmount === "" &&
       program === "" &&
       shift === ""
@@ -97,7 +97,7 @@ export function EditGroup() {
     } else if (notValidName) {
       setNameError(false);
       setNameNotValid(true);
-    } else if (year === "") {
+    } else if (schoolYear === "") {
       setYearError(true);
     } else if (notValidYear) {
       setYearError(false);
@@ -114,20 +114,19 @@ export function EditGroup() {
   };
 
   const editGroup = () => {
-    fetch("api/v1/group/" + params.id, {
-      method: "PATCH",
+    fetch("api/v1/group/modify-group/" + params.id, {
+      method: "PUT",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
         name,
-        year,
+        schoolYear,
         studentAmount,
         program,
         shift,
       }),
     }).then((response) => {
-      // let statusCode = response.status;
       let success = response.ok;
 
       response.json().then((response) => {
@@ -135,8 +134,6 @@ export function EditGroup() {
           setCreateMessage("");
           setError(response.message);
         } else {
-          setModuleError(false);
-          setClassRoomError(false);
           setCreateMessage("Sėkmingai atnaujinta. ");
           setError("");
         }
@@ -145,7 +142,7 @@ export function EditGroup() {
   };
 
   const deleteGroup = (id) => {
-    fetch("/api/v1/group/delete/" + id, {
+    fetch("/api/v1/group/deactivate-group/" + id, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
@@ -199,10 +196,10 @@ export function EditGroup() {
                 }
                 variant="outlined"
                 label="Mokslo metai"
-                id="year"
-                name="year"
-                value={year}
-                onChange={(e) => setYear(e.target.value)}
+                id="schoolYear"
+                name="schoolYear"
+                value={schoolYear}
+                onChange={(e) => setSchoolYear(e.target.value)}
               ></TextField>
             </Grid>
 
