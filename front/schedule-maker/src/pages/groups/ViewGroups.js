@@ -28,7 +28,7 @@ export function ViewGroup() {
 
           <Grid item sm={12}>
             <h4>Programa</h4>
-            <p>{group.program.programName}</p>
+            <p>{group.program && group.program.programName}</p>
           </Grid>
           <Grid item sm={12}>
             <h4>Mokslo metai</h4>
@@ -36,7 +36,7 @@ export function ViewGroup() {
           </Grid>
           <Grid item sm={12}>
             <h4>Pamaina</h4>
-            <p>{group.shift.name}</p>
+            <p>{group.shift && group.shift.name}</p>
           </Grid>
           <Grid item sm={12}>
             <h4>Studentų kiekis</h4>

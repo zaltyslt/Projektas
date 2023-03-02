@@ -28,12 +28,10 @@ public class GroupService {
     private final Comparator<Group> compareGroupByName = Comparator.comparing(o -> o.getName().toLowerCase());
 
     public List<Group> getActiveGroups() {
-        System.out.println("Getting active");
         return groupRepository.findAll().stream().filter(Group::getIsActive).sorted(compareGroupByName).collect(Collectors.toList());
     }
 
     public List<Group> getInactiveGroups() {
-        System.out.println("Getting inactive");
         return groupRepository.findAll().stream().filter(s -> !s.getIsActive()).sorted(compareGroupByName).collect(Collectors.toList());
     }
 

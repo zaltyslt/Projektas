@@ -49,7 +49,6 @@ export function GroupList() {
     fetch("api/v1/group/get-active")
       .then((response) => response.json())
       .then((data) => {
-        console.log(data)
         setGroups(data);
         setFilteredGroups(data);
       });
@@ -96,7 +95,6 @@ export function GroupList() {
   };
 
   const handleSearch = () => {
-    console.log(groups);
   }
 
   return (
