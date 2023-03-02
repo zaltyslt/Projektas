@@ -123,25 +123,27 @@ export function CreateProgram(props) {
               onChange={(e) => setDescription(e.target.value)}
             ></TextField>
           </Grid>
+          
           <Grid item sm={10}>
-            {error && (
+            <Stack direction="row" spacing={2}>
+              <Button variant="contained" onClick={createProgram}>
+                Išsaugoti
+              </Button>
+              <Button variant="contained" onClick={() => navigate(-1)}>
+                Grįžti
+              </Button>
+            </Stack>  {error && (
                 <Alert severity="warning">
                 {error}
               </Alert>
             )}
+            </Grid>
+            <Grid item sm={10}>
             {success && (
                 <Alert severity="success">
                 {success}
               </Alert>
             )}
-            <Stack direction="row" spacing={2}>
-              <Button variant="contained" onClick={createProgram}>
-                Sukurti
-              </Button>
-              <Button variant="contained" onClick={() => navigate(-1)}>
-                Grįžti
-              </Button>
-            </Stack>
           </Grid>
         </Grid>
       </form>
