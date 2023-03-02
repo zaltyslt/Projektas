@@ -31,8 +31,6 @@ public class Group {
     @JoinColumn(name = "program_group")
     private Program program;
 
-//    private String program;
-
     @ManyToOne
     @JoinColumn(name = "shift_group")
     private Shift shift;

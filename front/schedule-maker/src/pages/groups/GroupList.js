@@ -20,7 +20,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 export function GroupList() {
-  const [groups, setGruoups] = useState([]);
+  const [groups, setGroups] = useState([]);
   const [deletedGroups, setDeletedGroups] = useState([]);
   const [filteredGroups, setFilteredGroups] = useState([]);
 
@@ -29,6 +29,16 @@ export function GroupList() {
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [rowsPerPageInDeleted, setRowsPerPageInDeleted] = useState(10);
   const [isChecked, setChecked] = useState(false);
+
+  useEffect(() => {
+    fetchGroups();
+  }, []);
+
+  useEffect(() => {
+    fetchDeletedGroups();
+  }, []);
+
+
 
   const fetchDeletedGroups = () => {
     fetch("api/vi/group/get-inactive")
@@ -40,13 +50,14 @@ export function GroupList() {
     fetch("api/v1/group/get-active")
       .then((response) => response.json)
       .then((data) => {
-        setGruoups(data);
+        console.log(data)
+        setGroups(data);
         setFilteredGroups(data);
       });
   };
 
   const handleRestore = (id) => {
-    fetch("/api/v1/group/restore/" + id, {
+    fetch("api/v1/group/restore/" + id, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
@@ -85,6 +96,9 @@ export function GroupList() {
     setPageInDeleted(0);
   };
 
+  const handleSearch = () => {
+    console.log(groups);
+  }
 
   return (
     <div>
@@ -216,7 +230,7 @@ export function GroupList() {
                   <TableRow key={group.id}>
                     <TableCell component="th" scope="row">{group.name}</TableCell>
                     <TableCell>{group.program}</TableCell>
-                    <TableCell align="center">{group.year}</TableCell>
+                    <TableCell align="center">{group.schoolYear}</TableCell>
                     <TableCell align="center">{group.studentAmount}</TableCell>
                     <TableCell align="center" className="activity">
                       <Button
