@@ -17,7 +17,7 @@ public class TeacherDto implements Serializable {
     private String fName;
     private String lName;
     private String nickName;
-    private Set<TeacherSubjectsDto> subjectsDtoList;
+    private Set<TeacherSubjectsDto> subjectsList;
 //    private List<ContactDto> contacts;
     private ContactDto2 contacts;
     private TeacherShiftDto teacherShiftDto;
@@ -72,12 +72,12 @@ public class TeacherDto implements Serializable {
         this.nickName = nickName;
     }
 
-    public Set<TeacherSubjectsDto> getSubjectsDtoList() {
-        return subjectsDtoList;
+    public Set<TeacherSubjectsDto> getSubjectsList() {
+        return subjectsList;
     }
 
-    public void setSubjectsDtoList(Set<TeacherSubjectsDto> subjectsDtoList) {
-        this.subjectsDtoList = subjectsDtoList;
+    public void setSubjectsList(Set<TeacherSubjectsDto> subjectsList) {
+        this.subjectsList = subjectsList;
     }
 
     public ContactDto2 getContacts() {
@@ -154,7 +154,7 @@ public class TeacherDto implements Serializable {
                 ", workHoursPerWeek=" + workHoursPerWeek +
                 ", isActive=" + isActive +
                 ", contacts=" + contacts +
-                ", subjectsDtoList=" + subjectsDtoList +
+                ", subjectsDtoList=" + subjectsList +
                 ", teacherShiftDto=" + teacherShiftDto +
 
                 ", dateCreated=" + dateCreated +

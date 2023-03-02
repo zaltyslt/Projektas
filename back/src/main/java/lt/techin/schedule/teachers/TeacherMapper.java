@@ -19,7 +19,7 @@ public class TeacherMapper {
         dto.setlName(teacher.getlName() != null ? teacher.getlName() : "");
         dto.setNickName(teacher.getNickName() != null ? teacher.getNickName() : "");
 
-        dto.setSubjectsDtoList(teacher.getSubjects() != null
+        dto.setSubjectsList(teacher.getSubjects() != null
                 ? TeacherSubjectMapper.subjectsToDtos(teacher.getSubjects())
                 : new HashSet<TeacherSubjectsDto>());
         dto.setWorkHoursPerWeek(teacher.getWorkHoursPerWeek() != null ? teacher.getWorkHoursPerWeek() : 0);
@@ -73,8 +73,8 @@ public class TeacherMapper {
         teacher.setfName(dto.getfName() != null ? dto.getfName().trim() : "_empty");
         teacher.setlName(dto.getlName() != null ? dto.getlName().trim() : "_empty");
         teacher.setNickName(dto.getNickName() != null ? dto.getNickName().trim() : "_empty");
-        teacher.setSubjects(dto.getSubjectsDtoList() != null
-                ? TeacherSubjectMapper.subjectsFromDtos(dto.getSubjectsDtoList())
+        teacher.setSubjects(dto.getSubjectsList() != null
+                ? TeacherSubjectMapper.subjectsFromDtos(dto.getSubjectsList())
                 : null);
         teacher.setWorkHoursPerWeek(dto.getWorkHoursPerWeek());
 //        teacher.setShift(ShiftMapper.shiftFromDto(dto.getShiftDtoNew()));

@@ -66,7 +66,6 @@ export function CreateTeacher() {
     setWorkHours("");
     setActive("");
     setSubjects("");
-    
   };
 
   useEffect(() => {
@@ -85,14 +84,14 @@ export function CreateTeacher() {
       .then((data) => {
         setSubjects(data);
         return data;
-      })
-      // .then((data) => setFilteredSubjects(data))
-      // .then((data) => console.log(data));
+      });
+    // .then((data) => setFilteredSubjects(data))
+    // .then((data) => console.log(data));
   };
 
   const isActive = [
     { value: "true", label: "Aktyvus" },
-    { value: "false", label: "Neaktyvus" }
+    { value: "false", label: "Neaktyvus" },
   ];
 
   const applyResult = (result) => {
@@ -109,36 +108,37 @@ export function CreateTeacher() {
 
   const handleChosenSubjects = (subjectNew) => {
     setChosenSubjects([...chosenSubjects, subjectNew]);
-    const removed = subjects.filter(subject => subject.id != subjectNew.id);
+    const removed = subjects.filter((subject) => subject.id != subjectNew.id);
     setSubjects(removed);
     setShowSubjSelect(false);
   };
-const handleRemoveChosen = (subjectRem)=> {
-  console.log(subjectRem);
-  setSubjects([...subjects, subjectRem]);
-  const removed = chosenSubjects.filter(subject => subject.id != subjectRem.id);
-  setChosenSubjects(removed);
-};
+  const handleRemoveChosen = (subjectRem) => {
+    setSubjects([...subjects, subjectRem]);
+
+    const removed = chosenSubjects.filter(
+      (subject) => subject.id != subjectRem.id
+    );
+    setChosenSubjects(removed);
+  };
 
   const createTeacher = async () => {
-
     const teacherContacts = {
       phoneNumber: phone_number,
       directEmail: direct_email,
       teamsEmail: teams_name,
-      teamsName: teams_email
+      teamsName: teams_email,
     };
 
     const teacherShiftDto = {
-      "id":selectedShift.id,
-      "name": selectedShift.name
+      id: selectedShift.id,
+      name: selectedShift.name,
     };
 
     console.log(chosenSubjects);
-    
-    const chosenSubjectsDto = chosenSubjects.map(({ id }) => ({ "subjectId": id }));
-    const subjectIds = chosenSubjectsDto.map(obj => obj.subjectId);
-        
+
+    // const chosenSubjectsDto = chosenSubjects.map(({ id }) => ({ "subjectId": id }));
+    // const subjectIds = chosenSubjectsDto.map(obj => obj.subjectId);
+
     // fetch("/api/v1/teachers", {
     fetch("/api/v1/teachers/create", {
       method: "POST",
@@ -146,21 +146,19 @@ const handleRemoveChosen = (subjectRem)=> {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        "id": null, 
-        "fName": fName,
-        "lName": lName,
-        "nickName": nickName,
-        "workHoursPerWeek": workHours,
-        "active":  active,
-        "contacts":  teacherContacts,
-        "teacherShiftDto": teacherShiftDto, 
-        "subjectsDtoList": chosenSubjectsDto
-      
-  
-
+        id: null,
+        fName: fName,
+        lName: lName,
+        nickName: nickName,
+        workHoursPerWeek: workHours,
+        active: active,
+        contacts: teacherContacts,
+        teacherShiftDto: teacherShiftDto,
+        subjectsDtoList: chosenSubjectsDto,
       }),
-    }).then(applyResult)
-    .then(console.log( active));
+    })
+      .then(applyResult)
+      .then(console.log(active));
   };
   const row1 = 3.5;
   const row2 = 3.5;
@@ -168,13 +166,10 @@ const handleRemoveChosen = (subjectRem)=> {
   return (
     <Container style={{ maxWidth: "75rem" }}>
       <form>
-        <h3 className="create-header">Pridėti naują dėstytoją</h3>
-        {<p className="Deleted">Error:   {error&&error}   </p>}
-        {<p className="Deleted">Success:   {success && success}   </p>}
+        <h3 className="create-header">Pridėti naują mokytoją</h3>
+        {<p className="Deleted">Error: {error && error} </p>}
+        {<p className="Deleted">Success: {success && success} </p>}
 
-        
-        
-        
         <Grid
           container
           direction="row"
@@ -312,8 +307,7 @@ const handleRemoveChosen = (subjectRem)=> {
                 inputProps={{ "aria-label": "Without label" }}
                 onChange={(e) => setActive(e.target.value)}
               >
-
-               { isActive.map((isActive,index) => (
+                {isActive.map((isActive, index) => (
                   <MenuItem key={index} value={isActive.value}>
                     {isActive.label}
                   </MenuItem>
@@ -322,26 +316,27 @@ const handleRemoveChosen = (subjectRem)=> {
             </FormControl>
           </Grid>
 
-         <Grid item sm={12} >
-         { showSubjSelect && (<FormControl fullWidth>
-              <InputLabel id="subjects-label">Dalykai</InputLabel>
-              <Select
-                label="Dalyko pavadinimas"
-                labelId="subject-label"
-                id="subject"
-                value={subject}
-                defaultOpen={true}
-                onChange={(e) => handleChosenSubjects(e.target.value)}
-              >
-                {subjects.map((subject, index) => (
-                  <MenuItem key={index} value={subject}>
-                    {subject.name}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>)
-          }
-           
+          <Grid item sm={12}>
+            {showSubjSelect && (
+              <FormControl fullWidth>
+                <InputLabel id="subjects-label">Dalykai</InputLabel>
+                <Select
+                  label="Dalyko pavadinimas"
+                  labelId="subject-label"
+                  id="subject"
+                  value={subject}
+                  defaultOpen={true}
+                  onChange={(e) => handleChosenSubjects(e.target.value)}
+                >
+                  {subjects.map((subject, index) => (
+                    <MenuItem key={index} value={subject}>
+                      {subject.name}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            )}
+
             <TableContainer component={Paper}>
               <Table aria-label="custom pagination table">
                 <TableHead>
@@ -357,16 +352,13 @@ const handleRemoveChosen = (subjectRem)=> {
                 </TableHead>
 
                 <TableBody>
-
-
-                  {chosenSubjects.map((subject,index) => (
+                  {chosenSubjects.map((subject, index) => (
                     <TableRow key={index}>
-                      <TableCell  component="th" scope="row">
+                      <TableCell component="th" scope="row">
                         {subject.name}
                       </TableCell>
                       <TableCell>
-                        {subject.module
-                        ? (
+                        {subject.module ? (
                           subject.module.deleted ? (
                             <p className="Deleted">
                               {subject.module.name} - modulis buvo ištrintas
@@ -374,14 +366,14 @@ const handleRemoveChosen = (subjectRem)=> {
                           ) : (
                             subject.module.name
                           )
-                        )
-                        : ( <p>Nenurodytas</p>
+                        ) : (
+                          <p>Nenurodytas</p>
                         )}
                       </TableCell>
-                      <TableCell  align="center" className="activity">
+                      <TableCell align="center" className="activity">
                         <Button
                           variant="contained"
-                         onClick={(e) => handleRemoveChosen(subject)}
+                          onClick={(e) => handleRemoveChosen(subject)}
                         >
                           Ištrinti
                         </Button>
@@ -392,8 +384,7 @@ const handleRemoveChosen = (subjectRem)=> {
               </Table>
             </TableContainer>
           </Grid>
-          
-          
+
           <Grid item sm={12}>
             <Stack direction="row" spacing={2}>
               <Button variant="contained" onClick={createTeacher}>

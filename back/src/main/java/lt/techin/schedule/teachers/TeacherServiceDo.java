@@ -61,8 +61,8 @@ public class TeacherServiceDo {
         List<Contact>  contactsToSave= ContactMapper.contactFromDto2(contactsDto);
         newTeacher.setContacts(contactsToSave);
 
-        if (!teacherDto.getSubjectsDtoList().isEmpty()) {
-            Set<Subject> subjectsFromDto = TeacherSubjectMapper.subjectsFromDtos(teacherDto.getSubjectsDtoList());
+        if (!teacherDto.getSubjectsList().isEmpty()) {
+            Set<Subject> subjectsFromDto = TeacherSubjectMapper.subjectsFromDtos(teacherDto.getSubjectsList());
 
             Set<Subject> foundSubjects = subjectsFromDto.stream()
                     .filter(s -> subjectRepository.existsById(s.getId()))

@@ -27,12 +27,12 @@ public class TeacherServiceFind {
         this.subjectRepository = subjectRepository;
     }
 
-    protected Set<TeacherDto> getAllTeachers() {
+    public Set<TeacherDto> getAllTeachers() {
         List<Teacher> teachers = teacherRepository.findAll();
         return TeacherMapper.teacherToDto(teachers);
     }
 
-    protected TeacherDto getTeacherById(Long id) {
+    public TeacherDto getTeacherById(Long id) {
 //        Optional<Teacher> result = null;
 
 //        try{
@@ -45,13 +45,13 @@ public class TeacherServiceFind {
                 : new TeacherDto();
     }
 
-    protected Set<TeacherDto> getTeachersByName(String name) {
+    public Set<TeacherDto> getTeachersByName(String name) {
         name = "%" + name.toLowerCase() + "%";
         var result = teacherRepository.getTeachersByNameFragment(name);
         return TeacherMapper.teacherToDto(result);
     }
 
-    protected Set<TeacherDto> getTeachersBySubjects(Subject subject) {
+    public Set<TeacherDto> getTeachersBySubjects(Subject subject) {
         var result = teacherRepository.getTeacherBySubject(subject);
         //Comparator<Teacher> byLastName = Comparator.comparing(Teacher::getlName);
         return !result.isEmpty()
@@ -63,7 +63,7 @@ public class TeacherServiceFind {
                 : new HashSet<TeacherDto>();
     }
 
-    protected Set<TeacherDto> getTeachersByActiveStatus(boolean active) {
+    public Set<TeacherDto> getTeachersByActiveStatus(boolean active) {
         var result = teacherRepository.findByisActive(active);
         return !result.isEmpty()
                 ? result.stream()
@@ -74,4 +74,6 @@ public class TeacherServiceFind {
                 : new HashSet<TeacherDto>();
 //            return new HashSet<TeacherDto>();
     }
+
+
 }
