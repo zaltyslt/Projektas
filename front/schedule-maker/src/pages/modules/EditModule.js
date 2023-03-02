@@ -43,7 +43,7 @@ export function EditModule() {
   }, []);
 
   const deleteModule = async (id) => {
-    await fetch("/api/v1/modules/" + id, {
+    await fetch("api/v1/modules/" + id, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
@@ -58,7 +58,7 @@ export function EditModule() {
   }
 
   const editModule = async () => {
-      await fetch(`/api/v1/modules/update/${params.id}`, {
+      await fetch(`api/v1/modules/update/${params.id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
