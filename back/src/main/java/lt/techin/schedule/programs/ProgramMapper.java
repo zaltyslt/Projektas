@@ -9,6 +9,8 @@ public class ProgramMapper {
         programDto.setActive(program.isActive());
         programDto.setCreatedDate(program.getCreatedDate());
         programDto.setModifiedDate(program.getModifiedDate());
+
+        programDto.setSubjectHoursList(program.getSubjectHoursList());
         return programDto;
     }
     public static Program toProgram(ProgramDto programDto){
@@ -19,6 +21,8 @@ public class ProgramMapper {
         program.setActive(programDto.isActive());
         program.setCreatedDate(programDto.getCreatedDate());
         program.setModifiedDate(programDto.getModifiedDate());
+
+        program.setSubjectHoursList(programDto.getSubjectHoursList());
         return program;
     }
 }

@@ -25,7 +25,6 @@ import {
 import { Container } from "@mui/system";
 import { SelectChangeEvent } from "@mui/material/Select";
 
-
 export function ProgramList() {
     const [programs, setPrograms] = useState([])
     const [filter, setFilter] = useState("")
@@ -36,7 +35,6 @@ export function ProgramList() {
     const paginate = (pageNumber) => setCurrentPage(pageNumber)
     const paginate2 = (pageNumber2) => setCurrentPage2(pageNumber2)
     const [isChecked, setChecked] = useState(false)
-
 
     const fetchPrograms = () => {
         fetch("/api/v1/programs")
@@ -71,7 +69,6 @@ export function ProgramList() {
             .includes(filter.toLowerCase())
             && program.active === false;
     });
-
 
     const indexOfLastProgram = currentPage * programsPerPage;
     const indexOfFirstProgram = indexOfLastProgram - programsPerPage;
@@ -132,10 +129,7 @@ export function ProgramList() {
                             </Link>
                         </Stack>
                     </Grid>
-
                     <Grid item sm={12}>
-
-
                         <TextField
                             fullWidth
                             variant="outlined"
