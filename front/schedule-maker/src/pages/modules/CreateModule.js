@@ -51,6 +51,8 @@ export function CreateModule() {
   const applyResult = (data) => {
     if (data.valid) {
       setSuccessfulPost(true);
+      setName("");
+      setNumber("");
     }
     else {
         setModuleErrors(data)

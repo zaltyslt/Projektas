@@ -135,14 +135,6 @@ export function GroupList() {
               </TableRow>
             </TableHead>
             <TableBody>
-              <TableRow>
-                <TableCell>JP20</TableCell>
-                <TableCell>
-                  Illlllllllllllllllllllllllllllgas pavadinimas
-                </TableCell>
-                <TableCell align="center">2023-2024</TableCell>
-                <TableCell align="center">20</TableCell>
-              </TableRow>
 
               {(rowsPerPage > 0
                 ? filteredGroups.slice(
