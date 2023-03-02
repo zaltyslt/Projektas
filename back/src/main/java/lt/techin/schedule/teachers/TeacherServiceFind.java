@@ -7,10 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -36,8 +33,13 @@ public class TeacherServiceFind {
     }
 
     protected TeacherDto getTeacherById(Long id) {
+//        Optional<Teacher> result = null;
 
-        var result = teacherRepository.findById(id);
+//        try{
+//         result = teacherRepository.findById(id);}
+//
+//catch(Exception e){}
+      var  result = teacherRepository.findById(id);
         return result.isPresent()
                 ? TeacherMapper.teacherToDto(result)
                 : new TeacherDto();

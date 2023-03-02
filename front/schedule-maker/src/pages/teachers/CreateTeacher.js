@@ -31,10 +31,10 @@ export function CreateTeacher() {
   const [subject, setSubject] = useState("");
   const [chosenSubjects, setChosenSubjects] = useState([]);
 
+  const [fName, setFName] = useState("");
   const [shifts, setShifts] = useState([]);
   const [selectedShift, setSelectedShift] = useState("");
 
-  const [fName, setFName] = useState("");
   const [lName, setLName] = useState("");
   const [nickName, setNickName] = useState("");
 
@@ -42,9 +42,13 @@ export function CreateTeacher() {
   const [direct_email, setDirect_email] = useState("");
   const [teams_name, setTeams_name] = useState("");
   const [teams_email, setTeams_email] = useState("");
+  const [contacts, setContacts] = useState("");
 
   const [workHours, setWorkHours] = useState("");
-  const [active, setActive] = useState("");
+  const [active, setActive] = useState(true);
+
+  const [success, setSuccess] = useState();
+  const [error, setError] = useState();
 
   let navigate = useNavigate();
 
@@ -62,6 +66,7 @@ export function CreateTeacher() {
     setWorkHours("");
     setActive("");
     setSubjects("");
+    
   };
 
   useEffect(() => {
@@ -82,7 +87,7 @@ export function CreateTeacher() {
         return data;
       })
       // .then((data) => setFilteredSubjects(data))
-      .then((data) => console.log(data));
+      // .then((data) => console.log(data));
   };
 
   const isActive = [
@@ -103,40 +108,59 @@ export function CreateTeacher() {
   };
 
   const handleChosenSubjects = (subjectNew) => {
-    // console.log(event.name +" " +event.id);
-    const sub = chosenSubjects.push(subjectNew);
-    console.log(chosenSubjects);
-
+    setChosenSubjects([...chosenSubjects, subjectNew]);
+    const removed = subjects.filter(subject => subject.id != subjectNew.id);
+    setSubjects(removed);
     setShowSubjSelect(false);
-
-    // Find the index of the object with id = 3
-    const index = subjects.findIndex((subjectNew) => subjectNew.id);
-
-    // Remove the object at the specified index
-    subjects.splice(index, 1);
-
-    // const subjects = [...chosenSubjects, event];
-    //   setChosenSubjects (subject);
   };
-  // const handleRoomInput = (event) => {
-  //   const {
-  //     target: { value },  } = event;
-  //   setClassRooms(typeof value === "string" ? value.split(",") : value);
-  // };
+const handleRemoveChosen = (subjectRem)=> {
+  console.log(subjectRem);
+  setSubjects([...subjects, subjectRem]);
+  const removed = chosenSubjects.filter(subject => subject.id != subjectRem.id);
+  setChosenSubjects(removed);
+};
 
   const createTeacher = async () => {
-    fetch("/api/v1/teachers", {
+
+    const teacherContacts = {
+      phoneNumber: phone_number,
+      directEmail: direct_email,
+      teamsEmail: teams_name,
+      teamsName: teams_email
+    };
+
+    const teacherShiftDto = {
+      "id":selectedShift.id,
+      "name": selectedShift.name
+    };
+
+    console.log(chosenSubjects);
+    
+    const chosenSubjectsDto = chosenSubjects.map(({ id }) => ({ "subjectId": id }));
+    const subjectIds = chosenSubjectsDto.map(obj => obj.subjectId);
+        
+    // fetch("/api/v1/teachers", {
+    fetch("/api/v1/teachers/create", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        fName,
-        lName,
-        nickName,
-        selectedShift,
+        "id": null, 
+        "fName": fName,
+        "lName": lName,
+        "nickName": nickName,
+        "workHoursPerWeek": workHours,
+        "active":  active,
+        "contacts":  teacherContacts,
+        "teacherShiftDto": teacherShiftDto, 
+        "subjectsDtoList": chosenSubjectsDto
+      
+  
+
       }),
-    }).then(applyResult);
+    }).then(applyResult)
+    .then(console.log( active));
   };
   const row1 = 3.5;
   const row2 = 3.5;
@@ -145,6 +169,12 @@ export function CreateTeacher() {
     <Container style={{ maxWidth: "75rem" }}>
       <form>
         <h3 className="create-header">Pridėti naują dėstytoją</h3>
+        {<p className="Deleted">Error:   {error&&error}   </p>}
+        {<p className="Deleted">Success:   {success && success}   </p>}
+
+        
+        
+        
         <Grid
           container
           direction="row"
@@ -275,15 +305,16 @@ export function CreateTeacher() {
                 id="active"
                 fullWidth
                 required
-                multiline
-                value={active}
+                defaultValue={true}
+                defaultOpen={false}
                 variant="outlined"
                 displayEmpty
                 inputProps={{ "aria-label": "Without label" }}
                 onChange={(e) => setActive(e.target.value)}
               >
-                {isActive.map((isActive) => (
-                  <MenuItem key={isActive.value} value={isActive.value}>
+
+               { isActive.map((isActive,index) => (
+                  <MenuItem key={index} value={isActive.value}>
                     {isActive.label}
                   </MenuItem>
                 ))}
@@ -291,32 +322,32 @@ export function CreateTeacher() {
             </FormControl>
           </Grid>
 
-          <Grid item sm={12}>
-            {showSubjSelect && (
-              <FormControl fullWidth>
-                <InputLabel id="subjects-label">Dalykai</InputLabel>
-                <Select
-                  label="Dalyko pavadinimas"
-                  labelId="subject-label"
-                  id="subject"
-                  value={subject}
-                  onChange={(e) => handleChosenSubjects(e.target.value)}
-                >
-                  {subjects.map((subject) => (
-                    <MenuItem key={subject.id} value={subject}>
-                      {subject.name}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            )}
-
+         <Grid item sm={12} >
+         { showSubjSelect && (<FormControl fullWidth>
+              <InputLabel id="subjects-label">Dalykai</InputLabel>
+              <Select
+                label="Dalyko pavadinimas"
+                labelId="subject-label"
+                id="subject"
+                value={subject}
+                defaultOpen={true}
+                onChange={(e) => handleChosenSubjects(e.target.value)}
+              >
+                {subjects.map((subject, index) => (
+                  <MenuItem key={index} value={subject}>
+                    {subject.name}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>)
+          }
+           
             <TableContainer component={Paper}>
               <Table aria-label="custom pagination table">
                 <TableHead>
                   <TableRow>
                     <TableCell>Dėstomi dalykai</TableCell>
-                    <TableCell></TableCell>
+                    <TableCell>Moduliai </TableCell>
                     <TableCell>
                       <Button variant="contained" onClick={handleShowSubjects}>
                         Pridėti
@@ -326,27 +357,16 @@ export function CreateTeacher() {
                 </TableHead>
 
                 <TableBody>
-                  {/* <TableRow>
-                    <TableCell component="th" scope="row">
-                      sssss
-                    </TableCell>
-                    <TableCell>
-                    ffffff
-                    </TableCell>
-                    <TableCell>
-                      <Button variant="contained" onClick={createTeacher}>
-                        Išmesti
-                      </Button>
-                    </TableCell>
-                  </TableRow> */}
 
-                  {chosenSubjects.map((subject) => (
-                    <TableRow key={subject.id}>
-                      <TableCell component="th" scope="row">
+
+                  {chosenSubjects.map((subject,index) => (
+                    <TableRow key={index}>
+                      <TableCell  component="th" scope="row">
                         {subject.name}
                       </TableCell>
                       <TableCell>
-                        {subject.module ? (
+                        {subject.module
+                        ? (
                           subject.module.deleted ? (
                             <p className="Deleted">
                               {subject.module.name} - modulis buvo ištrintas
@@ -354,16 +374,16 @@ export function CreateTeacher() {
                           ) : (
                             subject.module.name
                           )
-                        ) : (
-                          <p>Nenurodytas</p>
+                        )
+                        : ( <p>Nenurodytas</p>
                         )}
                       </TableCell>
-                      <TableCell align="center" className="activity">
+                      <TableCell  align="center" className="activity">
                         <Button
                           variant="contained"
-                          onClick={() => handleRestore(subject.id)}
+                         onClick={(e) => handleRemoveChosen(subject)}
                         >
-                          Atstatyti
+                          Ištrinti
                         </Button>
                       </TableCell>
                     </TableRow>
@@ -372,7 +392,8 @@ export function CreateTeacher() {
               </Table>
             </TableContainer>
           </Grid>
-
+          
+          
           <Grid item sm={12}>
             <Stack direction="row" spacing={2}>
               <Button variant="contained" onClick={createTeacher}>

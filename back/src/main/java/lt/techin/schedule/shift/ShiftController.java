@@ -33,7 +33,8 @@ public class ShiftController {
 
     @GetMapping("/view-shift/{shiftID}")
     public Shift getShift(@PathVariable Long shiftID) {
-        return shiftService.getShiftByID(shiftID);
+        var result = shiftService.getShiftByID(shiftID);
+        return result;
     }
 
     @PostMapping(value = "/add-shift", consumes = {MediaType.APPLICATION_JSON_VALUE})

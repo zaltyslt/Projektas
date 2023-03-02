@@ -3,6 +3,7 @@ package lt.techin.schedule.shift;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lt.techin.schedule.teachers.Teacher;
 import lt.techin.schedule.validators.TextValid;
@@ -23,8 +24,10 @@ public class Shift {
     private String shiftStartingTime;
 
     private String shiftEndingTime;
+
     @OneToMany(mappedBy = "shift" )
-    @JsonBackReference
+//    @JsonBackReference
+    @JsonManagedReference
     private Set<Teacher> teachers;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime createdDate;

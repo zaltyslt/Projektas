@@ -25,7 +25,7 @@ import { EditSubject } from "./pages/subjects/EditSubject";
 import { TeacherList } from "./pages/teachers/TeacherList";
 import { ViewTeacher } from "./pages/teachers/ViewTeacher";
 import { CreateTeacher } from "./pages/teachers/CreateTeacher";
-// import { EditTeacher } from "./pages/teachers/EditTeacher";
+import { EditTeacher } from "./pages/teachers/EditTeacher";
 
 function App() {
   return (
@@ -68,7 +68,7 @@ function App() {
           <Route path="/teachers" element={<TeacherList />}></Route>
           <Route path="/teachers/view/:id" element={<ViewTeacher />}></Route>
           <Route path="/teachers/create" element={<CreateTeacher />}></Route>
-          {/* <Route path="/teachers/edit/:id" element={<EditTeacher />}></Route> */}
+          <Route path="/teachers/edit/:id" element={<EditTeacher />}></Route>
         </Routes>
       </HashRouter>
     </div>

@@ -64,6 +64,12 @@ public class ContactService {
         return result;
     }
 
+//    public List<Contact> saveContacts(Teacher teacher, List<Contact> contacts){
+//        for(Contact contact: contacts){
+//
+//        }
+//    }
+
     public void deleteContactsByTeacher(Teacher teacher){
         contactRepository.deleteAllByTeacher(teacher);
     }

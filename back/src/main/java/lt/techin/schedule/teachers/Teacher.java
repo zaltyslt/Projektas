@@ -2,7 +2,6 @@ package lt.techin.schedule.teachers;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -11,8 +10,6 @@ import jakarta.validation.constraints.Size;
 import lt.techin.schedule.shift.Shift;
 import lt.techin.schedule.subject.Subject;
 import lt.techin.schedule.teachers.contacts.Contact;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -49,21 +46,23 @@ public class Teacher implements Serializable {
 
 //    @JsonIgnore
 //    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+//    @JsonManagedReference
 //    @JoinTable(
 //            name = "teacher_shifts",
 //            joinColumns = @JoinColumn(name = "teacher_id", referencedColumnName = "teacher_id"),
 //            inverseJoinColumns = @JoinColumn(name = "shift_id", referencedColumnName = "id"))
-//    @JsonManagedReference
 //    private Shift shift;
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "shift_id")
-    private Shift shift;
+    @JsonBackReference
+    private  Shift shift;
 
     @NotBlank
     @Size(min = 3, max = 30)
-    private String fName="";
+    private String fName = "";
     @NotNull
-    private String lName="";
+    private String lName = "";
     @NotNull
     private String nickName;
     private Boolean isActive;
@@ -236,6 +235,7 @@ public class Teacher implements Serializable {
                 ", createdDateTime=" + createdDateTime +
                 ", modifiedDateAndTime=" + modifiedDateAndTime +
                 ", workHoursPerWeek=" + workHoursPerWeek +
+                ", hashCode=" + hashCode +
                 '}';
     }
 }

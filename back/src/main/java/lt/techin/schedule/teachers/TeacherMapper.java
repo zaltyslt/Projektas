@@ -1,5 +1,6 @@
 package lt.techin.schedule.teachers;
 
+import lt.techin.schedule.shift.ShiftMapper;
 import lt.techin.schedule.teachers.contacts.Contact;
 import lt.techin.schedule.teachers.contacts.ContactDto;
 import lt.techin.schedule.teachers.contacts.ContactDto2;
@@ -25,6 +26,7 @@ public class TeacherMapper {
                 : new HashSet<TeacherSubjectsDto>());
         dto.setWorkHoursPerWeek(teacher.getWorkHoursPerWeek() != null ? teacher.getWorkHoursPerWeek() : 0);
         dto.setTeacherShiftDto(teacher.getShift() != null ? TeacherShiftMapper.shiftToDto(teacher.getShift()) : null);
+//        dto.setSelectedShift(ShiftMapper.shiftToDto(teacher.getShift()));
 
         dto.setActive(teacher.getActive() != null ? teacher.getActive() : true);
 //        dto.setContacts(teacher.getContacts() != null ? contactsForDto(teacher.getContacts()) : new ArrayList<ContactDto>());
@@ -78,7 +80,8 @@ public class TeacherMapper {
                 : null);
         teacher.setWorkHoursPerWeek(dto.getWorkHoursPerWeek());
 //        teacher.setShift(ShiftMapper.shiftFromDto(dto.getShiftDtoNew()));
-        teacher.setShift(TeacherShiftMapper.shiftFromDto(dto.getTeacherShiftDto()));
+//        teacher.setShift(ShiftMapper.shiftFromDto(dto.getSelectedShift()));
+//        teacher.setShift(TeacherShiftMapper.shiftFromDto(dto.get .getSelectedShift()));
         teacher.setActive(dto.getActive());
         teacher.setContacts(dto.getContacts() != null ? ContactMapper.contactFromDto2(dto.getContacts()) : new ArrayList<Contact>());
         //implement message

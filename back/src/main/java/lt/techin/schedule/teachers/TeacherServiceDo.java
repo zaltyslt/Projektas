@@ -57,13 +57,15 @@ public class TeacherServiceDo {
 //            }
 //        }
         ContactDto2 contactsDto = teacherDto.getContacts();
-        newTeacher.setContacts(ContactMapper.contactFromDto2(contactsDto));
+        contactsDto.setTeacherId(newTeacher.getId());
+        List<Contact>  contactsToSave= ContactMapper.contactFromDto2(contactsDto);
+        newTeacher.setContacts(contactsToSave);
 
         if (!teacherDto.getSubjectsDtoList().isEmpty()) {
             Set<Subject> subjectsFromDto = TeacherSubjectMapper.subjectsFromDtos(teacherDto.getSubjectsDtoList());
 
             Set<Subject> foundSubjects = subjectsFromDto.stream()
-                    .filter(s -> teacherRepository.existsById(s.getId()))
+                    .filter(s -> subjectRepository.existsById(s.getId()))
                     .collect(Collectors.toSet());
 
             if (!foundSubjects.isEmpty()) {
