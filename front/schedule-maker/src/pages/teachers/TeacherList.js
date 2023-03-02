@@ -24,7 +24,7 @@ export function TeacherList() {
   const [teachers, setTeachers] = useState([]);
   const [filteredTeachers, setFilteredTeachers] = useState([]);
   const [deletedTeachers, setDeletedTeachers] = useState([]);
-  const [subjects, setSubjects] = useState([]);
+  // const [subjects, setSubjects] = useState([]);
 
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -47,7 +47,7 @@ export function TeacherList() {
       .then((response) => response.json())
       .then((data) => {
         setTeachers(data);
-
+        console.log(data);
         return data;
       })
       .then((data) => {setFilteredTeachers(data);
@@ -165,12 +165,12 @@ export function TeacherList() {
 
                   <TableCell>
                     {/* ////////////////////////////////////// */}
-                    {teacher.subjectsDtoList && teacher.subjectsDtoList.length > 0
-                      ? (teacher.subjectsDtoList.map((subjectItem, index) => {
-                          const subject = subjects.find(
+                    {teacher.subjectsList && teacher.subjectsList.length > 0
+                      ? (teacher.subjectsList.map((subjectItem, index) => {
+                          {/* const subject = subjects.find(
                             (s) => s.id === subjectItem.subjectId
-                          );
-                          return <p key={index}>{subject.name}</p>;
+                          ); */}
+                          return <p key={index}>{subjectItem.name}</p>;
                         }))
                       : "* Nepriskirta"}
                     

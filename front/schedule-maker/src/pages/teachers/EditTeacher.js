@@ -143,7 +143,7 @@ const matchingSubjects = data.filter(subAll => teacherSubjects.map( subChosen =>
 
   const handleChosenSubjects = (subjectNew) => {
     setSubject(subjectNew);
-    // console.log(subjectNew);
+    console.log(subjectNew);
     // setChosenSubjects([...chosenSubjects, subjectNew]);
     
     // const removed = subjects.filter((subject) => subject.id != subjectNew.id);

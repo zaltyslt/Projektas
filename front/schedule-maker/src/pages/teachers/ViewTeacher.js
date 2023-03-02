@@ -20,48 +20,49 @@ export function ViewTeacher() {
       .then((response) => response.json())
       .then((data) => {
         setTeacher(data);
-        setTeacherSubjects(data.subjectsDtoList)
         setContacts(data.contacts);
+        setTeacherSubjects(data.subjectsList)
             });
       };
       
  
 
-  const getSubjectsData = () => {
-    fetch(`/api/v1/subjects`)
-      .then((response) => response.json())
-      .then((data) => {
-        setSubjects(data);
-        // console.log(subjects);
-      });
-  };
+  // const getSubjectsData = () => {
+  //   fetch(`/api/v1/subjects`)
+  //     .then((response) => response.json())
+  //     .then((data) => {
+  //       setSubjects(data);
+  //       // console.log(subjects);
+  //     });
+  // };
 
-  const mapTeacherSubjects = () => {
-    const newFoundSubjects = [];
+  // const mapTeacherSubjects = () => {
+  //   const newFoundSubjects = [];
 
-    teacherSubjects.forEach(
-      (teacherSubject) => {
-        // const found = numbers.find(number => number > 3);
-        const subject = subjects.find((s) => s.id === teacherSubject.subjectId);
-        if (subject) {
-          newFoundSubjects.push(subject);
-        }
-      });
-      setFoundSubjects(newFoundSubjects);
-      // console.log(newFoundSubjects);
+  //   teacherSubjects.forEach(
+  //     (teacherSubject) => {
+  //       // const found = numbers.find(number => number > 3);
+  //       const subject = subjects.find((s) => s.id === teacherSubject.subjectId);
+  //       if (subject) {
+  //         newFoundSubjects.push(subject);
+  //       }
+  //     });
+  //     setFoundSubjects(newFoundSubjects);
+  //     // console.log(newFoundSubjects);
       
-  };
+  // };
 
   useEffect(() => {
     getTeacherData();
   }, []);
 
-  useEffect(() => {
-    getSubjectsData();
-  }, [teacher]);
-  useEffect(() => {
-    mapTeacherSubjects();
-  }, [subjects]);
+  // useEffect(() => {
+  //   getSubjectsData();
+  // }, [teacher]);
+
+  // useEffect(() => {
+  //   mapTeacherSubjects();
+  // }, [subjects]);
 
   // const filteredSubjectsArray = subjects.filter(o => teacher.subjectsDtoList.includes(o.id));
 
@@ -131,7 +132,7 @@ export function ViewTeacher() {
           <Grid item sm={12}>
             <h4>Dėstomi dalykai</h4>
             {/* {teacher.subjectsDtoList && teacher.subjectsDtoList.length > 0 */}
-            {foundSubjects.map((subjectItem, index) => {
+            {teacherSubjects.map((subjectItem, index) => {
               return <p key={index}>{subjectItem.name}</p>;
             })}
           </Grid>
