@@ -8,7 +8,7 @@ export function ViewGroup() {
   const params = useParams();
 
   useEffect(() => {
-    fetch("api/v1/groups/" + params.id)
+    fetch("api/v1/group/view-group/" + params.id)
       .then((response) => response.json())
       .then(setGroup);
   }, []);
@@ -28,15 +28,15 @@ export function ViewGroup() {
 
           <Grid item sm={12}>
             <h4>Programa</h4>
-            <p>{group.program}</p>
+            <p>{group.program.programName}</p>
           </Grid>
           <Grid item sm={12}>
             <h4>Mokslo metai</h4>
-            <p>{group.year}</p>
+            <p>{group.schoolYear}</p>
           </Grid>
           <Grid item sm={12}>
             <h4>Pamaina</h4>
-            <p>{group.shift}</p>
+            <p>{group.shift.name}</p>
           </Grid>
           <Grid item sm={12}>
             <h4>Studentų kiekis</h4>

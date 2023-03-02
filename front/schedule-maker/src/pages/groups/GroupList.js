@@ -157,7 +157,7 @@ export function GroupList() {
                   <TableCell component="th" scope="row">
                     <Link to={"/groups/view/" + group.id}>{group.name}</Link>
                   </TableCell>
-                  <TableCell>{group.program}</TableCell>
+                  <TableCell>{group.program.programName}</TableCell>
                   <TableCell align="center">{group.schoolYear}</TableCell>
                   <TableCell align="center">{group.studentAmount}</TableCell>
                 </TableRow>
@@ -177,7 +177,6 @@ export function GroupList() {
                   labelDisplayedRows={({ from, to, count }) =>
                     `${from}-${to} iš ${count}`
                   }
-                  colSpan={3}
                   count={filteredGroups.length}
                   page={page}
                   SelectProps={{
@@ -228,7 +227,7 @@ export function GroupList() {
                 ).map((group) => (
                   <TableRow key={group.id}>
                     <TableCell component="th" scope="row">{group.name}</TableCell>
-                    <TableCell>{group.program}</TableCell>
+                    <TableCell>{group.program.programName}</TableCell>
                     <TableCell align="center">{group.schoolYear}</TableCell>
                     <TableCell align="center">{group.studentAmount}</TableCell>
                     <TableCell align="center" className="activity">
@@ -257,7 +256,6 @@ export function GroupList() {
                     labelDisplayedRows={({ from, to, count }) =>
                       `${from}-${to} iš ${count}`
                     }
-                    colSpan={3}
                     count={deletedGroups.length}
                     page={pageInDeleted}
                     SelectProps={{
