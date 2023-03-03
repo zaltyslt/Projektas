@@ -45,11 +45,11 @@ public class TeacherMapper {
                 : new TeacherDto();
     }
 
-    public static Set<TeacherDto> teacherToDto(List<Teacher> teacher) {
+    public static List<TeacherDto> teacherToDto(List<Teacher> teacher) {
 
         return !teacher.isEmpty()
-                ? teacher.stream().map(t -> teacherToDto(t)).collect(Collectors.toSet())
-                : new HashSet<TeacherDto>();
+                ? teacher.stream().map(t -> teacherToDto(t)).toList()
+                : new ArrayList<TeacherDto>();
     }
 
     //to DTO Helpers

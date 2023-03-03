@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -41,8 +42,8 @@ public class TeacherControllerView {
 
     @GetMapping
     @ResponseBody
-    public Set<TeacherDto> getAllTeachers(@RequestParam(value = "active", required = false) Optional<Boolean> active) {
-        Set<TeacherDto> teachers; //Fixme Dev remove
+    public List<TeacherDto> getAllTeachers(@RequestParam(value = "active", required = false) Optional<Boolean> active) {
+        List<TeacherDto> teachers; //Fixme Dev remove
         if (active.isPresent()) {
             teachers = teacherFinder.getTeachersByActiveStatus(active.get());
         } else {

@@ -29,7 +29,7 @@ public class TeacherServiceFind {
         this.subjectRepository = subjectRepository;
     }
 
-    public Set<TeacherDto> getAllTeachers() {
+    public List<TeacherDto> getAllTeachers() {
         List<Teacher> teachers = teacherRepository.findAll();
         return TeacherMapper.teacherToDto(teachers);
     }
@@ -47,7 +47,7 @@ public class TeacherServiceFind {
                 : new TeacherDto();
     }
 
-    public Set<TeacherDto> getTeachersByName(String name) {
+    public List<TeacherDto> getTeachersByName(String name) {
         name = "%" + name.toLowerCase() + "%";
         var result = teacherRepository.getTeachersByNameFragment(name);
         return TeacherMapper.teacherToDto(result);
@@ -65,15 +65,15 @@ public class TeacherServiceFind {
                 : new HashSet<TeacherDto>();
     }
 
-    public Set<TeacherDto> getTeachersByActiveStatus(boolean active) {
+    public List<TeacherDto> getTeachersByActiveStatus(boolean active) {
         var result = teacherRepository.findByisActive(active);
         return !result.isEmpty()
                 ? result.stream()
-                    .sorted(Comparator.comparing(Teacher::getModifiedDateAndTime))
+                    .sorted(Comparator.comparing(Teacher::getModifiedDateAndTime).reversed())
                     .filter(t -> t.getActive() == active) //just to be sure :)
                     .map(TeacherMapper::teacherToDto)
-                    .collect(Collectors.toSet())
-                : new HashSet<TeacherDto>();
+                    .toList()
+                : new ArrayList<>();
 //            return new HashSet<TeacherDto>();
     }
 
