@@ -92,6 +92,12 @@ public class ModuleController {
         return validationDto;
     }
 
+    @PatchMapping("/delete/{moduleId}")
+    public ResponseEntity<ModuleDto> delete(@PathVariable Long moduleId) {
+        var deletedModule = moduleService.delete(moduleId);
+        return ok(toModuleDto(deletedModule));
+    }
+
     @DeleteMapping("/{moduleId}")
     public ResponseEntity<Void> deleteModule(@PathVariable Long moduleId) {
         boolean deleted = moduleService.deleteById(moduleId);

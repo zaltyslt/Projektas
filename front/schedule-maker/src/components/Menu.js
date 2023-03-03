@@ -13,7 +13,7 @@ export function Menu() {
         &nbsp;|&nbsp;
         <li>
           <NavLink to="/teachers" className="Link">
-            Dėstytojai
+            Mokytojai
           </NavLink>
         </li>
         &nbsp;|&nbsp;

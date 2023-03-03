@@ -13,6 +13,7 @@ import {
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import ".././pages.css";
 
 export function CreateSubject() {
   const [name, setName] = useState("");
@@ -68,10 +69,17 @@ export function CreateSubject() {
   const validation = () => {
     setCreateMessage("");
     const badSymbols = "!@#$%^&*_+={}<>|~`\\'";
-    let notValidName = name.split('').some(char => badSymbols.includes(char));
-    let notValiDescription = description.split('').some(char => badSymbols.includes(char));
+    let notValidName = name.split("").some((char) => badSymbols.includes(char));
+    let notValiDescription = description
+      .split("")
+      .some((char) => badSymbols.includes(char));
 
-    if (name === "" && description === "" && module === "" && classRooms.length === 0) {
+    if (
+      name === "" &&
+      description === "" &&
+      module === "" &&
+      classRooms.length === 0
+    ) {
       setNameError(true);
       setDescriptionError(true);
       setModuleError(true);
@@ -90,8 +98,7 @@ export function CreateSubject() {
       setModuleError(true);
     } else if (classRooms.length === 0) {
       setClassRoomError(true);
-    }
-     else {
+    } else {
       createSubject();
     }
   };
@@ -127,7 +134,7 @@ export function CreateSubject() {
 
   return (
     <Container>
-      <h3>Pridėti naują dalyką</h3>
+      <h3 className="create-header">Pridėti naują dalyką</h3>
       <form>
         <Grid container rowSpacing={2}>
           <Grid item sm={10}>
@@ -135,7 +142,13 @@ export function CreateSubject() {
               fullWidth
               required
               error={nameError || nameNotValid}
-              helperText={nameError ? "Dalyko pavadinimas yra privalomas" : (nameNotValid ? "Laukas turi negalimų simbolių. " : "")}
+              helperText={
+                nameError
+                  ? "Dalyko pavadinimas yra privalomas"
+                  : nameNotValid
+                  ? "Laukas turi negalimų simbolių. "
+                  : ""
+              }
               variant="outlined"
               label="Dalyko pavadinimas"
               id="name"
@@ -151,7 +164,13 @@ export function CreateSubject() {
               required
               multiline
               error={descriptionError || descriptionNotValid}
-              helperText={descriptionError ? "Dalyko aprašas yra privalomas. " : (descriptionNotValid ? "Laukas turi negalimų simbolių. " : "")}
+              helperText={
+                descriptionError
+                  ? "Dalyko aprašas yra privalomas. "
+                  : descriptionNotValid
+                  ? "Laukas turi negalimų simbolių. "
+                  : ""
+              }
               variant="outlined"
               label="Dalyko aprašas"
               id="description"
@@ -162,7 +181,11 @@ export function CreateSubject() {
 
           <Grid item sm={10}>
             <FormControl fullWidth required error={moduleError}>
-              <InputLabel id="module-label">{moduleError ? "Privaloma pasirinkti modulį. " : "Modulio pavadinimas"}</InputLabel>
+              <InputLabel id="module-label">
+                {moduleError
+                  ? "Privaloma pasirinkti modulį. "
+                  : "Modulio pavadinimas"}
+              </InputLabel>
               <Select
                 label="Modulio pavadinimas"
                 labelId="module-label"
@@ -183,7 +206,11 @@ export function CreateSubject() {
 
           <Grid item sm={10}>
             <FormControl fullWidth required error={classRoomError}>
-              <InputLabel id="room-label">{classRoomError ? "Privaloma pasirinkti nors vieną klasę. " : "Klasės"}</InputLabel>
+              <InputLabel id="room-label">
+                {classRoomError
+                  ? "Privaloma pasirinkti nors vieną klasę. "
+                  : "Klasės"}
+              </InputLabel>
               <Select
                 multiple
                 labelId="room-label"
@@ -202,11 +229,6 @@ export function CreateSubject() {
           </Grid>
 
           <Grid item sm={10}>
-            {error && <Alert severity="warning">{error}</Alert>}
-            {createMessage && <Alert severity="success">{createMessage}</Alert>}
-          </Grid>
-
-          <Grid item sm={10}>
             <Stack direction="row" spacing={2}>
               <Button variant="contained" onClick={validation}>
                 Išsaugoti
@@ -216,6 +238,10 @@ export function CreateSubject() {
                 <Button variant="contained">Grįžti</Button>
               </Link>
             </Stack>
+          </Grid>
+          <Grid item sm={10}>
+            {error && <Alert severity="warning">{error}</Alert>}
+            {createMessage && <Alert severity="success">{createMessage}</Alert>}
           </Grid>
         </Grid>
       </form>

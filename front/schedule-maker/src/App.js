@@ -23,7 +23,9 @@ import { UpdateProgram } from "./pages/programs/UpdateProgram";
 import { CreateSubject } from "./pages/subjects/CreateSubject";
 import { ViewSubject } from "./pages/subjects/ViewSubject";
 import { EditSubject } from "./pages/subjects/EditSubject";
-
+import { CreateGroup } from "./pages/groups/CreateGroup";
+import { ViewGroup } from "./pages/groups/ViewGroups";
+import { EditGroup } from "./pages/groups/EditGroup";
 
 
 function App() {
@@ -60,6 +62,10 @@ function App() {
           <Route path="/subjects/create" element={<CreateSubject />} />
           <Route path="/subjects/view/:id" element={<ViewSubject />}></Route>
           <Route path="/subjects/edit/:id" element={<EditSubject />}></Route>
+
+          <Route path="/groups/create" element={<CreateGroup />}></Route>
+          <Route path="/groups/view/:id" element={<ViewGroup />}></Route>
+          <Route path="/groups/edit/:id" element={<EditGroup />}></Route>
         </Routes>
       </HashRouter>
     </div>

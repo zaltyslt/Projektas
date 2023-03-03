@@ -181,7 +181,7 @@ export function ShiftList() {
                   <TableCell component="th" scope="row">
                     <Link to={"/view-shift/" + shift.id}>{shift.name}</Link>
                   </TableCell>
-                  <TableCell>{shift.shiftTime}</TableCell>
+                  <TableCell>{shift.shiftStartingTime + "-" + shift.shiftEndingTime}</TableCell>
                   <TableCell></TableCell>
                 </TableRow>
               ))}
