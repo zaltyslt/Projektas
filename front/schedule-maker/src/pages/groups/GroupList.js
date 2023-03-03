@@ -23,6 +23,7 @@ export function GroupList() {
   const [groups, setGroups] = useState([]);
   const [deletedGroups, setDeletedGroups] = useState([]);
   const [filteredGroups, setFilteredGroups] = useState([]);
+  const [filteredDeletedGroups, setFilteredDeletedGroups] = useState([]);
 
   const [page, setPage] = useState(0);
   const [pageInDeleted, setPageInDeleted] = useState(0);
@@ -38,11 +39,13 @@ export function GroupList() {
     fetchDeletedGroups();
   }, []);
 
-
   const fetchDeletedGroups = () => {
     fetch("api/v1/group/get-inactive")
       .then((response) => response.json())
-      .then(setDeletedGroups);
+      .then((data) => {
+        setDeletedGroups(data);
+        setFilteredDeletedGroups(data);
+      });
   };
 
   const fetchGroups = () => {
@@ -96,66 +99,115 @@ export function GroupList() {
 
   const handleSearch = (filterString) => {
     if (filterString.length === 0) {
-        setFilteredGroups(groups);
-    }
-    else {
-        var groupsCurrent = undefined;
-        var groupsTempByName = groups.filter((group) =>
+      setFilteredGroups(groups);
+      setFilteredDeletedGroups(deletedGroups);
+    } else {
+      var groupsCurrent = undefined;
+      let deletedGroupsCurrent = undefined;
+
+      var groupsTempByName = groups.filter((group) =>
         group.name.toLowerCase().includes(filterString.toLowerCase())
-        );
-        if (groupsTempByName.length != 0) {
-            groupsCurrent = groupsTempByName;
-        }
+      );
 
-        var groupsTempBySchoolYear = groups.filter((group) =>
+      let deletedTempByName = deletedGroups.filter((group) =>
+        group.name.toLowerCase().includes(filterString.toLowerCase())
+      );
+
+      if (groupsTempByName.length != 0 || deletedTempByName.length != 0) {
+        groupsCurrent = groupsTempByName;
+        deletedGroupsCurrent = deletedTempByName;
+      }
+
+      var groupsTempBySchoolYear = groups.filter((group) =>
         group.schoolYear.includes(filterString)
-        );
-        if (groupsTempBySchoolYear.length != 0) {
-            if (groupsCurrent !== undefined) {
-                const newGroupsCurrent = [...groupsCurrent]; 
+      );
+      let deletedGroupsTempBySchoolYear = deletedGroups.filter((group) =>
+        group.schoolYear.includes(filterString)
+      );
+      if (
+        groupsTempBySchoolYear.length != 0 ||
+        deletedGroupsTempBySchoolYear.length != 0
+      ) {
+        if (groupsCurrent !== undefined && deletedGroupsCurrent !== undefined) {
+          const newGroupsCurrent = [...groupsCurrent];
+          const newDeletedGroupsCurrent = [...deletedGroupsCurrent];
 
-                groupsTempBySchoolYear.forEach(function(element, index, array) {
-                    const isPresent = groupsCurrent.some(array => JSON.stringify(array) === JSON.stringify(element));
-                    if (!isPresent) {
-                        newGroupsCurrent.push(element);
-                    } 
-                });
-                groupsCurrent = newGroupsCurrent;
+          groupsTempBySchoolYear.forEach(function (element, index, array) {
+            const isPresent = groupsCurrent.some(
+              (array) => JSON.stringify(array) === JSON.stringify(element)
+            );
+            if (!isPresent) {
+              newGroupsCurrent.push(element);
             }
-            else {
-                groupsCurrent = groupsTempBySchoolYear;
-            }
-        }
+          });
 
-        var groupsTempByProgram = groups.filter((group) =>
-        group.program.programName.toLowerCase().includes(filterString.toLowerCase())
-        );
-        if (groupsTempByProgram.length != 0) {
-            if (groupsCurrent !== undefined) {
-                const newGroupsCurrent = [...groupsCurrent]; 
-
-                groupsTempByProgram.forEach(function(element, index, programs) {
-                    const isPresent = groupsCurrent.some(programs => JSON.stringify(programs) === JSON.stringify(element));
-                    if (!isPresent) {
-                        newGroupsCurrent.push(element);
-                    } 
-                });
-                groupsCurrent = newGroupsCurrent;
+          deletedGroupsTempBySchoolYear.forEach(function (element) {
+            const isPresent = deletedGroupsCurrent.some(
+              (array) => JSON.stringify(array) === JSON.stringify(element)
+            );
+            if (!isPresent) {
+              newDeletedGroupsCurrent.push(element);
             }
-            else {
-                groupsCurrent = groupsTempByProgram;
-            }
+          });
+          deletedGroupsCurrent = newDeletedGroupsCurrent;
+        } else {
+          groupsCurrent = groupsTempBySchoolYear;
+          deletedGroupsCurrent = deletedGroupsTempBySchoolYear;
         }
+      }
 
-        if (groupsCurrent !== undefined) {
-            setFilteredGroups(groupsCurrent);
+      var groupsTempByProgram = groups.filter((group) =>
+        group.program.programName
+          .toLowerCase()
+          .includes(filterString.toLowerCase())
+      );
+      let deletedGroupsTempByProgram = deletedGroups.filter((group) =>
+        group.program.programName
+          .toLowerCase()
+          .includes(filterString.toLowerCase())
+      );
+
+      if (groupsTempByProgram.length != 0 || deletedGroupsTempByProgram.length != 0) {
+        if (groupsCurrent !== undefined && deletedGroupsCurrent !== undefined) {
+          const newGroupsCurrent = [...groupsCurrent];
+          const newDeletedGroupsCurrent = [...deletedGroupsCurrent];
+
+          groupsTempByProgram.forEach(function (element, index, programs) {
+            const isPresent = groupsCurrent.some(
+              (programs) => JSON.stringify(programs) === JSON.stringify(element)
+            );
+            if (!isPresent) {
+              newGroupsCurrent.push(element);
+            }
+          });
+
+          deletedGroupsTempByProgram.forEach(function (element) {
+            const isPresent = deletedGroupsCurrent.some(
+              (programs) => JSON.stringify(programs) === JSON.stringify(element)
+            );
+            if (!isPresent) {
+              newDeletedGroupsCurrent.push(element);
+            }
+          });
+
+          groupsCurrent = newGroupsCurrent;
+          deletedGroupsCurrent = newDeletedGroupsCurrent;
+        } else {
+          groupsCurrent = groupsTempByProgram;
+          deletedGroupsCurrent = deletedGroupsTempByProgram;
         }
-        else {
-            setFilteredGroups([]);
-        }
+      }
+
+      if (groupsCurrent !== undefined && deletedGroupsCurrent !== undefined) {
+        setFilteredGroups(groupsCurrent);
+        setFilteredDeletedGroups(deletedGroupsCurrent);
+      } else {
+        setFilteredGroups([]);
+        setFilteredDeletedGroups([]);
+      }
     }
     //   setCurrentPageActive(0);
-  }
+  };
 
   return (
     <div>
@@ -195,7 +247,6 @@ export function GroupList() {
               </TableRow>
             </TableHead>
             <TableBody>
-
               {(rowsPerPage > 0
                 ? filteredGroups.slice(
                     page * rowsPerPage,
@@ -268,15 +319,17 @@ export function GroupList() {
               </TableHead>
               <TableBody>
                 {(rowsPerPageInDeleted > 0
-                  ? deletedGroups.slice(
+                  ? filteredDeletedGroups.slice(
                       pageInDeleted * rowsPerPageInDeleted,
                       pageInDeleted * rowsPerPageInDeleted +
                         rowsPerPageInDeleted
                     )
-                  : deletedGroups
+                  : filteredDeletedGroups
                 ).map((group) => (
                   <TableRow key={group.id}>
-                    <TableCell component="th" scope="row">{group.name}</TableCell>
+                    <TableCell component="th" scope="row">
+                      {group.name}
+                    </TableCell>
                     <TableCell>{group.program.programName}</TableCell>
                     <TableCell align="center">{group.schoolYear}</TableCell>
                     <TableCell align="center">{group.studentAmount}</TableCell>
