@@ -1,32 +1,41 @@
 import "./App.css";
 import { HashRouter, Routes, Route } from "react-router-dom";
 import { Menu } from "./components/Menu";
-import { RoomList } from "./pages/rooms/RoomList";
-import { ModuleList } from "./pages/modules/ModuleList";
-import { CreateModule } from "./pages/modules/CreateModule";
-import { ViewModule } from "./pages/modules/ViewModule";
-import { EditModule } from "./pages/modules/EditModule";
-import { ShiftList } from "./pages/shifts/ShiftList";
-import { AddShift } from "./pages/shifts/AddShift";
-import { ViewShift } from "./pages/shifts/ViewShift";
-import { ModifyShift } from "./pages/shifts/ModifyShift";
-import { SubjectList } from "./pages/subjects/SubjectList";
-import { TeacherList } from "./pages/teachers/TeacherList";
+
 import { GroupList } from "./pages/groups/GroupList";
-import { ProgramList } from "./pages/programs/ProgramList";
-import { CreateRoom } from "./pages/rooms/CreateRoom";
-import { ViewRoom } from "./pages/rooms/ViewRoom";
-import { UpdateClassroom } from "./pages/rooms/UpdateRoom";
-import { CreateProgram } from "./pages/programs/CreateProgram"
-import { ViewProgram } from "./pages/programs/ViewProgram";
-import { UpdateProgram } from "./pages/programs/UpdateProgram";
-import { CreateSubject } from "./pages/subjects/CreateSubject";
-import { ViewSubject } from "./pages/subjects/ViewSubject";
-import { EditSubject } from "./pages/subjects/EditSubject";
 import { CreateGroup } from "./pages/groups/CreateGroup";
 import { ViewGroup } from "./pages/groups/ViewGroups";
 import { EditGroup } from "./pages/groups/EditGroup";
 
+import { ModuleList } from "./pages/modules/ModuleList";
+import { CreateModule } from "./pages/modules/CreateModule";
+import { ViewModule } from "./pages/modules/ViewModule";
+import { EditModule } from "./pages/modules/EditModule";
+
+import { CreateProgram } from "./pages/programs/CreateProgram"
+import { ViewProgram } from "./pages/programs/ViewProgram";
+import { UpdateProgram } from "./pages/programs/UpdateProgram";
+import { ProgramList } from "./pages/programs/ProgramList";
+
+import { RoomList } from "./pages/rooms/RoomList";
+import { CreateRoom } from "./pages/rooms/CreateRoom";
+import { ViewRoom } from "./pages/rooms/ViewRoom";
+import { UpdateClassroom } from "./pages/rooms/UpdateRoom";
+
+import { ShiftList } from "./pages/shifts/ShiftList";
+import { AddShift } from "./pages/shifts/AddShift";
+import { ViewShift } from "./pages/shifts/ViewShift";
+import { ModifyShift } from "./pages/shifts/ModifyShift";
+
+import { SubjectList } from "./pages/subjects/SubjectList";
+import { CreateSubject } from "./pages/subjects/CreateSubject";
+import { ViewSubject } from "./pages/subjects/ViewSubject";
+import { EditSubject } from "./pages/subjects/EditSubject";
+
+import { TeacherList } from "./pages/teachers/TeacherList";
+import { ViewTeacher } from "./pages/teachers/ViewTeacher";
+import { CreateTeacher } from "./pages/teachers/CreateTeacher";
+import { EditTeacher } from "./pages/teachers/EditTeacher";
 
 function App() {
   return (
@@ -66,6 +75,10 @@ function App() {
           <Route path="/groups/create" element={<CreateGroup />}></Route>
           <Route path="/groups/view/:id" element={<ViewGroup />}></Route>
           <Route path="/groups/edit/:id" element={<EditGroup />}></Route>
+          {/* TEACHERS PATHAI */}
+          <Route path="/teachers/view/:id" element={<ViewTeacher />}></Route>
+          <Route path="/teachers/create" element={<CreateTeacher />}></Route>
+          <Route path="/teachers/edit/:id" element={<EditTeacher />}></Route>
         </Routes>
       </HashRouter>
     </div>

@@ -3,13 +3,13 @@ package lt.techin.schedule.teachers;
 import lt.techin.schedule.subject.*;
 import lt.techin.schedule.teachers.contacts.ContactRepository;
 import lt.techin.schedule.teachers.contacts.ContactService;
+import lt.techin.schedule.teachers.helpers.TeacherSubjectMapper;
+import lt.techin.schedule.teachers.helpers.TeacherSubjectsDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -29,26 +29,31 @@ public class TeacherServiceFind {
         this.subjectRepository = subjectRepository;
     }
 
-    protected Set<TeacherDto> getAllTeachers() {
-        var teachers = teacherRepository.findAll();
+    public List<TeacherDto> getAllTeachers() {
+        List<Teacher> teachers = teacherRepository.findAll();
         return TeacherMapper.teacherToDto(teachers);
     }
 
-    protected TeacherDto getTeacherById(Long id) {
+    public TeacherDto getTeacherById(Long id) {
+//        Optional<Teacher> result = null;
 
-        var result = teacherRepository.findById(id);
+//        try{
+//         result = teacherRepository.findById(id);}
+//
+//catch(Exception e){}
+      var  result = teacherRepository.findById(id);
         return result.isPresent()
                 ? TeacherMapper.teacherToDto(result)
                 : new TeacherDto();
     }
 
-    protected Set<TeacherDto> getTeachersByName(String name) {
+    public List<TeacherDto> getTeachersByName(String name) {
         name = "%" + name.toLowerCase() + "%";
         var result = teacherRepository.getTeachersByNameFragment(name);
         return TeacherMapper.teacherToDto(result);
     }
 
-    protected Set<TeacherDto> getTeachersBySubjects(Subject subject) {
+    public Set<TeacherDto> getTeachersBySubjects(Subject subject) {
         var result = teacherRepository.getTeacherBySubject(subject);
         //Comparator<Teacher> byLastName = Comparator.comparing(Teacher::getlName);
         return !result.isEmpty()
@@ -60,15 +65,22 @@ public class TeacherServiceFind {
                 : new HashSet<TeacherDto>();
     }
 
-    protected Set<TeacherDto> getTeachersByActiveStatus(boolean active) {
+    public List<TeacherDto> getTeachersByActiveStatus(boolean active) {
         var result = teacherRepository.findByisActive(active);
         return !result.isEmpty()
                 ? result.stream()
-                    .sorted(Comparator.comparing(Teacher::getlName))
+                    .sorted(Comparator.comparing(Teacher::getModifiedDateAndTime).reversed())
                     .filter(t -> t.getActive() == active) //just to be sure :)
                     .map(TeacherMapper::teacherToDto)
-                    .collect(Collectors.toSet())
-                : new HashSet<TeacherDto>();
+                    .toList()
+                : new ArrayList<>();
 //            return new HashSet<TeacherDto>();
+    }
+
+    public Set<TeacherSubjectsDto> getMiniSubjects(){
+        var result = subjectRepository.findAll().stream()
+                .filter(subject -> !subject.getDeleted()).collect(Collectors.toSet());
+
+        return TeacherSubjectMapper.subjectsToDtos(result);
     }
 }

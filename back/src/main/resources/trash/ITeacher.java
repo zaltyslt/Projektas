@@ -1,4 +1,4 @@
-package lt.techin.schedule.teachers;
+package trash;
 
 import lt.techin.schedule.subject.Subject;
 import lt.techin.schedule.subject.SubjectEntityDto;

@@ -1,4 +1,4 @@
-package lt.techin.schedule.teachers;
+package trash;
 
 public class TestDto {
     private String key;

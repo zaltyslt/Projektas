@@ -91,6 +91,19 @@ public class Contact implements Serializable {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Contact contact = (Contact) o;
+        return Objects.equals(id, contact.id) && contactType == contact.contactType && Objects.equals(contactValue, contact.contactValue) && Objects.equals(teacher, contact.teacher);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, contactType, contactValue, teacher);
+    }
+
+    @Override
     public String toString() {
         return "Contact{" +
                 "id=" + "id" +

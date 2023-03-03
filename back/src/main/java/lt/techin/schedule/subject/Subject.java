@@ -46,10 +46,10 @@ public class Subject {
     @NotEmpty
     private Set<Classroom> classRooms;
 
-    @ManyToMany(mappedBy = "subjects")
-//@JsonIgnore
-    @JsonBackReference
-    private Set<Teacher> teachers;
+//    @ManyToMany(mappedBy = "subjects")
+////@JsonIgnore
+//    @JsonBackReference
+//    private Set<Teacher> teachers;
 
     @CreatedDate
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
@@ -107,13 +107,13 @@ public class Subject {
         return name;
     }
 
-    public Set<Teacher> getTeachers() {
-        return teachers;
-    }
-
-    public void setTeachers(Set<Teacher> teachers) {
-        this.teachers = teachers;
-    }
+//    public Set<Teacher> getTeachers() {
+//        return teachers;
+//    }
+//
+//    public void setTeachers(Set<Teacher> teachers) {
+//        this.teachers = teachers;
+//    }
 
     public void setName(String name) {
         this.name = name;
@@ -199,12 +199,18 @@ public class Subject {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Subject subject = (Subject) o;
-        return Objects.equals(id, subject.id) && Objects.equals(name, subject.name) && Objects.equals(description, subject.description) && Objects.equals(module, subject.module) && Objects.equals(classRooms, subject.classRooms) && Objects.equals(teachers, subject.teachers) && Objects.equals(createdDate, subject.createdDate) && Objects.equals(createdBy, subject.createdBy) && Objects.equals(modifiedDate, subject.modifiedDate) && Objects.equals(modifiedBy, subject.modifiedBy) && Objects.equals(deleted, subject.deleted);
+        return Objects.equals(id, subject.id) && Objects.equals(name, subject.name)
+                && Objects.equals(description, subject.description) && Objects.equals(module, subject.module)
+                && Objects.equals(classRooms, subject.classRooms)
+//                && Objects.equals(teachers, subject.teachers)
+                && Objects.equals(createdDate, subject.createdDate) && Objects.equals(createdBy, subject.createdBy) && Objects.equals(modifiedDate, subject.modifiedDate) && Objects.equals(modifiedBy, subject.modifiedBy) && Objects.equals(deleted, subject.deleted);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, description, module, classRooms, teachers, createdDate, createdBy, modifiedDate, modifiedBy, deleted);
+        return Objects.hash(id, name, description, module, classRooms,
+//                teachers,
+                createdDate, createdBy, modifiedDate, modifiedBy, deleted);
     }
 
     @Override
@@ -215,7 +221,7 @@ public class Subject {
                 ", description='" + description + '\'' +
                 ", module=" + module +
                 ", classRooms=" + classRooms +
-                ", teachers=" + teachers +
+//                ", teachers=" + teachers +
                 ", createdDate=" + createdDate +
                 ", createdBy='" + createdBy + '\'' +
                 ", modifiedDate=" + modifiedDate +

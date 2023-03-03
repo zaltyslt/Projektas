@@ -30,7 +30,7 @@ public class ShiftDto {
     private Integer startIntEnum;
     private Integer endIntEnum;
     private Boolean isActive;
-    private Set<TeacherDto> teachers = null;
+//    private Set<TeacherDto> teachers = null;
 
     public ShiftDto() {
     }
@@ -107,25 +107,33 @@ public class ShiftDto {
         isActive = active;
     }
 
-    public Set<TeacherDto> getTeachers() {
-        return teachers;
-}
-
-    public void setTeachers(Set<TeacherDto> teachers) {
-        this.teachers = teachers;
-    }
+//    public Set<TeacherDto> getTeachers() {
+//        return teachers;
+//}
+//
+//    public void setTeachers(Set<TeacherDto> teachers) {
+//        this.teachers = teachers;
+//    }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ShiftDto that = (ShiftDto) o;
-        return Objects.equals(id, that.id) && Objects.equals(name, that.name) && Objects.equals(shiftStartingTime, that.shiftStartingTime) && Objects.equals(shiftEndingTime, that.shiftEndingTime) && Objects.equals(createdDate, that.createdDate) && Objects.equals(modifiedDate, that.modifiedDate) && Objects.equals(startIntEnum, that.startIntEnum) && Objects.equals(endIntEnum, that.endIntEnum) && Objects.equals(isActive, that.isActive) && Objects.equals(teachers, that.teachers);
+        return Objects.equals(id, that.id) && Objects.equals(name, that.name)
+                && Objects.equals(shiftStartingTime, that.shiftStartingTime)
+                && Objects.equals(shiftEndingTime, that.shiftEndingTime)
+                && Objects.equals(createdDate, that.createdDate) && Objects.equals(modifiedDate, that.modifiedDate)
+                && Objects.equals(startIntEnum, that.startIntEnum) && Objects.equals(endIntEnum, that.endIntEnum)
+                && Objects.equals(isActive, that.isActive) ;
+//                && Objects.equals(teachers, that.teachers);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, shiftStartingTime, shiftEndingTime, createdDate, modifiedDate, startIntEnum, endIntEnum, isActive, teachers);
+        return Objects.hash(id, name, shiftStartingTime, shiftEndingTime, createdDate, modifiedDate, startIntEnum, endIntEnum, isActive
+//                ,teachers
+        );
     }
 
     @Override
@@ -140,7 +148,7 @@ public class ShiftDto {
                 ", startIntEnum=" + startIntEnum +
                 ", endIntEnum=" + endIntEnum +
                 ", isActive=" + isActive +
-                ", teachers=" + teachers +
+//                ", teachers=" + teachers +
                 '}';
     }
 }
