@@ -55,12 +55,33 @@ export function AddShift() {
   var startIntEnum;
   var endIntEnum;
 
-  const createShift = () => {
-    if (isValidName && !isNameEmpty && !isNameTooLong) {
-      startIntEnum = shiftStartingTime;
-      endIntEnum = shiftEndingTime;
-      createShiftPostRequest();
-    }
+  const createShift = (() => {
+      if (isValidName && !isNameEmpty && !isNameTooLong) {
+          startIntEnum = shiftStartingTime;
+          endIntEnum = shiftEndingTime;
+          createShiftPostRequest();
+      }
+  })
+
+  const createShiftPostRequest = async () =>  {
+      await fetch(
+          'api/v1/shift/add-shift', {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({
+                  name,
+                  startIntEnum,
+                  endIntEnum,
+                  isActive
+              })
+          }
+      ) 
+      .then(response => response.json())
+      .then(data => {
+          handleAfterPost(data);
+    })
   };
 
   const createShiftPostRequest = async () => {

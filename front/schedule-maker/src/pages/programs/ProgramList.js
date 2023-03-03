@@ -37,14 +37,14 @@ export function ProgramList() {
     const [isChecked, setChecked] = useState(false)
 
     const fetchPrograms = () => {
-        fetch("/api/v1/programs")
+        fetch("api/v1/programs")
             .then((responce) => responce.json())
             .then((jsonResponce) => setPrograms(jsonResponce));
     };
 
     const enableProgram = (event, program) => {
         console.log(program)
-        fetch(`/api/v1/programs/enable-program/${program.id}`, {
+        fetch(`api/v1/programs/enable-program/${program.id}`, {
             method: "PATCH",
             headers: {
                 "Content-Type": "application/json",

@@ -25,7 +25,7 @@ export function ViewProgram() {
   let navigate = useNavigate();
 
   useEffect(() => {
-    fetch(`/api/v1/programs/program/${params.id}`)
+    fetch(`api/v1/programs/program/${params.id}`)
       .then((response) => response.json())
       .then((data) => {
         setProgram(data);

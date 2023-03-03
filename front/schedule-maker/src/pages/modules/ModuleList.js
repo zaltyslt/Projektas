@@ -93,7 +93,7 @@ export function ModuleList() {
   };
 
   const handleRestore = async (id) => {
-    await fetch("/api/v1/modules/restore/" + id, {
+    await fetch("api/v1/modules/restore/" + id, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",

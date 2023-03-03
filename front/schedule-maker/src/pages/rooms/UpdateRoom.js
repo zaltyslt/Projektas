@@ -50,7 +50,7 @@ export function UpdateClassroom() {
   });
 
   useEffect(() => {
-    fetch(`/api/v1/classrooms/classroom/${params.id}`)
+    fetch(`api/v1/classrooms/classroom/${params.id}`)
       .then((response) => response.json())
       .then((data) => {
         setClassroom(data);
@@ -83,7 +83,7 @@ export function UpdateClassroom() {
     } else if (!building) {
       setErrorBuilding(true);
     } else {
-      fetch(`/api/v1/classrooms/update-classroom/${params.id}`, {
+      fetch(`api/v1/classrooms/update-classroom/${params.id}`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
@@ -109,7 +109,7 @@ export function UpdateClassroom() {
   };
 
   const disableClassroom = () => {
-    fetch(`/api/v1/classrooms/disable-classroom/${params.id}`, {
+    fetch(`api/v1/classrooms/disable-classroom/${params.id}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
@@ -118,7 +118,7 @@ export function UpdateClassroom() {
   };
 
   const enableClassroom = () => {
-    fetch(`/api/v1/classrooms/enable-classroom/${params.id}`, {
+    fetch(`api/v1/classrooms/enable-classroom/${params.id}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
