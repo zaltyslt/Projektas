@@ -27,14 +27,8 @@ export function UpdateProgram() {
     const [errorSymbolsName, setErrorSymbolsName] = useState(false);
     const [errorEmptyDesc, setErrorEmptyDesc] = useState(false);
     const [errorSymbolsDesc, setErrorSymbolsDesc] = useState(false);
-    const [subjects, setSubjects] = useState(
-        [{name :'', description : '', module :'', deleted:'', classRooms:'', createdDate:'', modifiedDate:'', id:''}]
-    );
-    const [subjectHoursList, setsubjectHoursList] = useState([
-        { id: '', subject: '', hours: '', subjectName: '' },
-    ])
-
-
+    const [subjects, setSubjects] = useState([])
+    const [subjectHoursList, setsubjectHoursList] = useState([])
 
     const handleCNameeChange = (event) => {
         setProgramName(event.target.value);
@@ -54,7 +48,7 @@ export function UpdateProgram() {
         fetch("api/v1/subjects")
             .then((response) => response.json())
             .then(setSubjects);
-        fetch(`/api/v1/programs/program/${params.id}`)
+        fetch(`api/v1/programs/program/${params.id}`)
             .then((response) => response.json())
             .then((data) => {
                 setProgram(data);
@@ -83,8 +77,8 @@ export function UpdateProgram() {
             description.split("").some((char) => invalidSymbols.includes(char))
         ) {
             setErrorSymbolsDesc(true);
-        } else {
-            fetch(`/api/v1/programs/update-program/${params.id}`, {
+        } else { 
+            fetch(`api/v1/programs/update-hours-program/${params.id}`, {
                 method: "PATCH",
                 headers: {
                     "Content-Type": "application/json",
@@ -92,6 +86,7 @@ export function UpdateProgram() {
                 body: JSON.stringify({
                     programName,
                     description,
+                    subjectHoursList
                 }),
             }).then((result) => {
                 if (!result.ok) {
@@ -104,7 +99,7 @@ export function UpdateProgram() {
     };
 
     const disableProgram = () => {
-        fetch(`/api/v1/programs/disable-program/${params.id}`, {
+        fetch(`api/v1/programs/disable-program/${params.id}`, {
             method: "PATCH",
             headers: {
                 "Content-Type": "application/json",
@@ -113,7 +108,7 @@ export function UpdateProgram() {
     };
 
     const enableProgram = () => {
-        fetch(`/api/v1/programs/enable-program/${params.id}`, {
+        fetch(`api/v1/programs/enable-program/${params.id}`, {
             method: "PATCH",
             headers: {
                 "Content-Type": "application/json",
@@ -131,7 +126,6 @@ export function UpdateProgram() {
     const addFields = () => {
         let object = {
             subjectName: '',
-            subject: '',
             hours: ''
         }
         setsubjectHoursList([...subjectHoursList, object])
@@ -146,16 +140,15 @@ export function UpdateProgram() {
     const handleFormChange = (event, index) => {
         let data = [...subjectHoursList];
     
-        if (event.target.name === '') {
+        if (event.target.name === 'subjectName') {
           console.log(event.target.value)
+          console.log(event.target.name)
           data[index]['subjectName'] = event.target.value;
         } else {
           data[index][event.target.name] = event.target.value;
         }
         setsubjectHoursList(data);
       }
-
-
 
     const handleSubjectInput = (event) => {
         const {
@@ -223,18 +216,19 @@ export function UpdateProgram() {
                                 </Alert>
                             )}
                         </Grid>
+
                         {subjectHoursList.map((form, index) => {
                             return (
                                 <div key={index}>
+                                    <p>{form.subjectName}</p>
                                     <Select
-                                        value={subjects.findIndex(subject => subject.name === form.subjectName) + 1}
-                                        // value={subjects[index].id}
-                                        onChange={handleFormChange}
-                                    // onChange={event => handleFormChange(event, index)}
+                                        value={form.subjectName}
+                                        onChange={event => handleFormChange(event, index)}
+                                        name='subjectName'
+                                        placeholder='Hours'
                                     >
                                         {subjects.map(currentOption => (
-                                            <MenuItem key={currentOption.id} value={currentOption.id}>
-
+                                            <MenuItem key={currentOption.name} value={currentOption.name}>
                                                 {currentOption.name}
                                             </MenuItem>
                                         ))}
@@ -251,7 +245,7 @@ export function UpdateProgram() {
                         })}
                         <Grid item sm={10}>
                             <Stack direction="row" spacing={2}>
-                            <Button variant="contained" onClick={addFields}>Pridėtį dalyką</Button>
+                                <Button variant="contained" onClick={addFields}>Pridėtį dalyką</Button>
                                 <Button variant="contained" onClick={updateProgram}>
                                     Išsaugoti
                                 </Button>

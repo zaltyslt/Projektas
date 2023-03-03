@@ -103,7 +103,7 @@ export function SubjectList() {
   };
 
   const handleRestore = (id) => {
-    fetch("/api/v1/subjects/restore/" + id, {
+    fetch("api/v1/subjects/restore/" + id, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",

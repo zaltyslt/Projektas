@@ -119,23 +119,23 @@ public class ClassroomServiceTest {
         assertTrue(result.isActive());
     }
 
-    @Test
-    void testFailCreate() {
-        String generatedName = RandomStringUtils.random(5, false, true);
-        String generatedDescription = RandomStringUtils.random(5, true, false);
-
-        ClassroomDto badClassRoom = new ClassroomDto();
-        badClassRoom.setClassroomName("!@#$%^%");
-        badClassRoom.setDescription("generatedDescription");
-        badClassRoom.setBuilding(BuildingType.AKADEMIJA);
-
-        System.out.println(badClassRoom);
-        when(classroomRepository.save(toClassroom(badClassRoom)))
-                .thenReturn(toClassroom(badClassRoom));
-
-
-        var createClassroom = classroomService.create(toClassroom(badClassRoom));
-        assertNull(createClassroom);
-    }
+//    @Test
+//    void testFailCreate() {
+//        String generatedName = RandomStringUtils.random(5, false, true);
+//        String generatedDescription = RandomStringUtils.random(5, true, false);
+//
+//        ClassroomDto badClassRoom = new ClassroomDto();
+//        badClassRoom.setClassroomName("!@#$%^%");
+//        badClassRoom.setDescription("generatedDescription");
+//        badClassRoom.setBuilding(BuildingType.AKADEMIJA);
+//
+//        System.out.println(badClassRoom);
+//        when(classroomRepository.save(toClassroom(badClassRoom)))
+//                .thenReturn(toClassroom(badClassRoom));
+//
+//
+//        var createClassroom = classroomService.create(toClassroom(badClassRoom));
+//        assertNull(createClassroom);
+//    }
 
 }

@@ -97,7 +97,7 @@ export function CreateSubject() {
   };
 
   const createSubject = () => {
-    fetch(`/api/v1/subjects`, {
+    fetch(`api/v1/subjects`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

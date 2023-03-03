@@ -31,9 +31,7 @@ export function CreateProgram(props) {
   const [errorSymbolsDesc, setErrorSymbolsDesc] = useState(false);
   const [subjects, setSubjects] = useState([])
   const [subjectError, setSubjectError] = useState(false);
-  const [subjectHoursList, setsubjectHoursList] = useState([
-    // { hours: '', subjectName: '' }
-  ])
+  const [subjectHoursList, setsubjectHoursList] = useState([])
 
   const clear = () => {
     setProgramName("");
@@ -52,7 +50,7 @@ export function CreateProgram(props) {
   };
 
   useEffect(() => {
-    fetch("api/v1/subjects")
+    fetch(`api/v1/subjects`)
       .then((response) => response.json())
       .then(setSubjects);
   }, []);
@@ -80,7 +78,7 @@ export function CreateProgram(props) {
     } else if (!subjects) {
       setSubjectError(true)
     } else {
-      fetch("/api/v1/programs/create-program-hours", {
+      fetch("api/v1/programs/create-program-hours", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -108,21 +106,13 @@ export function CreateProgram(props) {
 
   const handleFormChange = (event, index) => {
     let data = [...subjectHoursList];
-
-    // if (event.target.name === '') {
-      console.log(event.target.value)
-      console.log(event.target.name)
-      // data[index]['subjectName'] = event.target.value;
-    // } else {
-      data[index][event.target.name] = event.target.value;
-    // }
+    data[index][event.target.name] = event.target.value;
     setsubjectHoursList(data);
   }
 
   const addFields = () => {
     let object = {
       subjectName: '',
-      // subject: '',
       hours: ''
     }
     setsubjectHoursList([...subjectHoursList, object])
@@ -186,34 +176,13 @@ export function CreateProgram(props) {
               justifyContent="space-around"
               alignItems="flex-start"
             >
-              {/* <Grid item sm={6}>
-                <FormControl fullWidth required error={subjectError}>
-                  <InputLabel id="subject-label">{subjectError ? "Privaloma pasirinkti nors vieną dalyką. " : "Dalykai"}</InputLabel>
-                  <Select
-                    multiple
-                    labelId="subject-label"
-                    id="subject"
-                    value={subjects}
-                    onChange={handleSubjectInput}
-                    input={<OutlinedInput label="Dalykai" />}
-                  >
-                    {subjects.map((subject) => (
-                      <MenuItem key={subject.id} value={subject}>
-                        {subject.name}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-              </Grid> */}
               {subjectHoursList.map((form, index) => {
                 return (
                   <div key={index}>
                     <br />
                     <Select
-                    name='subjectName'
-                    label='sdf'
-                    // placeholder="ert"
-                    // value={subjects}
+                      name='subjectName'
+                      label='subjectName'
                       onChange={event => handleFormChange(event, index)}
                     >
                       {subjects.map(currentOption => (

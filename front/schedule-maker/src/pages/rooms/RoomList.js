@@ -38,14 +38,14 @@ export function RoomList() {
   const [isChecked, setChecked] = useState(false);
 
   const fetchClassrooms = () => {
-    fetch("/api/v1/classrooms")
+    fetch("api/v1/classrooms")
       .then((responce) => responce.json())
       .then((jsonResponce) => setClassrooms(jsonResponce));
   };
 
   const enableClassroom = (event, classroom) => {
     console.log(classroom);
-    fetch(`/api/v1/classrooms/enable-classroom/${classroom.id}`, {
+    fetch(`api/v1/classrooms/enable-classroom/${classroom.id}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",

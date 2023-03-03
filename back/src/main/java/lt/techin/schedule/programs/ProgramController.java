@@ -103,13 +103,12 @@ public class ProgramController {
     }
 
     @PatchMapping(value = "/update-hours-program/{programId}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ProgramDto> getProgramHours(@RequestBody List<SubjectHoursDto> subjectHoursDto,
+    public ResponseEntity<ProgramDto> getProgramHours(@RequestBody ProgramDto subjectHoursDto,
                                                       @PathVariable Long programId) {
         Program program = programService.finById(programId);
         if (program != null) {
 
-            var hourlist = subjectHoursService.updateAll(subjectHoursDto.stream()
-                    .map(SubjectHoursMapper::toSubjectHours).toList());
+            var hourlist = subjectHoursService.updateAll(subjectHoursDto.getSubjectHoursList());
 
             program.setSubjectHoursList(hourlist);
             programService.update(program.getId(), program);

@@ -5,13 +5,13 @@ export function Buildings(props) {
     const [selectedBuilding, setSelectedBuilding] = useState(null)
 
     useEffect(() => {
-        fetch('/api/v1/buildings')
+        fetch('api/v1/buildings')
             .then(response => response.json())
             .then(setBuildings)
     }, [])
 
     const assignClassToBuilding = () => {
-        fetch(`/api/v1/buildings/${props.id}/addbuilding?buildingId=${selectedBuilding}`, {
+        fetch(`api/v1/buildings/${props.id}/addbuilding?buildingId=${selectedBuilding}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

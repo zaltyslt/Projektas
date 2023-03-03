@@ -67,7 +67,7 @@ export function EditSubject() {
   };
 
   const deleteSubject = (id) => {
-    fetch("/api/v1/subjects/delete/" + id, {
+    fetch("api/v1/subjects/delete/" + id, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
@@ -118,7 +118,7 @@ export function EditSubject() {
   };
 
   const editSubject = () => {
-    fetch(`/api/v1/subjects/${params.id}`, {
+    fetch(`api/v1/subjects/${params.id}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",

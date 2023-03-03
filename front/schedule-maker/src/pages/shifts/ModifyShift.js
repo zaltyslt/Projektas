@@ -37,7 +37,7 @@ export function ModifyShift() {
 
 
     useEffect(() => {
-        fetch( 'http://localhost:8080/api/v1/shift/view-shift/' + params.id)
+        fetch( 'api/v1/shift/view-shift/' + params.id)
         .then((response) => response.json())
         .then(data => {
             setCurrentShift(data);
@@ -48,7 +48,7 @@ export function ModifyShift() {
 
     const deactivateShift = (shiftID) => {
         fetch(
-            'http://localhost:8080/api/v1/shift/deactivate-shift/' + shiftID, {
+            'api/v1/shift/deactivate-shift/' + shiftID, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json'
@@ -70,7 +70,7 @@ export function ModifyShift() {
 
     const modifyShiftPutRequest = () => {
         fetch(
-            'http://localhost:8080/api/v1/shift/modify-shift/' + params.id, {
+            'api/v1/shift/modify-shift/' + params.id, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'
