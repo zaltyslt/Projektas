@@ -37,7 +37,6 @@ export function CreateProgram(props) {
     setProgramName("");
     setDescription("");
     removeAllFields();
-
   };
 
   const applyResult = (result) => {
@@ -45,7 +44,12 @@ export function CreateProgram(props) {
       setSuccess("Sėkmingai pridėta!");
       clear();
     } else {
-      setError("Nepavyko sukurti!");
+      result.text().then(text => {
+        const response = JSON.parse(text);
+        setError(response.message)
+      }).catch(error => {
+        setError("Klasės sukurti nepavyko: ", error);
+      });
     }
   };
 
@@ -87,7 +91,7 @@ export function CreateProgram(props) {
           programName,
           description,
           active,
-          subjectHoursList
+          subjectHoursList,
         }),
       }).then(applyResult);
     }
@@ -170,38 +174,50 @@ export function CreateProgram(props) {
                 onChange={(e) => setDescription(e.target.value)}
               ></TextField>
             </Grid>
-            <Grid
-              container
-              direction="column"
-              justifyContent="space-around"
-              alignItems="flex-start"
-            >
-              {subjectHoursList.map((form, index) => {
-                return (
-                  <div key={index}>
-                    <br />
-                    <Select
-                      name='subjectName'
-                      label='subjectName'
-                      onChange={event => handleFormChange(event, index)}
-                    >
-                      {subjects.map(currentOption => (
-                        <MenuItem key={currentOption.id} value={currentOption.name}>
-                          {currentOption.name}
-                        </MenuItem>
+            <Grid item sm={12} >
 
-                      ))}
-                    </Select>
-                    <TextField
-                      name='hours'
-                      placeholder='Hours'
-                      onChange={event => handleFormChange(event, index)}
-                      value={form.hours}
-                    />
-                    <Button onClick={() => removeFields(index)}>Remove</Button>
-                  </div>
-                )
-              })}
+              <Grid container direction="row" justifyContent="space-between">
+                {subjectHoursList.map((form, index) => {
+                  return (
+                    // <Grid container spacing={{ xs: 2, md: 3 }} rowSpacing={{xs: 5, sm: 5, md:5}} columnSpacing={{ xs: 1, sm: 1, md: 1 }} key={index}>
+                    <Grid container spacing={{ xs: 4, md: 4 }} columnSpacing={{ xs: 8, sm: 8, md: 8 }} key={index}>
+                      <Grid item xs={4}>
+                        <FormControl fullWidth>
+                          <InputLabel id="subject-label">Dalykas</InputLabel>
+                          <Select
+                            required
+                            variant="outlined"
+                            placeholder='Dalykas'
+                            labelId="subject-label"
+                            label="Dalykas"
+                            name='subjectName'
+                            label='subjectName'
+                            onChange={event => handleFormChange(event, index)}
+                          >
+                            {subjects.map(currentOption => (
+                              <MenuItem key={currentOption.id} value={currentOption.name}>
+                                {currentOption.name}
+                              </MenuItem>
+                            ))}
+                          </Select>
+                        </FormControl>
+                      </Grid>
+                      <Grid item xs={4}>
+                        <TextField
+                          name='hours'
+                          placeholder='Valandos'
+                          onChange={event => handleFormChange(event, index)}
+                          value={form.hours}
+                        />
+                      </Grid>
+                      <Grid item xs>
+                        <Button onClick={() => removeFields(index)}>Remove</Button>
+                      </Grid>
+                    </Grid>
+
+                  )
+                })}
+              </Grid>
             </Grid>
             <Grid item sm={10}>
               {error && (

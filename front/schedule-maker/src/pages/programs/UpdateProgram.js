@@ -90,7 +90,12 @@ export function UpdateProgram() {
                 }),
             }).then((result) => {
                 if (!result.ok) {
-                    setError("Redaguoti nepavyko!");
+                    result.text().then(text => {
+                        const response = JSON.parse(text);
+                        setError(response.message)
+                      }).catch(error => {
+                        setError("Klasės sukurti nepavyko: ", error);
+                      });
                 } else {
                     setSuccess("Sėkmingai atnaujinote!");
                 }
@@ -139,10 +144,7 @@ export function UpdateProgram() {
 
     const handleFormChange = (event, index) => {
         let data = [...subjectHoursList];
-    
         if (event.target.name === 'subjectName') {
-          console.log(event.target.value)
-          console.log(event.target.name)
           data[index]['subjectName'] = event.target.value;
         } else {
           data[index][event.target.name] = event.target.value;
@@ -220,7 +222,6 @@ export function UpdateProgram() {
                         {subjectHoursList.map((form, index) => {
                             return (
                                 <div key={index}>
-                                    <p>{form.subjectName}</p>
                                     <Select
                                         value={form.subjectName}
                                         onChange={event => handleFormChange(event, index)}

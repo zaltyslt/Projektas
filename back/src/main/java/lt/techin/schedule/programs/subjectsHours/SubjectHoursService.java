@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class SubjectHoursService {
@@ -36,7 +35,6 @@ public class SubjectHoursService {
         } else {
             return false;
         }
-
     }
 
     public List<SubjectHours> updateAll(List<SubjectHours> subjectHoursList) {
@@ -55,7 +53,6 @@ public class SubjectHoursService {
                     updatedList.add(toNewSubject);
                 }
             }
-
         }
         List<SubjectHours> newList = new ArrayList<>();
         if (!updatedList.isEmpty()) {
@@ -63,8 +60,5 @@ public class SubjectHoursService {
             System.out.println(newList);
         }
         return newList;
-
     }
-
-
 }
