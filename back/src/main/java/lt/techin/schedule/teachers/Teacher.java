@@ -112,6 +112,21 @@ public class Teacher implements Serializable {
         this.isActive = isActive;
     }
 
+    public Teacher(Long id, List<Contact> contacts, Set<Subject> subjects, Shift shift, String fName, String lName, String nickName, Boolean isActive, LocalDateTime createdDateTime, LocalDateTime modifiedDateAndTime, Integer workHoursPerWeek) {
+        this.id = id;
+        this.contacts = contacts;
+        this.subjects = subjects;
+        this.shift = shift;
+        this.fName = fName;
+        this.lName = lName;
+        this.nickName = nickName;
+        this.isActive = isActive;
+        this.createdDateTime = createdDateTime;
+        this.modifiedDateAndTime = modifiedDateAndTime;
+        this.workHoursPerWeek = workHoursPerWeek;
+
+    }
+
     public Integer getHashCode() {
         return hashCode;
     }

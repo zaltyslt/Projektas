@@ -80,11 +80,11 @@ public class ModuleService {
         return moduleRepository.save(module);
     }
 
-    public Module delete(Long moduleId) {
-        var existingSubject = moduleRepository.findById(moduleId).orElseThrow();
-        existingSubject.setDeleted(true);
-        return moduleRepository.save(existingSubject);
-    }
+//    public Module delete(Long moduleId) {
+//        var existingSubject = moduleRepository.findById(moduleId).orElseThrow();
+//        existingSubject.setDeleted(true);
+//        return moduleRepository.save(existingSubject);
+//    }
 
     public boolean deleteById(Long id) {
         try {

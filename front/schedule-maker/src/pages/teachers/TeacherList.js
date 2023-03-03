@@ -145,11 +145,11 @@ export function TeacherList() {
             <h3>Mokytojų sąrašas</h3>
           </Grid>
           <Grid item sm={2}>
-          <Stack direction="row" justifyContent="flex-end">
+          {/* <Stack direction="row" justifyContent="flex-end">
             <Link to="/teachers/create">
               <Button variant="contained">Pridėti naują</Button>
             </Link>
-            </Stack>
+            </Stack> */}
           </Grid>
 
           <Grid item sm={12}>

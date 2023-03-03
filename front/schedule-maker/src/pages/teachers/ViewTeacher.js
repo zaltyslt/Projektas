@@ -124,9 +124,9 @@ export function ViewTeacher() {
 
           <Grid item sm={12}>
             <Stack direction="row" spacing={2}>
-              <Link to={`/teachers/edit/${teacher.id}`}>
+              {/* <Link to={`/teachers/edit/${teacher.id}`}>
                 <Button variant="contained">Redaguoti</Button>
-              </Link>
+              </Link> */}
               <Button variant="contained" onClick={() => navigate(-1)}>
                 Grįžti
               </Button>
