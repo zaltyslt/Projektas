@@ -31,9 +31,9 @@ import { EditGroup } from "./pages/groups/EditGroup";
 function App() {
   return (
     <div className="App">
-      <HashRouter>
+      <HashRouter basename={process.env.PUBLIC_URL ? '' : '/schedule-maker'}>
         <Menu />
-        <Routes>
+        <Routes >
           <Route path="/"></Route>
           <Route path="/teachers" element={<TeacherList />}></Route>
           <Route path="/groups" element={<GroupList />}></Route>

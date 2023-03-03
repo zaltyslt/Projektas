@@ -1,5 +1,6 @@
 package lt.techin.schedule.programs;
 
+import lt.techin.schedule.programs.subjectsHours.SubjectHoursRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -8,6 +9,7 @@ import java.util.List;
 @Service
 public class ProgramService {
     private final ProgramRepository programRepository;
+
 
     @Autowired
 
@@ -24,19 +26,22 @@ public class ProgramService {
     }
 
     public Program update(Long id, Program program) {
-        var existingProgram = programRepository.findById(id)
-                .orElse(null);
+//        var existingProgram = programRepository.findById(id).orElse(null);
+        var existingProgram = finById(id);
+
         if (existingProgram != null) {
             existingProgram.setProgramName(program.getProgramName());
             existingProgram.setDescription(program.getDescription());
             existingProgram.setActive(program.isActive());
+
+            existingProgram.setSubjectHoursList(program.getSubjectHoursList());
             return programRepository.save(existingProgram);
         }
         return null;
     }
 
     public Program finById(Long id) {
-        return programRepository.findById(id).orElse(new Program());
+        return programRepository.findById(id).orElse(null);
     }
 
     public Program disable(Long id) {

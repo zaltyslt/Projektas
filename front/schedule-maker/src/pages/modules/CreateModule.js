@@ -34,7 +34,7 @@ export function CreateModule() {
   };
 
   const createModule = async () => {
-    await fetch("/api/v1/modules/create", {
+    await fetch("api/v1/modules/create", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

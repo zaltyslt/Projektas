@@ -313,3 +313,5 @@ sketch
 
 # End of https://www.toptal.com/developers/gitignore/api/java,intellij,visualstudiocode,react,node
 back/src/main/resources/application.yml
+# ignore everythin in build after `npm run build`
+front/schedule-maker/build/

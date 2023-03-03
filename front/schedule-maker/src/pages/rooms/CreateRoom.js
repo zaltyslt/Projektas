@@ -77,7 +77,7 @@ export function CreateRoom(props) {
     } else if (!building) {
       setErrorBuilding(true);
     } else {
-      fetch("/api/v1/classrooms/create-classroom", {
+      fetch("api/v1/classrooms/create-classroom", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

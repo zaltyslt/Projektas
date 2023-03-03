@@ -11,7 +11,7 @@ export function ViewShift() {
     const [currentShift, setCurrentShift] = useState([]);
 
     useEffect(() => {
-        fetch( 'http://localhost:8080/api/v1/shift/view-shift/' + params.id)
+        fetch( 'api/v1/shift/view-shift/' + params.id)
         .then((response) => response.json())
         .then(data => {
             setCurrentShift(data);
