@@ -130,6 +130,8 @@ export function CreateGroup() {
     setStudentAmountError(false);
     setProgramError(false);
     setShiftError(false);
+    setNameNotValid(false);
+    setYearNotValid(false);
   };
 
   return (
