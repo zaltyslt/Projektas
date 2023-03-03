@@ -16,17 +16,25 @@ import {
 import { SelectChangeEvent } from "@mui/material/Select";
 
 export function UpdateProgram() {
-  const [program, setProgram] = useState({});
-  const [error, setError] = useState();
-  const [success, setSuccess] = useState();
-  const [active, setActive] = useState("");
-  const [programName, setProgramName] = useState("");
-  const [description, setDescription] = useState("");
-  const invalidSymbols = "!@#$%^&*_+={}<>|~`\\\"'";
-  const [errorEmptyName, setErrorEmptyName] = useState(false);
-  const [errorSymbolsName, setErrorSymbolsName] = useState(false);
-  const [errorEmptyDesc, setErrorEmptyDesc] = useState(false);
-  const [errorSymbolsDesc, setErrorSymbolsDesc] = useState(false);
+    const [program, setProgram] = useState({});
+    const [error, setError] = useState();
+    const [success, setSuccess] = useState();
+    const [active, setActive] = useState("");
+    const [programName, setProgramName] = useState("");
+    const [description, setDescription] = useState("");
+    const invalidSymbols = "!@#$%^&*_+={}<>|~`\\\"'";
+    const [errorEmptyName, setErrorEmptyName] = useState(false);
+    const [errorSymbolsName, setErrorSymbolsName] = useState(false);
+    const [errorEmptyDesc, setErrorEmptyDesc] = useState(false);
+    const [errorSymbolsDesc, setErrorSymbolsDesc] = useState(false);
+    const [subjects, setSubjects] = useState(
+        [{name :'', description : '', module :'', deleted:'', classRooms:'', createdDate:'', modifiedDate:'', id:''}]
+    );
+    const [subjectHoursList, setsubjectHoursList] = useState([
+        { id: '', subject: '', hours: '', subjectName: '' },
+    ])
+
+
 
   const handleCNameeChange = (event) => {
     setProgramName(event.target.value);
@@ -42,15 +50,19 @@ export function UpdateProgram() {
     active: program.active,
   });
 
-  useEffect(() => {
-    fetch(`/api/v1/programs/program/${params.id}`)
-      .then((response) => response.json())
-      .then((data) => {
-        setProgram(data);
-        setProgramName(data.programName);
-        setDescription(data.description);
-      });
-  }, []);
+    useEffect(() => {
+        fetch("api/v1/subjects")
+            .then((response) => response.json())
+            .then(setSubjects);
+        fetch(`/api/v1/programs/program/${params.id}`)
+            .then((response) => response.json())
+            .then((data) => {
+                setProgram(data);
+                setProgramName(data.programName);
+                setDescription(data.description);
+                setsubjectHoursList(data.subjectHoursList)
+            });
+    }, []);
 
   const updateProgram = () => {
     setError("");
@@ -117,96 +129,163 @@ export function UpdateProgram() {
     });
   };
 
-  return (
-    <div>
-      <Container>
-        <h1 className="edit-header">Redagavimas</h1>
-        <h3>{program.programName}</h3>
-        <span id="modified-date">
-          Paskutinį kartą redaguota: {program.modifiedDate}
-        </span>
-        <form>
-          <Grid container rowSpacing={3}>
-            <Grid item sm={10}>
-              <TextField
-                fullWidth
-                required
-                error={errorEmptyName || errorSymbolsName}
-                helperText={
-                  errorEmptyName
-                    ? "Programos pavadinimas yra privalomas."
-                    : errorSymbolsName
-                    ? "Programos pavadinimas turi neleidžiamų simbolių."
-                    : ""
-                }
-                variant="outlined"
-                id="programName"
-                label="Programos pavadinimas"
-                value={programName}
-                onChange={(e) => setProgramName(e.target.value)}
-              ></TextField>
-            </Grid>
-            <Grid item sm={10}>
-              <TextField
-                fullWidth
-                multiline
-                required
-                error={errorEmptyDesc || errorSymbolsDesc}
-                helperText={
-                  errorEmptyDesc
-                    ? "Programos aprašas yra privalomas."
-                    : errorSymbolsDesc
-                    ? "Programos aprašas turi neleidžiamų simbolių."
-                    : ""
-                }
-                variant="outlined"
-                label="Programos aprašas"
-                id="description"
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-              ></TextField>
-            </Grid>
-            <Grid item sm={10}>
-              {" "}
-              <legend>{params.programName}</legend>
-              {error && <Alert severity="warning">{error}</Alert>}
-              {success && <Alert severity="success">{success}</Alert>}
-            </Grid>
-            <Grid item sm={10}>
-              <Stack direction="row" spacing={2}>
-                <Button variant="contained" onClick={updateProgram}>
-                  Išsaugoti
-                </Button>
-                {!program.active && (
-                  <Button
-                    variant="contained"
-                    data-value="true"
-                    value={params.id}
-                    onClick={enableProgram}
-                  >
-                    Aktyvuoti
-                  </Button>
-                )}
-                {program.active && (
-                  <Link to="/programs">
-                    <Button
-                      variant="contained"
-                      data-value="true"
-                      value={params.id}
-                      onClick={disableProgram}
-                    >
-                      Ištrinti
-                    </Button>
-                  </Link>
-                )}
-                <Link to="/programs">
-                  <Button variant="contained">Grįžti</Button>
-                </Link>
-              </Stack>
-            </Grid>
-          </Grid>
-        </form>
-      </Container>
-    </div>
-  );
+    const addFields = () => {
+        let object = {
+            subjectName: '',
+            subject: '',
+            hours: ''
+        }
+        setsubjectHoursList([...subjectHoursList, object])
+    }
+
+    const removeFields = (index) => {
+        let data = [...subjectHoursList];
+        data.splice(index, 1)
+        setsubjectHoursList(data)
+    }
+
+    const handleFormChange = (event, index) => {
+        let data = [...subjectHoursList];
+    
+        if (event.target.name === '') {
+          console.log(event.target.value)
+          data[index]['subjectName'] = event.target.value;
+        } else {
+          data[index][event.target.name] = event.target.value;
+        }
+        setsubjectHoursList(data);
+      }
+
+
+
+    const handleSubjectInput = (event) => {
+        const {
+            target: { value },
+        } = event;
+        setSubjects(typeof value === "string" ? value.split(",") : value);
+    };
+
+    return (
+        <div>
+            <Container>
+                <h1 className="edit-header">Redagavimas</h1>
+                <h3>{program.programName}</h3>
+                <span id="modified-date">
+                    Paskutinį kartą redaguota: {program.modifiedDate}
+                </span>
+                <form>
+                    <Grid container rowSpacing={3}>
+                        <Grid item sm={10}>
+                            <TextField
+                                fullWidth
+                                required
+                                error={errorEmptyName || errorSymbolsName}
+                                helperText={errorEmptyName ? "Programos pavadinimas yra privalomas."
+                                    : errorSymbolsName
+                                        ? "Programos pavadinimas turi neleidžiamų simbolių."
+                                        : ""}
+                                variant="outlined"
+                                id="programName"
+                                label="Programos pavadinimas"
+                                value={programName}
+                                onChange={(e) => setProgramName(e.target.value)}
+                            ></TextField>
+                        </Grid>
+                        <Grid item sm={10}>
+                            <TextField
+                                fullWidth
+                                multiline
+                                required
+                                error={errorEmptyDesc || errorSymbolsDesc}
+                                helperText={
+                                    errorEmptyDesc
+                                        ? "Programos aprašas yra privalomas."
+                                        : errorSymbolsDesc
+                                            ? "Programos aprašas turi neleidžiamų simbolių."
+                                            : ""}
+                                variant="outlined"
+                                label="Programos aprašas"
+                                id="description"
+                                value={description}
+                                onChange={(e) => setDescription(e.target.value)}
+                            ></TextField>
+                        </Grid>
+                        <Grid item sm={10}>
+                            {" "}
+                            <legend>{params.programName}</legend>
+                            {error && (
+                                <Alert severity="warning">
+                                    {error}
+                                </Alert>
+                            )}
+                            {success && (
+                                <Alert severity="success">
+                                    {success}
+                                </Alert>
+                            )}
+                        </Grid>
+                        {subjectHoursList.map((form, index) => {
+                            return (
+                                <div key={index}>
+                                    <Select
+                                        value={subjects.findIndex(subject => subject.name === form.subjectName) + 1}
+                                        // value={subjects[index].id}
+                                        onChange={handleFormChange}
+                                    // onChange={event => handleFormChange(event, index)}
+                                    >
+                                        {subjects.map(currentOption => (
+                                            <MenuItem key={currentOption.id} value={currentOption.id}>
+
+                                                {currentOption.name}
+                                            </MenuItem>
+                                        ))}
+                                    </Select>
+                                    <TextField
+                                        name='hours'
+                                        placeholder='Hours'
+                                        onChange={event => handleFormChange(event, index)}
+                                        value={form.hours}
+                                    />
+                                    <Button onClick={() => removeFields(index)}>Remove</Button>
+                                </div>
+                            )
+                        })}
+                        <Grid item sm={10}>
+                            <Stack direction="row" spacing={2}>
+                            <Button variant="contained" onClick={addFields}>Pridėtį dalyką</Button>
+                                <Button variant="contained" onClick={updateProgram}>
+                                    Išsaugoti
+                                </Button>
+                                {!program.active && (
+                                    <Button
+                                        variant="contained"
+                                        data-value="true"
+                                        value={params.id}
+                                        onClick={enableProgram}
+                                    >
+                                        Aktyvuoti
+                                    </Button>
+                                )}
+                                {program.active && (
+                                    <Link to="/programs">
+                                        <Button
+                                            variant="contained"
+                                            data-value="true"
+                                            value={params.id}
+                                            onClick={disableProgram}
+                                        >
+                                            Ištrinti
+                                        </Button>
+                                    </Link>
+                                )}
+                                <Link to="/programs">
+                                    <Button variant="contained">Grįžti</Button>
+                                </Link>
+                            </Stack>
+                        </Grid>
+                    </Grid>
+                </form>
+            </Container>
+        </div>
+    );
 }
