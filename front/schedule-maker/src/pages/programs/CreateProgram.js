@@ -205,6 +205,7 @@ export function CreateProgram(props) {
                   </Select>
                 </FormControl>
               </Grid> */}
+              
               {subjectHoursList.map((form, index) => {
                 return (
                   <div key={index}>
@@ -223,13 +224,14 @@ export function CreateProgram(props) {
 
                       ))}
                     </Select>
+                    
                     <TextField
                       name='hours'
                       placeholder='Hours'
                       onChange={event => handleFormChange(event, index)}
                       value={form.hours}
                     />
-                    <Button onClick={() => removeFields(index)}>Remove</Button>
+                    <Button onClick={() => removeFields(index)}>Ištrinti</Button>
                   </div>
                 )
               })}

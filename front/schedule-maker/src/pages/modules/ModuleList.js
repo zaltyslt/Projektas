@@ -27,7 +27,9 @@ export function ModuleList() {
   const [filteredModules, setFilteredModules] = useState([]);
   const [deletedModules, setDeletedModules] = useState([]);
   const [page, setPage] = useState(0);
+  const [pageInDeleted, setPageInDeleted] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [rowsPerPageInDeleted, setRowsPerPageInDeleted] = useState(10);
   const [isChecked, setChecked] = useState(false);
 
   useEffect(() => {
