@@ -29,9 +29,9 @@ export function ViewRoom() {
           <Grid item sm={10}>
             <header>
               <h1>{classroom.classroomName}</h1>
-              <div>
+              {/* <div>
                 <span id="created-date">Sukurta: {classroom.createdDate}</span>
-                </div>
+                </div> */}
               <div>
                 <span id="modified-date">Paskutinį kartą redaguota: {classroom.modifiedDate}</span>
               </div>
