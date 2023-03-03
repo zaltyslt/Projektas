@@ -4,13 +4,11 @@ import lt.techin.schedule.shift.Shift;
 import lt.techin.schedule.shift.ShiftRepository;
 import lt.techin.schedule.subject.Subject;
 import lt.techin.schedule.subject.SubjectRepository;
-import lt.techin.schedule.teachers.contacts.Contact;
-import lt.techin.schedule.teachers.contacts.ContactDto2;
-import lt.techin.schedule.teachers.contacts.ContactMapper;
-import lt.techin.schedule.teachers.contacts.ContactService;
+import lt.techin.schedule.teachers.contacts.*;
 import lt.techin.schedule.exceptions.TeacherException;
 import lt.techin.schedule.teachers.helpers.TeacherSubjectMapper;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -37,18 +35,20 @@ public class TeacherServiceDo {
 
     public ResponseEntity<TeacherDto> createTeacher(TeacherDto teacherDto) {
         Teacher newTeacher = TeacherMapper.teacherFromDto(teacherDto);
-        int newTeacherHash = Objects.hash(newTeacher.getfName().toLowerCase(), newTeacher.getlName().toLowerCase());
+//        int newTeacherHash = Objects.hash(newTeacher.getfName().toLowerCase(), newTeacher.getlName().toLowerCase());
         newTeacher.setId(null);
 
-        isNotDuplicate(newTeacher);
+        if (isNotDuplicate(newTeacher)) {
 
 
-        newTeacher.setContacts(null);
-        newTeacher.setShift(null);
-        newTeacher.setSubjects(null);
-        newTeacher.setId(null);
-        newTeacher = teacherRepository.save(newTeacher);
-
+            newTeacher.setContacts(null);
+            newTeacher.setShift(null);
+            newTeacher.setSubjects(null);
+            newTeacher.setId(null);
+            newTeacher = teacherRepository.save(newTeacher);
+        } else {
+            throw new RuntimeException("Teacher verification process failed.");
+        }
 //        if (!teacherDto.getContacts().isE()) {
 //            List<Contact> contactsList = ContactMapper.contactFromDto(teacherDto.getContacts());
 //            if (!contactsList.isEmpty()) {
@@ -58,7 +58,7 @@ public class TeacherServiceDo {
 //        }
         ContactDto2 contactsDto = teacherDto.getContacts();
         contactsDto.setTeacherId(newTeacher.getId());
-        List<Contact>  contactsToSave= ContactMapper.contactFromDto2(contactsDto);
+        List<Contact> contactsToSave = ContactMapper.contactFromDto2(contactsDto);
         newTeacher.setContacts(contactsToSave);
 
         if (!teacherDto.getSubjectsList().isEmpty()) {
@@ -108,6 +108,39 @@ public class TeacherServiceDo {
         return ResponseEntity.ok(TeacherMapper.teacherToDto(newTeacher));
     }
 
+    public ResponseEntity<Void> switchOff(Long id) {
+        var result = teacherRepository.findById(id);
+        if (result.isPresent()) {
+            Teacher teacher = result.get();
+            try {
+                teacher.setActive(false);
+                teacher = teacherRepository.save(teacher);
+                return ResponseEntity.ok().header(HttpHeaders.ACCEPT, "Deleted").build();
+            } catch (Exception e) {
+                throw new TeacherException(HttpStatus.BAD_REQUEST, "Ištrinti nepavyko !");
+            }
+        } else {
+            throw new TeacherException(HttpStatus.NOT_FOUND, "Mokytojas nerastas !");
+        }
+    }
+
+    public ResponseEntity<Void> switchOn(Long id) {
+        var result = teacherRepository.findById(id);
+        if (result.isPresent()) {
+            Teacher teacher = result.get();
+            try {
+                teacher.setActive(true);
+                teacher = teacherRepository.save(teacher);
+                return ResponseEntity.ok().header(HttpHeaders.ACCEPT, "Restored").build();
+            } catch (Exception e) {
+                throw new TeacherException(HttpStatus.BAD_REQUEST, "Atstatyti nepavyko !");
+            }
+        } else {
+            throw new TeacherException(HttpStatus.NOT_FOUND, "Mokytojas nerastas !");
+        }
+    }
+
+
     public ResponseEntity<Void> deleteTeacherById(Long teacherId) {
         try {
             teacherRepository.deleteById(teacherId);
@@ -123,28 +156,32 @@ public class TeacherServiceDo {
         Map<Long, Teacher> teachers = teacherRepository.findTeachersByHashCode(teacherHash)
                 .stream()
                 .collect(Collectors.toMap(t -> t.getId(), Function.identity()));
-       //If no maches
+
+
+        //If no maches
         if (teachers.isEmpty()) {
             return true;
         }
         //If teacher looked and found is the same
         if (newTeacher.getId() != null) {
             teachers.remove(newTeacher.getId());
-            if(teachers.isEmpty()){
+            if (teachers.isEmpty()) {
                 return true;
             }
         }
-
-        if (!teachers.isEmpty() && newTeacher.getNickName().isBlank()) {
-            throw new TeacherException(HttpStatus.CONFLICT, "Bandoma įvesti esamą mokytoją, jei tai bendravardis naudokite žymą !!!");
-        }
-
+        Map<ContactType, String> newTeacherContacts = newTeacher.getContacts().stream()
+                .collect(Collectors.toMap(c -> c.getContactType(), c -> c.getContactValue()));
         for (Teacher teacher : teachers.values()) {
-            if (!teacher.getNickName().isBlank() && teacher.getNickName().equalsIgnoreCase(newTeacher.getNickName())) {
+
+            Map<ContactType, String> teacherContacts = teacher.getContacts().stream()
+                    .collect(Collectors.toMap(c -> c.getContactType(), c -> c.getContactValue()));
+
+            if (newTeacherContacts.get(ContactType.PHONE_NUMBER).equals(teacherContacts.get(ContactType.PHONE_NUMBER)) &&
+                    newTeacherContacts.get(ContactType.DIRECT_EMAIL).equals(teacherContacts.get(ContactType.DIRECT_EMAIL))
+            ) {
                 throw new TeacherException(HttpStatus.CONFLICT, "Bandoma įvesti esamą mokytoją !!!");
             }
         }
-
         return true;
     }
 }

@@ -26,10 +26,10 @@ import { width } from "@mui/system";
 
 export function CreateTeacher() {
   const [subjects, setSubjects] = useState([]);
-  const [showSubjSelect, setShowSubjSelect] = useState(false);
-
   const [subject, setSubject] = useState("");
   const [chosenSubjects, setChosenSubjects] = useState([]);
+  const [freeSubjects, setFreeSubjects] = useState([]);
+  const [showSubjSelect, setShowSubjSelect] = useState(false); //show/hide
 
   const [fName, setFName] = useState("");
   const [shifts, setShifts] = useState([]);
@@ -79,14 +79,13 @@ export function CreateTeacher() {
   }, []);
 
   const fetchSubjects = () => {
-    fetch("api/v1/subjects")
+    fetch("api/v1/teachers/subjects")
       .then((response) => response.json())
       .then((data) => {
         setSubjects(data);
-        return data;
+        setFreeSubjects(data);
+        console.log(data);
       });
-    // .then((data) => setFilteredSubjects(data))
-    // .then((data) => console.log(data));
   };
 
   const isActive = [
@@ -97,27 +96,45 @@ export function CreateTeacher() {
   const applyResult = (result) => {
     if (result.ok) {
       setSuccess("Sėkmingai pridėta!");
-      clear();
+     // clear();
     } else {
       setError("Nepavyko sukurti!");
     }
   };
+ 
+  useEffect(() => {             
+       
+    const tempSubjects = freeSubjects.filter(
+      (subA) => !chosenSubjects.map((subC) => subC.subjectId).includes(subA.subjectId)
+    );
+    setSubjects(tempSubjects);
+  }, [showSubjSelect]);
+
+
   const handleShowSubjects = () => {
     setShowSubjSelect(!showSubjSelect);
   };
 
-  const handleChosenSubjects = (subjectNew) => {
-    setChosenSubjects([...chosenSubjects, subjectNew]);
-    const removed = subjects.filter((subject) => subject.id != subjectNew.id);
-    setSubjects(removed);
+  const handleAddChosen = (subjectNew) => {
+    // setSubject(subjectNew);
+
+    const temp = [...chosenSubjects, subjectNew];
+    setChosenSubjects(temp);
+    const removed = subjects.filter((subject) => subject.subjectId != subjectNew.subjectId);
+    setFreeSubjects(removed);
     setShowSubjSelect(false);
   };
-  const handleRemoveChosen = (subjectRem) => {
-    setSubjects([...subjects, subjectRem]);
 
-    const removed = chosenSubjects.filter(
-      (subject) => subject.id != subjectRem.id
+  const handleRemoveChosen = (subjectRem) => {
+    
+    //patikrinti ar subjects neturi tokio dalyko
+    console.log(freeSubjects);
+    const moved = freeSubjects.filter( (subject) => subject.subjectId != subjectRem.subjectId
     );
+    
+    const removed = chosenSubjects.filter(
+      (subject) => subject.subjectId != subjectRem.subjectId );
+    setFreeSubjects([...moved, subjectRem]);
     setChosenSubjects(removed);
   };
 
@@ -149,16 +166,18 @@ export function CreateTeacher() {
         id: null,
         fName: fName,
         lName: lName,
-        nickName: nickName,
-        workHoursPerWeek: workHours,
-        active: active,
+        nickName: "",
+        active: true,
+        
         contacts: teacherContacts,
+
+        workHoursPerWeek: workHours,
         teacherShiftDto: teacherShiftDto,
-        subjectsDtoList: chosenSubjectsDto,
+        subjectsList: chosenSubjects,
       }),
     })
-      .then(applyResult)
-      .then(console.log(active));
+      .then(applyResult);
+      // .then(console.log(active));
   };
   const row1 = 3.5;
   const row2 = 3.5;
@@ -201,7 +220,7 @@ export function CreateTeacher() {
             ></TextField>
           </Grid>
 
-          <Grid item sm={row1}>
+          {/* <Grid item sm={row1}>
             <TextField
               fullWidth
               variant="outlined"
@@ -210,7 +229,7 @@ export function CreateTeacher() {
               value={nickName}
               onChange={(e) => setNickName(e.target.value)}
             ></TextField>
-          </Grid>
+          </Grid> */}
 
           <Grid item sm={row2}>
             <TextField
@@ -292,7 +311,7 @@ export function CreateTeacher() {
               </Select>
             </FormControl>
           </Grid>
-          <Grid item sm={row3}>
+          {/* <Grid item sm={row3}>
             <FormControl fullWidth>
               <InputLabel id="demo-simple-select-label">Būsena</InputLabel>
               <Select
@@ -314,7 +333,7 @@ export function CreateTeacher() {
                 ))}
               </Select>
             </FormControl>
-          </Grid>
+          </Grid> */}
 
           <Grid item sm={12}>
             {showSubjSelect && (
@@ -326,9 +345,9 @@ export function CreateTeacher() {
                   id="subject"
                   value={subject}
                   defaultOpen={true}
-                  onChange={(e) => handleChosenSubjects(e.target.value)}
+                  onChange={(e) => handleAddChosen(e.target.value)}
                 >
-                  {subjects.map((subject, index) => (
+                  {freeSubjects.map((subject, index) => (
                     <MenuItem key={index} value={subject}>
                       {subject.name}
                     </MenuItem>

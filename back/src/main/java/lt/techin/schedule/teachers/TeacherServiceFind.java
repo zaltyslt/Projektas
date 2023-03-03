@@ -3,6 +3,8 @@ package lt.techin.schedule.teachers;
 import lt.techin.schedule.subject.*;
 import lt.techin.schedule.teachers.contacts.ContactRepository;
 import lt.techin.schedule.teachers.contacts.ContactService;
+import lt.techin.schedule.teachers.helpers.TeacherSubjectMapper;
+import lt.techin.schedule.teachers.helpers.TeacherSubjectsDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -67,7 +69,7 @@ public class TeacherServiceFind {
         var result = teacherRepository.findByisActive(active);
         return !result.isEmpty()
                 ? result.stream()
-                    .sorted(Comparator.comparing(Teacher::getlName))
+                    .sorted(Comparator.comparing(Teacher::getModifiedDateAndTime))
                     .filter(t -> t.getActive() == active) //just to be sure :)
                     .map(TeacherMapper::teacherToDto)
                     .collect(Collectors.toSet())
@@ -75,5 +77,10 @@ public class TeacherServiceFind {
 //            return new HashSet<TeacherDto>();
     }
 
+    public Set<TeacherSubjectsDto> getMiniSubjects(){
+        var result = subjectRepository.findAll().stream()
+                .filter(subject -> !subject.getDeleted()).collect(Collectors.toSet());
 
+        return TeacherSubjectMapper.subjectsToDtos(result);
+    }
 }

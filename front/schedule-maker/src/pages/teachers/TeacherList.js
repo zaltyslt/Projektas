@@ -5,6 +5,7 @@ import {
   FormGroup,
   Grid,
   Paper,
+  Stack,
   Table,
   TableBody,
   TableCell,
@@ -16,6 +17,7 @@ import {
   TextField,
 } from "@mui/material";
 import { Container } from "@mui/system";
+import ".././pages.css";
 
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
@@ -27,7 +29,10 @@ export function TeacherList() {
   // const [subjects, setSubjects] = useState([]);
 
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [pageP, setPageP] = useState(0);
+
+  const [rowsPerPageA, setRowsPerPageA] = useState(10);
+  const [rowsPerPageP, setRowsPerPageP] = useState(10);
   const [isChecked, setChecked] = useState(false);
 
   useEffect(() => {
@@ -38,20 +43,21 @@ export function TeacherList() {
     fetchDeletedTeachers();
   }, []);
 
-  useEffect(() => {
-    fetchSubjects();
-  }, []);
+  // useEffect(() => {
+  //   fetchSubjects();
+  // }, []);
 
   const fetchTeachers = async () => {
     fetch("/api/v1/teachers?active=true")
       .then((response) => response.json())
       .then((data) => {
         setTeachers(data);
-        console.log(data);
+        // console.log(data);
         return data;
       })
-      .then((data) => {setFilteredTeachers(data);
-     });
+      .then((data) => {
+        setFilteredTeachers(data);
+      });
   };
 
   const fetchDeletedTeachers = async () => {
@@ -60,56 +66,77 @@ export function TeacherList() {
       .then(setDeletedTeachers);
   };
 
-  const fetchSubjects = async () => {
-    fetch("/api/v1/subjects")
-      .then((response) => response.json())
-      .then(setSubjects);
-    // console.log(subjects);
-  };
+  
 
   const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - teachers.length) : 0;
+    page > 0 ? Math.max(0, (1 + page) * rowsPerPageA - teachers.length) : 0;
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
 
   const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
+    setRowsPerPageA(parseInt(event.target.value, 10));
     setPage(0);
   };
 
+  const handleChangeRowsPerPageP = (event) => {
+    setRowsPerPageP(parseInt(event.target.value, 10));
+    setPageP(0);
+  };
+
+  // const handleSearch = (event) => {
+  //   if (event.length === 0) {
+  //     setFilteredModules(modules);
+  //   } else {
+  //     const filtered = modules.filter((module) => {
+  //       const moduleName = module.name.toLowerCase();
+  //       return moduleName.includes(event.toLowerCase());
+  //     });
+  //     setFilteredModules(filtered);
+  //   }
+  // };
+
+
+
   const handleSearch = (event) => {
-    if (event.length === 0) {
-      setFilteredTeachers(teachers);
-    } else {
+    // console.log(teachers);
+    if (event.length === 0) {setFilteredTeachers(teachers); } 
+    else {
       const filtered = teachers.filter((teacher) => {
         const teacherFName = teacher.fName.toLowerCase();
-        // const teacherSurname = teacher
         const teacherLName = teacher.lName.toLowerCase();
-        const teacherNick = teacher.nickName.toLowerCase();
-        return (
-          teacherFName.includes(event.toLowerCase()) ||
-          teacherLName.includes(event.toLowerCase()) ||
-          teacherNick.includes(event.toLowerCase())
+        const shift = teacher.teacherShiftDto.name.toLowerCase();
+        const moduleNamesArray = teacher.subjectsList.map(subject => subject.name.toLowerCase()).flat();
+      console.log(moduleNamesArray);
+        
+        // const subjectsF = teacher.subjectsList.map();
+      
+        return (teacherFName.includes(event.toLowerCase()) 
+        ||teacherLName.includes(event.toLowerCase()) 
+        || shift.includes(event.toLowerCase())
+        || moduleNamesArray.some(name => name.includes(event.toLowerCase()))
         );
       });
+      
+      // console.log(filtered);
       setFilteredTeachers(filtered);
     }
   };
-
-  const handleRestore = (teacher) => {
-    fetch("/api/v1/teachers/update?tid=" + teacher.id, {
+  
+  //////////
+  const restoreTeacher = async (teacher) => {
+    await fetch(`/api/v1/teachers/active?tid=${teacher.id}&active=true`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ id: teacher.id, active: true }),
     })
       .then(fetchTeachers)
       .then(fetchDeletedTeachers);
   };
 
+  
   return (
     <div>
       <Container maxWidth="lg">
@@ -118,9 +145,11 @@ export function TeacherList() {
             <h3>Mokytojų sąrašas</h3>
           </Grid>
           <Grid item sm={2}>
+          <Stack direction="row" justifyContent="flex-end">
             <Link to="/teachers/create">
               <Button variant="contained">Pridėti naują</Button>
             </Link>
+            </Stack>
           </Grid>
 
           <Grid item sm={12}>
@@ -139,18 +168,17 @@ export function TeacherList() {
           <Table aria-label="custom pagination table">
             <TableHead>
               <TableRow>
-                <TableCell>Vardas Pavardė</TableCell>
-                <TableCell>Žyma</TableCell>
-                <TableCell>Dėstomi dalykai</TableCell>
-                <TableCell>Pamaina</TableCell>
-                {/* <TableCell>Kontaktai</TableCell> */}
+                <TableCell >Vardas Pavardė</TableCell>
+                <TableCell >Dėstomi dalykai</TableCell>
+                <TableCell className="empty-activity">Pamaina</TableCell>
+                {/* <TableCell></TableCell> */}
               </TableRow>
             </TableHead>
             <TableBody>
-              {(rowsPerPage > 0
+              {(rowsPerPageA > 0
                 ? filteredTeachers.slice(
-                    page * rowsPerPage,
-                    page * rowsPerPage + rowsPerPage
+                    page * rowsPerPageA,
+                    page * rowsPerPageA + rowsPerPageA
                   )
                 : filteredTeachers
               ).map((teacher) => (
@@ -161,20 +189,18 @@ export function TeacherList() {
                     </Link>
                   </TableCell>
 
-                  <TableCell>{teacher.nickName && teacher.nickName}</TableCell>
-
                   <TableCell>
-                    {/* ////////////////////////////////////// */}
-                    {teacher.subjectsList && teacher.subjectsList.length > 0
-                      ? (teacher.subjectsList.map((subjectItem, index) => {
-                          {/* const subject = subjects.find(
-                            (s) => s.id === subjectItem.subjectId
-                          ); */}
-                          return <p key={index}>{subjectItem.name}</p>;
-                        }))
-                      : "* Nepriskirta"}
                     
-
+                    {(teacher.subjectsList && teacher.subjectsList.length > 0)
+                      ? teacher.subjectsList.map((subjectItem, index) => {
+                          {
+                            /* const subject = subjects.find(
+                            (s) => s.id === subjectItem.subjectId
+                          ); */
+                          }
+                          return <p key={index}>{subjectItem.name}</p>;
+                        })
+                      : "* Nepriskirta"}
                   </TableCell>
 
                   <TableCell>
@@ -182,14 +208,9 @@ export function TeacherList() {
                       ? teacher.teacherShiftDto.name
                       : "** Nepriskirta"}
                   </TableCell>
-
-                  
-
                 </TableRow>
               ))}
-              {/* [
-    
-
+              
 {/* //////////////////////////// */}
               {emptyRows > 0 && (
                 <TableRow style={{ height: 53 * emptyRows }}>
@@ -211,8 +232,11 @@ export function TeacherList() {
                     },
                     native: true,
                   }}
+                  labelDisplayedRows={({ from, to, count }) =>
+                    `${from}-${to} iš ${count}`
+                  }
                   onPageChange={handleChangePage}
-                  rowsPerPage={rowsPerPage}
+                  rowsPerPage={rowsPerPageA}
                   onRowsPerPageChange={handleChangeRowsPerPage}
                 ></TablePagination>
               </TableRow>
@@ -234,28 +258,46 @@ export function TeacherList() {
             <Table aria-label="custom pagination table">
               <TableHead>
                 <TableRow>
-                  <TableCell colSpan={6}>Dalyko pavadinimas keisti2</TableCell>
-                  <TableCell colSpan={6}>Modulio pavadinimas keisti2</TableCell>
-                  <TableCell colSpan={2} align="center">
-                    Veiksmai2
-                  </TableCell>
+                  <TableCell >Vardas Pavardė</TableCell>
+                  <TableCell >Dėstomi dalykai</TableCell>
+                  <TableCell className="activity">Veiksmai</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                {(rowsPerPage > 0
+                {(rowsPerPageP > 0
                   ? deletedTeachers.slice(
-                      page * rowsPerPage,
-                      page * rowsPerPage + rowsPerPage
+                      page * rowsPerPageP,
+                      page * rowsPerPageP + rowsPerPageP
                     )
                   : deletedTeachers
                 ).map((teacher) => (
                   <TableRow key={teacher.id}>
-                    <TableCell colSpan={6} component="th" scope="row">
+                    {/* <TableCell colSpan={6} component="th" scope="row">
                       {teacher.fName}
                     </TableCell>
                     <TableCell colSpan={6}>{teacher.active}</TableCell>
-                    <TableCell colSpan={2} align="center">
-                      <Button onClick={() => handleRestore(teacher)}>
+                    <TableCell colSpan={2} align="center"> */}
+                    <TableCell component="th" scope="row">
+                      {teacher.fName }
+                    </TableCell>
+                    <TableCell > 
+                    {(teacher.subjectsList && teacher.subjectsList.length > 0)
+                      ? teacher.subjectsList.map((subjectItem, index) => {
+                          {
+                            /* const subject = subjects.find(
+                            (s) => s.id === subjectItem.subjectId
+                          ); */
+                          }
+                          return <p key={index}>{subjectItem.name}</p>;
+                        })
+                      : "* Nepriskirta"}
+                    
+                    </TableCell>
+                    <TableCell  align="center">
+
+                      <Button 
+                       variant="contained"
+                      onClick={() => restoreTeacher(teacher)}>
                         Atstatyti
                       </Button>
                     </TableCell>
@@ -264,7 +306,7 @@ export function TeacherList() {
 
                 {emptyRows > 0 && (
                   <TableRow style={{ height: 53 * emptyRows }}>
-                    <TableCell colSpan={6} />
+                    <TableCell colSpan={3} />
                   </TableRow>
                 )}
               </TableBody>
@@ -276,15 +318,18 @@ export function TeacherList() {
                     colSpan={3}
                     count={deletedTeachers.length}
                     page={page}
-                    SelectProps={{
+                    labelDisplayedRows={({ from, to, count }) =>
+                      `${from}-${to} iš ${count}`
+                    }
+                    SelectProps={{ 
                       inputProps: {
                         "aria-label": "Rodyti po",
                       },
                       native: true,
                     }}
                     onPageChange={handleChangePage}
-                    rowsPerPage={rowsPerPage}
-                    onRowsPerPageChange={handleChangeRowsPerPage}
+                    rowsPerPage={rowsPerPageP}
+                    onRowsPerPageChange={handleChangeRowsPerPageP}    
                   ></TablePagination>
                 </TableRow>
               </TableFooter>

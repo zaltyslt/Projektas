@@ -21,13 +21,13 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import ".././pages.css";
 import "../teachers/Teacher.css";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useHref } from "react-router-dom";
 import { width } from "@mui/system";
 
 export function EditTeacher() {
   const [teacher, setTeacher] = useState("");
   const params = useParams();
-
+  const [id, setId] = useState("");
   const [fName, setFName] = useState("");
   const [lName, setLName] = useState("");
   const [nickName, setNickName] = useState("");
@@ -47,13 +47,15 @@ export function EditTeacher() {
 
   const [subject, setSubject] = useState(""); //tas, kur keliauja tarp array
   const [subjects, setSubjects] = useState([]); //visi subjectai
-  const [showSubjSelect, setShowSubjSelect] = useState(false);// rodyt/nerodyt subjects pasirinkima 
   const [chosenSubjects, setChosenSubjects] = useState([]); // pasirinkti dalykai
+  const [freeSubjects, setFreeSubjects] = useState([]); // pasirinkti dalykai
+  const [showSubjSelect, setShowSubjSelect] = useState(false); // rodyt/nerodyt subjects pasirinkima
 
   const [success, setSuccess] = useState();
   const [error, setError] = useState();
 
   let navigate = useNavigate();
+  const listUrl = useHref("/teachers");
 
   const clear = () => {
     setFName("");
@@ -71,32 +73,41 @@ export function EditTeacher() {
     setSubjects("");
   };
 
+const getTeachers = async ()=>{
+  fetch("api/v1/teachers/view?tid=" + params.id)
+  .then((response) => response.json())
+  .then((data) => {
+    setTeacher(data);
+    setUpTeacher(data);
+    return data
+  } )
+  .then((data) => {
+    // console.log(teacher);
+  });
+}
+
   useEffect(() => {
-    fetch("api/v1/teachers/view?tid=" + params.id)
-      .then((response) => response.json())
-      .then((data) => {
-        setTeacher(data);
-        setUpTeacher(data);
-      })
-      
+   getTeachers();
   }, []);
 
   useEffect(() => {
-  fetch("api/v1/subjects")
+    fetch("api/v1/teachers/subjects")
       .then((response) => response.json())
-      .then((data) => setSubjects(data));       
-   } ,[]);
-  
-      //Shifts
+      .then((data) => {
+        setSubjects(data);
+        setFreeSubjects(data);
+      });
+  }, []);
+
+  //Shifts
   useEffect(() => {
     fetch("api/v1/shift/get-active")
       .then((response) => response.json())
       .then(setShifts);
   }, []);
 
-
   const setUpTeacher = (data) => {
-   
+    setId(data.id)
     setFName(data.fName);
     setLName(data.lName);
     setNickName(data.nickName);
@@ -110,22 +121,13 @@ export function EditTeacher() {
     setActive(data.active);
     setChosenSubjects(data.subjectsList);
   };
-  
-  const loadChosenSubjects = (data, teacherSubjects) =>{
-   
-// const matchingObjects = subjects.filter(obj1 => array2.map(obj2 => obj2.id).includes(obj1.id));
-const matchingSubjects = data.filter(subAll => teacherSubjects.map( subChosen => subChosen.id).includes(subAll.id));
-    
-   setChosenSubjects(matchingSubjects);
 
-  };
-    
   
   const isActive = [
     { value: "true", label: "Aktyvus" },
     { value: "false", label: "Neaktyvus" },
   ];
-
+  
   const applyResult = (result) => {
     if (result.ok) {
       setSuccess("Sėkmingai pridėta!");
@@ -135,33 +137,41 @@ const matchingSubjects = data.filter(subAll => teacherSubjects.map( subChosen =>
     }
   };
 
+ useEffect(() => {
+       
+    const tempSubjects = freeSubjects.filter(
+      (subA) => !chosenSubjects.map((subC) => subC.subjectId).includes(subA.subjectId)
+    );
+    setSubjects(tempSubjects);
+  }, [showSubjSelect]);
 
 
   const handleShowSubjects = () => {
     setShowSubjSelect(!showSubjSelect);
   };
 
-  const handleChosenSubjects = (subjectNew) => {
-    setSubject(subjectNew);
-    console.log(subjectNew);
-    // setChosenSubjects([...chosenSubjects, subjectNew]);
-    
-    // const removed = subjects.filter((subject) => subject.id != subjectNew.id);
-    // setSubjects(removed);
-    // setShowSubjSelect(false);
+  const handleAddChosen = (subjectNew) => {
+    // setSubject(subjectNew);
+
+    const temp = [...chosenSubjects, subjectNew];
+    setChosenSubjects(temp);
+    const removed = subjects.filter((subject) => subject.subjectId != subjectNew.subjectId);
+    setFreeSubjects(removed);
+    setShowSubjSelect(false);
   };
-  
+
   const handleRemoveChosen = (subjectRem) => {
-  console.log(subjectRem);
-    setSubjects([...subjects, subjectRem]);
-  
-    const removed = chosenSubjects.filter(
-      (subject) => subject.id != subjectRem.id
+    
+    //patikrinti ar subjects neturi tokio dalyko
+    console.log(freeSubjects);
+    const moved = freeSubjects.filter( (subject) => subject.subjectId != subjectRem.subjectId
     );
+    
+    const removed = chosenSubjects.filter(
+      (subject) => subject.subjectId != subjectRem.subjectId );
+    setFreeSubjects([...moved, subjectRem]);
     setChosenSubjects(removed);
   };
-  
-  
 
   // Update teacher routine
   const createTeacher = async () => {
@@ -203,7 +213,20 @@ const matchingSubjects = data.filter(subAll => teacherSubjects.map( subChosen =>
       }),
     }).then(applyResult);
   };
-  
+
+
+
+  const deleteTeacher = async () => {
+    console.log(teacher.id);
+    await fetch(`/api/v1/teachers/active?tid=${teacher.id}&active=false`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }).then(() => (window.location = listUrl));
+  };
+
+
   const row1 = 3.5;
   const row2 = 3.5;
   const row3 = 3.5;
@@ -218,6 +241,7 @@ const matchingSubjects = data.filter(subAll => teacherSubjects.map( subChosen =>
         </span>
         {<p className="Deleted">Error: {error && error} </p>}
         {<p className="Deleted">Success: {success && success} </p>}
+        { <p className="Deleted">ID: {teacher.id && teacher.id} </p>}
 
         <Grid
           container
@@ -250,7 +274,7 @@ const matchingSubjects = data.filter(subAll => teacherSubjects.map( subChosen =>
             ></TextField>
           </Grid>
 
-          <Grid item sm={row1}>
+          {/* <Grid item sm={row1}>
             <TextField
               fullWidth
               variant="outlined"
@@ -259,7 +283,7 @@ const matchingSubjects = data.filter(subAll => teacherSubjects.map( subChosen =>
               value={nickName}
               onChange={(e) => setNickName(e.target.value)}
             ></TextField>
-          </Grid>
+          </Grid> */}
 
           <Grid item sm={row2}>
             <TextField
@@ -329,17 +353,16 @@ const matchingSubjects = data.filter(subAll => teacherSubjects.map( subChosen =>
                 labelId="shift-label"
                 id="shift"
                 // displayEmpty={false}
-                //defaultValue={''}
+                // defaultValue={''}
                 //defaultValue={`Pirma`}
+                // value={selectedShift.name} //33370
                 value={''}
-
                 onChange={(e) => {
                   setSelectedShift(e.target.value);
                 }}
               >
                 {shifts.map((shift, index) => (
-                  
-                  <MenuItem key={shift.id} value={shift}>
+                  <MenuItem key={index} value={shift.name}>
                     {shift.name}
                   </MenuItem>
                 ))}
@@ -347,7 +370,7 @@ const matchingSubjects = data.filter(subAll => teacherSubjects.map( subChosen =>
             </FormControl>
           </Grid>
 
-          <Grid item sm={row3}>
+          {/* <Grid item sm={row3}>
             <FormControl fullWidth>
               <InputLabel id="active-select-label">Būsena</InputLabel>
               <Select
@@ -369,7 +392,7 @@ const matchingSubjects = data.filter(subAll => teacherSubjects.map( subChosen =>
                 ))}
               </Select>
             </FormControl>
-          </Grid>
+          </Grid> */}
 
           <Grid item sm={12}>
             {showSubjSelect && (
@@ -381,7 +404,7 @@ const matchingSubjects = data.filter(subAll => teacherSubjects.map( subChosen =>
                   id="subject"
                   value={subject}
                   defaultOpen={true}
-                  onChange={(e) => handleChosenSubjects(e.target.value)}
+                  onChange={(e) => handleAddChosen(e.target.value)}
                 >
                   {subjects.map((subject, index) => (
                     <MenuItem key={index} value={subject}>
@@ -407,25 +430,25 @@ const matchingSubjects = data.filter(subAll => teacherSubjects.map( subChosen =>
                 </TableHead>
 
                 <TableBody>
-                  {chosenSubjects && chosenSubjects.map(
-                    (subject, index) => (
-                    <TableRow key={index}>
-                      <TableCell component="th" scope="row">
-                        {subject.name}
-                      </TableCell>
-                      <TableCell>
-                        {subject.module && subject.module }
-                      </TableCell>
-                      <TableCell align="center" className="activity">
-                        <Button
-                          variant="contained"
-                          onClick={(e) => handleRemoveChosen(subject)}
-                        >
-                          Ištrinti
-                        </Button>
-                      </TableCell>
-                    </TableRow>
-                  ))}
+                  {chosenSubjects &&
+                    chosenSubjects.map((subject, index) => (
+                      <TableRow key={index}>
+                        <TableCell component="th" scope="row">
+                          {subject.name}
+                        </TableCell>
+                        <TableCell>
+                          {subject.module && subject.module}
+                        </TableCell>
+                        <TableCell align="center" className="activity">
+                          <Button
+                            variant="contained"
+                            onClick={(e) => handleRemoveChosen(subject)}
+                          >
+                            Ištrinti
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    ))}
                 </TableBody>
               </Table>
             </TableContainer>
@@ -434,7 +457,10 @@ const matchingSubjects = data.filter(subAll => teacherSubjects.map( subChosen =>
           <Grid item sm={12}>
             <Stack direction="row" spacing={2}>
               <Button variant="contained" onClick={createTeacher}>
-                Sukurti
+                Išsaugoti
+              </Button>
+              <Button variant="contained" onClick={deleteTeacher}>
+                Ištrinti
               </Button>
               <Button variant="contained" onClick={() => navigate(-1)}>
                 Grįžti

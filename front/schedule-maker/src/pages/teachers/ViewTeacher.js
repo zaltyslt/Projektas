@@ -72,55 +72,40 @@ export function ViewTeacher() {
         <Grid container rowSpacing={4}>
           <Grid item sm={10}>
             <header>
-              <h1>{teacher.fName}</h1>
+              <h1>{teacher.fName +" "+ teacher.lName}</h1>
               <span id="modified-date">
                 Paskutinį kartą redaguota: {teacher.dateModified}
               </span>
             </header>
           </Grid>
 
-          <Grid item sm={6}>
-            {/* Kol kas vienintelis privalomas */}
-            <h4>Mokytojo vardas</h4>
-            <p>{teacher.fName}</p>
-          </Grid>
-          <Grid item sm={6}>
-            <h4>Mokytojo pavardė</h4>
-            <p>{teacher.lName && teacher.lName}</p>
-          </Grid>
+         
 
-          <Grid item sm={6}>
-            <h4>Nickname</h4>
-            <p>{teacher.nickName && teacher.nickName}</p>
-          </Grid>
-          <Grid item sm={6}>
-            <h4>Būsena</h4>
-            <p>{teacher.active ? "Aktyvus" : "Ištrintas"}</p>
-          </Grid>
-
-          <Grid item sm={6}>
+          <Grid item sm={12}>
             <h4>Kontaktinis telefonas</h4>
             <p>{contacts.phoneNumber ? contacts.phoneNumber : "n"}</p>
-          </Grid>
-          <Grid item sm={6}>
+            </Grid>
+
+            <Grid item sm={12}>
             <h4>El. paštas</h4>
             <p>{contacts.directEmail ? contacts.directEmail : "n"}</p>
           </Grid>
-
-          <Grid item sm={6}>
+         
+          <Grid item sm={12}>
             <h4>Teams vardas</h4>
             <p>{contacts.teamsName ? contacts.teamsName : "n"}</p>
-          </Grid>
-          <Grid item sm={6}>
+            </Grid>
+
+        <Grid item sm={12}>
             <h4>Teams el. paštas</h4>
             <p>{contacts.teamsEmail ? contacts.teamsEmail : "n"}</p>
           </Grid>
-
-          <Grid item sm={6}>
+        
+          <Grid item sm={12}>
             <h4>Valandos per savaitę</h4>
             <p>{teacher.workHoursPerWeek && teacher.workHoursPerWeek}</p>
           </Grid>
-          <Grid item sm={6}>
+          <Grid item sm={12}>
             <h4>Galima pamaina</h4>
             <p>
               {teacher.teacherShiftDto

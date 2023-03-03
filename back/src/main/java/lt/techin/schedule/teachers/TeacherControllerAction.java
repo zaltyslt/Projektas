@@ -49,6 +49,13 @@ var aa = payLoad;
         return teacherServiceDo.updateTeacher(teacherId, teacherDto);
     }
 
+    @PatchMapping("/active")
+    public ResponseEntity<Void> updateTeacherDetails(@RequestParam("tid") Long teacherId, @RequestParam("active") boolean status) {
+      return status
+              ? teacherServiceDo.switchOn(teacherId)
+              : teacherServiceDo.switchOff(teacherId);
+    }
+
     @DeleteMapping("/delete")
     public ResponseEntity<Void> deleteTeacherDetails(@RequestParam("tid") Long teacherId) {
         return teacherServiceDo.deleteTeacherById(teacherId);

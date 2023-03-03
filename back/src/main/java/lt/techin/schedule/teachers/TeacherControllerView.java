@@ -2,6 +2,7 @@ package lt.techin.schedule.teachers;
 
 import lt.techin.schedule.subject.SubjectService;
 import lt.techin.schedule.teachers.contacts.ContactService;
+import lt.techin.schedule.teachers.helpers.TeacherSubjectsDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -56,6 +57,15 @@ public class TeacherControllerView {
         var result =  teacherFinder.getTeacherById(teacherId);
 
         return result.getId() != null
+                ? ResponseEntity.ok(result)
+                : ResponseEntity.notFound().build();
+
+    }
+    @GetMapping(value = "/subjects") //view by teacherID via params
+    public ResponseEntity<Set<TeacherSubjectsDto>> getTeacherById() {
+        var result =  teacherFinder.getMiniSubjects();
+
+        return result.size() > 0
                 ? ResponseEntity.ok(result)
                 : ResponseEntity.notFound().build();
 
