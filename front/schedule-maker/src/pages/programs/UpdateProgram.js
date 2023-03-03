@@ -96,9 +96,7 @@ export function UpdateProgram() {
                 }
             });
         }
-      });
-    }
-  };
+      };
 
     const disableProgram = () => {
         fetch(`api/v1/programs/disable-program/${params.id}`, {
@@ -241,7 +239,7 @@ export function UpdateProgram() {
                                         onChange={event => handleFormChange(event, index)}
                                         value={form.hours}
                                     />
-                                    <Button onClick={() => removeFields(index)}>Remove</Button>
+                                    <Button onClick={() => removeFields(index)}>Ištrinti</Button>
                                 </div>
                             )
                         })}

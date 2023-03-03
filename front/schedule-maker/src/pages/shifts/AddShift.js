@@ -84,25 +84,6 @@ export function AddShift() {
     })
   };
 
-  const createShiftPostRequest = async () => {
-    await fetch("http://localhost:8080/api/v1/shift/add-shift", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        name,
-        startIntEnum,
-        endIntEnum,
-        isActive,
-      }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        handleAfterPost(data);
-      });
-  };
-
   const handleAfterPost = (data) => {
     if (data.valid) {
       setSuccessfulPost(true);
