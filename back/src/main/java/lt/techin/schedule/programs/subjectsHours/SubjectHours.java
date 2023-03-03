@@ -2,7 +2,7 @@ package lt.techin.schedule.programs.subjectsHours;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
-import lt.techin.schedule.subject.Subject;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
@@ -13,11 +13,10 @@ public class SubjectHours {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
-//    @ManyToOne
-//    @JoinColumn(name = "subject_id")
-//    private Subject subjectn;
+    @NotNull
     private String subjectName;
     private Long subject;
+
     private int hours;
     @CreatedDate
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
@@ -35,10 +34,6 @@ public class SubjectHours {
     public void preUpdate() {
         modifiedDate = LocalDateTime.now();
     }
-
-
-
-
 
     public String getSubjectName() {
         return subjectName;
@@ -90,28 +85,11 @@ public class SubjectHours {
     public void setSubject(Long subject) {
         this.subject = subject;
     }
-    //    @Override
-//    public boolean equals(Object o) {
-//        if (this == o) return true;
-//        if (o == null || getClass() != o.getClass()) return false;
-//        SubjectHours that = (SubjectHours) o;
-//        return hours == that.hours
-//                && Objects.equals(id, that.id)
-//                && Objects.equals(subject, that.subject)
-//                && Objects.equals(createdDate, that.createdDate)
-//                && Objects.equals(modifiedDate, that.modifiedDate);
-//    }
-
-//    @Override
-//    public int hashCode() {
-//        return Objects.hash(id, subject, hours, createdDate, modifiedDate);
-//    }
 
     @Override
     public String toString() {
         return "SubjectHours{" +
                 "id=" + id +
-//                ", subject=" + subject +
                 ", hours=" + hours +
                 ", createdDate=" + createdDate +
                 ", modifiedDate=" + modifiedDate +
