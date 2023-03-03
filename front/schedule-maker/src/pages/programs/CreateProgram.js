@@ -174,14 +174,13 @@ export function CreateProgram(props) {
                 onChange={(e) => setDescription(e.target.value)}
               ></TextField>
             </Grid>
-            <Grid item sm={12} >
-
+            <Grid item sm={10} >
               <Grid container direction="row" justifyContent="space-between">
                 {subjectHoursList.map((form, index) => {
                   return (
-                    // <Grid container spacing={{ xs: 2, md: 3 }} rowSpacing={{xs: 5, sm: 5, md:5}} columnSpacing={{ xs: 1, sm: 1, md: 1 }} key={index}>
-                    <Grid container spacing={{ xs: 4, md: 4 }} columnSpacing={{ xs: 8, sm: 8, md: 8 }} key={index}>
-                      <Grid item xs={4}>
+                    <Grid container spacing={{ xs: 2, md: 3 }} rowSpacing={{xs: 5, sm: 5, md:5}} columnSpacing={{ xs: 1, sm: 1, md: 1 }} key={index}>
+                    {/* <Grid container spacing={{ xs: 4, md: 4 }} columnSpacing={{ xs: 8, sm: 8, md: 8 }} key={index}> */}
+                      <Grid item xs={2}>
                         <FormControl fullWidth>
                           <InputLabel id="subject-label">Dalykas</InputLabel>
                           <Select
@@ -202,7 +201,7 @@ export function CreateProgram(props) {
                           </Select>
                         </FormControl>
                       </Grid>
-                      <Grid item xs={4}>
+                      <Grid item xs={2}>
                         <TextField
                           name='hours'
                           placeholder='Valandos'
@@ -210,7 +209,7 @@ export function CreateProgram(props) {
                           value={form.hours}
                         />
                       </Grid>
-                      <Grid item xs>
+                      <Grid item xs={2}>
                         <Button onClick={() => removeFields(index)}>Remove</Button>
                       </Grid>
                     </Grid>
