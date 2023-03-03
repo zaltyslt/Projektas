@@ -3,7 +3,6 @@ import { Container, Stack } from "@mui/system";
 
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
-import './ViewShift.css';
 
 export function ViewShift() {
     
@@ -12,7 +11,7 @@ export function ViewShift() {
     const [currentShift, setCurrentShift] = useState([]);
 
     useEffect(() => {
-        fetch( 'http://localhost:8080/api/v1/shift/view-shift/' + params.id)
+        fetch( 'api/v1/shift/view-shift/' + params.id)
         .then((response) => response.json())
         .then(data => {
             setCurrentShift(data);

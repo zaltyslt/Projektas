@@ -38,14 +38,14 @@ export function RoomList() {
   const [isChecked, setChecked] = useState(false);
 
   const fetchClassrooms = () => {
-    fetch("/api/v1/classrooms")
+    fetch("api/v1/classrooms")
       .then((responce) => responce.json())
       .then((jsonResponce) => setClassrooms(jsonResponce));
   };
 
   const enableClassroom = (event, classroom) => {
     console.log(classroom);
-    fetch(`/api/v1/classrooms/enable-classroom/${classroom.id}`, {
+    fetch(`api/v1/classrooms/enable-classroom/${classroom.id}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
@@ -222,7 +222,7 @@ export function RoomList() {
               <TableRow>
                 <TablePagination
                   labelRowsPerPage="Rodyti po"
-                  rowsPerPageOptions={[10, 20, { label: "Visi", value: -1 }]}
+                  rowsPerPageOptions={[10, 20, { label: "Visi", value: filteredClassrooms.length }]}
                   labelDisplayedRows={({ from, to, count }) =>
                     `${from}-${to} iš ${count}`
                   }

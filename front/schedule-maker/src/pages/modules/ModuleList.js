@@ -27,7 +27,9 @@ export function ModuleList() {
   const [filteredModules, setFilteredModules] = useState([]);
   const [deletedModules, setDeletedModules] = useState([]);
   const [page, setPage] = useState(0);
+  const [pageInDeleted, setPageInDeleted] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [rowsPerPageInDeleted, setRowsPerPageInDeleted] = useState(10);
   const [isChecked, setChecked] = useState(false);
 
   useEffect(() => {
@@ -61,9 +63,21 @@ export function ModuleList() {
     setPage(newPage);
   };
 
+  const emptyRowsInDeleted =
+  pageInDeleted > 0 ? Math.max(0, (1 + pageInDeleted) * rowsPerPageInDeleted - deletedModules.length) : 0;
+  
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
+  };
+
+  const handleChangePageInDeleted = (event, newPage) => {
+    setPageInDeleted(newPage);
+  };
+
+  const handleChangeRowsPerPageInDeleted = (event) => {
+    setRowsPerPageInDeleted(parseInt(event.target.value, 10));
+    setPageInDeleted(0);
   };
 
   const handleSearch = (event) => {
@@ -79,7 +93,7 @@ export function ModuleList() {
   };
 
   const handleRestore = async (id) => {
-    await fetch("/api/v1/modules/restore/" + id, {
+    await fetch("api/v1/modules/restore/" + id, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
@@ -200,8 +214,8 @@ export function ModuleList() {
               <TableBody>
                 {(rowsPerPage > 0
                   ? deletedModules.slice(
-                      page * rowsPerPage,
-                      page * rowsPerPage + rowsPerPage
+                      pageInDeleted * rowsPerPageInDeleted,
+                      pageInDeleted * rowsPerPageInDeleted + rowsPerPageInDeleted
                     )
                   : deletedModules
                 ).map((module) => (
@@ -221,8 +235,8 @@ export function ModuleList() {
                   </TableRow>
                 ))}
 
-                {emptyRows > 0 && (
-                  <TableRow style={{ height: 53 * emptyRows }}>
+                {emptyRowsInDeleted > 0 && (
+                  <TableRow style={{ height: 53 * emptyRowsInDeleted }}>
                     <TableCell colSpan={6} />
                   </TableRow>
                 )}
@@ -237,16 +251,16 @@ export function ModuleList() {
                     }
                     colSpan={3}
                     count={deletedModules.length}
-                    page={page}
+                    page={pageInDeleted}
                     SelectProps={{
                       inputProps: {
                         "aria-label": "Rodyti po",
                       },
                       native: true,
                     }}
-                    onPageChange={handleChangePage}
-                    rowsPerPage={rowsPerPage}
-                    onRowsPerPageChange={handleChangeRowsPerPage}
+                    onPageChange={handleChangePageInDeleted}
+                    rowsPerPage={rowsPerPageInDeleted}
+                    onRowsPerPageChange={handleChangeRowsPerPageInDeleted}
                   ></TablePagination>
                 </TableRow>
               </TableFooter>

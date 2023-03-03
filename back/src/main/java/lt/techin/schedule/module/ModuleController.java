@@ -98,15 +98,15 @@ public class ModuleController {
         return ok(toModuleDto(deletedModule));
     }
 
-//    @DeleteMapping("/{moduleId}")
-//    public ResponseEntity<Void> deleteModule(@PathVariable Long moduleId) {
-//        boolean deleted = moduleService.deleteById(moduleId);
-//        if (deleted) {
-//            return ResponseEntity.noContent().build();
-//        } else {
-//            return ResponseEntity.notFound().build();
-//        }
-//    }
+    @DeleteMapping("/{moduleId}")
+    public ResponseEntity<Void> deleteModule(@PathVariable Long moduleId) {
+        boolean deleted = moduleService.deleteById(moduleId);
+        if (deleted) {
+            return ResponseEntity.noContent().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 
     @PatchMapping("/restore/{moduleId}")
     public ResponseEntity<ModuleDto>  restoreModule(@PathVariable Long moduleId) {

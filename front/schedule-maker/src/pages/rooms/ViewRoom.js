@@ -16,7 +16,7 @@ export function ViewRoom() {
   let navigate = useNavigate();
 
   useEffect(() => {
-    fetch(`/api/v1/classrooms/classroom/${params.id}`)
+    fetch(`api/v1/classrooms/classroom/${params.id}`)
       .then((response) => response.json())
       .then(setClassroom);
   }, [params.id]);

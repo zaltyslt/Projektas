@@ -39,7 +39,7 @@ export function CreateModule() {
   };
 
   const createModule = async () => {
-    await fetch("/api/v1/modules/create", {
+    await fetch("api/v1/modules/create", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -56,6 +56,8 @@ export function CreateModule() {
   const applyResult = (data) => {
     if (data.valid) {
       setSuccessfulPost(true);
+      setName("");
+      setNumber("");
     }
     else {
         setModuleErrors(data)

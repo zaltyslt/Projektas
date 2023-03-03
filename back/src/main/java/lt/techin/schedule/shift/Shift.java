@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+import lt.techin.schedule.group.Group;
 import lt.techin.schedule.teachers.Teacher;
 import lt.techin.schedule.validators.TextValid;
 
@@ -29,8 +30,14 @@ public class Shift {
 //    @JsonBackReference
     @JsonManagedReference
     private Set<Teacher> teachers;
+
+    @OneToMany
+    @JoinColumn(name = "shift_group")
+    private Set<Group> groups;
+
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime createdDate;
+
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime modifiedDate;
 
@@ -107,11 +114,6 @@ public class Shift {
 
     public void setShiftEndingTime(String shiftEndingTime) {
         this.shiftEndingTime = shiftEndingTime;
-    }
-
-    @JsonIgnore
-    public String getShiftTime() {
-        return shiftStartingTime + "-" + shiftEndingTime;
     }
 
     public boolean getIsActive() {

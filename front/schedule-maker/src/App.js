@@ -11,17 +11,22 @@ import { AddShift } from "./pages/shifts/AddShift";
 import { ViewShift } from "./pages/shifts/ViewShift";
 import { ModifyShift } from "./pages/shifts/ModifyShift";
 import { SubjectList } from "./pages/subjects/SubjectList";
+import { TeacherList } from "./pages/teachers/TeacherList";
 import { GroupList } from "./pages/groups/GroupList";
 import { ProgramList } from "./pages/programs/ProgramList";
 import { CreateRoom } from "./pages/rooms/CreateRoom";
 import { ViewRoom } from "./pages/rooms/ViewRoom";
 import { UpdateClassroom } from "./pages/rooms/UpdateRoom";
-import { CreateProgram } from "./pages/programs/CreateProgram";
+import { CreateProgram } from "./pages/programs/CreateProgram"
 import { ViewProgram } from "./pages/programs/ViewProgram";
 import { UpdateProgram } from "./pages/programs/UpdateProgram";
 import { CreateSubject } from "./pages/subjects/CreateSubject";
 import { ViewSubject } from "./pages/subjects/ViewSubject";
 import { EditSubject } from "./pages/subjects/EditSubject";
+import { CreateGroup } from "./pages/groups/CreateGroup";
+import { ViewGroup } from "./pages/groups/ViewGroups";
+import { EditGroup } from "./pages/groups/EditGroup";
+
 import { TeacherList } from "./pages/teachers/TeacherList";
 import { ViewTeacher } from "./pages/teachers/ViewTeacher";
 import { CreateTeacher } from "./pages/teachers/CreateTeacher";
@@ -30,32 +35,29 @@ import { EditTeacher } from "./pages/teachers/EditTeacher";
 function App() {
   return (
     <div className="App">
-      <HashRouter>
+      <HashRouter basename={process.env.PUBLIC_URL ? '' : '/schedule-maker'}>
         <Menu />
-        <Routes>
+        <Routes >
           <Route path="/"></Route>
+          <Route path="/teachers" element={<TeacherList />}></Route>
           <Route path="/groups" element={<GroupList />}></Route>
           <Route path="/modules" element={<ModuleList />}></Route>
           <Route path="/subjects" element={<SubjectList />}></Route>
           <Route path="/shifts" element={<ShiftList />}></Route>
-        
           {/* CLASSROOMS PATHAI */}
-          <Route path="/rooms" element={<RoomList />}></Route>
-          <Route path="/create-classroom" element={<CreateRoom />}></Route>
-          <Route path="/classrooms/view-classroom/:id" element={<ViewRoom />}></Route>
-          <Route path="/update-classroom/:id" element={<UpdateClassroom />} />
+          <Route path='/rooms' element={<RoomList />}></Route>
+          <Route path='/create-classroom' element={<CreateRoom />}></Route>
+          <Route path='/classrooms/view-classroom/:id' element={<ViewRoom />}></Route>
+          <Route path='/update-classroom/:id' element={<UpdateClassroom />} />
           {/* SHIFTS PATHAI */}
-          <Route exact path="/add-shift" element={<AddShift />}></Route>
-          <Route path="/view-shift/:id" element={<ViewShift />}></Route>
-          <Route path="/modify-shift/:id" element={<ModifyShift />}></Route>
+          <Route exact path="/add-shift" element={<AddShift/>} ></Route>
+          <Route path="/view-shift/:id" element={<ViewShift/>} ></Route>
+          <Route path="/modify-shift/:id" element={<ModifyShift/>} ></Route>
           {/* PROGRAMS PATHAI */}
           <Route path="/programs" element={<ProgramList />}></Route>
           <Route path="/create-program" element={<CreateProgram />}></Route>
-          <Route
-            path="/programs/view-program/:id"
-            element={<ViewProgram />}
-          ></Route>
-          <Route path="/update-program/:id" element={<UpdateProgram />} />
+          <Route path='/programs/view-program/:id' element={<ViewProgram />}></Route>
+          <Route path='/update-program/:id' element={<UpdateProgram />} />
           {/* MODULES PATHAI */}
           <Route path="/modules/create" element={<CreateModule />} />
           <Route path="/modules/view/:id" element={<ViewModule />}></Route>
@@ -64,6 +66,10 @@ function App() {
           <Route path="/subjects/create" element={<CreateSubject />} />
           <Route path="/subjects/view/:id" element={<ViewSubject />}></Route>
           <Route path="/subjects/edit/:id" element={<EditSubject />}></Route>
+
+          <Route path="/groups/create" element={<CreateGroup />}></Route>
+          <Route path="/groups/view/:id" element={<ViewGroup />}></Route>
+          <Route path="/groups/edit/:id" element={<EditGroup />}></Route>
           {/* TEACHERS PATHAI */}
           <Route path="/teachers" element={<TeacherList />}></Route>
           <Route path="/teachers/view/:id" element={<ViewTeacher />}></Route>

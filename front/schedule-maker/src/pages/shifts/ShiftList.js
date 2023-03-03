@@ -76,7 +76,7 @@ export function ShiftList() {
   }, []);
 
   const getActiveShifts = () => {
-    fetch("http://localhost:8080/api/v1/shift/get-active")
+    fetch("api/v1/shift/get-active")
       .then((response) => response.json())
       .then((data) => {
         if (Array.isArray(data)) {
@@ -88,7 +88,7 @@ export function ShiftList() {
   };
 
   const getInactiveShifts = () => {
-    fetch("http://localhost:8080/api/v1/shift/get-inactive")
+    fetch("api/v1/shift/get-inactive")
       .then((response) => response.json())
       .then((data) => {
         if (Array.isArray(data)) {
@@ -101,7 +101,7 @@ export function ShiftList() {
 
   const activateShift = async (shiftID) => {
     await fetch(
-      `http://localhost:8080/api/v1/shift/activate-shift/${shiftID}`,
+      `api/v1/shift/activate-shift/${shiftID}`,
       {
         method: "PATCH",
         headers: {
@@ -181,7 +181,7 @@ export function ShiftList() {
                   <TableCell component="th" scope="row">
                     <Link to={"/view-shift/" + shift.id}>{shift.name}</Link>
                   </TableCell>
-                  <TableCell>{shift.shiftTime}</TableCell>
+                  <TableCell>{shift.shiftStartingTime + "-" + shift.shiftEndingTime}</TableCell>
                   <TableCell></TableCell>
                 </TableRow>
               ))}

@@ -1,6 +1,7 @@
 package lt.techin.schedule.shift;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lt.techin.schedule.config.DataFieldsLengthConstraints;
 import lt.techin.schedule.teachers.Teacher;
 import lt.techin.schedule.teachers.TeacherDto;

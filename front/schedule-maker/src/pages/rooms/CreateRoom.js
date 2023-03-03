@@ -12,11 +12,10 @@ import {
   MenuItem,
   colors,
   Alert,
-  AlertTitle
+  AlertTitle,
 } from "@mui/material";
 import { SelectChangeEvent } from "@mui/material/Select";
-import "../pages.css"
-
+import ".././pages.css";
 
 export function CreateRoom(props) {
   const [classroomName, setClassroomName] = useState("");
@@ -45,12 +44,15 @@ export function CreateRoom(props) {
       setSuccess("Sėkmingai pridėta!");
       clear();
     } else {
-      result.text().then(text => {
-        const response = JSON.parse(text);
-        setError(response.message)
-      }).catch(error => {
-        setError("Klasės sukurti nepavyko: ", error);
-      });
+      result
+        .text()
+        .then((text) => {
+          const response = JSON.parse(text);
+          setError(response.message);
+        })
+        .catch((error) => {
+          setError("Klasės sukurti nepavyko: ", error);
+        });
     }
   };
 
@@ -61,7 +63,7 @@ export function CreateRoom(props) {
     setErrorSymbolsName(false);
     setErrorEmptyDesc(false);
     setErrorSymbolsDesc(false);
-    setErrorBuilding(false)
+    setErrorBuilding(false);
     if (!classroomName) {
       setErrorEmptyName(true);
     } else if (
@@ -73,11 +75,11 @@ export function CreateRoom(props) {
     } else if (
       description.split("").some((char) => invalidSymbols.includes(char))
     ) {
-      setErrorSymbolsDesc(true)
+      setErrorSymbolsDesc(true);
     } else if (!building) {
       setErrorBuilding(true);
     } else {
-      fetch("/api/v1/classrooms/create-classroom", {
+      fetch("api/v1/classrooms/create-classroom", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -125,10 +127,13 @@ export function CreateRoom(props) {
               fullWidth
               required
               error={errorEmptyName || errorSymbolsName}
-              helperText={errorEmptyName ? "Klasės pavadinimas yra privalomas."
-                : errorSymbolsName
+              helperText={
+                errorEmptyName
+                  ? "Klasės pavadinimas yra privalomas."
+                  : errorSymbolsName
                   ? "Klasės pavadinimas turi neleidžiamų simbolių."
-                  : ""}
+                  : ""
+              }
               variant="outlined"
               id="classroomName"
               label="Klasės pavadinimas"
@@ -146,8 +151,9 @@ export function CreateRoom(props) {
                 errorEmptyDesc
                   ? "Klasės aprašas yra privalomas."
                   : errorSymbolsDesc
-                    ? "Klasės aprašas turi neleidžiamų simbolių."
-                    : ""}
+                  ? "Klasės aprašas turi neleidžiamų simbolių."
+                  : ""
+              }
               variant="outlined"
               label="Klasės aprašas"
               id="description"
@@ -156,16 +162,6 @@ export function CreateRoom(props) {
             ></TextField>
           </Grid>
           <Grid item sm={10}>
-            {error && (
-              <Alert severity="warning">
-                {error}
-              </Alert>
-            )}
-            {success && (
-              <Alert severity="success">
-                {success}
-              </Alert>
-            )}
             <Stack direction="row" spacing={2}>
               <Button variant="contained" onClick={createClassroom}>
                 Išsaugoti
@@ -174,6 +170,10 @@ export function CreateRoom(props) {
                 Grįžti
               </Button>
             </Stack>
+          </Grid>
+          <Grid item sm={10}>
+            {error && <Alert severity="warning">{error}</Alert>}
+            {success && <Alert severity="success">{success}</Alert>}
           </Grid>
         </Grid>
       </form>
