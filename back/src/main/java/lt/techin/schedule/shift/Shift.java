@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import lt.techin.schedule.group.Group;
 import lt.techin.schedule.teachers.Teacher;
 import lt.techin.schedule.validators.TextValid;
 
@@ -23,11 +24,18 @@ public class Shift {
     private String shiftStartingTime;
 
     private String shiftEndingTime;
+
     @OneToMany(mappedBy = "shift" )
     @JsonBackReference
     private Set<Teacher> teachers;
+
+    @OneToMany
+    @JoinColumn(name = "shift_group")
+    private Set<Group> groups;
+
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime createdDate;
+
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime modifiedDate;
 

@@ -15,7 +15,7 @@ public class ProgramDto {
 
     private String description;
 
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime createdDate;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
