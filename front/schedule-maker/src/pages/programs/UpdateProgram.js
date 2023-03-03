@@ -2,16 +2,16 @@ import * as React from "react";
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import {
-    Button,
-    Container,
-    FormControl,
-    Grid,
-    Select,
-    Stack,
-    TextField,
-    InputLabel,
-    MenuItem,
-    Alert,
+  Button,
+  Container,
+  FormControl,
+  Grid,
+  Select,
+  Stack,
+  TextField,
+  InputLabel,
+  MenuItem,
+  Alert,
 } from "@mui/material";
 import { SelectChangeEvent } from "@mui/material/Select";
 
@@ -30,19 +30,19 @@ export function UpdateProgram() {
     const [subjects, setSubjects] = useState([])
     const [subjectHoursList, setsubjectHoursList] = useState([])
 
-    const handleCNameeChange = (event) => {
-        setProgramName(event.target.value);
-    };
+  const handleCNameeChange = (event) => {
+    setProgramName(event.target.value);
+  };
 
-    const handleDescriptionChange = (event) => {
-        setDescription(event.target.value);
-    };
+  const handleDescriptionChange = (event) => {
+    setDescription(event.target.value);
+  };
 
-    const params = useParams({
-        setProgramName: "",
-        description: "",
-        active: program.active,
-    });
+  const params = useParams({
+    setProgramName: "",
+    description: "",
+    active: program.active,
+  });
 
     useEffect(() => {
         fetch("api/v1/subjects")
@@ -96,7 +96,9 @@ export function UpdateProgram() {
                 }
             });
         }
-    };
+      });
+    }
+  };
 
     const disableProgram = () => {
         fetch(`api/v1/programs/disable-program/${params.id}`, {
@@ -116,12 +118,12 @@ export function UpdateProgram() {
         }).then(() => navigate("/programs"));
     };
 
-    const updateProperty = (property, event) => {
-        setProgram({
-            ...program,
-            [property]: event.target.value,
-        });
-    };
+  const updateProperty = (property, event) => {
+    setProgram({
+      ...program,
+      [property]: event.target.value,
+    });
+  };
 
     const addFields = () => {
         let object = {
