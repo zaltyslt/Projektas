@@ -26,9 +26,10 @@ public class Shift {
 
     private String shiftEndingTime;
 
-    @OneToMany(mappedBy = "shift" )
+
+    @OneToMany(mappedBy = "shift", fetch = FetchType.LAZY)
 //    @JsonBackReference
-    @JsonManagedReference
+    @JsonBackReference
     private Set<Teacher> teachers;
 
     @OneToMany

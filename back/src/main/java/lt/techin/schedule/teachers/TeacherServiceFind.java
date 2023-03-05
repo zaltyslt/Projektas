@@ -31,16 +31,11 @@ public class TeacherServiceFind {
 
     public List<TeacherDto> getAllTeachers() {
         List<Teacher> teachers = teacherRepository.findAll();
-        return TeacherMapper.teacherToDto(teachers);
+        return TeacherMapper.teachersToDtos(teachers);
     }
 
     public TeacherDto getTeacherById(Long id) {
-//        Optional<Teacher> result = null;
 
-//        try{
-//         result = teacherRepository.findById(id);}
-//
-//catch(Exception e){}
       var  result = teacherRepository.findById(id);
         return result.isPresent()
                 ? TeacherMapper.teacherToDto(result)
@@ -50,7 +45,7 @@ public class TeacherServiceFind {
     public List<TeacherDto> getTeachersByName(String name) {
         name = "%" + name.toLowerCase() + "%";
         var result = teacherRepository.getTeachersByNameFragment(name);
-        return TeacherMapper.teacherToDto(result);
+        return TeacherMapper.teachersToDtos(result);
     }
 
     public Set<TeacherDto> getTeachersBySubjects(Subject subject) {

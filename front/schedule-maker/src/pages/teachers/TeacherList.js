@@ -85,21 +85,7 @@ export function TeacherList() {
     setPageP(0);
   };
 
-  // const handleSearch = (event) => {
-  //   if (event.length === 0) {
-  //     setFilteredModules(modules);
-  //   } else {
-  //     const filtered = modules.filter((module) => {
-  //       const moduleName = module.name.toLowerCase();
-  //       return moduleName.includes(event.toLowerCase());
-  //     });
-  //     setFilteredModules(filtered);
-  //   }
-  // };
-
-
-
-  const handleSearch = (event) => {
+    const handleSearch = (event) => {
     // console.log(teachers);
     if (event.length === 0) {setFilteredTeachers(teachers); } 
     else {
@@ -108,10 +94,7 @@ export function TeacherList() {
         const teacherLName = teacher.lName.toLowerCase();
         const shift = teacher.teacherShiftDto.name.toLowerCase();
         const moduleNamesArray = teacher.subjectsList.map(subject => subject.name.toLowerCase()).flat();
-      console.log(moduleNamesArray);
-        
-        // const subjectsF = teacher.subjectsList.map();
-      
+    
         return (teacherFName.includes(event.toLowerCase()) 
         ||teacherLName.includes(event.toLowerCase()) 
         || shift.includes(event.toLowerCase())
@@ -119,7 +102,6 @@ export function TeacherList() {
         );
       });
       
-      // console.log(filtered);
       setFilteredTeachers(filtered);
     }
   };
@@ -145,11 +127,11 @@ export function TeacherList() {
             <h3>Mokytojų sąrašas</h3>
           </Grid>
           <Grid item sm={2}>
-          {/* <Stack direction="row" justifyContent="flex-end">
+          <Stack direction="row" justifyContent="flex-end">
             <Link to="/teachers/create">
               <Button variant="contained">Pridėti naują</Button>
             </Link>
-            </Stack> */}
+            </Stack>
           </Grid>
 
           <Grid item sm={12}>

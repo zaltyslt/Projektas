@@ -34,8 +34,10 @@ public class TeacherServiceDo {
     }
 
     public ResponseEntity<TeacherDto> createTeacher(TeacherDto teacherDto) {
-        Teacher newTeacher = TeacherMapper.teacherFromDto(teacherDto);
+       Teacher newTeacher = TeacherMapper.teacherFromDto(teacherDto);
 //        int newTeacherHash = Objects.hash(newTeacher.getfName().toLowerCase(), newTeacher.getlName().toLowerCase());
+
+
         newTeacher.setId(null);
 
         if (isNotDuplicate(newTeacher)) {
@@ -47,7 +49,7 @@ public class TeacherServiceDo {
             newTeacher.setId(null);
             newTeacher = teacherRepository.save(newTeacher);
         } else {
-            throw new RuntimeException("Teacher verification process failed.");
+            throw new RuntimeException("Teacher creation process failed.");
         }
 //        if (!teacherDto.getContacts().isE()) {
 //            List<Contact> contactsList = ContactMapper.contactFromDto(teacherDto.getContacts());

@@ -45,7 +45,7 @@ public class TeacherMapper {
                 : new TeacherDto();
     }
 
-    public static List<TeacherDto> teacherToDto(List<Teacher> teacher) {
+    public static List<TeacherDto> teachersToDtos(List<Teacher> teacher) {
 
         return !teacher.isEmpty()
                 ? teacher.stream().map(t -> teacherToDto(t)).toList()
@@ -93,18 +93,5 @@ public class TeacherMapper {
                 : new HashSet<Teacher>();
     }
 
-//    public static List<Contact> insertTeacherInContacts(Teacher teacher, List<ContactDto> contactsDto) {
-//        return contactsDto.stream()
-//                .map(ContactMapper::contactFromDto)
-//                .peek(c -> c.setTeacher(teacher))
-//                .toList();
-//    }
-
-    //    public static List<Subject> subjectsFromDto(List<SubjectEntityDto> subjectList){
-//        var result = subjectList.stream()
-//                .map(SubjectMapper::toSubjectFromEntityDto)
-//                .toList();
-//        return result;
-//    }
 
 }

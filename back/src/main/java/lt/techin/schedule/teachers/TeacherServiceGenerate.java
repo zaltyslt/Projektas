@@ -44,7 +44,7 @@ public class TeacherServiceGenerate {
 
     }
 
-    @EventListener(ApplicationReadyEvent.class)
+//    @EventListener(ApplicationReadyEvent.class)
     public void doSomethingAfterStartup() {
         Module mod1 = new Module(null, "A01", "I modulis", LocalDateTime.now(), LocalDateTime.now(), false);
         Module mod2 = new Module(null, "A02", "II modulis", LocalDateTime.now(), LocalDateTime.now(), false);
@@ -65,9 +65,13 @@ public class TeacherServiceGenerate {
         Subject sub1 = new Subject(null, "Dalykas1", "Dalyko 1 aprašymas", mod1, classroomSet, false);
         Subject sub2 = new Subject(null, "Dalykas2", "Dalyko 2 aprašymas", mod2, classroomSet, false);
         Subject sub3 = new Subject(null, "Dalykas3", "Dalyko 3 aprašymas", mod3, classroomSet, false);
-        Set<Subject> subSet = new HashSet<>();
-        subSet.addAll(Arrays.asList(sub1, sub2, sub3));
-        var sub = subjectRepository.saveAll(subSet);
+        Set<Subject> subSet1 = new HashSet<>();
+        Set<Subject> subSet2 = new HashSet<>();
+        Set<Subject> subSet3 = new HashSet<>();
+        subSet1.addAll(Arrays.asList(sub1, sub2, sub3));
+        subSet2.addAll(Arrays.asList(sub1 ));
+        subSet3.addAll(Arrays.asList( sub2, sub3));
+        var sub = subjectRepository.saveAll(subSet1);
 
         Shift sh1 = new Shift("Pamaina1", LessonTime.FIRST.getLessonStart(), LessonTime.FIFTH.getLessonEnd(), true, 1, 5);
         Shift sh2 = new Shift("Pamaina2", LessonTime.FIRST.getLessonStart(), LessonTime.SEVENTH.getLessonEnd(), true, 1, 5);
@@ -77,9 +81,9 @@ public class TeacherServiceGenerate {
 
 //         public Teacher(Long id, List< Contact > contacts, Set<Subject> subjects, Shift shift, String fName, String lName, String nickName,
 //         Boolean isActive, LocalDateTime createdDateTime, LocalDateTime modifiedDateAndTime, Integer workHoursPerWeek, Integer hashCode) {
-        Teacher t1 = new Teacher(null, null,subSet,sh1,"Vardas1", "Pavarde1", "", true, LocalDateTime.now(),LocalDateTime.now(), 10);
-        Teacher t2 = new Teacher(null, null,subSet,sh2,"Vardas2", "Pavarde2", "", true, LocalDateTime.now(),LocalDateTime.now(), 20);
-        Teacher t3 = new Teacher(null, null,subSet,sh3,"Vardas3", "Pavarde3", "", true, LocalDateTime.now(),LocalDateTime.now(), 30);
+        Teacher t1 = new Teacher(null, null,subSet1,sh1,"Vardas1", "Pavarde1", "", true, LocalDateTime.now(),LocalDateTime.now(), 10);
+        Teacher t2 = new Teacher(null, null,subSet2,sh2,"Kitas2", "Kitoks2", "", true, LocalDateTime.now(),LocalDateTime.now(), 20);
+        Teacher t3 = new Teacher(null, null,subSet3,sh3,"Trečiokas", "Trečias", "", true, LocalDateTime.now(),LocalDateTime.now(), 30);
        var teach = teacherRepository.saveAll(Arrays.asList(t1,t2,t3));
 
         Contact con11 = new Contact(t1, ContactType.TEAMS_EMAIL, "Teams@1");

@@ -53,9 +53,9 @@ public class Teacher implements Serializable {
 //            inverseJoinColumns = @JoinColumn(name = "shift_id", referencedColumnName = "id"))
 //    private Shift shift;
     @JsonIgnore
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "shift_id")
-    @JsonBackReference
+    @JsonManagedReference
     private  Shift shift;
 
     @NotBlank
@@ -82,7 +82,7 @@ public class Teacher implements Serializable {
     public void prePersist() {
         createdDateTime = LocalDateTime.now();
         modifiedDateAndTime = LocalDateTime.now();
-        this.hashCode = hashCode();
+        hashCode = hashCode();
     }
 
     @PostLoad
@@ -94,8 +94,8 @@ public class Teacher implements Serializable {
 
     @PreUpdate
     public void preUpdate() {
-        this.modifiedDateAndTime = LocalDateTime.now();
-        this.hashCode = hashCode();
+        modifiedDateAndTime = LocalDateTime.now();
+        hashCode = hashCode();
     }
 
     //*************************

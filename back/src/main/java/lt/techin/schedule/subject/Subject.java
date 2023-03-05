@@ -50,6 +50,14 @@ public class Subject {
 ////@JsonIgnore
 //    @JsonBackReference
 //    private Set<Teacher> teachers;
+@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+@JoinTable(
+        name = "teacher_subject",
+        joinColumns = @JoinColumn(name = "subject_id", referencedColumnName = "id"),
+        inverseJoinColumns = @JoinColumn(name = "teacher_id", referencedColumnName = "teacher_id"))
+@JsonBackReference
+private Set<Teacher> teachers;
+
 
     @CreatedDate
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
@@ -107,13 +115,13 @@ public class Subject {
         return name;
     }
 
-//    public Set<Teacher> getTeachers() {
-//        return teachers;
-//    }
-//
-//    public void setTeachers(Set<Teacher> teachers) {
-//        this.teachers = teachers;
-//    }
+    public Set<Teacher> getTeachers() {
+        return teachers;
+    }
+
+    public void setTeachers(Set<Teacher> teachers) {
+        this.teachers = teachers;
+    }
 
     public void setName(String name) {
         this.name = name;
