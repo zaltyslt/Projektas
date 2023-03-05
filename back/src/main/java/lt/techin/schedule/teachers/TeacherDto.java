@@ -88,14 +88,6 @@ public class TeacherDto implements Serializable {
         this.contacts = contacts;
     }
 
-//    public ShiftDto getSelectedShift() {
-//        return selectedShift;
-//    }
-//
-//    public void setSelectedShift(ShiftDto selectedShift) {
-//        this.selectedShift = selectedShift;
-//    }
-
     public TeacherShiftDto getTeacherShiftDto() {
         return teacherShiftDto;
     }
