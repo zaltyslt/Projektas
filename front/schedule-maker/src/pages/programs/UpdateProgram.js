@@ -29,6 +29,7 @@ export function UpdateProgram() {
     const [errorSymbolsDesc, setErrorSymbolsDesc] = useState(false);
     const [subjects, setSubjects] = useState([])
     const [subjectHoursList, setsubjectHoursList] = useState([])
+    const [subjectNameError, setSubjectNameError] = useState(false);
 
     const handleCNameeChange = (event) => {
         setProgramName(event.target.value);
@@ -58,6 +59,19 @@ export function UpdateProgram() {
             });
     }, []);
 
+    const checkIfSubjectsIsnotEmpty = () => {
+        setSubjectNameError(false)
+        var i = 0;
+        while (i < subjectHoursList.length) {
+            if (subjectHoursList[i].subjectName === '') {
+                setSubjectNameError(true)
+                return true;
+            }
+            i++;
+        }
+        return false;
+    }
+
     const updateProgram = () => {
         setError("");
         setSuccess("");
@@ -77,6 +91,9 @@ export function UpdateProgram() {
             description.split("").some((char) => invalidSymbols.includes(char))
         ) {
             setErrorSymbolsDesc(true);
+        } else if (subjectHoursList.length === 0) {
+            setError("Prašome pridėti dalyką(-us).");
+        } else if (checkIfSubjectsIsnotEmpty()) {
         } else {
             fetch(`api/v1/programs/update-hours-program/${params.id}`, {
                 method: "PATCH",
@@ -222,20 +239,20 @@ export function UpdateProgram() {
                             <Grid container direction="row" justifyContent="space-between">
                                 {subjectHoursList.map((form, index) => {
                                     return (
-                                        <Grid container spacing={{ xs: 2, md: 3 }} rowSpacing={{xs: 5, sm: 5, md:5}} columnSpacing={{ xs: 1, sm: 1, md: 1 }} key={index}>
-                           <Grid item xs={2}>
+                                        <Grid container spacing={{ xs: 2, md: 3 }} rowSpacing={{ xs: 5, sm: 5, md: 5 }} columnSpacing={{ xs: 1, sm: 1, md: 1 }} key={index}>
+                                            <Grid item xs={2}>
                                                 <FormControl fullWidth>
-                                                    {/* <InputLabel id="subject-label">Dalykas</InputLabel> */}
+                                                    <InputLabel id="subject-label">Dalykas</InputLabel>
                                                     <Select
-                                                        value={form.subjectName}
-                                                        onChange={event => handleFormChange(event, index)}
-                                                        // required
-                                                        // variant="outlined"
-                                                        // placeholder='Dalykas'
-                                                        // labelId="subject-label"
-                                                        // label="Dalykas"
+                                                        required
+                                                        variant="outlined"
+                                                        error={subjectNameError}
+                                                        helperText={subjectNameError && "Prašome pasirinkti dalyką iš sąrašo."}
+                                                        labelId="subject-label"
+                                                        label="Dalykas"
                                                         name='subjectName'
-                                                        // label='subjectName'
+                                                        label='subjectName'
+                                                        onChange={event => handleFormChange(event, index)}
                                                     >
                                                         {subjects.map(currentOption => (
                                                             <MenuItem key={currentOption.name} value={currentOption.name}>
