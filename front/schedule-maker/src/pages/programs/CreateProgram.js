@@ -202,7 +202,7 @@ export function CreateProgram(props) {
                           </Select>
                         </FormControl>
                       </Grid>
-                      <Grid item xs={4}>
+                      <Grid item xs={2}>
                         <TextField
                           name='hours'
                           placeholder='Valandos'

@@ -2,16 +2,16 @@ import * as React from "react";
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import {
-  Button,
-  Container,
-  FormControl,
-  Grid,
-  Select,
-  Stack,
-  TextField,
-  InputLabel,
-  MenuItem,
-  Alert,
+    Button,
+    Container,
+    FormControl,
+    Grid,
+    Select,
+    Stack,
+    TextField,
+    InputLabel,
+    MenuItem,
+    Alert,
 } from "@mui/material";
 import { SelectChangeEvent } from "@mui/material/Select";
 import { grid } from "@mui/system";
@@ -31,19 +31,19 @@ export function UpdateProgram() {
   const [subjects, setSubjects] = useState([]);
   const [subjectHoursList, setsubjectHoursList] = useState([]);
 
-  const handleCNameeChange = (event) => {
-    setProgramName(event.target.value);
-  };
+    const handleCNameeChange = (event) => {
+        setProgramName(event.target.value);
+    };
 
-  const handleDescriptionChange = (event) => {
-    setDescription(event.target.value);
-  };
+    const handleDescriptionChange = (event) => {
+        setDescription(event.target.value);
+    };
 
-  const params = useParams({
-    setProgramName: "",
-    description: "",
-    active: program.active,
-  });
+    const params = useParams({
+        setProgramName: "",
+        description: "",
+        active: program.active,
+    });
 
   useEffect(() => {
     fetch("api/v1/subjects")
@@ -59,53 +59,52 @@ export function UpdateProgram() {
       });
   }, []);
 
-  const updateProgram = () => {
-    setError("");
-    setSuccess("");
-    setErrorEmptyName(false);
-    setErrorSymbolsName(false);
-    setErrorEmptyDesc(false);
-    setErrorSymbolsDesc(false);
-    if (!programName) {
-      setErrorEmptyName(true);
-    } else if (
-      programName.split("").some((char) => invalidSymbols.includes(char))
-    ) {
-      setErrorSymbolsName(true);
-    } else if (!description) {
-      setErrorEmptyDesc(true);
-    } else if (
-      description.split("").some((char) => invalidSymbols.includes(char))
-    ) {
-      setErrorSymbolsDesc(true);
-    } else {
-      fetch(`api/v1/programs/update-hours-program/${params.id}`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          programName,
-          description,
-          subjectHoursList,
-        }),
-      }).then((result) => {
-        if (!result.ok) {
-          result
-            .text()
-            .then((text) => {
-              const response = JSON.parse(text);
-              setError(response.message);
-            })
-            .catch((error) => {
-              setError("Klasės sukurti nepavyko: ", error);
+    const updateProgram = () => {
+        setError("");
+        setSuccess("");
+        setErrorEmptyName(false);
+        setErrorSymbolsName(false);
+        setErrorEmptyDesc(false);
+        setErrorSymbolsDesc(false);
+        if (!programName) {
+            setErrorEmptyName(true);
+        } else if (
+            programName.split("").some((char) => invalidSymbols.includes(char))
+        ) {
+            setErrorSymbolsName(true);
+        } else if (!description) {
+            setErrorEmptyDesc(true);
+        } else if (
+            description.split("").some((char) => invalidSymbols.includes(char))
+        ) {
+            setErrorSymbolsDesc(true);
+        } else {
+            fetch(`api/v1/programs/update-hours-program/${params.id}`, {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    programName,
+                    description,
+                    subjectHoursList
+                }),
+            }).then((result) => {
+                if (!result.ok) {
+                    result.text().then(text => {
+                        const response = JSON.parse(text);
+                        setError(response.message)
+                    }).catch(error => {
+                        setError("Klasės sukurti nepavyko: ", error);
+                    });
+                } else {
+                    setSuccess("Sėkmingai atnaujinote!");
+                }
             });
         } else {
           setSuccess("Sėkmingai atnaujinote!");
         }
-      });
-    }
-  };
+    };
 
   const disableProgram = () => {
     fetch(`api/v1/programs/disable-program/${params.id}`, {
@@ -125,17 +124,42 @@ export function UpdateProgram() {
     }).then(() => navigate("/programs"));
   };
 
-  const updateProperty = (property, event) => {
-    setProgram({
-      ...program,
-      [property]: event.target.value,
-    });
-  };
+    const updateProperty = (property, event) => {
+        setProgram({
+            ...program,
+            [property]: event.target.value,
+        });
+    };
 
-  const addFields = () => {
-    let object = {
-      subjectName: "",
-      hours: "",
+    const addFields = () => {
+        let object = {
+            subjectName: '',
+            hours: ''
+        }
+        setsubjectHoursList([...subjectHoursList, object])
+    }
+
+    const removeFields = (index) => {
+        let data = [...subjectHoursList];
+        data.splice(index, 1)
+        setsubjectHoursList(data)
+    }
+
+    const handleFormChange = (event, index) => {
+        let data = [...subjectHoursList];
+        if (event.target.name === 'subjectName') {
+            data[index]['subjectName'] = event.target.value;
+        } else {
+            data[index][event.target.name] = event.target.value;
+        }
+        setsubjectHoursList(data);
+    }
+
+    const handleSubjectInput = (event) => {
+        const {
+            target: { value },
+        } = event;
+        setSubjects(typeof value === "string" ? value.split(",") : value);
     };
     setsubjectHoursList([...subjectHoursList, object]);
   };

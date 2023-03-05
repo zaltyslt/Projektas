@@ -13,12 +13,17 @@ import java.util.stream.Collectors;
 public class TeacherSubjectMapper {
 
     public static Set<TeacherSubjectsDto> subjectsToDtos(Set<Subject> subjects) {
-        return subjects.stream().map(s -> new TeacherSubjectsDto(s.getId())).collect(Collectors.toSet());
+        return subjects.stream()
+                .map(s -> new TeacherSubjectsDto(s.getId(), s.getName(), s.getModule().getName()))
+                .collect(Collectors.toSet());
     }
 
     public static Subject subjectFromDto(TeacherSubjectsDto subjectsDto) {
         Subject subject = new Subject();
         subject.setId(subjectsDto.getSubjectId());
+        subject.setName(subjectsDto.getName());
+
+
         return subject;
     }
 

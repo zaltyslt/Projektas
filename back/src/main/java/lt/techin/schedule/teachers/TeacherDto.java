@@ -1,14 +1,12 @@
 package lt.techin.schedule.teachers;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import lt.techin.schedule.teachers.contacts.ContactDto;
+import lt.techin.schedule.teachers.contacts.ContactDto2;
 import lt.techin.schedule.teachers.helpers.TeacherShiftDto;
 import lt.techin.schedule.teachers.helpers.TeacherSubjectsDto;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -19,15 +17,19 @@ public class TeacherDto implements Serializable {
     private String fName;
     private String lName;
     private String nickName;
-    private Set<TeacherSubjectsDto> subjectsDtoList;
-    private List<ContactDto> contacts;
+    private Set<TeacherSubjectsDto> subjectsList;
+//    private List<ContactDto> contacts;
+    private ContactDto2 contacts;
     private TeacherShiftDto teacherShiftDto;
     //    private String savedSubjectsList;
+//    private ShiftDto selectedShift;
     private Integer workHoursPerWeek;
     private Boolean isActive;
 
     @JsonFormat(pattern = "yyyy.MM.dd HH:mm")
     private LocalDateTime dateCreated;
+    @JsonFormat(pattern = "yyyy.MM.dd HH:mm")
+    private LocalDateTime dateModified;
 
     private String message;
 
@@ -70,12 +72,36 @@ public class TeacherDto implements Serializable {
         this.nickName = nickName;
     }
 
-    public Set<TeacherSubjectsDto> getSubjectsDtoList() {
-        return subjectsDtoList;
+    public Set<TeacherSubjectsDto> getSubjectsList() {
+        return subjectsList;
     }
 
-    public void setSubjectsDtoList(Set<TeacherSubjectsDto> subjectsDtoList) {
-        this.subjectsDtoList = subjectsDtoList;
+    public void setSubjectsList(Set<TeacherSubjectsDto> subjectsList) {
+        this.subjectsList = subjectsList;
+    }
+
+    public ContactDto2 getContacts() {
+        return contacts;
+    }
+
+    public void setContacts(ContactDto2 contacts) {
+        this.contacts = contacts;
+    }
+
+//    public ShiftDto getSelectedShift() {
+//        return selectedShift;
+//    }
+//
+//    public void setSelectedShift(ShiftDto selectedShift) {
+//        this.selectedShift = selectedShift;
+//    }
+
+    public TeacherShiftDto getTeacherShiftDto() {
+        return teacherShiftDto;
+    }
+
+    public void setTeacherShiftDto(TeacherShiftDto teacherShiftDto) {
+        this.teacherShiftDto = teacherShiftDto;
     }
 
     public Integer getWorkHoursPerWeek() {
@@ -94,14 +120,6 @@ public class TeacherDto implements Serializable {
         isActive = active;
     }
 
-    public TeacherShiftDto getTeacherShiftDto() {
-        return teacherShiftDto;
-    }
-
-    public void setTeacherShiftDto(TeacherShiftDto teacherShiftDto) {
-        this.teacherShiftDto = teacherShiftDto;
-    }
-
     public LocalDateTime getDateCreated() {
         return dateCreated;
     }
@@ -110,12 +128,12 @@ public class TeacherDto implements Serializable {
         this.dateCreated = dateCreated;
     }
 
-    public List<ContactDto> getContacts() {
-        return contacts;
+    public LocalDateTime getDateModified() {
+        return dateModified;
     }
 
-    public void setContacts(List<ContactDto> contacts) {
-        this.contacts = contacts;
+    public void setDateModified(LocalDateTime dateModified) {
+        this.dateModified = dateModified;
     }
 
     public String getMessage() {
@@ -133,12 +151,14 @@ public class TeacherDto implements Serializable {
                 ", fName='" + fName + '\'' +
                 ", lName='" + lName + '\'' +
                 ", nickName='" + nickName + '\'' +
-                ", subjectsDtoList=" + subjectsDtoList +
                 ", workHoursPerWeek=" + workHoursPerWeek +
                 ", isActive=" + isActive +
-                ", teacherShiftDto=" + teacherShiftDto +
-                ", dateCreated=" + dateCreated +
                 ", contacts=" + contacts +
+                ", subjectsDtoList=" + subjectsList +
+                ", teacherShiftDto=" + teacherShiftDto +
+
+                ", dateCreated=" + dateCreated +
+                ", dateMotified=" + dateModified +
                 ", message='" + message + '\'' +
                 '}';
     }
