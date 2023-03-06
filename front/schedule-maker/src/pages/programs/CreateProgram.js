@@ -24,6 +24,7 @@ export function CreateProgram(props) {
   const [success, setSuccess] = useState();
   const [active, setActive] = useState(true);
   const invalidSymbols = "!@#$%^&*_+={}<>|~`\\\"'"
+  const invalidNumbers = /^(\d+)?$/
   let navigate = useNavigate();
   const [errorEmptyName, setErrorEmptyName] = useState(false);
   const [errorSymbolsName, setErrorSymbolsName] = useState(false);
@@ -63,24 +64,28 @@ export function CreateProgram(props) {
 
   const checkIfSubjectsIsnotEmpty = () => {
     setSubjectNameError(false)
-    setErrorHours(false)
     var i = 0;
-      while (i < subjectHoursList.length) {
-        if (subjectHoursList[i].subjectName === '') {
-          setSubjectNameError(true)
-          return true;
-        // } else if (subjectHoursList[i].hours !== ''){
-        //   console.log('1')
-        //    if (subjectHoursList[i].hours.split("").some((char) => invalidSymbolsForHours.includes(char))) {
-        //     console.log('2')
-        //     setErrorHours(true)
-        //     return true;
-        //    }
-        }
-        i++;
+    while (i < subjectHoursList.length) {
+      if (subjectHoursList[i].subjectName === '') {
+        setSubjectNameError(true)
+        return true;
       }
-      return false;
+      i++;
+    }
+    return false;
   }
+
+  const checkHours = () => {
+    setErrorHours(false);
+    let hasErrors = false;
+    subjectHoursList.forEach(({ hours }) => {
+      if (!invalidNumbers.test(hours)) {
+        setErrorHours(true);
+        hasErrors = true;
+      }
+    });
+    return hasErrors;
+  };
 
   const createProgram = () => {
     setError("");
@@ -90,6 +95,8 @@ export function CreateProgram(props) {
     setErrorEmptyDesc(false);
     setErrorSymbolsDesc(false);
     setSubjectError(false)
+    setSubjectNameError(false)
+    setErrorHours(false);
     if (!programName) {
       setErrorEmptyName(true);
     } else if (
@@ -105,6 +112,9 @@ export function CreateProgram(props) {
     } else if (subjectHoursList.length === 0) {
       setError("Prašome pridėti dalyką(-us).");
     } else if (checkIfSubjectsIsnotEmpty()) {
+
+    } else if (checkHours()) {
+
     } else {
       fetch("api/v1/programs/create-program-hours", {
         method: "POST",
@@ -204,13 +214,14 @@ export function CreateProgram(props) {
                   return (
                     <Grid container spacing={{ xs: 2, md: 3 }} rowSpacing={{ xs: 5, sm: 5, md: 5 }} columnSpacing={{ xs: 1, sm: 1, md: 1 }} key={index}>
                       <Grid item xs={2}>
-                        <FormControl fullWidth>
-                          <InputLabel id="subject-label">Dalykas</InputLabel>
+                        <FormControl fullWidth required error={subjectNameError}>
+                          <InputLabel id="subject-label">
+                            {subjectNameError
+                              ? "Privaloma pasirinkti dalyką. "
+                              : "Dalykas"}</InputLabel>
                           <Select
                             required
                             variant="outlined"
-                            error={subjectNameError}
-                            helperText={subjectNameError && "Prašome pasirinkti dalyką iš sąrašo."}
                             labelId="subject-label"
                             label="Dalykas"
                             name='subjectName'
@@ -227,12 +238,12 @@ export function CreateProgram(props) {
                       </Grid>
                       <Grid item xs={2}>
                         <TextField
-                        fullWidth
-                        required
-                        // error={errorHours}
-                        // helperText={errorHours ? "Valandos turi neleidžiamų simbolių." : null}
-                        variant="outlined"
-                        id="hours"
+                          fullWidth
+                          required
+                          error={errorHours}
+                          helperText={errorHours && "Leidžiami tik skaičių simboliai."}
+                          variant="outlined"
+                          id="hours"
                           name='hours'
                           placeholder='Valandos'
                           onChange={event => handleFormChange(event, index)}
@@ -243,7 +254,6 @@ export function CreateProgram(props) {
                         <Button onClick={() => removeFields(index)}>Remove</Button>
                       </Grid>
                     </Grid>
-
                   )
                 })}
               </Grid>

@@ -23,6 +23,7 @@ export function UpdateProgram() {
     const [programName, setProgramName] = useState("");
     const [description, setDescription] = useState("");
     const invalidSymbols = "!@#$%^&*_+={}<>|~`\\\"'";
+    const invalidNumbers = /^(\d+)?$/
     const [errorEmptyName, setErrorEmptyName] = useState(false);
     const [errorSymbolsName, setErrorSymbolsName] = useState(false);
     const [errorEmptyDesc, setErrorEmptyDesc] = useState(false);
@@ -30,6 +31,7 @@ export function UpdateProgram() {
     const [subjects, setSubjects] = useState([])
     const [subjectHoursList, setsubjectHoursList] = useState([])
     const [subjectNameError, setSubjectNameError] = useState(false);
+    const [errorHours, setErrorHours] = useState(false);
 
     const handleCNameeChange = (event) => {
         setProgramName(event.target.value);
@@ -72,6 +74,18 @@ export function UpdateProgram() {
         return false;
     }
 
+    const checkHours = () => {
+        setErrorHours(false);
+        let hasErrors = false;
+        subjectHoursList.forEach(({ hours }) => {
+          if (!invalidNumbers.test(hours)) {
+            setErrorHours(true);
+            hasErrors = true;
+          }
+        });
+        return hasErrors;
+      };
+
     const updateProgram = () => {
         setError("");
         setSuccess("");
@@ -79,6 +93,8 @@ export function UpdateProgram() {
         setErrorSymbolsName(false);
         setErrorEmptyDesc(false);
         setErrorSymbolsDesc(false);
+        setSubjectNameError(false)
+        setErrorHours(false);
         if (!programName) {
             setErrorEmptyName(true);
         } else if (
@@ -94,6 +110,7 @@ export function UpdateProgram() {
         } else if (subjectHoursList.length === 0) {
             setError("Prašome pridėti dalyką(-us).");
         } else if (checkIfSubjectsIsnotEmpty()) {
+        } else if (checkHours()) {
         } else {
             fetch(`api/v1/programs/update-hours-program/${params.id}`, {
                 method: "PATCH",
@@ -241,17 +258,20 @@ export function UpdateProgram() {
                                     return (
                                         <Grid container spacing={{ xs: 2, md: 3 }} rowSpacing={{ xs: 5, sm: 5, md: 5 }} columnSpacing={{ xs: 1, sm: 1, md: 1 }} key={index}>
                                             <Grid item xs={2}>
-                                                <FormControl fullWidth>
-                                                    <InputLabel id="subject-label">Dalykas</InputLabel>
+                                                <FormControl fullWidth required error={subjectNameError}>
+                                                    <InputLabel id="subject-label">
+                                                        {subjectNameError
+                                                            ? "Privaloma pasirinkti dalyką. "
+                                                            : "Dalykas"}
+                                                    </InputLabel>
                                                     <Select
                                                         required
                                                         variant="outlined"
-                                                        error={subjectNameError}
-                                                        helperText={subjectNameError && "Prašome pasirinkti dalyką iš sąrašo."}
                                                         labelId="subject-label"
                                                         label="Dalykas"
                                                         name='subjectName'
                                                         label='subjectName'
+                                                        value={form.subjectName}
                                                         onChange={event => handleFormChange(event, index)}
                                                     >
                                                         {subjects.map(currentOption => (
@@ -263,12 +283,25 @@ export function UpdateProgram() {
                                                 </FormControl>
                                             </Grid>
                                             <Grid item xs={2}>
-                                                <TextField
+                                                {/* <TextField
                                                     name='hours'
                                                     placeholder='Valandos'
                                                     onChange={event => handleFormChange(event, index)}
                                                     value={form.hours}
-                                                />
+                                                /> */}
+                        <TextField
+                          fullWidth
+                          required
+                          error={errorHours}
+                          helperText={errorHours && "Leidžiami tik skaičių simboliai."}
+                          variant="outlined"
+                          id="hours"
+                          name='hours'
+                          placeholder='Valandos'
+                          onChange={event => handleFormChange(event, index)}
+                          value={form.hours}
+                        />
+
                                             </Grid>
                                             <Grid item xs={2}>
                                                 <Button onClick={() => removeFields(index)}>Ištrinti</Button>

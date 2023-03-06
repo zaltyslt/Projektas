@@ -58,6 +58,20 @@ class Program {
     public Program() {
     }
 
+    public Program(Long id,
+                   String programName,
+                   String description,
+                   Set<Group> groups,
+                   boolean active,
+                   List<SubjectHours> subjectHoursList) {
+        this.id = id;
+        this.programName = programName;
+        this.description = description;
+        this.groups = groups;
+        this.active = active;
+        this.subjectHoursList = subjectHoursList;
+    }
+
     public Program(Long id, String programName, String description, LocalDateTime createdDate,
                    LocalDateTime modifiedDate, boolean active) {
         this.id = id;
