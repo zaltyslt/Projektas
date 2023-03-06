@@ -43,7 +43,7 @@ public class TeacherControllerAction {
         Object jsonObject = new Object();
         Exception ee;
         try {
-//       jsonObject = objectMapper.readValue(payLoad, Object.class);
+       jsonObject = objectMapper.readValue(payLoad, TeacherDto.class);
 //       jsonObject = objectMapper.readValue(payLoad, TeacherSubjectsDto.class);
             var res = objectMapper.writeValueAsString(jsonObject);
         } catch (

@@ -75,8 +75,6 @@ public class Teacher implements Serializable {
     private Integer workHoursPerWeek;
     private Integer hashCode;
 
-    //FIXME kai bus kaip paimti Shiftus
-
 
     @PrePersist
     public void prePersist() {

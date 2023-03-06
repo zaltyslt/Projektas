@@ -17,6 +17,7 @@ import {
   TextField,
 } from "@mui/material";
 import { Container } from "@mui/system";
+import { EntityForm } from "./components/une";
 import ".././pages.css";
 
 import { useEffect, useState } from "react";
@@ -34,6 +35,26 @@ export function TeacherList() {
   const [rowsPerPageA, setRowsPerPageA] = useState(10);
   const [rowsPerPageP, setRowsPerPageP] = useState(10);
   const [isChecked, setChecked] = useState(false);
+
+  function CreateEntityPage() {
+    function handleCreate(entity) {
+      // Make an API request to create the entity
+      console.log("Creating entity", entity);
+    }
+
+    return <EntityForm mode="create" onSave={handleCreate} />;
+  }
+
+  function UpdateEntityPage({ entityId }) {
+    function handleUpdate(entity) {
+      // Make an API request to update the entity
+      console.log("Updating entity", entity);
+    }
+
+    return (
+      <EntityForm mode="update" entityId={entityId} onSave={handleUpdate} />
+    );
+  }
 
   useEffect(() => {
     fetchTeachers();
@@ -66,8 +87,6 @@ export function TeacherList() {
       .then(setDeletedTeachers);
   };
 
-  
-
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPageA - teachers.length) : 0;
 
@@ -85,27 +104,31 @@ export function TeacherList() {
     setPageP(0);
   };
 
-    const handleSearch = (event) => {
+  const handleSearch = (event) => {
     // console.log(teachers);
-    if (event.length === 0) {setFilteredTeachers(teachers); } 
-    else {
+    if (event.length === 0) {
+      setFilteredTeachers(teachers);
+    } else {
       const filtered = teachers.filter((teacher) => {
         const teacherFName = teacher.fName.toLowerCase();
         const teacherLName = teacher.lName.toLowerCase();
         const shift = teacher.teacherShiftDto.name.toLowerCase();
-        const moduleNamesArray = teacher.subjectsList.map(subject => subject.name.toLowerCase()).flat();
-    
-        return (teacherFName.includes(event.toLowerCase()) 
-        ||teacherLName.includes(event.toLowerCase()) 
-        || shift.includes(event.toLowerCase())
-        || moduleNamesArray.some(name => name.includes(event.toLowerCase()))
+        const moduleNamesArray = teacher.subjectsList
+          .map((subject) => subject.name.toLowerCase())
+          .flat();
+
+        return (
+          teacherFName.includes(event.toLowerCase()) ||
+          teacherLName.includes(event.toLowerCase()) ||
+          shift.includes(event.toLowerCase()) ||
+          moduleNamesArray.some((name) => name.includes(event.toLowerCase()))
         );
       });
-      
+
       setFilteredTeachers(filtered);
     }
   };
-  
+
   //////////
   const restoreTeacher = async (teacher) => {
     await fetch(`/api/v1/teachers/active?tid=${teacher.id}&active=true`, {
@@ -118,7 +141,6 @@ export function TeacherList() {
       .then(fetchDeletedTeachers);
   };
 
-  
   return (
     <div>
       <Container maxWidth="lg">
@@ -127,10 +149,13 @@ export function TeacherList() {
             <h3>Mokytojų sąrašas</h3>
           </Grid>
           <Grid item sm={2}>
-          <Stack direction="row" justifyContent="flex-end">
-            <Link to="/teachers/create">
-              <Button variant="contained">Pridėti naują</Button>
-            </Link>
+            <Stack direction="row" justifyContent="flex-end">
+              <Link to="/teachers/create2">
+                <Button variant="contained">Pridėti naują2</Button>
+              </Link>
+              <Link to="/teachers/create">
+                <Button variant="contained">Pridėti naują</Button>
+              </Link>
             </Stack>
           </Grid>
 
@@ -150,8 +175,8 @@ export function TeacherList() {
           <Table aria-label="custom pagination table">
             <TableHead>
               <TableRow>
-                <TableCell >Vardas Pavardė</TableCell>
-                <TableCell >Dėstomi dalykai</TableCell>
+                <TableCell>Vardas Pavardė</TableCell>
+                <TableCell>Dėstomi dalykai</TableCell>
                 <TableCell className="empty-activity">Pamaina</TableCell>
                 {/* <TableCell></TableCell> */}
               </TableRow>
@@ -169,11 +194,16 @@ export function TeacherList() {
                     <Link to={"/teachers/view/" + teacher.id}>
                       {teacher.fName + " " + teacher.lName}
                     </Link>
+
+                    &nbsp;|&nbsp;
+                    {/*                                 33370 */}
+                    <Link to={`/teachers/edit2/${teacher.id}`}>
+                      {` Edit ${teacher.fName} ${teacher.id}`}
+                    </Link>
                   </TableCell>
 
                   <TableCell>
-                    
-                    {(teacher.subjectsList && teacher.subjectsList.length > 0)
+                    {teacher.subjectsList && teacher.subjectsList.length > 0
                       ? teacher.subjectsList.map((subjectItem, index) => {
                           {
                             /* const subject = subjects.find(
@@ -192,8 +222,8 @@ export function TeacherList() {
                   </TableCell>
                 </TableRow>
               ))}
-              
-{/* //////////////////////////// */}
+
+              {/* //////////////////////////// */}
               {emptyRows > 0 && (
                 <TableRow style={{ height: 53 * emptyRows }}>
                   <TableCell colSpan={6} />
@@ -240,8 +270,8 @@ export function TeacherList() {
             <Table aria-label="custom pagination table">
               <TableHead>
                 <TableRow>
-                  <TableCell >Vardas Pavardė</TableCell>
-                  <TableCell >Dėstomi dalykai</TableCell>
+                  <TableCell>Vardas Pavardė</TableCell>
+                  <TableCell>Dėstomi dalykai</TableCell>
                   <TableCell className="activity">Veiksmai</TableCell>
                 </TableRow>
               </TableHead>
@@ -260,26 +290,25 @@ export function TeacherList() {
                     <TableCell colSpan={6}>{teacher.active}</TableCell>
                     <TableCell colSpan={2} align="center"> */}
                     <TableCell component="th" scope="row">
-                      {teacher.fName }
+                      {teacher.fName}
                     </TableCell>
-                    <TableCell > 
-                    {(teacher.subjectsList && teacher.subjectsList.length > 0)
-                      ? teacher.subjectsList.map((subjectItem, index) => {
-                          {
-                            /* const subject = subjects.find(
+                    <TableCell>
+                      {teacher.subjectsList && teacher.subjectsList.length > 0
+                        ? teacher.subjectsList.map((subjectItem, index) => {
+                            {
+                              /* const subject = subjects.find(
                             (s) => s.id === subjectItem.subjectId
                           ); */
-                          }
-                          return <p key={index}>{subjectItem.name}</p>;
-                        })
-                      : "* Nepriskirta"}
-                    
+                            }
+                            return <p key={index}>{subjectItem.name}</p>;
+                          })
+                        : "* Nepriskirta"}
                     </TableCell>
-                    <TableCell  align="center">
-
-                      <Button 
-                       variant="contained"
-                      onClick={() => restoreTeacher(teacher)}>
+                    <TableCell align="center">
+                      <Button
+                        variant="contained"
+                        onClick={() => restoreTeacher(teacher)}
+                      >
                         Atstatyti
                       </Button>
                     </TableCell>
@@ -303,7 +332,7 @@ export function TeacherList() {
                     labelDisplayedRows={({ from, to, count }) =>
                       `${from}-${to} iš ${count}`
                     }
-                    SelectProps={{ 
+                    SelectProps={{
                       inputProps: {
                         "aria-label": "Rodyti po",
                       },
@@ -311,7 +340,7 @@ export function TeacherList() {
                     }}
                     onPageChange={handleChangePage}
                     rowsPerPage={rowsPerPageP}
-                    onRowsPerPageChange={handleChangeRowsPerPageP}    
+                    onRowsPerPageChange={handleChangeRowsPerPageP}
                   ></TablePagination>
                 </TableRow>
               </TableFooter>

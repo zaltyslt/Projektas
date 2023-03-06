@@ -22,50 +22,15 @@ export function ViewTeacher() {
         setTeacher(data);
         setContacts(data.contacts);
         setTeacherSubjects(data.subjectsList)
+        console.log(data);
             });
       };
-      
- 
-
-  // const getSubjectsData = () => {
-  //   fetch(`/api/v1/subjects`)
-  //     .then((response) => response.json())
-  //     .then((data) => {
-  //       setSubjects(data);
-  //       // console.log(subjects);
-  //     });
-  // };
-
-  // const mapTeacherSubjects = () => {
-  //   const newFoundSubjects = [];
-
-  //   teacherSubjects.forEach(
-  //     (teacherSubject) => {
-  //       // const found = numbers.find(number => number > 3);
-  //       const subject = subjects.find((s) => s.id === teacherSubject.subjectId);
-  //       if (subject) {
-  //         newFoundSubjects.push(subject);
-  //       }
-  //     });
-  //     setFoundSubjects(newFoundSubjects);
-  //     // console.log(newFoundSubjects);
-      
-  // };
-
+  
   useEffect(() => {
     getTeacherData();
   }, []);
 
-  // useEffect(() => {
-  //   getSubjectsData();
-  // }, [teacher]);
-
-  // useEffect(() => {
-  //   mapTeacherSubjects();
-  // }, [subjects]);
-
-  // const filteredSubjectsArray = subjects.filter(o => teacher.subjectsDtoList.includes(o.id));
-
+  
   return (
     <div>
       <Container maxWidth="lg">
@@ -110,7 +75,7 @@ export function ViewTeacher() {
             <p>
               {teacher.teacherShiftDto
                 ? teacher.teacherShiftDto.name
-                : "Negaunu"}
+                : "Duomenys nepasiekiami"}
             </p>
           </Grid>
 
