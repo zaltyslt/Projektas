@@ -2,6 +2,7 @@ package lt.techin.schedule;
 
 import lt.techin.schedule.validators.EmailValidator;
 import lt.techin.schedule.validators.PhoneNumberValidator;
+import lt.techin.schedule.validators.SchoolYearValidator;
 import lt.techin.schedule.validators.TextValidator;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -80,5 +81,15 @@ public class ValidatorTests {
 
         Assertions.assertFalse(PhoneNumberValidator.isPhoneNumberValid("01234567891", 10), "Phone number exceeding maximum length should be invalid");
         Assertions.assertFalse(PhoneNumberValidator.isPhoneNumberValid("12", 1), "Phone number exceeding maximum length should be invalid");
+    }
+
+    @Test
+    public void testSchoolYearValidator() {
+        Assertions.assertTrue(SchoolYearValidator.isSchoolYearValid("2000", 30), "Simple school year should be valid");
+        Assertions.assertTrue(SchoolYearValidator.isSchoolYearValid("2010-2015", 30), "School year with - symbol should be valid");
+        Assertions.assertTrue(SchoolYearValidator.isSchoolYearValid("200/130", 30), "School year with / symbol should be valid");
+
+        Assertions.assertFalse(SchoolYearValidator.isSchoolYearValid("This Is Text", 30), "School year with letters should be invalid");
+        Assertions.assertFalse(SchoolYearValidator.isSchoolYearValid("2010!?", 30), "School year with illegal symbols should be invalid");
     }
 }

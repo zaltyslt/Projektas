@@ -233,7 +233,7 @@ export function AddShift() {
                     (
                     <div></div>
                     )}
-            </Grid>
+        </Grid>
       </Container>
     </div>
   );
