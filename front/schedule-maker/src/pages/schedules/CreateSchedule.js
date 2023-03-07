@@ -18,7 +18,6 @@ import "./Schedule.css";
 
 export function CreateSchedule() {
   const [groups, setGroups] = useState([]);
-  const [selectedGroup, setSelectedGroup] = useState("");
   const [group, setGroup] = useState("");
   const [schoolYear, setSchoolYear] = useState("");
   const [semester, setSemester] = useState("");
@@ -63,9 +62,36 @@ export function CreateSchedule() {
     isValid ? setSchoolYearValid(false) : setSchoolYearValid(true);
   };
 
+  const validateGroup = (value) => {
+    setGroup(value);
+    value.length === 0 ? setGroupEmpty(true) : setGroupEmpty(false);
+  };
+
+  const validateDateFrom = (value) => {
+    setDateFrom(value);
+    if (value.length === 0) {
+      setDateFromEmpty(true);
+      setErrorMessage("Privaloma užpildyti");
+    } else {
+      setDateFromEmpty(false);
+      setErrorMessage("");
+    }
+  };
+
+  const validateDateUntil = (value) => {
+    setDateUntil(value);
+    if (value.length === 0) {
+      setDateUntilEmpty(true);
+      setErrorMessage("Privaloma užpildyti");
+    } else {
+      setDateFromEmpty(false);
+      setErrorMessage("");
+    }
+  };
+
   const validation = () => {
     if (
-      selectedGroup === "" &&
+      group === "" &&
       schoolYear === "" &&
       semester === "" &&
       dateFrom === "" &&
@@ -77,13 +103,13 @@ export function CreateSchedule() {
       setDateFromEmpty(true);
       setDateUntilEmpty(true);
       setErrorMessage("Privaloma užpildyti");
-    } else if (selectedGroup === "") {
-      setGroupEmpty(true);
-    } else if (dateFrom === "") {
-      setDateFromEmpty(true);
-      setErrorMessage("Privaloma užpildyti");
-    } else if (dateUntil === "") {
-      setDateUntilEmpty(true);
+    } else if (
+      group === "" ||
+      schoolYear === "" ||
+      semester === "" ||
+      dateFrom === "" ||
+      dateUntil === ""
+    ) {
     } else {
       createSchedule();
     }
@@ -120,7 +146,7 @@ export function CreateSchedule() {
 
   const clear = () => {
     setGroups(fetchGroups());
-    setSelectedGroup("");
+    setGroup("");
     setSchoolYear("");
     setSemester("");
     setDateFrom("");
@@ -146,10 +172,9 @@ export function CreateSchedule() {
                   label="Grupės pavadinimas"
                   labelId="group-label"
                   id="group"
-                  value={selectedGroup}
+                  value={group}
                   onChange={(e) => {
-                    setSelectedGroup(e.target.value);
-                    setGroup(e.target.value.id);
+                    validateGroup(e.target.value);
                   }}
                 >
                   {groups.map((group) => (
@@ -210,7 +235,7 @@ export function CreateSchedule() {
                   label="Nuo"
                   format="YYYY/MM/DD"
                   value={dateFrom}
-                  onChange={(e) => setDateFrom(e)}
+                  onChange={(e) => validateDateFrom(e)}
                   slotProps={{
                     textField: {
                       helperText: errorMessage,
@@ -222,19 +247,18 @@ export function CreateSchedule() {
 
             <Grid item sm={5}>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
-                   <DatePicker
+                <DatePicker
                   className="DatePicker"
                   label="Iki"
                   format="YYYY/MM/DD"
                   value={dateUntil}
-                  onChange={(e) => setDateUntil(e)}
+                  onChange={(e) => validateDateUntil(e)}
                   slotProps={{
                     textField: {
                       helperText: errorMessage,
                     },
                   }}
                 ></DatePicker>
-               
               </LocalizationProvider>
             </Grid>
 
