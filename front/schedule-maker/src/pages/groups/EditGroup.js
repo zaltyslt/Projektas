@@ -28,9 +28,6 @@ export function EditGroup() {
   const [program, setProgram] = useState("");
   const [shift, setShift] = useState("");
 
-  const [initProgram, initSetProgram] = useState("");
-  const [initShift, initSetShift] = useState("");
-
   const [programs, setPrograms] = useState([]);
   const [shifts, setShifts] = useState([]);
 
@@ -71,8 +68,6 @@ export function EditGroup() {
         setStudentAmount(data.studentAmount);
         setProgram(data.program);
         setShift(data.shift);
-        initSetProgram(data.program)
-        initSetShift(data.shift)
       });
   };
 
