@@ -76,12 +76,12 @@ export function CreateSchedule() {
       setSchoolYearEmpty(true);
       setDateFromEmpty(true);
       setDateUntilEmpty(true);
-      setErrorMessage("Privaloma");
+      setErrorMessage("Privaloma užpildyti");
     } else if (selectedGroup === "") {
       setGroupEmpty(true);
     } else if (dateFrom === "") {
       setDateFromEmpty(true);
-      setErrorMessage("Privaloma");
+      setErrorMessage("Privaloma užpildyti");
     } else if (dateUntil === "") {
       setDateUntilEmpty(true);
     } else {
@@ -126,6 +126,7 @@ export function CreateSchedule() {
     setDateFrom("");
     setDateUntil("");
     setGroupEmpty(false);
+    setErrorMessage("");
   };
 
   return (
@@ -221,13 +222,19 @@ export function CreateSchedule() {
 
             <Grid item sm={5}>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DatePicker
+                   <DatePicker
                   className="DatePicker"
                   label="Iki"
                   format="YYYY/MM/DD"
                   value={dateUntil}
                   onChange={(e) => setDateUntil(e)}
+                  slotProps={{
+                    textField: {
+                      helperText: errorMessage,
+                    },
+                  }}
                 ></DatePicker>
+               
               </LocalizationProvider>
             </Grid>
 
