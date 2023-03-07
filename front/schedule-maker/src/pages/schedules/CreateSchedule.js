@@ -13,7 +13,7 @@ import { Container } from "@mui/system";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useAsyncError } from "react-router-dom";
 import "./Schedule.css";
 
 export function CreateSchedule() {
@@ -28,12 +28,65 @@ export function CreateSchedule() {
   const [error, setError] = useState("");
   const [createMessage, setCreateMessage] = useState("");
 
+  const [semesterEmpty, setSemesterEmpty] = useState(false);
+  const [semesterValid, setSemesterValid] = useState(true);
+  const [groupEmpty, setGroupEmpty] = useState(false);
+  const [schoolYearEmpty, setSchoolYearEmpty] = useState(false);
+  const [schoolYearValid, setSchoolYearValid] = useState(true);
+  const [dateFromEmpty, setDateFromEmpty] = useState(false);
+  const [dateUntilEmpty, setDateUntilEmpty] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+
+  const badSymbols = "!@#$%^&*_+={}<>|~`\\'";
+
   useEffect(() => fetchGroups, []);
 
   const fetchGroups = () => {
     fetch("api/v1/group/get-active/small")
       .then((response) => response.json())
       .then(setGroups);
+  };
+
+  const validateSemester = (value) => {
+    setSemester(value);
+    value.length === 0 ? setSemesterEmpty(true) : setSemesterEmpty(false);
+
+    const isValid = value.split("").some((char) => badSymbols.includes(char));
+    isValid ? setSemesterValid(false) : setSemesterValid(true);
+  };
+
+  const validateSchoolYear = (value) => {
+    setSchoolYear(value);
+    value.length === 0 ? setSchoolYearEmpty(true) : setSchoolYearEmpty(false);
+
+    const isValid = value.split("").some((char) => badSymbols.includes(char));
+    isValid ? setSchoolYearValid(false) : setSchoolYearValid(true);
+  };
+
+  const validation = () => {
+    if (
+      selectedGroup === "" &&
+      schoolYear === "" &&
+      semester === "" &&
+      dateFrom === "" &&
+      dateUntil === ""
+    ) {
+      setSemesterEmpty(true);
+      setGroupEmpty(true);
+      setSchoolYearEmpty(true);
+      setDateFromEmpty(true);
+      setDateUntilEmpty(true);
+      setErrorMessage("Privaloma");
+    } else if (selectedGroup === "") {
+      setGroupEmpty(true);
+    } else if (dateFrom === "") {
+      setDateFromEmpty(true);
+      setErrorMessage("Privaloma");
+    } else if (dateUntil === "") {
+      setDateUntilEmpty(true);
+    } else {
+      createSchedule();
+    }
   };
 
   const createSchedule = () => {
@@ -72,6 +125,7 @@ export function CreateSchedule() {
     setSemester("");
     setDateFrom("");
     setDateUntil("");
+    setGroupEmpty(false);
   };
 
   return (
@@ -81,8 +135,12 @@ export function CreateSchedule() {
         <form>
           <Grid container rowSpacing={2} spacing={2}>
             <Grid item sm={10}>
-              <FormControl fullWidth required>
-                <InputLabel id="group-label">Gupės pavadinimas</InputLabel>
+              <FormControl fullWidth required error={groupEmpty}>
+                <InputLabel id="group-label">
+                  {groupEmpty
+                    ? "Privaloma pasirinkti grupę"
+                    : "Gupės pavadinimas"}
+                </InputLabel>
                 <Select
                   label="Grupės pavadinimas"
                   labelId="group-label"
@@ -110,8 +168,16 @@ export function CreateSchedule() {
                 label="Mokslo metai"
                 id="schoolYear"
                 name="schoolYear"
+                error={!schoolYearValid || schoolYearEmpty}
+                helperText={
+                  !schoolYearValid
+                    ? "Mokslo metai turi neleidžiamų simbolių."
+                    : schoolYearEmpty
+                    ? "Mokslo metai negali būti tušti"
+                    : ""
+                }
                 value={schoolYear}
-                onChange={(e) => setSchoolYear(e.target.value)}
+                onChange={(e) => validateSchoolYear(e.target.value)}
               ></TextField>
             </Grid>
 
@@ -123,8 +189,16 @@ export function CreateSchedule() {
                 label="Sesija"
                 id="semester"
                 name="semester"
+                error={!semesterValid || semesterEmpty}
+                helperText={
+                  !semesterValid
+                    ? "Semestro pavadinimas turi neleidžiamų simbolių."
+                    : semesterEmpty
+                    ? "Semestro pavadinimas negali būti tuščias"
+                    : ""
+                }
                 value={semester}
-                onChange={(e) => setSemester(e.target.value)}
+                onChange={(e) => validateSemester(e.target.value)}
               ></TextField>
             </Grid>
 
@@ -136,6 +210,11 @@ export function CreateSchedule() {
                   format="YYYY/MM/DD"
                   value={dateFrom}
                   onChange={(e) => setDateFrom(e)}
+                  slotProps={{
+                    textField: {
+                      helperText: errorMessage,
+                    },
+                  }}
                 ></DatePicker>
               </LocalizationProvider>
             </Grid>
@@ -161,7 +240,7 @@ export function CreateSchedule() {
 
             <Grid item sm={10}>
               <Stack direction="row" spacing={2}>
-                <Button variant="contained" onClick={createSchedule}>
+                <Button variant="contained" onClick={validation}>
                   Išsaugoti
                 </Button>
 
