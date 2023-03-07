@@ -31,7 +31,7 @@ export function CreateSchedule() {
   useEffect(() => fetchGroups, []);
 
   const fetchGroups = () => {
-    fetch("api/v1/group/get-active")
+    fetch("api/v1/group/get-active/small")
       .then((response) => response.json())
       .then(setGroups);
   };
