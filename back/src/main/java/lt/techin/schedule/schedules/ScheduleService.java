@@ -37,4 +37,10 @@ public class ScheduleService {
             return null;
         }
 //    }
+
+    public Schedule createSchedule(Schedule schedule, Long groupId) {
+        var existingGroup = groupRepository.findById(groupId).orElseThrow();
+        schedule.setGroups(existingGroup);
+        return scheduleRepository.save(schedule);
+    }
 }

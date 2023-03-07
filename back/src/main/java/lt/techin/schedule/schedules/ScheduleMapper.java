@@ -28,4 +28,22 @@ public class ScheduleMapper {
         schedule.setModifiedDate(scheduleDto.getModifiedDate());
         return schedule;
     }
+
+    public static Schedule toScheduleFromCreateDto(ScheduleCreateDto scheduleCreateDto) {
+        var schedule = new Schedule();
+        schedule.setSemester(scheduleCreateDto.getSemester());
+        schedule.setSchoolYear(scheduleCreateDto.getSchoolYear());
+        schedule.setDateFrom(scheduleCreateDto.getDateFrom());
+        schedule.setDateUntil(scheduleCreateDto.getDateUntil());
+        return schedule;
+    }
+
+    public  static ScheduleCreateDto toScheduleCreateDto(Schedule schedule) {
+        var scheduleCreateDto = new ScheduleCreateDto();
+        scheduleCreateDto.setSemester(schedule.getSemester());
+        scheduleCreateDto.setSchoolYear(schedule.getSchoolYear());
+        scheduleCreateDto.setDateFrom(schedule.getDateFrom());
+        scheduleCreateDto.setDateUntil(schedule.getDateUntil());
+        return scheduleCreateDto;
+    }
 }

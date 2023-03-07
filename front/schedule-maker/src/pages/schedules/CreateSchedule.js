@@ -91,7 +91,7 @@ export function CreateSchedule() {
 
   const validation = () => {
     if (
-      group === "" &&
+      // group === "" &&
       schoolYear === "" &&
       semester === "" &&
       dateFrom === "" &&
@@ -104,7 +104,7 @@ export function CreateSchedule() {
       setDateUntilEmpty(true);
       setErrorMessage("Privaloma užpildyti");
     } else if (
-      group === "" ||
+      // group === "" ||
       schoolYear === "" ||
       semester === "" ||
       dateFrom === "" ||
@@ -116,13 +116,12 @@ export function CreateSchedule() {
   };
 
   const createSchedule = () => {
-    fetch("/api/v1/schedule/create", {
+    fetch(`/api/v1/schedules/create?groupId=${group.id}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        group,
+      body: JSON.stringify({        
         schoolYear,
         semester,
         dateFrom,
@@ -145,7 +144,7 @@ export function CreateSchedule() {
   };
 
   const clear = () => {
-    setGroups(fetchGroups());
+    fetchGroups();
     setGroup("");
     setSchoolYear("");
     setSemester("");

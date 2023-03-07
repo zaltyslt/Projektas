@@ -11,8 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
-import static lt.techin.schedule.schedules.ScheduleMapper.toSchedule;
-import static lt.techin.schedule.schedules.ScheduleMapper.toScheduleDto;
+import static lt.techin.schedule.schedules.ScheduleMapper.*;
 
 @RestController
 @RequestMapping("/api/v1/schedules")
@@ -48,6 +47,11 @@ public class ScheduleController {
         logger.info("The schedule was created, successfully");
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(Map.of("message", (toScheduleDto(createSchedule).toString())));
+    }
+
+    @PostMapping(value = "/create", consumes = {MediaType.APPLICATION_JSON_VALUE})
+    public Schedule create(@RequestParam Long groupId, @RequestBody ScheduleCreateDto scheduleCreateDto) {
+        return scheduleService.createSchedule(toScheduleFromCreateDto(scheduleCreateDto), groupId);
     }
 }
 

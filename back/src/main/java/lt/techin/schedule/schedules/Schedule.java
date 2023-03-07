@@ -6,6 +6,7 @@ import lt.techin.schedule.group.Group;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Calendar;
 import java.util.Date;
@@ -16,18 +17,20 @@ public class Schedule {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
-//    @ManyToOne
-//    @JoinColumn(name = "group_id")
-//    private Group groups;
+    @ManyToOne
+    @JoinColumn(name = "group_id")
+    private Group groups;
 
     private String schoolYear;
     private String semester;
 
     @Column(name = "date_from", nullable = false)
-    private Date dateFrom;
+    @JsonFormat(pattern="yyyy-MM-dd")
+    private LocalDate dateFrom;
 
     @Column(name = "date_until", nullable = false)
-    private Date dateUntil;
+    @JsonFormat(pattern="yyyy-MM-dd")
+    private LocalDate dateUntil;
 
     private boolean active = true;
     @CreatedDate
@@ -60,13 +63,13 @@ public class Schedule {
         this.id = id;
     }
 
-//    public Group getGroups() {
-//        return groups;
-//    }
-//
-//    public void setGroups(Group groups) {
-//        this.groups = groups;
-//    }
+    public Group getGroups() {
+        return groups;
+    }
+
+    public void setGroups(Group groups) {
+        this.groups = groups;
+    }
 
     public String getSchoolYear() {
         return schoolYear;
@@ -109,19 +112,19 @@ public class Schedule {
         this.modifiedDate = modifiedDate;
     }
 
-    public Date getDateFrom() {
+    public LocalDate getDateFrom() {
         return dateFrom;
     }
 
-    public void setDateFrom(Date dateFrom) {
+    public void setDateFrom(LocalDate dateFrom) {
         this.dateFrom = dateFrom;
     }
 
-    public Date getDateUntil() {
+    public LocalDate getDateUntil() {
         return dateUntil;
     }
 
-    public void setDateUntil(Date dateUntil) {
+    public void setDateUntil(LocalDate dateUntil) {
         this.dateUntil = dateUntil;
     }
 }
