@@ -4,7 +4,7 @@ public class ScheduleMapper {
     public static ScheduleDto toScheduleDto(Schedule schedule) {
         var scheduleDto = new ScheduleDto();
         scheduleDto.setId(schedule.getId());
-//        scheduleDto.setGroups(schedule.getGroups());
+        scheduleDto.setGroups(schedule.getGroups());
         scheduleDto.setSchoolYear(schedule.getSchoolYear());
         scheduleDto.setSemester(schedule.getSemester());
         scheduleDto.setDateFrom(schedule.getDateFrom());
@@ -18,7 +18,7 @@ public class ScheduleMapper {
     public static Schedule toSchedule(ScheduleDto scheduleDto) {
         var schedule = new Schedule();
         schedule.setId(scheduleDto.getId());
-//        schedule.setGroups(scheduleDto.getGroups());
+        schedule.setGroups(scheduleDto.getGroups());
         schedule.setSchoolYear(scheduleDto.getSchoolYear());
         schedule.setSemester(scheduleDto.getSemester());
         schedule.setDateFrom(scheduleDto.getDateFrom());

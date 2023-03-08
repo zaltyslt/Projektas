@@ -1,16 +1,16 @@
 package lt.techin.schedule.exceptions;
 
-public class SubjectValidationException extends RuntimeException {
+public class ValidationException extends RuntimeException {
 
     private String field;
     private String error;
 
     private String rejectedValue;
 
-    public SubjectValidationException() {
+    public ValidationException() {
     }
 
-    public SubjectValidationException(String message, String field, String error, String rejectedValue) {
+    public ValidationException(String message, String field, String error, String rejectedValue) {
         super(message);
         this.field = field;
         this.error = error;

@@ -3,7 +3,7 @@ package lt.techin.schedule.subject;
 
 import jakarta.persistence.EntityManager;
 import lt.techin.schedule.classrooms.ClassroomRepository;
-import lt.techin.schedule.exceptions.SubjectValidationException;
+import lt.techin.schedule.exceptions.ValidationException;
 import lt.techin.schedule.module.ModuleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -55,7 +55,7 @@ public class SubjectService {
         if (existing.size() > 0) {
             var subjectDto = toSubjectDto(subject);
 
-            throw new SubjectValidationException("Dalykas su tokiu pavadinimu, aprašu ir moduliu jau sukurtas.", "Subject", "Not unique", subjectDto.toString());
+            throw new ValidationException("Dalykas su tokiu pavadinimu, aprašu ir moduliu jau sukurtas.", "Subject", "Not unique", subjectDto.toString());
         } else {
             return subjectRepository.save(subject);
         }
