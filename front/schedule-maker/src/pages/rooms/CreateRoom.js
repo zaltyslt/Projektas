@@ -104,12 +104,13 @@ export function CreateRoom(props) {
       <form>
         <Grid container rowSpacing={2}>
           <Grid item sm={10}>
-            <FormControl fullWidth>
-              <InputLabel id="building-label">Pastatas</InputLabel>
+            <FormControl fullWidth required error={errorBuilding}>
+              <InputLabel id="building-label">
+                {errorBuilding
+                  ? "Prašome pasirinkti pastatą."
+                  : "Pastatas"}</InputLabel>
               <Select
                 required
-                error={errorBuilding}
-                helperText={errorBuilding && "Prašome pasirinkti pastatą."}
                 variant="outlined"
                 labelId="building-label"
                 id="building"
@@ -131,8 +132,8 @@ export function CreateRoom(props) {
                 errorEmptyName
                   ? "Klasės pavadinimas yra privalomas."
                   : errorSymbolsName
-                  ? "Klasės pavadinimas turi neleidžiamų simbolių."
-                  : ""
+                    ? "Klasės pavadinimas turi neleidžiamų simbolių."
+                    : ""
               }
               variant="outlined"
               id="classroomName"
@@ -151,8 +152,8 @@ export function CreateRoom(props) {
                 errorEmptyDesc
                   ? "Klasės aprašas yra privalomas."
                   : errorSymbolsDesc
-                  ? "Klasės aprašas turi neleidžiamų simbolių."
-                  : ""
+                    ? "Klasės aprašas turi neleidžiamų simbolių."
+                    : ""
               }
               variant="outlined"
               label="Klasės aprašas"

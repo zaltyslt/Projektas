@@ -23,7 +23,8 @@ export function CreateProgram(props) {
   const [error, setError] = useState();
   const [success, setSuccess] = useState();
   const [active, setActive] = useState(true);
-  const invalidSymbols = "!@#$%^&*_+={}<>|~`\\\"'";
+  const invalidSymbols = "!@#$%^&*_+={}<>|~`\\\"'"
+  const invalidNumbers = /^(\d+)?$/
   let navigate = useNavigate();
   const [errorEmptyName, setErrorEmptyName] = useState(false);
   const [errorSymbolsName, setErrorSymbolsName] = useState(false);
@@ -32,7 +33,9 @@ export function CreateProgram(props) {
   const [subjects, setSubjects] = useState([])
   const [subjectError, setSubjectError] = useState(false);
   const [subjectHoursList, setsubjectHoursList] = useState([])
-
+  const [subjectName, setSubjectName] = useState("")
+  const [subjectNameError, setSubjectNameError] = useState(false);
+  const [errorHours, setErrorHours] = useState(false);
   const clear = () => {
     setProgramName("");
     setDescription("");
@@ -59,6 +62,31 @@ export function CreateProgram(props) {
       .then(setSubjects);
   }, []);
 
+  const checkIfSubjectsIsnotEmpty = () => {
+    setSubjectNameError(false)
+    var i = 0;
+    while (i < subjectHoursList.length) {
+      if (subjectHoursList[i].subjectName === '') {
+        setSubjectNameError(true)
+        return true;
+      }
+      i++;
+    }
+    return false;
+  }
+
+  const checkHours = () => {
+    setErrorHours(false);
+    let hasErrors = false;
+    subjectHoursList.forEach(({ hours }) => {
+      if (!invalidNumbers.test(hours)) {
+        setErrorHours(true);
+        hasErrors = true;
+      }
+    });
+    return hasErrors;
+  };
+
   const createProgram = () => {
     setError("");
     setSuccess("");
@@ -67,6 +95,8 @@ export function CreateProgram(props) {
     setErrorEmptyDesc(false);
     setErrorSymbolsDesc(false);
     setSubjectError(false)
+    setSubjectNameError(false)
+    setErrorHours(false);
     if (!programName) {
       setErrorEmptyName(true);
     } else if (
@@ -79,8 +109,12 @@ export function CreateProgram(props) {
       description.split("").some((char) => invalidSymbols.includes(char))
     ) {
       setErrorSymbolsDesc(true);
-    } else if (!subjects) {
-      setSubjectError(true)
+    } else if (subjectHoursList.length === 0) {
+      setError("Prašome pridėti dalyką(-us).");
+    } else if (checkIfSubjectsIsnotEmpty()) {
+
+    } else if (checkHours()) {
+
     } else {
       fetch("api/v1/programs/create-program-hours", {
         method: "POST",
@@ -178,15 +212,16 @@ export function CreateProgram(props) {
               <Grid container direction="row" justifyContent="space-between">
                 {subjectHoursList.map((form, index) => {
                   return (
-                    <Grid container spacing={{ xs: 2, md: 3 }} rowSpacing={{xs: 5, sm: 5, md:5}} columnSpacing={{ xs: 1, sm: 1, md: 1 }} key={index}>
-                    {/* <Grid container spacing={{ xs: 4, md: 4 }} columnSpacing={{ xs: 8, sm: 8, md: 8 }} key={index}> */}
+                    <Grid container spacing={{ xs: 2, md: 3 }} rowSpacing={{ xs: 5, sm: 5, md: 5 }} columnSpacing={{ xs: 1, sm: 1, md: 1 }} key={index}>
                       <Grid item xs={2}>
-                        <FormControl fullWidth>
-                          <InputLabel id="subject-label">Dalykas</InputLabel>
+                        <FormControl fullWidth required error={subjectNameError}>
+                          <InputLabel id="subject-label">
+                            {subjectNameError
+                              ? "Privaloma pasirinkti dalyką. "
+                              : "Dalykas"}</InputLabel>
                           <Select
                             required
                             variant="outlined"
-                            placeholder='Dalykas'
                             labelId="subject-label"
                             label="Dalykas"
                             name='subjectName'
@@ -203,6 +238,12 @@ export function CreateProgram(props) {
                       </Grid>
                       <Grid item xs={2}>
                         <TextField
+                          fullWidth
+                          required
+                          error={errorHours}
+                          helperText={errorHours && "Leidžiami tik skaičių simboliai."}
+                          variant="outlined"
+                          id="hours"
                           name='hours'
                           placeholder='Valandos'
                           onChange={event => handleFormChange(event, index)}
@@ -213,7 +254,6 @@ export function CreateProgram(props) {
                         <Button onClick={() => removeFields(index)}>Remove</Button>
                       </Grid>
                     </Grid>
-
                   )
                 })}
               </Grid>
