@@ -30,6 +30,17 @@ public class ScheduleController {
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE})
     public List<ScheduleDto> getScheduleList() {
         logger.info("Get All Schedule List");
+
+//        var schedule = new Schedule();
+//        var groups = new Group();
+//        groupService.addGroup(groups);
+//        schedule.setGroups(groups);
+//        var createdschedule = scheduleService.create(schedule);
+//
+//        List<ScheduleDto> scheduleDtos = new ArrayList<>();
+//        scheduleDtos.add(toScheduleDto(createdschedule));
+//        return scheduleDtos;
+
         return scheduleService.getAll().stream().map(ScheduleMapper::toScheduleDto).toList();
     }
 

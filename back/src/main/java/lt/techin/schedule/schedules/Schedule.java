@@ -2,13 +2,11 @@ package lt.techin.schedule.schedules;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
-import lt.techin.schedule.group.Group;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Calendar;
-import java.util.Date;
 
 @Entity
 public class Schedule {
@@ -24,10 +22,12 @@ public class Schedule {
     private String semester;
 
     @Column(name = "date_from", nullable = false)
-    private Date dateFrom;
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private LocalDate dateFrom;
 
     @Column(name = "date_until", nullable = false)
-    private Date dateUntil;
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private LocalDate dateUntil;
 
     private boolean active = true;
     @CreatedDate
@@ -109,19 +109,19 @@ public class Schedule {
         this.modifiedDate = modifiedDate;
     }
 
-    public Date getDateFrom() {
+    public LocalDate getDateFrom() {
         return dateFrom;
     }
 
-    public void setDateFrom(Date dateFrom) {
+    public void setDateFrom(LocalDate dateFrom) {
         this.dateFrom = dateFrom;
     }
 
-    public Date getDateUntil() {
+    public LocalDate getDateUntil() {
         return dateUntil;
     }
 
-    public void setDateUntil(Date dateUntil) {
+    public void setDateUntil(LocalDate dateUntil) {
         this.dateUntil = dateUntil;
     }
 }

@@ -10,6 +10,7 @@ import java.util.List;
 public class ScheduleService {
     private final ScheduleRepository scheduleRepository;
     private final GroupRepository groupRepository;
+//    private GroupService groupService;
 
     public ScheduleService(ScheduleRepository scheduleRepository,
                            GroupRepository groupRepository,
