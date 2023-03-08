@@ -32,6 +32,8 @@ export function UpdateProgram() {
     const [subjectHoursList, setsubjectHoursList] = useState([])
     const [subjectNameError, setSubjectNameError] = useState(false);
     const [errorHours, setErrorHours] = useState(false);
+    const [errorLengthName, setErrorLengthName] = useState(false);
+    const [errorLengthDesc, setErrorLengthDesc] = useState(false);
 
     const handleCNameeChange = (event) => {
         setProgramName(event.target.value);
@@ -78,13 +80,13 @@ export function UpdateProgram() {
         setErrorHours(false);
         let hasErrors = false;
         subjectHoursList.forEach(({ hours }) => {
-          if (!invalidNumbers.test(hours)) {
-            setErrorHours(true);
-            hasErrors = true;
-          }
+            if (!invalidNumbers.test(hours)) {
+                setErrorHours(true);
+                hasErrors = true;
+            }
         });
         return hasErrors;
-      };
+    };
 
     const updateProgram = () => {
         setError("");
@@ -165,10 +167,13 @@ export function UpdateProgram() {
     const addFields = () => {
         let object = {
             subjectName: '',
+            subject: '',
+            deleted: '',
             hours: ''
         }
         setsubjectHoursList([...subjectHoursList, object])
     }
+
 
     const removeFields = (index) => {
         let data = [...subjectHoursList];
@@ -179,7 +184,10 @@ export function UpdateProgram() {
     const handleFormChange = (event, index) => {
         let data = [...subjectHoursList];
         if (event.target.name === 'subjectName') {
+            const found = subjects.find(obj => { return obj.name === event.target.value })
             data[index]['subjectName'] = event.target.value;
+            data[index]['deleted'] = found.deleted;
+            data[index]['subject'] = found.id
         } else {
             data[index][event.target.name] = event.target.value;
         }
@@ -207,16 +215,27 @@ export function UpdateProgram() {
                             <TextField
                                 fullWidth
                                 required
-                                error={errorEmptyName || errorSymbolsName}
+                                error={errorEmptyName || errorSymbolsName || errorLengthName}
                                 helperText={errorEmptyName ? "Programos pavadinimas yra privalomas."
-                                    : errorSymbolsName
-                                        ? "Programos pavadinimas turi neleidžiamų simbolių."
-                                        : ""}
+                                  : errorSymbolsName
+                                    ? "Programos pavadinimas turi neleidžiamų simbolių."
+                                    : errorLengthName
+                                    ? "Programos pavadinimas negali būti ilgesnis nei 200 simbolių"
+                                    : ""}
                                 variant="outlined"
                                 id="programName"
                                 label="Programos pavadinimas"
                                 value={programName}
-                                onChange={(e) => setProgramName(e.target.value)}
+                                onChange={(e) => {
+                                    const input = e.target.value;
+                                    if (input.length > 200) {
+                                      setErrorLengthName(true);
+                                    } else {
+                                      setErrorLengthName(false);
+                                    }
+                                    setProgramName(input);
+                                  }}
+                                // onChange={(e) => setProgramName(e.target.value)}
                             ></TextField>
                         </Grid>
                         <Grid item sm={10}>
@@ -224,18 +243,29 @@ export function UpdateProgram() {
                                 fullWidth
                                 multiline
                                 required
-                                error={errorEmptyDesc || errorSymbolsDesc}
+                                error={errorEmptyDesc || errorSymbolsDesc || errorLengthDesc}
                                 helperText={
-                                    errorEmptyDesc
-                                        ? "Programos aprašas yra privalomas."
-                                        : errorSymbolsDesc
-                                            ? "Programos aprašas turi neleidžiamų simbolių."
-                                            : ""}
+                                  errorEmptyDesc
+                                    ? "Programos aprašas yra privalomas."
+                                    : errorSymbolsDesc
+                                      ? "Programos aprašas turi neleidžiamų simbolių."
+                                      : errorLengthDesc
+                                      ? "Programos aprašas negali būti ilgesnis nei 2000 simbolių"
+                                      : ""}
                                 variant="outlined"
                                 label="Programos aprašas"
                                 id="description"
                                 value={description}
-                                onChange={(e) => setDescription(e.target.value)}
+                                onChange={(e) => {
+                                    const input = e.target.value;
+                                    if (input.length > 2000) {
+                                      setErrorLengthDesc(true);
+                                    } else {
+                                      setErrorLengthDesc(false);
+                                    }
+                                    setDescription(input);
+                                  }}
+                                // onChange={(e) => setDescription(e.target.value)}
                             ></TextField>
                         </Grid>
                         <Grid item sm={10}>
@@ -275,7 +305,7 @@ export function UpdateProgram() {
                                                         onChange={event => handleFormChange(event, index)}
                                                     >
                                                         {subjects.map(currentOption => (
-                                                            <MenuItem key={currentOption.name} value={currentOption.name}>
+                                                            <MenuItem key={currentOption.id} value={currentOption.name}>
                                                                 {currentOption.name}
                                                             </MenuItem>
                                                         ))}
@@ -283,25 +313,18 @@ export function UpdateProgram() {
                                                 </FormControl>
                                             </Grid>
                                             <Grid item xs={2}>
-                                                {/* <TextField
+                                                <TextField
+                                                    fullWidth
+                                                    required
+                                                    error={errorHours}
+                                                    helperText={errorHours && "Leidžiami tik skaičių simboliai."}
+                                                    variant="outlined"
+                                                    id="hours"
                                                     name='hours'
                                                     placeholder='Valandos'
                                                     onChange={event => handleFormChange(event, index)}
                                                     value={form.hours}
-                                                /> */}
-                        <TextField
-                          fullWidth
-                          required
-                          error={errorHours}
-                          helperText={errorHours && "Leidžiami tik skaičių simboliai."}
-                          variant="outlined"
-                          id="hours"
-                          name='hours'
-                          placeholder='Valandos'
-                          onChange={event => handleFormChange(event, index)}
-                          value={form.hours}
-                        />
-
+                                                />
                                             </Grid>
                                             <Grid item xs={2}>
                                                 <Button onClick={() => removeFields(index)}>Ištrinti</Button>

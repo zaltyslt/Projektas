@@ -36,6 +36,9 @@ export function CreateProgram(props) {
   const [subjectName, setSubjectName] = useState("")
   const [subjectNameError, setSubjectNameError] = useState(false);
   const [errorHours, setErrorHours] = useState(false);
+  const [errorLengthName, setErrorLengthName] = useState(false);
+  const [errorLengthDesc, setErrorLengthDesc] = useState(false);
+
   const clear = () => {
     setProgramName("");
     setDescription("");
@@ -143,8 +146,17 @@ export function CreateProgram(props) {
   };
 
   const handleFormChange = (event, index) => {
+    console.log(event.target.value)
     let data = [...subjectHoursList];
-    data[index][event.target.name] = event.target.value;
+
+    if (event.target.name == 'subjectName') {
+      data[index][event.target.name] = event.target.value.name;
+      data[index]['deleted'] = event.target.value.deleted;
+      data[index]['subject'] = event.target.value.id;
+    } else {
+      data[index][event.target.name] = event.target.value;
+    }
+
     setsubjectHoursList(data);
   }
 
@@ -177,16 +189,27 @@ export function CreateProgram(props) {
               <TextField
                 fullWidth
                 required
-                error={errorEmptyName || errorSymbolsName}
+                error={errorEmptyName || errorSymbolsName || errorLengthName}
                 helperText={errorEmptyName ? "Programos pavadinimas yra privalomas."
                   : errorSymbolsName
                     ? "Programos pavadinimas turi neleidžiamų simbolių."
+                    : errorLengthName
+                    ? "Programos pavadinimas negali būti ilgesnis nei 200 simbolių"
                     : ""}
                 variant="outlined"
                 id="programName"
                 label="Programos pavadinimas"
                 value={programName}
-                onChange={(e) => setProgramName(e.target.value)}
+                onChange={(e) => {
+                  const input = e.target.value;
+                  if (input.length > 200) {
+                    setErrorLengthName(true);
+                  } else {
+                    setErrorLengthName(false);
+                  }
+                  setProgramName(input);
+                }}
+                // onChange={(e) => setProgramName(e.target.value)}
               ></TextField>
             </Grid>
             <Grid item sm={10}>
@@ -194,18 +217,29 @@ export function CreateProgram(props) {
                 fullWidth
                 multiline
                 required
-                error={errorEmptyDesc || errorSymbolsDesc}
+                error={errorEmptyDesc || errorSymbolsDesc || errorLengthDesc}
                 helperText={
                   errorEmptyDesc
                     ? "Programos aprašas yra privalomas."
                     : errorSymbolsDesc
                       ? "Programos aprašas turi neleidžiamų simbolių."
+                      : errorLengthDesc
+                      ? "Programos aprašas negali būti ilgesnis nei 2000 simbolių"
                       : ""}
                 variant="outlined"
                 label="Programos aprašas"
                 id="description"
                 value={description}
-                onChange={(e) => setDescription(e.target.value)}
+                onChange={(e) => {
+                  const input = e.target.value;
+                  if (input.length > 2000) {
+                    setErrorLengthDesc(true);
+                  } else {
+                    setErrorLengthDesc(false);
+                  }
+                  setDescription(input);
+                }}
+                // onChange={(e) => setDescription(e.target.value)}
               ></TextField>
             </Grid>
             <Grid item sm={10} >
@@ -229,7 +263,7 @@ export function CreateProgram(props) {
                             onChange={event => handleFormChange(event, index)}
                           >
                             {subjects.map(currentOption => (
-                              <MenuItem key={currentOption.id} value={currentOption.name}>
+                              <MenuItem key={currentOption.id} value={currentOption}>
                                 {currentOption.name}
                               </MenuItem>
                             ))}
