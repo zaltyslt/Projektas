@@ -26,10 +26,10 @@ public class Shift {
 
     private String shiftEndingTime;
 
-    @OneToMany(mappedBy = "shift" )
+//    @OneToMany(mappedBy = "shift" )
 //    @JsonBackReference
-    @JsonManagedReference
-    private Set<Teacher> teachers;
+//    @JsonManagedReference
+//    private Set<Teacher> teachers;
 
     @OneToMany
     @JoinColumn(name = "shift_group")

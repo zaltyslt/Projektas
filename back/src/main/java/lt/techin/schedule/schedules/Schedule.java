@@ -14,9 +14,9 @@ public class Schedule {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
-//    @ManyToOne
-//    @JoinColumn(name = "group_id")
-//    private Group groups;
+    @ManyToOne
+    @JoinColumn(name = "group_id")
+    private Group groups;
 
     private String schoolYear;
     private String semester;
@@ -60,13 +60,13 @@ public class Schedule {
         this.id = id;
     }
 
-//    public Group getGroups() {
-//        return groups;
-//    }
-//
-//    public void setGroups(Group groups) {
-//        this.groups = groups;
-//    }
+    public Group getGroups() {
+        return groups;
+    }
+
+    public void setGroups(Group groups) {
+        this.groups = groups;
+    }
 
     public String getSchoolYear() {
         return schoolYear;

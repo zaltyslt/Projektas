@@ -1,7 +1,6 @@
 package lt.techin.schedule.teachers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lt.techin.schedule.shift.ShiftDTO;
 import lt.techin.schedule.subject.SubjectRepository;
 import lt.techin.schedule.teachers.contacts.ContactDto;
 import lt.techin.schedule.teachers.contacts.ContactService;

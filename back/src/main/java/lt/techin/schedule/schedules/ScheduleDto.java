@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 
 public class ScheduleDto {
     private Long id;
-//    private Group groups;
+    private Group groups;
     private String schoolYear;
     private String semester;
 
@@ -27,13 +27,13 @@ public class ScheduleDto {
         this.id = id;
     }
 
-//    public Group getGroups() {
-//        return groups;
-//    }
-//
-//    public void setGroups(Group groups) {
-//        this.groups = groups;
-//    }
+    public Group getGroups() {
+        return groups;
+    }
+
+    public void setGroups(Group groups) {
+        this.groups = groups;
+    }
 
     public String getSchoolYear() {
         return schoolYear;
