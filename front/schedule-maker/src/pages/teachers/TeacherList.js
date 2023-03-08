@@ -17,7 +17,6 @@ import {
   TextField,
 } from "@mui/material";
 import { Container } from "@mui/system";
-import { EntityForm } from "./components/une";
 import ".././pages.css";
 
 import { useEffect, useState } from "react";
@@ -28,34 +27,13 @@ export function TeacherList() {
   const [filteredTeachers, setFilteredTeachers] = useState([]);
   const [deletedTeachers, setDeletedTeachers] = useState([]);
   const [deletedFiltered, setDeletedFiltered] = useState([]);
-  // const [subjects, setSubjects] = useState([]);
-
+  
   const [page, setPage] = useState(0);
   const [pageP, setPageP] = useState(0);
 
   const [rowsPerPageA, setRowsPerPageA] = useState(10);
   const [rowsPerPageP, setRowsPerPageP] = useState(10);
   const [isChecked, setChecked] = useState(false);
-
-  // function CreateEntityPage() {
-  //   function handleCreate(entity) {
-  //     // Make an API request to create the entity
-  //     console.log("Creating entity", entity);
-  //   }
-
-  //   return <EntityForm mode="create" onSave={handleCreate} />;
-  // }
-
-  // function UpdateEntityPage({ entityId }) {
-  //   function handleUpdate(entity) {
-  //     // Make an API request to update the entity
-  //     console.log("Updating entity", entity);
-  //   }
-
-  //   return (
-  //     <EntityForm mode="update" entityId={entityId} onSave={handleUpdate} />
-  //   );
-  // }
 
   useEffect(() => {
     fetchTeachers();
@@ -65,16 +43,11 @@ export function TeacherList() {
     fetchDeletedTeachers();
   }, []);
 
-  // useEffect(() => {
-  //   fetchSubjects();
-  // }, []);
-
   const fetchTeachers = async () => {
     fetch("/api/v1/teachers?active=true")
       .then((response) => response.json())
       .then((data) => {
         setTeachers(data);
-        // console.log(data);
         return data;
       })
       .then((data) => {
@@ -106,7 +79,7 @@ export function TeacherList() {
   };
 //////////////////////
   const handleSearch = (event) => {
-    // console.log(teachers);
+   
     
     if (event.length === 0) {
       setFilteredTeachers(teachers);
@@ -219,26 +192,16 @@ export function TeacherList() {
                 <TableRow key={teacher.id}>
                   <TableCell component="th" scope="row" align="left">
                     <Link to={"/teachers/view/" + teacher.id}>
-                      {teacher.id +
-                        " View " +
-                        " " +
-                        teacher.fName +
-                        " " +
-                        teacher.lName}
+                      {
+                        teacher.fName + " " + teacher.lName}
                     </Link>
-                    &nbsp;|&nbsp;
-                    {/*                                 33370 */}
-                    <Link to={`/teachers/edit/${teacher.id}`}>{` Edit `}</Link>
+                  
                   </TableCell>
 
                   <TableCell align="center">
                     {teacher.subjectsList && teacher.subjectsList.length > 0
                       ? teacher.subjectsList.map((subjectItem, index) => {
-                          {
-                            /* const subject = subjects.find(
-                            (s) => s.id === subjectItem.subjectId
-                          ); */
-                          }
+                          
                           return <p key={index}>{subjectItem.name}</p>;
                         })
                       : ""}

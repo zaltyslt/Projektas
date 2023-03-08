@@ -19,7 +19,7 @@ import {
 } from "@mui/material";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Link } from "react-router-dom";
+import { Link, useHref } from "react-router-dom";
 import { width } from "@mui/system";
 import {
   validateText,
@@ -39,17 +39,17 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
 
   const [teacher, setTeacher] = useState({});
 
-  const [id, setid] = useState("");
-  const [fName, setFName] = useState("");
-  const [lName, setLName] = useState("");
+  // const [id, setid] = useState("");
+  // const [fName, setFName] = useState("");
+  // const [lName, setLName] = useState("");
 
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const [directEmail, setDirectEmail] = useState("");
-  const [teamsName, setTeamsName] = useState("");
-  const [teamsEmail, setTeamsEmail] = useState("");
-  const [contacts, setContacts] = useState("");
+  // const [phoneNumber, setPhoneNumber] = useState("");
+  // const [directEmail, setDirectEmail] = useState("");
+  // const [teamsName, setTeamsName] = useState("");
+  // const [teamsEmail, setTeamsEmail] = useState("");
+  // const [contacts, setContacts] = useState("");
 
-  const [workHours, setWorkHours] = useState(0);
+  // const [workHours, setWorkHours] = useState(0);
   const [shifts, setShifts] = useState([]);
   const [shift, setShift] = useState("");
 
@@ -64,9 +64,10 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
   const [errorTeamsName, setErrorTeamsName] = useState(errorObject);
   const [errorTeamsMail, setErrorTeamsMail] = useState(errorObject);
   const [errorHours, setErrorHours] = useState(errorObject);
-  const [errorShift, setErrorShift] = useState(errorObject);
+  // const [errorShift, setErrorShift] = useState(errorObject);
 
   let navigate = useNavigate();
+  const listUrl = useHref("/teachers");
 
   function validate(field) {
     field.name === "fName" && setErrorFname(validateText(field));
@@ -105,7 +106,6 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
       setErrorMessage("Įveskite/pataisykite kontaktinius duomenis !");
       isCorrect = false;
     } else if (teacher.workHoursPerWeek === "" || errorHours.error) {
-      // console.log(workHours + ", " + errorHours.error);
       setErrorMessage("Įveskite/pataisykite valandų skaičių !");
       isCorrect = false;
     } else if (!teacher.selectedShift.id || teacher.selectedShift.id === "") {
@@ -116,7 +116,6 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
     }
 
     isCorrect && createTeacher();
-    // onSave(teacher);
   }
 
   useEffect(() => {
@@ -129,50 +128,35 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
 
   async function fetchData() {
     getDataFrom("api/v1/teachers/subjects", (data) => {
-     if(data){
-      setSubjects(data);
-      setFreeSubjects(data);}
-      else{setErrorMessage("Nepavyko parsiųsti duomenų iš serverio. (Subject)")}
+      if (data) {
+        setSubjects(data);
+        setFreeSubjects(data);
+      } else {
+        setErrorMessage("Nepavyko parsiųsti duomenų iš serverio. (Subject)");
+      }
     });
 
     getDataFrom("api/v1/shift/get-active", (data) => {
-      if(data){
-      console.log(data);
-      setShifts(data);}
-        else{setErrorMessage("Nepavyko parsiųsti duomenų iš serverio. (Shift)")
+      if (data) {
+        setShifts(data);
+      } else {
+        setErrorMessage("Nepavyko parsiųsti duomenų iš serverio. (Shift)");
       }
     });
   }
 
   async function fetchTeacherData() {
     getDataFrom("api/v1/teachers/view?tid=" + teacherId, (data) => {
-      if(data){
-      console.log(data);      //33370
-      setTeacher(data);
-      // setid(data.body.id);
-      // setFName(data.body.fName);
-      // setLName(data.body.lName);
-      // setWorkHours(data.body.workHoursPerWeek);
-
-      // setPhoneNumber(data.body.contacts.phoneNumber);
-      // setDirectEmail(data.body.contacts.directEmail);
-      // setTeamsName(data.body.contacts.teamsName);
-      // setTeamsEmail(data.body.contacts.teamsEmail);
-
-      setShift(data.selectedShift);
-      // handleShift(data.selectedshift);
-      setChosenSubjects(data.subjectsList); 
-    }
-      else{
+      if (data) {
+        setTeacher(data);
+        setShift(data.selectedShift);
+        setChosenSubjects(data.subjectsList);
+      } else {
         setTeacher({});
-        setErrorMessage("Nepavyko parsiųsti duomenų iš serverio. (Shift)")
-    }
+        setErrorMessage("Nepavyko parsiųsti duomenų iš serverio. (Shift)");
+      }
     });
   }
-  // function handleShift(teacherShift) {
-  //   const shift = shifts.find(shift.id === teacherShift.id);
-  //   console.log(teacherShift + ", " + shift);
-  // }
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -186,44 +170,31 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
   }, [createMessage, errorMessage]);
 
   function handleChange(event) {
-    // console.log(event);
     const { id, value } = event.target;
-    // console.log(id + " * " + value);
     const prefix = id.split(".");
     if (prefix[0] === "contacts") {
-      setTeacher((prevTeacher) => ({
-        ...prevTeacher,
-        contacts: { ...prevTeacher.contacts, [prefix[1]]: value },
-      }));
+      setTeacher((prevTeacher) => ({ ...prevTeacher,contacts: { ...prevTeacher.contacts, [prefix[1]]: value },}));
     } else {
       setTeacher((prevTeacher) => ({ ...prevTeacher, [id]: value }));
     }
   }
 
-
-  
-
   const createTeacher = () => {
-
-   async function teacherModifier(teacher) {
+    async function teacherModifier(teacher) {
       const fetchResult = await onSave(teacher);
       console.log(fetchResult);
       applyResult(fetchResult);
     }
-    
+
     teacherModifier(teacher);
-    
   };
 
   async function deleteTeacher() {
-    // console.log(teacher.id);
     onSave(teacher.id);
-    navigate(-1);
+    window.location = listUrl;
   }
 
   function applyResult(result) {
-    console.log("apply result");
-    console.log(result);
     if (result.status > 299) {
       setCreateMessage("");
       console.log(result);
@@ -231,8 +202,6 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
     } else {
       if (mode === "update") {
         setCreateMessage("Duomenys atnaujinti sėkmingai.");
-
-        // navigate(-1);
       } else {
         setCreateMessage("Mokytojas sukurtas");
         clear();
@@ -277,12 +246,9 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
   };
 
   const handleAddChosen = (subjectNew) => {
-    //  setSubject(subjectNew);
-
     const temp = [...chosenSubjects, subjectNew];
     setChosenSubjects(temp);
     handleChange({ target: { id: "subjectsList", value: temp } });
-    //const evenNumbers = numbers.filter((number) => number % 2 === 0);
     const removed = freeSubjects.filter(
       (subject) => subject.subjectId != subjectNew.subjectId
     );
@@ -315,15 +281,7 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
     setShift(tempShift);
   };
 
-  function showInfo() {
-    console.log(teacher);
-    // console.log(freeSubjects);
-    // console.log(chosenSubjects);
-    // console.log(freeSubjects);
-    // console.log(subject);
-  }
-
-  return (
+    return (
     <Container style={{ maxWidth: "75rem" }}>
       <form>
         <Grid item sm={7}>
@@ -343,7 +301,7 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
           justifyContent="space-between"
           alignItems="center"
           rowSpacing={3}
-              >
+        >
           <Grid item sm={5}>
             <TextField
               error={errorFname.error}
@@ -370,9 +328,7 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
 
           {/* //33370 */}
           <Grid item sm={7}>
-            <Button variant="contained" onClick={() => showInfo()}>
-              Rodyt
-            </Button>
+            
           </Grid>
 
           <Grid item sm={5}>
@@ -408,11 +364,9 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
               variant="outlined"
               label="Kontaktinis telefonas"
               id="contacts.phoneNumber"
-              // value={teacher.contacts ? teacher.contacts.phoneNumber : "" || ""}
               value={(teacher.contacts && teacher.contacts.phoneNumber) || ""}
               onChange={(e) => {
-                // setPhoneNumber(e.target.value);
-                handleChange(e);
+               handleChange(e);
               }}
               onBlur={(e) => {
                 validate({
@@ -435,11 +389,9 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
               variant="outlined"
               label="El. paštas"
               id="contacts.directEmail"
-              // value={teacher.contacts ? teacher.contacts.directEmail : ""  || ""}
               value={(teacher.contacts && teacher.contacts.directEmail) || ""}
               onChange={(e) => {
-                // setDirectEmail(e.target.value);
-                handleChange(e);
+               handleChange(e);
               }}
               onBlur={(e) => {
                 validate({
@@ -469,7 +421,6 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
                   maxLength: 15,
                   value: e.target.value,
                 });
-                // setTeamsName(e.target.value);
                 handleChange(e);
               }}
             ></TextField>
@@ -486,8 +437,7 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
               id="contacts.teamsEmail"
               value={(teacher.contacts && teacher.contacts.teamsEmail) || ""}
               onChange={(e) => {
-                // setTeamsEmail(e.target.value);
-                handleChange(e);
+              handleChange(e);
               }}
               onBlur={(e) =>
                 validate({
@@ -539,17 +489,17 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
                 }
                 onChange={(e) => {
                   handleShiftChange(e.target.value);
-                  // handleChange({id:"teacher.selectedShift",value:e.target.value});
-                  // console.log(e.target.value);
-                }}
+                                 }}
               >
                 {shifts &&
                   shifts.map((shift) => (
-                    <MenuItem key={shift.id} value={shift.id}> {shift.name} </MenuItem>
+                    <MenuItem key={shift.id} value={shift.id}>
+                      {" "}
+                      {shift.name}{" "}
+                    </MenuItem>
                   ))}
               </Select>
-              {/* <FormHelperText>{shift.name}</FormHelperText> */}
-            </FormControl>
+             </FormControl>
           </Grid>
           <Grid item sm={7}></Grid>
 
