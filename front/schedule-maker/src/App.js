@@ -37,13 +37,17 @@ import { ViewTeacher } from "./pages/teachers/ViewTeacher";
 import { CreateTeacher } from "./pages/teachers/CreateTeacher";
 import { EditTeacher } from "./pages/teachers/EditTeacher";
 
+import { ScheduleList } from "./pages/schedules/ScheduleList";
+import { CreateSchedule } from "./pages/schedules/CreateSchedule";
+
+
 function App() {
   return (
     <div className="App">
       <HashRouter basename={process.env.PUBLIC_URL ? '' : '/schedule-maker'}>
         <Menu />
         <Routes >
-          <Route path="/"></Route>
+          <Route path="/" element={<ScheduleList />}></Route>
           <Route path="/teachers" element={<TeacherList />}></Route>
           <Route path="/groups" element={<GroupList />}></Route>
           <Route path="/modules" element={<ModuleList />}></Route>
@@ -79,6 +83,9 @@ function App() {
           <Route path="/teachers/view/:id" element={<ViewTeacher />}></Route>
           <Route path="/teachers/create" element={<CreateTeacher />}></Route>
           <Route path="/teachers/edit/:id" element={<EditTeacher />}></Route>
+
+          {/*   SCHEDULE PATHS */}
+          <Route path="/create-schedule" element={<CreateSchedule />}></Route>
         </Routes>
       </HashRouter>
     </div>

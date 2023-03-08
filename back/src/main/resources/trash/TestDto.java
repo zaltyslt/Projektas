@@ -16,7 +16,7 @@ public class TestDto {
 
     @Override
     public String toString() {
-        return "TestDto{" +
+        return "ScheduleCreateDto{" +
                 "key='" + key + '\'' +
                 '}';
     }
