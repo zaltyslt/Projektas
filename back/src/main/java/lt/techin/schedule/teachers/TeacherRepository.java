@@ -27,6 +27,8 @@ public interface TeacherRepository extends JpaRepository<Teacher,Long> {
                     "Where TEACHER_SUBJECT.SUBJECT_ID = :subject" )
     Set<Teacher> getTeacherBySubject(Subject subject );
 
+    List<Teacher> findTeachersBySubjectsId(Long subjectId);
+
 //    TypedQuery<Set<Teacher>> query = entityManager.createQuery(
 //            "SELECT ts FROM TeacherSubject ts " +
 //                    "JOIN ts.teacher t " +

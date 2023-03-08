@@ -83,4 +83,8 @@ public class TeacherServiceFind {
 
         return TeacherSubjectMapper.subjectsToDtos(result);
     }
+
+    public List<Teacher> findTeachersBySubjectsId(Long subjectId) {
+        return teacherRepository.findTeachersBySubjectsId(subjectId);
+    }
 }

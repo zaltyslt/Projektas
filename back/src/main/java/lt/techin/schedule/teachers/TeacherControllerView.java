@@ -71,4 +71,9 @@ public class TeacherControllerView {
                 : ResponseEntity.notFound().build();
 
     }
+
+    @GetMapping(value = "/subject")
+    public List<Teacher> getTeachersBySubject(@RequestParam Long subjectId) {
+        return teacherFinder.findTeachersBySubjectsId(subjectId);
+    }
 }
