@@ -116,7 +116,7 @@ export function CreateSchedule() {
   };
 
   const createSchedule = () => {
-    fetch(`/api/v1/schedules/create?groupId=${group.id}`, {
+    fetch(`/api/v1/schedules/create-schedule?groupId=${group.id}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

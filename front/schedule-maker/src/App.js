@@ -82,7 +82,7 @@ function App() {
           <Route path="/teachers/edit/:id" element={<EditTeacher />}></Route>
 
           {/*   SCHEDULE PATHS */}
-          <Route path="/create" element={<CreateSchedule />}></Route>
+          <Route path="/create-schedule" element={<CreateSchedule />}></Route>
         </Routes>
       </HashRouter>
     </div>
