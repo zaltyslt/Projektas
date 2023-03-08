@@ -179,7 +179,7 @@ export function EditGroup() {
     <div>
       <Container>
         <h1>Redagavimas</h1>
-        <h3>{name}</h3>
+        <h3>{group.name}</h3>
         <span id="modified-date">
           Paskutinį kartą redaguota: {group.modifiedDate}
         </span>

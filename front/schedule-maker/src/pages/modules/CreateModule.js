@@ -6,37 +6,56 @@ import {
   Stack,
   TextField,
 } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import ".././pages.css"
+import ".././pages.css";
 
 export function CreateModule() {
   const [number, setNumber] = useState("");
   const [name, setName] = useState("");
 
-  const [isValidNumber, setIsValidNumber] = useState(true);
-  const [isNumberEmpty, setIsNumberEmpty] = useState(false);
-  const [isNumberTooLong, setIsNumberTooLong] = useState(false);
+  const [nameError, setNameError] = useState(false);
+  const [numberError, setNumberError] = useState(false);
 
-  const [isValidName, setIsValidName] = useState(true);
-  const [isNameEmpty, setIsNameEmpty] = useState(false);
-  const [isNameTooLong, setIsNameTooLong] = useState(false);
+  const [nameNotValid, setNameNotValid] = useState(false);
+  const [numberNotValid, setNumberNotValid] = useState(false);
 
-  const [successfulPost, setSuccessfulPost] = useState();
-  const [isPostUsed, setIsPostUsed] = useState(false);
-  const [moduleErrors, setModuleErrors] = useState();
+  const [error, setError] = useState("");
+  const [createMessage, setCreateMessage] = useState("");
 
   const clear = () => {
     setNumber("");
     setName("");
-  }
+    };
 
-  const validation = () => {
-    if (isValidNumber && isValidName && !isNumberEmpty && !isNameEmpty && !isNumberTooLong && !isNameTooLong) {
-      createModule();
-      clear();
-    }
-  };
+const validation = () => {
+    setCreateMessage("");
+    const badSymbols = "!@#$%^&*_+={}<>|~`\\'";
+    let notValidName = name.split("").some((char) => badSymbols.includes(char));
+    let notValidNumber = number
+      .split("")
+      .some((char) => badSymbols.includes(char));
+
+  if (
+    number === "" &&
+    name === ""
+  ) {
+    setNameError(true);
+    setNumberError(true);
+  } else if (name === "") {
+    setNameError(true);
+  } else if (notValidName) {
+    setNameError(false);
+    setNameNotValid(true);
+  } else if (number === "") {
+    setNumberError(true);
+  } else if (notValidNumber) {
+    setNumberError(false);
+    setNumberNotValid(true);
+  } else {
+    createModule();
+  }
+};
 
   const createModule = async () => {
     await fetch("api/v1/modules/create", {
@@ -48,71 +67,64 @@ export function CreateModule() {
         number,
         name,
       }),
-    })
-    .then(response => response.json())
-    .then(applyResult);
+    }).then((response) => {
+      let success = response.ok;
+
+      response.json().then((response) => {
+        if (!success) {
+          setCreateMessage("");
+          setError(response.message);
+        } else {
+          setCreateMessage("Sėkmingai sukurta. ");
+          setError("");
+          clear();
+        }
+      });
+    });
   };
 
-  const applyResult = (data) => {
-    if (data.valid) {
-      setSuccessfulPost(true);
-      setName("");
-      setNumber("");
-    }
-    else {
-        setModuleErrors(data)
-        setSuccessfulPost(false);
-    }
-    setIsPostUsed(true);
-  };
-
-  const badSymbols = "!@#$%^&*_+={}<>|~`\\'";
-  const moduleNumberLength = 200;
-  const moduleNameLength = 200;
-
-
-  const setNumberOnChange = (number) => {
-    setNumber(number);
-    (number.length === 0) ? setIsNumberEmpty(true) : setIsNumberEmpty(false);
+  // const setNumberOnChange = (number) => {
+  //   setNumber(number);
+  //   (number.length === 0) ? setIsNumberEmpty(true) : setIsNumberEmpty(false);
    
-    const isValid = number.split('').some(char => badSymbols.includes(char));
-    (isValid) ? setIsValidNumber(false) : setIsValidNumber(true);
+  //   const isValid = number.split('').some(char => badSymbols.includes(char));
+  //   (isValid) ? setIsValidNumber(false) : setIsValidNumber(true);
  
-    (number.length > moduleNumberLength) ? setIsNumberTooLong(true) : setIsNumberTooLong(false);
-  }
+  //   (number.length > moduleNumberLength) ? setIsNumberTooLong(true) : setIsNumberTooLong(false);
+  // }
 
-  const setNameOnChange = (name) => {
-    setName(name);
-    (name.length === 0) ? setIsNameEmpty(true) : setIsNameEmpty(false);
+  // const setNameOnChange = (name) => {
+  //   setName(name);
+  //   (name.length === 0) ? setIsNameEmpty(true) : setIsNameEmpty(false);
    
-    const isValid = name.split('').some(char => badSymbols.includes(char));
-    (isValid) ? setIsValidName(false) : setIsValidName(true);
+  //   const isValid = name.split('').some(char => badSymbols.includes(char));
+  //   (isValid) ? setIsValidName(false) : setIsValidName(true);
   
-    (name.length > moduleNameLength) ? setIsNameTooLong(true) : setIsNameTooLong(false);
-  }
+  //   (name.length > moduleNameLength) ? setIsNameTooLong(true) : setIsNameTooLong(false);
+  // }
 
   return (
     <Container>
       <h3 className="create-header">Pridėti naują modulį</h3>
-      <form>
-        
+      <form> 
         <Grid container rowSpacing={2}>
           <Grid item sm={10}>
             <TextField
               fullWidth
               required
               variant="outlined"
-              error={!isValidNumber || isNumberEmpty || isNumberTooLong}
+              error={numberError || numberNotValid}
               helperText={
-                !isValidNumber ? "Modulio kodas turi neleidžiamų simbolių." : 
-                isNumberEmpty ? "Modulio kodas negali būti tuščias" :
-                isNumberTooLong ? `Modulio kodas negali būti ilgesnis nei ${moduleNumberLength} simbolių` 
-                : null
+                numberError
+                  ? "Modulio kodas yra privalomas"
+                  : nameNotValid
+                  ? "Modulio kodas turi negalimų simbolių. "
+                  : ""
               }
               label="Modulio kodas"
               id="number"
               value={number}
-              onChange={(e) => setNumberOnChange(e.target.value)}
+              onChange={(e) => setNumber(e.target.value)}
             ></TextField>
           </Grid>
 
@@ -121,17 +133,18 @@ export function CreateModule() {
               fullWidth
               required
               variant="outlined"
-              error={!isValidName || isNameEmpty || isNameTooLong}
+              error={nameError || nameNotValid}
               helperText={
-                !isValidName ? "Modulio pavadinimas turi neleidžiamų simbolių." : 
-                isNameEmpty ? "Modulio pavadinimas negali būti tuščias" :
-                isNameTooLong ? `Modulio pavadinimas negali būti ilgesnis nei ${moduleNameLength} simbolių` 
-                : null
+                nameError
+                  ? "Modulio pavadinimas yra privalomas"
+                  : nameNotValid
+                  ? "Laukas turi negalimų simbolių. "
+                  : ""
               }
               label="Modulio pavadinimas"
               id="name"
               value={name}
-              onChange={(e) => setNameOnChange(e.target.value)}
+              onChange={(e) => setName(e.target.value)}
             ></TextField>
           </Grid>
 
@@ -146,38 +159,12 @@ export function CreateModule() {
               </Link>
             </Stack>
           </Grid>
-
           <Grid item sm={10}>
-                {isPostUsed ? (
-                    successfulPost ? (
-                        <Alert severity="success"> Modulis sėkmingai pridėtas.</Alert>
-                        ) : 
-                        (
-                        <Grid>
-                            <Alert severity="warning">Nepavyko pridėti modulio.</Alert>
-                            {
-                                (moduleErrors.passedValidation ?
-                                    (moduleErrors.databaseErrors).map((databaseError, index) => (
-                                        <Alert key={index} severity="warning">
-                                        {databaseError}
-                                        </Alert>
-                                    )) 
-                                    :
-                                    Object.keys(moduleErrors.validationErrors).map(key => (
-                                    <Alert key={key} severity="warning"> {moduleErrors.validationErrors[key]} {key} laukelyje.
-                                    </Alert>
-                                    ))
-                                )
-                            }
-                        </Grid>
-                        )
-                    ) : 
-                    (
-                    <div></div>
-                    )}
-            </Grid>
+            {error && <Alert severity="warning">{error}</Alert>}
+            {createMessage && <Alert severity="success">{createMessage}</Alert>}
+          </Grid>
         </Grid>
       </form>
     </Container>
   );
-}
+} 
