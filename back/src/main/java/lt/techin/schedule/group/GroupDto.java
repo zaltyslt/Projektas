@@ -2,9 +2,10 @@ package lt.techin.schedule.group;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lt.techin.schedule.config.DataFieldsLengthConstraints;
-import lt.techin.schedule.programs.ProgramDto;
+
 import lt.techin.schedule.shift.ShiftDto;
 import lt.techin.schedule.validators.TextValid;
+import lt.techin.schedule.programs.ProgramDto;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -34,7 +35,9 @@ public class GroupDto {
 
     public GroupDto() {}
 
-    public GroupDto(Long id, String name, String schoolYear, int studentAmount, boolean isActive, ProgramDto program, ShiftDto shift, LocalDateTime createdDate, LocalDateTime modifiedDate) {
+    public GroupDto(Long id, String name, String schoolYear,
+                    int studentAmount, boolean isActive, ProgramDto program,
+                    ShiftDto shift, LocalDateTime createdDate, LocalDateTime modifiedDate) {
         this.id = id;
         this.name = name;
         this.schoolYear = schoolYear;
@@ -119,7 +122,12 @@ public class GroupDto {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof GroupDto groupDto)) return false;
-        return schoolYear == groupDto.schoolYear && studentAmount == groupDto.studentAmount && id.equals(groupDto.id) && name.equals(groupDto.name) && program.equals(groupDto.program) && shift.equals(groupDto.shift);
+        return schoolYear == groupDto.schoolYear
+                && studentAmount == groupDto.studentAmount
+                && id.equals(groupDto.id)
+                && name.equals(groupDto.name)
+                && program.equals(groupDto.program)
+                && shift.equals(groupDto.shift);
     }
 
     @Override

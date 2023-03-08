@@ -3,16 +3,9 @@ package lt.techin.schedule.subject;
 
 import jakarta.persistence.EntityManager;
 import lt.techin.schedule.classrooms.ClassroomRepository;
-import lt.techin.schedule.exceptions.SubjectValidationException;
+import lt.techin.schedule.exceptions.ValidationException;
 import lt.techin.schedule.module.ModuleRepository;
-import org.hibernate.Filter;
-import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -33,7 +26,9 @@ public class SubjectService {
     @Autowired
     private EntityManager entityManager;
 
-    public SubjectService(SubjectRepository subjectRepository, ModuleRepository moduleRepository, ClassroomRepository classroomRepository) {
+    public SubjectService(SubjectRepository subjectRepository,
+                          ModuleRepository moduleRepository,
+                          ClassroomRepository classroomRepository) {
         this.subjectRepository = subjectRepository;
         this.moduleRepository = moduleRepository;
         this.classroomRepository = classroomRepository;
@@ -60,7 +55,7 @@ public class SubjectService {
         if (existing.size() > 0) {
             var subjectDto = toSubjectDto(subject);
 
-            throw new SubjectValidationException("Dalykas su tokiu pavadinimu, aprašu ir moduliu jau sukurtas.", "Subject", "Not unique", subjectDto.toString());
+            throw new ValidationException("Dalykas su tokiu pavadinimu, aprašu ir moduliu jau sukurtas.", "Subject", "Not unique", subjectDto.toString());
         } else {
             return subjectRepository.save(subject);
         }
