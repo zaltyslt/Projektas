@@ -144,12 +144,13 @@ export function UpdateClassroom() {
         <form>
           <Grid container rowSpacing={3}>
             <Grid item sm={10}>
-              <FormControl fullWidth>
-                <InputLabel id="building-label">Pastatas</InputLabel>
+            <FormControl fullWidth required error={errorBuilding}>
+              <InputLabel id="building-label">
+                {errorBuilding
+                  ? "Prašome pasirinkti pastatą."
+                  : "Pastatas"}</InputLabel>
                 <Select
                   required
-                  error={errorBuilding}
-                  helperText={errorBuilding && "Prašome pasirinkti pastatą."}
                   variant="outlined"
                   labelId="building-label"
                   id="building"

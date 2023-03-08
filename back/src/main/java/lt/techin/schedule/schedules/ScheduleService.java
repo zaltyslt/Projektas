@@ -47,4 +47,22 @@ public class ScheduleService {
             return scheduleRepository.save(schedule);
         }
     }
+
+    public Schedule disable(Long id) {
+        var existingSchedule = scheduleRepository.findById(id).orElse(null);
+        if (existingSchedule != null) {
+            existingSchedule.setActive(false);
+            return scheduleRepository.save(existingSchedule);
+        }
+        return null;
+    }
+
+    public Schedule enable(Long scheduleId) {
+        var existingSchedule = scheduleRepository.findById(scheduleId).orElse(null);
+        if (existingSchedule != null) {
+            existingSchedule.setActive(true);
+            return scheduleRepository.save(existingSchedule);
+        }
+        return null;
+    }
 }
