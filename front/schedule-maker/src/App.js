@@ -36,7 +36,10 @@ import { TeacherList } from "./pages/teachers/TeacherList";
 import { ViewTeacher } from "./pages/teachers/ViewTeacher";
 import { CreateTeacher } from "./pages/teachers/CreateTeacher";
 import { EditTeacher } from "./pages/teachers/EditTeacher";
+
+import { ScheduleList } from "./pages/schedules/ScheduleList";
 import { CreateSchedule } from "./pages/schedules/CreateSchedule";
+
 
 function App() {
   return (
@@ -44,7 +47,7 @@ function App() {
       <HashRouter basename={process.env.PUBLIC_URL ? '' : '/schedule-maker'}>
         <Menu />
         <Routes >
-          <Route path="/"></Route>
+          <Route path="/" element={<ScheduleList />}></Route>
           <Route path="/teachers" element={<TeacherList />}></Route>
           <Route path="/groups" element={<GroupList />}></Route>
           <Route path="/modules" element={<ModuleList />}></Route>
