@@ -41,7 +41,7 @@ export function CreateRoom(props) {
 
   const applyResult = (result) => {
     if (result.ok) {
-      setSuccess("Sėkmingai pridėta!");
+      setSuccess("Sėkmingai sukurta.");
       clear();
     } else {
       result
