@@ -64,7 +64,14 @@ export function CreateRoom(props) {
     setErrorEmptyDesc(false);
     setErrorSymbolsDesc(false);
     setErrorBuilding(false);
-    if (!classroomName) {
+
+    if (
+      classroomName === "" &&
+      description === "" 
+    ) {
+      setErrorEmptyName(true);
+      setErrorEmptyDesc(true);
+    }else if (!classroomName) {
       setErrorEmptyName(true);
     } else if (
       classroomName.split("").some((char) => invalidSymbols.includes(char))

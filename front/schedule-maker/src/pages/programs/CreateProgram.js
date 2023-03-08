@@ -307,7 +307,7 @@ export function CreateProgram(props) {
                   Pridėtį dalyką
                 </Button>
                 <Button variant="contained" onClick={createProgram}>
-                  Sukurti
+                 Išsaugoti
                 </Button>
                 <Button variant="contained" onClick={() => navigate(-1)}>
                   Grįžti
