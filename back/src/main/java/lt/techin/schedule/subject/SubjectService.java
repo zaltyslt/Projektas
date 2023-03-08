@@ -1,10 +1,10 @@
 package lt.techin.schedule.subject;
 
-
 import jakarta.persistence.EntityManager;
 import lt.techin.schedule.classrooms.ClassroomRepository;
 import lt.techin.schedule.exceptions.ValidationException;
 import lt.techin.schedule.module.ModuleRepository;
+import lt.techin.schedule.programs.subjectsHours.SubjectHoursRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +22,9 @@ public class SubjectService {
     private final ModuleRepository moduleRepository;
 
     private final ClassroomRepository classroomRepository;
+
+    @Autowired
+    private SubjectHoursRepository subjectHours;
 
     @Autowired
     private EntityManager entityManager;
@@ -64,6 +67,15 @@ public class SubjectService {
     public Subject delete(Long subjectId) {
         var existingSubject = subjectRepository.findById(subjectId).orElseThrow();
         existingSubject.setDeleted(true);
+
+
+        var existingsubjecthours = subjectHours.findBySubject(subjectId).orElse(null);
+        if (existingsubjecthours != null) {
+            existingsubjecthours.setDeleted(true);
+            subjectHours.save(existingsubjecthours);
+        }
+
+
         return subjectRepository.save(existingSubject);
     }
 
@@ -82,6 +94,13 @@ public class SubjectService {
     public Subject restoreSubject(Long id) {
         var subject = subjectRepository.findById(id).orElseThrow();
         subject.setDeleted(false);
+
+        var existingsubjecthours = subjectHours.findBySubject(id).orElse(null);
+        if (existingsubjecthours != null) {
+            existingsubjecthours.setDeleted(false);
+            subjectHours.save(existingsubjecthours);
+        }
+
         return subjectRepository.save(subject);
     }
 
