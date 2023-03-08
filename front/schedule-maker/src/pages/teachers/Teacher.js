@@ -5,7 +5,6 @@ import {
   FormControl,
   InputLabel,
   Grid,
-  FormHelperText,
   MenuItem,
   Paper,
   Select,
@@ -34,7 +33,6 @@ import "../teachers/Teacher.css";
 
 export function Teacher({ mode, teacherId, onSave, handleSave }) {
   const [subjects, setSubjects] = useState([]);
-  const [subject, setSubject] = useState("");
   const [chosenSubjects, setChosenSubjects] = useState([]);
   const [freeSubjects, setFreeSubjects] = useState([]);
   const [showSubjSelect, setShowSubjSelect] = useState(false); //show/hide
@@ -83,7 +81,7 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
   function preCreateCheck() {
     let isCorrect = true;
     //  console.log("boom");
-    
+
     if (!teacher.fName || teacher.fName === "" || errorFname.error) {
       setErrorMessage("Įveskite/pataisykite vardą !");
       isCorrect = false;
@@ -91,10 +89,14 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
       setErrorMessage("Įveskite/pataisykite pavardę !");
       isCorrect = false;
     } else if (
-      !teacher.contacts.phoneNumber  || teacher.contacts.phoneNumber === "" ||
-      !teacher.contacts.directEmail || teacher.contacts.directEmail === "" ||
-      !teacher.contacts.teamsName || teacher.contacts.teamsName === "" ||
-      !teacher.contacts.teamsEmail || teacher.contacts.teamsEmail === "" ||
+      !teacher.contacts.phoneNumber ||
+      teacher.contacts.phoneNumber === "" ||
+      !teacher.contacts.directEmail ||
+      teacher.contacts.directEmail === "" ||
+      !teacher.contacts.teamsName ||
+      teacher.contacts.teamsName === "" ||
+      !teacher.contacts.teamsEmail ||
+      teacher.contacts.teamsEmail === "" ||
       errorPhoneNumber.error ||
       errorDirectMail.error ||
       errorTeamsName.error ||
@@ -102,11 +104,11 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
     ) {
       setErrorMessage("Įveskite/pataisykite kontaktinius duomenis !");
       isCorrect = false;
-    } else if ( teacher.workHoursPerWeek === "" || errorHours.error) {
+    } else if (teacher.workHoursPerWeek === "" || errorHours.error) {
       // console.log(workHours + ", " + errorHours.error);
       setErrorMessage("Įveskite/pataisykite valandų skaičių !");
       isCorrect = false;
-    } else if (!teacher.selectedShift.id ||teacher.selectedShift.id === "") {
+    } else if (!teacher.selectedShift.id || teacher.selectedShift.id === "") {
       setErrorMessage("Pasirinkite pamainą");
       isCorrect = false;
     } else {
@@ -116,21 +118,6 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
     isCorrect && createTeacher();
     // onSave(teacher);
   }
-
-  // function fetchData() {
-  //   getDataFrom("api/v1/teachers/subjects", (data) => {
-  //     setSubjects(data.body);
-  //     setFreeSubjects(data.body);
-  //   });
-
-  //   getDataFrom("api/v1/shift/get-active", (data) => {
-  //     setShifts(data.body);
-  //   });
-  // }
-
-  // useEffect(() => {
-  //   fetchData();
-  // }, []);
 
   useEffect(() => {
     fetchData();
@@ -142,38 +129,50 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
 
   async function fetchData() {
     getDataFrom("api/v1/teachers/subjects", (data) => {
-      setSubjects(data.body);
-      setFreeSubjects(data.body);
+     if(data){
+      setSubjects(data);
+      setFreeSubjects(data);}
+      else{setErrorMessage("Nepavyko parsiųsti duomenų iš serverio. (Subject)")}
     });
 
     getDataFrom("api/v1/shift/get-active", (data) => {
-      setShifts(data.body);
+      if(data){
+      console.log(data);
+      setShifts(data);}
+        else{setErrorMessage("Nepavyko parsiųsti duomenų iš serverio. (Shift)")
+      }
     });
   }
 
   async function fetchTeacherData() {
     getDataFrom("api/v1/teachers/view?tid=" + teacherId, (data) => {
-      setTeacher(data.body);
-      // console.log(data.body);      //33370
-      setid(data.body.id);
-      setFName(data.body.fName);
-      setLName(data.body.lName);
-      setWorkHours(data.body.workHoursPerWeek);
+      if(data){
+      console.log(data);      //33370
+      setTeacher(data);
+      // setid(data.body.id);
+      // setFName(data.body.fName);
+      // setLName(data.body.lName);
+      // setWorkHours(data.body.workHoursPerWeek);
 
-      setPhoneNumber(data.body.contacts.phoneNumber);
-      setDirectEmail(data.body.contacts.directEmail);
-      setTeamsName(data.body.contacts.teamsName);
-      setTeamsEmail(data.body.contacts.teamsEmail);
+      // setPhoneNumber(data.body.contacts.phoneNumber);
+      // setDirectEmail(data.body.contacts.directEmail);
+      // setTeamsName(data.body.contacts.teamsName);
+      // setTeamsEmail(data.body.contacts.teamsEmail);
 
-      setShift(data.body.selectedShift);
-      // handleShift(data.body.teacherShiftDto);
-      setChosenSubjects(data.body.subjectsList);
+      setShift(data.selectedShift);
+      // handleShift(data.selectedshift);
+      setChosenSubjects(data.subjectsList); 
+    }
+      else{
+        setTeacher({});
+        setErrorMessage("Nepavyko parsiųsti duomenų iš serverio. (Shift)")
+    }
     });
   }
-  function handleShift(teacherShift) {
-    const shift = shifts.find(shift.id === teacherShift.id);
-    console.log(teacherShift + ", " + shift);
-  }
+  // function handleShift(teacherShift) {
+  //   const shift = shifts.find(shift.id === teacherShift.id);
+  //   console.log(teacherShift + ", " + shift);
+  // }
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -189,43 +188,31 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
   function handleChange(event) {
     // console.log(event);
     const { id, value } = event.target;
-    console.log(id + " * " + value);
+    // console.log(id + " * " + value);
     const prefix = id.split(".");
-    if (prefix[0] === "contacts" ) {
-      setTeacher((prevTeacher) => ({ ...prevTeacher, contacts: {...prevTeacher.contacts, [prefix[1]]: value,}, }));
+    if (prefix[0] === "contacts") {
+      setTeacher((prevTeacher) => ({
+        ...prevTeacher,
+        contacts: { ...prevTeacher.contacts, [prefix[1]]: value },
+      }));
     } else {
       setTeacher((prevTeacher) => ({ ...prevTeacher, [id]: value }));
     }
   }
 
+
+  
+
   const createTeacher = () => {
-    // // setTeacher({
 
-    // const teacher1 = {
-    //   id: id,
-    //   fName: fName,
-    //   lName: lName,
-    //   active: true,
-    //   workHoursPerWeek: workHours,
-
-    //   contacts: {
-    //     phoneNumber,
-    //     directEmail,
-    //     teamsEmail,
-    //     teamsName,
-    //   },
-
-    //   selectedShift: shift,
-    //   subjectsList: chosenSubjects,
-    // };
-    // setTeacher(teacher1);
-
-    async function teacherModifier(teacher) {
+   async function teacherModifier(teacher) {
       const fetchResult = await onSave(teacher);
+      console.log(fetchResult);
       applyResult(fetchResult);
     }
-
+    
     teacherModifier(teacher);
+    
   };
 
   async function deleteTeacher() {
@@ -235,24 +222,23 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
   }
 
   function applyResult(result) {
-    // console.log(result);
-    if (result.status >= 300) {
+    console.log("apply result");
+    console.log(result);
+    if (result.status > 299) {
       setCreateMessage("");
-      console.log(result.body);
-      setErrorMessage(result.body.message);
+      console.log(result);
+      setErrorMessage(result.message);
     } else {
-      if(mode === "update"){
+      if (mode === "update") {
         setCreateMessage("Duomenys atnaujinti sėkmingai.");
-        // window.location.assign("/teachers/view&tid="+teacher.id);
-        localStorage.setItem('messageUpdateTeacher', 'Duomenys atnaujinti.');
-        console.log(localStorage.getItem("messageUpdateTeacher"))
-        navigate(-1);
-      }else{
+
+        // navigate(-1);
+      } else {
         setCreateMessage("Mokytojas sukurtas");
         clear();
       }
       setErrorMessage("");
-  }
+    }
   }
   function clearMessages() {
     setCreateMessage("");
@@ -295,7 +281,7 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
 
     const temp = [...chosenSubjects, subjectNew];
     setChosenSubjects(temp);
-    handleChange({target:{id:'subjectsList', value: temp,}});
+    handleChange({ target: { id: "subjectsList", value: temp } });
     //const evenNumbers = numbers.filter((number) => number % 2 === 0);
     const removed = freeSubjects.filter(
       (subject) => subject.subjectId != subjectNew.subjectId
@@ -316,15 +302,15 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
     );
     setFreeSubjects([...moved, subjectRem]);
     setChosenSubjects(removed);
-    handleChange({target:{id:'subjectsList', value: removed,}});
+    handleChange({ target: { id: "subjectsList", value: removed } });
     setShowSubjSelect(false);
   };
 
   const handleShiftChange = (shiftId) => {
     const tempShift = shifts.find((shift) => shift.id === shiftId);
     console.log(tempShift);
-    handleChange({target:{id:'selectedShift', value: tempShift}});
-    handleChange({target:{id: 'active',        value: true}});
+    handleChange({ target: { id: "selectedShift", value: tempShift } });
+    handleChange({ target: { id: "active", value: true } });
 
     setShift(tempShift);
   };
@@ -340,10 +326,10 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
   return (
     <Container style={{ maxWidth: "75rem" }}>
       <form>
-      <Grid item sm={7}>
-            {errorMessage && <Alert severity="warning">{errorMessage}</Alert>}
-            {createMessage && <Alert severity="success">{createMessage}</Alert>}
-          </Grid>
+        <Grid item sm={7}>
+          {errorMessage && <Alert severity="warning">{errorMessage}</Alert>}
+          {createMessage && <Alert severity="success">{createMessage}</Alert>}
+        </Grid>
         <h3 className="create-header">
           {" "}
           {mode === "update"
@@ -357,7 +343,7 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
           justifyContent="space-between"
           alignItems="center"
           rowSpacing={3}
-        >
+              >
           <Grid item sm={5}>
             <TextField
               error={errorFname.error}
@@ -423,7 +409,7 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
               label="Kontaktinis telefonas"
               id="contacts.phoneNumber"
               // value={teacher.contacts ? teacher.contacts.phoneNumber : "" || ""}
-              value={teacher.contacts && teacher.contacts.phoneNumber || ""}
+              value={(teacher.contacts && teacher.contacts.phoneNumber) || ""}
               onChange={(e) => {
                 // setPhoneNumber(e.target.value);
                 handleChange(e);
@@ -450,7 +436,7 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
               label="El. paštas"
               id="contacts.directEmail"
               // value={teacher.contacts ? teacher.contacts.directEmail : ""  || ""}
-              value={teacher.contacts && teacher.contacts.directEmail|| ""}
+              value={(teacher.contacts && teacher.contacts.directEmail) || ""}
               onChange={(e) => {
                 // setDirectEmail(e.target.value);
                 handleChange(e);
@@ -475,7 +461,7 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
               variant="outlined"
               label="Teams vardas"
               id="contacts.teamsName"
-              value={teacher.contacts && teacher.contacts.teamsName   || ""}
+              value={(teacher.contacts && teacher.contacts.teamsName) || ""}
               onChange={(e) => {
                 validate({
                   name: "teamsName",
@@ -484,7 +470,7 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
                   value: e.target.value,
                 });
                 // setTeamsName(e.target.value);
-                handleChange(e)
+                handleChange(e);
               }}
             ></TextField>
           </Grid>
@@ -498,10 +484,10 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
               variant="outlined"
               label="Teams el. paštas"
               id="contacts.teamsEmail"
-              value={teacher.contacts && teacher.contacts.teamsEmail    || ""}
+              value={(teacher.contacts && teacher.contacts.teamsEmail) || ""}
               onChange={(e) => {
                 // setTeamsEmail(e.target.value);
-                handleChange(e)
+                handleChange(e);
               }}
               onBlur={(e) =>
                 validate({
@@ -548,18 +534,19 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
                 label="Galima pamaina"
                 labelId="shift-label"
                 id="teacher.selectedShift"
-                value={teacher.selectedShift && teacher.selectedShift.id  || ""}
+                value={
+                  (teacher.selectedShift && teacher.selectedShift.id) || ""
+                }
                 onChange={(e) => {
                   handleShiftChange(e.target.value);
                   // handleChange({id:"teacher.selectedShift",value:e.target.value});
                   // console.log(e.target.value);
                 }}
               >
-                {shifts.map((shift) => (
-                  <MenuItem key={shift.id} value={shift.id}>
-                    {shift.name}
-                  </MenuItem>
-                ))}
+                {shifts &&
+                  shifts.map((shift) => (
+                    <MenuItem key={shift.id} value={shift.id}> {shift.name} </MenuItem>
+                  ))}
               </Select>
               {/* <FormHelperText>{shift.name}</FormHelperText> */}
             </FormControl>
@@ -576,7 +563,8 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
                   id="subject"
                   value={subject}
                   defaultOpen={true}
-                  onChange={(e) =>{ handleAddChosen(e.target.value);
+                  onChange={(e) => {
+                    handleAddChosen(e.target.value);
                   }}
                 >
                   {freeSubjects.map(

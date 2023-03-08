@@ -26,23 +26,6 @@ export function ViewTeacher() {
       });
   };
 
-  // const handleMessage = () => {
-    useEffect(() => { 
-    const messageLocal = localStorage.getItem("messageUpdateTeacher");
-    console.log(messageLocal);
-    setMessage(messageLocal);
-    // if (messageLocal !== null ) {
-    //   console.log("setMessage");
-    //   setMessage(messageLocal);
-    //   localStorage.removeItem("messageUpdateTeacher");
-    // }  
-    
-    // if(){
-    //   setMessage(null);
-    //   console.log("setNull");
-    // }
-  },[teacher]);
-
   useEffect(() => {
     getTeacherData();
     
@@ -55,8 +38,7 @@ export function ViewTeacher() {
           <Grid item sm={10}>
             <header>
               <h1>{teacher.fName + " " + teacher.lName}</h1>
-              {/* messageUpdateTeacher */}
-              {message && <Alert severity="success">{message}</Alert>}
+             
               <span id="modified-date">
                 Paskutinį kartą redaguota: {teacher.dateModified}
               </span>

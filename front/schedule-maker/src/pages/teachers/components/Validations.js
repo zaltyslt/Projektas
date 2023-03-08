@@ -28,11 +28,11 @@ export function validateText(field ) {
         // skaicius
         // min max
                 
-        // const numberRegex = /^-?(0|[1-9][0-9]*)$/.test(field.value);
+        const numberRegex = /^-?(0|[1-9][0-9]*)$/.test(field.value) && !/^0[0-9]/.test(field.value);
         const inInterval = field.min <= field.value && field.max >= field.value; 
         // console.log(field.min <= field.value +", "+field.value +", "+ field.max );
         
-        const goodFormat = inInterval || field.value ==="";
+        const goodFormat = (inInterval && numberRegex) || field.value ==="";
         const text = "Įveskte sveiką skaičių nuo "+field.min+" iki " + field.max + ".";
         console.log(inInterval+", "+ goodFormat);
         return  {error: !goodFormat, text : !goodFormat ? text : "",};

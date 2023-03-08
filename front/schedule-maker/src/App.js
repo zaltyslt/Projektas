@@ -34,10 +34,8 @@ import { EditSubject } from "./pages/subjects/EditSubject";
 
 import { TeacherList } from "./pages/teachers/TeacherList";
 import { ViewTeacher } from "./pages/teachers/ViewTeacher";
-// import { CreateTeacher } from "./pages/teachers/CreateTeacher";
-// import { EditTeacher } from "./pages/teachers/EditTeacher";
-import { CreateTeacher } from "./pages/teachers/Create";
-import { UpdateTeacher } from "./pages/teachers/Edit";
+import { CreateTeacher } from "./pages/teachers/CreateTeacher";
+import { UpdateTeacher } from "./pages/teachers/EditTeacher";
 
 
 function App() {
@@ -80,8 +78,6 @@ function App() {
           <Route path="/groups/edit/:id" element={<EditGroup />}></Route>
           {/* TEACHERS PATHAI */}
           <Route path="/teachers/view/:id" element={<ViewTeacher />}></Route>
-          {/* <Route path="/teachers/create" element={<CreateTeacher />}></Route>
-          <Route path="/teachers/edit/:id" element={<EditTeacher />}></Route> */}
           <Route path="/teachers/create" element={<CreateTeacher />}></Route>
           <Route path="/teachers/edit/:teacherId" element={<UpdateTeacher />}></Route>
          

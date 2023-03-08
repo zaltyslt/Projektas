@@ -63,7 +63,7 @@ public class TeacherServiceDo {
         List<Contact> contactsToSave = ContactMapper.contactFromDto2(contactsDto);
         newTeacher.setContacts(contactsToSave);
 
-        if (!teacherDto.getSubjectsList().isEmpty()) {
+        if (teacherDto.getSubjectsList()!=null && !teacherDto.getSubjectsList().isEmpty()) {
             Set<Subject> subjectsFromDto = TeacherSubjectMapper.subjectsFromDtos(teacherDto.getSubjectsList());
 
             Set<Subject> foundSubjects = subjectsFromDto.stream()
@@ -73,6 +73,8 @@ public class TeacherServiceDo {
             if (!foundSubjects.isEmpty()) {
                 newTeacher.setSubjects(foundSubjects);
             }
+        } else{newTeacher.setSubjects(new HashSet<>());
+
         }
 
         if (teacherDto.getSelectedShift() != null) {

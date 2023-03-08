@@ -1,121 +1,59 @@
 export async function getDataFrom(endPoint, callback) {
   const fetchResult = async () => {
     const response = await fetch(endPoint);
-    //   .then((response) => response.json())
-    //   .then((data) => {
-    //     callback(data); // invoke callback with data
-    //     return data;
-    //   });
-    const body = await response.json();
-    const headers = response.headers;
-    return { body, headers };
+    return response;
   };
-  
+
   const result = await fetchResult();
-  callback(result);
+  let data = "";
 
-  return result;
+  if (result.status < 300) {
+    data = await result.json();
+  } else {
+    window.alert("Fetch " + result.status);
+    data = {
+      message: "Operacija nepavyko!",
+      status: result.status,
+      ok: result.ok,
+      statusText: result.statusText,
+    };
+  }
+
+  callback(data);
+
+  return data;
 }
 
-// export async function postDataTo(teacher, callback) {
-//     const fetchResult = async () => {
-      
-//         const response = await fetch("/api/v1/teachers/create", {
-//         method: "POST",
-//         headers: { "Content-Type": "application/json" },
-//         body: JSON.stringify(
-        
-//     teacher
-       
-//       ),
-//       });
+export async function postDataTo(teacher, address, type) {
+  const fetchResult = async () => {
+    console.log(teacher);
+    const response = await fetch(address, {
+      method: type,
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(teacher),
+    });
 
-//       const body = await response.json();
-//       const headers = response.headers;
-//       const status = response.status;
-//       return { body, headers, status };
-//     };
-  
-//     const result = await fetchResult();
-//     callback(result);
-//     console.log(result);
-//     return result;
-//   }
+    return response;
+  };
 
-export async function postDataTo(teacher) {
-  // console.log(teacher);
-  const response = await fetch("/api/v1/teachers/create", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(teacher),
-  });
-
-  const body = await response.json();
-  const headers = response.headers;
-  const status = response.status;
-  console.log(response);
-  // return { response };
-  return { body, headers, status };
-}
-
-export async function putDataTo(teacher) {
-  // console.log(teacher);
-  const response = await fetch("/api/v1/teachers/update?tid=" + teacher.id, {
-    method: "PUT",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(teacher),
-  });
-
-  const result = await response.json();
-  const headers = response.headers;
-  const status = response.status;
- console.log(result);
-  return { result };
-  // return { body, headers, status };
+  const result = await fetchResult();
+  let data = await result.json();
+  return data;
 }
 
 export async function switchActive(id) {
   console.log(id);
-  const response = await fetch(`/api/v1/teachers/active?tid=${id}&active=false` ,{
-    method: "PATCH",
-    headers: { "Content-Type": "application/json" },
-    // body: JSON.stringify(teacher),
-  });
+  const response = await fetch(
+    `/api/v1/teachers/active?tid=${id}&active=false`,
+    {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+    }
+  );
 
   const body = await response.json();
   const headers = response.headers;
   const status = response.status;
   // console.log(response);
-  // return { response };
-  return { body, headers, status };
+  return { response };
 }
-   
-//    function draw(obj){
-//     for (const prop in obj) {
-//         console.log(`${prop}: ${obj[prop]}`);
-//       }
-//     }
- 
-//     draw(teacher.body);
-//   draw(teacher.contacts);
-//   draw(teacher.subjects);
-//   draw(teacher.shift);
-
-// fetch("/api/v1/teachers/create", {
-//   method: "POST",
-//   headers: {
-//     "Content-Type": "application/json",
-//   },
-//   body: JSON.stringify({
-//     id: 0,
-//     fName: fName,
-//     lName: lName,
-//     active: true,
-//     workHoursPerWeek: workHours,
-
-//     contacts: teacherContacts,
-
-//     teacherShiftDto: teacherShiftDto,
-//     subjectsList: chosenSubjects,
-//   }),
-// }).then(applyResult);
