@@ -11,10 +11,7 @@ import {
     TextField,
     InputLabel,
     MenuItem,
-    colors,
     Alert,
-    AlertTitle,
-    OutlinedInput,
 } from "@mui/material";
 import { SelectChangeEvent } from "@mui/material/Select";
 
@@ -36,114 +33,33 @@ export function UpdateProgram() {
     const [subjectNameError, setSubjectNameError] = useState(false);
     const [errorHours, setErrorHours] = useState(false);
 
-  const handleCNameeChange = (event) => {
-    setProgramName(event.target.value);
-  };
-
-  const handleDescriptionChange = (event) => {
-    setDescription(event.target.value);
-  };
-
-  const params = useParams({
-    setProgramName: "",
-    description: "",
-    active: program.active,
-  });
-
-  useEffect(() => {
-    fetch("api/v1/subjects")
-      .then((response) => response.json())
-      .then(setSubjects);
-    fetch(`api/v1/programs/program/${params.id}`)
-      .then((response) => response.json())
-      .then((data) => {
-        setProgram(data);
-        setProgramName(data.programName);
-        setDescription(data.description);
-        setsubjectHoursList(data.subjectHoursList);
-      });
-  }, []);
-
-  const updateProgram = () => {
-    setError("");
-    setSuccess("");
-    setErrorEmptyName(false);
-    setErrorSymbolsName(false);
-    setErrorEmptyDesc(false);
-    setErrorSymbolsDesc(false);
-    if (!programName) {
-      setErrorEmptyName(true);
-    } else if (
-      programName.split("").some((char) => invalidSymbols.includes(char))
-    ) {
-      setErrorSymbolsName(true);
-    } else if (!description) {
-      setErrorEmptyDesc(true);
-    } else if (
-      description.split("").some((char) => invalidSymbols.includes(char))
-    ) {
-      setErrorSymbolsDesc(true);
-    } else {
-      fetch(`api/v1/programs/update-hours-program/${params.id}`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          programName,
-          description,
-          subjectHoursList,
-        }),
-      }).then((result) => {
-        if (!result.ok) {
-          result
-            .text()
-            .then((text) => {
-              const response = JSON.parse(text);
-              setError(response.message);
-            })
-            .catch((error) => {
-              setError("Klasės sukurti nepavyko: ", error);
-            });
-        } else {
-          setSuccess("Sėkmingai atnaujinote!");
-        }
-      });
-    }
-  };
-
-  const disableProgram = () => {
-    fetch(`api/v1/programs/disable-program/${params.id}`, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }).then(() => navigate(-1));
-  };
-
-  const enableProgram = () => {
-    fetch(`api/v1/programs/enable-program/${params.id}`, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }).then(() => navigate("/programs"));
-  };
-
-  const updateProperty = (property, event) => {
-    setProgram({
-      ...program,
-      [property]: event.target.value,
-    });
-  };
-
-  const addFields = () => {
-    let object = {
-      subjectName: "",
-      hours: "",
+    const handleCNameeChange = (event) => {
+        setProgramName(event.target.value);
     };
-    setsubjectHoursList([...subjectHoursList, object]);
-  };
+
+    const handleDescriptionChange = (event) => {
+        setDescription(event.target.value);
+    };
+
+    const params = useParams({
+        setProgramName: "",
+        description: "",
+        active: program.active,
+    });
+
+    useEffect(() => {
+        fetch("api/v1/subjects")
+            .then((response) => response.json())
+            .then(setSubjects);
+        fetch(`api/v1/programs/program/${params.id}`)
+            .then((response) => response.json())
+            .then((data) => {
+                setProgram(data);
+                setProgramName(data.programName);
+                setDescription(data.description);
+                setsubjectHoursList(data.subjectHoursList)
+            });
+    }, []);
 
     const checkIfSubjectsIsnotEmpty = () => {
         setSubjectNameError(false)
@@ -429,48 +345,8 @@ export function UpdateProgram() {
                             </Stack>
                         </Grid>
                     </Grid>
-                  );
-                })}
-              </Grid>
-            </Grid>
-            <Grid item sm={12}>
-              <Stack direction="row" spacing={3}>
-                <Button variant="contained" onClick={addFields}>
-                  Pridėtį dalyką
-                </Button>
-                <Button variant="contained" onClick={updateProgram}>
-                  Išsaugoti
-                </Button>
-                {!program.active && (
-                  <Button
-                    variant="contained"
-                    data-value="true"
-                    value={params.id}
-                    onClick={enableProgram}
-                  >
-                    Aktyvuoti
-                  </Button>
-                )}
-                {program.active && (
-                  <Link to="/programs">
-                    <Button
-                      variant="contained"
-                      data-value="true"
-                      value={params.id}
-                      onClick={disableProgram}
-                    >
-                      Ištrinti
-                    </Button>
-                  </Link>
-                )}
-                <Link to="/programs">
-                  <Button variant="contained">Grįžti</Button>
-                </Link>
-              </Stack>
-            </Grid>
-          </Grid>
-        </form>
-      </Container>
-    </div>
-  );
+                </form>
+            </Container>
+        </div >
+    );
 }
