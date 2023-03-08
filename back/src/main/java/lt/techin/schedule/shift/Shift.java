@@ -3,6 +3,7 @@ package lt.techin.schedule.shift;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lt.techin.schedule.group.Group;
 import lt.techin.schedule.teachers.Teacher;
@@ -25,9 +26,10 @@ public class Shift {
 
     private String shiftEndingTime;
 
-    @OneToMany(mappedBy = "shift" )
-    @JsonBackReference
-    private Set<Teacher> teachers;
+//    @OneToMany(mappedBy = "shift" )
+//    @JsonBackReference
+//    @JsonManagedReference
+//    private Set<Teacher> teachers;
 
     @OneToMany
     @JoinColumn(name = "shift_group")

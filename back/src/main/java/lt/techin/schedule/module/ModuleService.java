@@ -37,6 +37,12 @@ public class ModuleService {
         return moduleRepository.findAll().stream().filter(Module::isDeleted).collect(Collectors.toList());
     }
 
+    public Module delete(Long moduleId) {
+        var existingSubject = moduleRepository.findById(moduleId).orElseThrow();
+        existingSubject.setDeleted(true);
+        return moduleRepository.save(existingSubject);
+    }
+
     public Optional<Module> getById(Long id) {
         return moduleRepository.findById(id);
     }
@@ -74,11 +80,11 @@ public class ModuleService {
         return moduleRepository.save(module);
     }
 
-    public Module delete(Long moduleId) {
-        var existingSubject = moduleRepository.findById(moduleId).orElseThrow();
-        existingSubject.setDeleted(true);
-        return moduleRepository.save(existingSubject);
-    }
+//    public Module delete(Long moduleId) {
+//        var existingSubject = moduleRepository.findById(moduleId).orElseThrow();
+//        existingSubject.setDeleted(true);
+//        return moduleRepository.save(existingSubject);
+//    }
 
     public boolean deleteById(Long id) {
         try {

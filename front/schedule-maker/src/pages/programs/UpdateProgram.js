@@ -23,12 +23,15 @@ export function UpdateProgram() {
     const [programName, setProgramName] = useState("");
     const [description, setDescription] = useState("");
     const invalidSymbols = "!@#$%^&*_+={}<>|~`\\\"'";
+    const invalidNumbers = /^(\d+)?$/
     const [errorEmptyName, setErrorEmptyName] = useState(false);
     const [errorSymbolsName, setErrorSymbolsName] = useState(false);
     const [errorEmptyDesc, setErrorEmptyDesc] = useState(false);
     const [errorSymbolsDesc, setErrorSymbolsDesc] = useState(false);
     const [subjects, setSubjects] = useState([])
     const [subjectHoursList, setsubjectHoursList] = useState([])
+    const [subjectNameError, setSubjectNameError] = useState(false);
+    const [errorHours, setErrorHours] = useState(false);
 
     const handleCNameeChange = (event) => {
         setProgramName(event.target.value);
@@ -58,6 +61,31 @@ export function UpdateProgram() {
             });
     }, []);
 
+    const checkIfSubjectsIsnotEmpty = () => {
+        setSubjectNameError(false)
+        var i = 0;
+        while (i < subjectHoursList.length) {
+            if (subjectHoursList[i].subjectName === '') {
+                setSubjectNameError(true)
+                return true;
+            }
+            i++;
+        }
+        return false;
+    }
+
+    const checkHours = () => {
+        setErrorHours(false);
+        let hasErrors = false;
+        subjectHoursList.forEach(({ hours }) => {
+          if (!invalidNumbers.test(hours)) {
+            setErrorHours(true);
+            hasErrors = true;
+          }
+        });
+        return hasErrors;
+      };
+
     const updateProgram = () => {
         setError("");
         setSuccess("");
@@ -65,6 +93,8 @@ export function UpdateProgram() {
         setErrorSymbolsName(false);
         setErrorEmptyDesc(false);
         setErrorSymbolsDesc(false);
+        setSubjectNameError(false)
+        setErrorHours(false);
         if (!programName) {
             setErrorEmptyName(true);
         } else if (
@@ -77,7 +107,11 @@ export function UpdateProgram() {
             description.split("").some((char) => invalidSymbols.includes(char))
         ) {
             setErrorSymbolsDesc(true);
-        } else { 
+        } else if (subjectHoursList.length === 0) {
+            setError("Prašome pridėti dalyką(-us).");
+        } else if (checkIfSubjectsIsnotEmpty()) {
+        } else if (checkHours()) {
+        } else {
             fetch(`api/v1/programs/update-hours-program/${params.id}`, {
                 method: "PATCH",
                 headers: {
@@ -90,7 +124,12 @@ export function UpdateProgram() {
                 }),
             }).then((result) => {
                 if (!result.ok) {
-                    setError("Redaguoti nepavyko!");
+                    result.text().then(text => {
+                        const response = JSON.parse(text);
+                        setError(response.message)
+                    }).catch(error => {
+                        setError("Klasės sukurti nepavyko: ", error);
+                    });
                 } else {
                     setSuccess("Sėkmingai atnaujinote!");
                 }
@@ -139,16 +178,13 @@ export function UpdateProgram() {
 
     const handleFormChange = (event, index) => {
         let data = [...subjectHoursList];
-    
         if (event.target.name === 'subjectName') {
-          console.log(event.target.value)
-          console.log(event.target.name)
-          data[index]['subjectName'] = event.target.value;
+            data[index]['subjectName'] = event.target.value;
         } else {
-          data[index][event.target.name] = event.target.value;
+            data[index][event.target.name] = event.target.value;
         }
         setsubjectHoursList(data);
-      }
+    }
 
     const handleSubjectInput = (event) => {
         const {
@@ -216,33 +252,65 @@ export function UpdateProgram() {
                                 </Alert>
                             )}
                         </Grid>
+                        <Grid item sm={12} >
+                            <Grid container direction="row" justifyContent="space-between">
+                                {subjectHoursList.map((form, index) => {
+                                    return (
+                                        <Grid container spacing={{ xs: 2, md: 3 }} rowSpacing={{ xs: 5, sm: 5, md: 5 }} columnSpacing={{ xs: 1, sm: 1, md: 1 }} key={index}>
+                                            <Grid item xs={2}>
+                                                <FormControl fullWidth required error={subjectNameError}>
+                                                    <InputLabel id="subject-label">
+                                                        {subjectNameError
+                                                            ? "Privaloma pasirinkti dalyką. "
+                                                            : "Dalykas"}
+                                                    </InputLabel>
+                                                    <Select
+                                                        required
+                                                        variant="outlined"
+                                                        labelId="subject-label"
+                                                        label="Dalykas"
+                                                        name='subjectName'
+                                                        label='subjectName'
+                                                        value={form.subjectName}
+                                                        onChange={event => handleFormChange(event, index)}
+                                                    >
+                                                        {subjects.map(currentOption => (
+                                                            <MenuItem key={currentOption.name} value={currentOption.name}>
+                                                                {currentOption.name}
+                                                            </MenuItem>
+                                                        ))}
+                                                    </Select>
+                                                </FormControl>
+                                            </Grid>
+                                            <Grid item xs={2}>
+                                                {/* <TextField
+                                                    name='hours'
+                                                    placeholder='Valandos'
+                                                    onChange={event => handleFormChange(event, index)}
+                                                    value={form.hours}
+                                                /> */}
+                        <TextField
+                          fullWidth
+                          required
+                          error={errorHours}
+                          helperText={errorHours && "Leidžiami tik skaičių simboliai."}
+                          variant="outlined"
+                          id="hours"
+                          name='hours'
+                          placeholder='Valandos'
+                          onChange={event => handleFormChange(event, index)}
+                          value={form.hours}
+                        />
 
-                        {subjectHoursList.map((form, index) => {
-                            return (
-                                <div key={index}>
-                                    <p>{form.subjectName}</p>
-                                    <Select
-                                        value={form.subjectName}
-                                        onChange={event => handleFormChange(event, index)}
-                                        name='subjectName'
-                                        placeholder='Hours'
-                                    >
-                                        {subjects.map(currentOption => (
-                                            <MenuItem key={currentOption.name} value={currentOption.name}>
-                                                {currentOption.name}
-                                            </MenuItem>
-                                        ))}
-                                    </Select>
-                                    <TextField
-                                        name='hours'
-                                        placeholder='Hours'
-                                        onChange={event => handleFormChange(event, index)}
-                                        value={form.hours}
-                                    />
-                                    <Button onClick={() => removeFields(index)}>Remove</Button>
-                                </div>
-                            )
-                        })}
+                                            </Grid>
+                                            <Grid item xs={2}>
+                                                <Button onClick={() => removeFields(index)}>Ištrinti</Button>
+                                            </Grid>
+                                        </Grid>
+                                    )
+                                })}
+                            </Grid>
+                        </Grid>
                         <Grid item sm={10}>
                             <Stack direction="row" spacing={2}>
                                 <Button variant="contained" onClick={addFields}>Pridėtį dalyką</Button>
@@ -279,6 +347,6 @@ export function UpdateProgram() {
                     </Grid>
                 </form>
             </Container>
-        </div>
+        </div >
     );
 }

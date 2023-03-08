@@ -1,7 +1,7 @@
 package lt.techin.schedule.teachers;
 
 import lt.techin.schedule.teachers.contacts.Contact;
-import lt.techin.schedule.teachers.contacts.ContactDto;
+import lt.techin.schedule.teachers.contacts.ContactDto2;
 import lt.techin.schedule.teachers.contacts.ContactMapper;
 import lt.techin.schedule.teachers.helpers.TeacherShiftMapper;
 import lt.techin.schedule.teachers.helpers.TeacherSubjectMapper;
@@ -19,19 +19,23 @@ public class TeacherMapper {
         dto.setlName(teacher.getlName() != null ? teacher.getlName() : "");
         dto.setNickName(teacher.getNickName() != null ? teacher.getNickName() : "");
 
-        dto.setSubjectsDtoList(teacher.getSubjects() != null
+        dto.setSubjectsList(teacher.getSubjects() != null
                 ? TeacherSubjectMapper.subjectsToDtos(teacher.getSubjects())
                 : new HashSet<TeacherSubjectsDto>());
         dto.setWorkHoursPerWeek(teacher.getWorkHoursPerWeek() != null ? teacher.getWorkHoursPerWeek() : 0);
-        dto.setTeacherShiftDto( teacher.getShift() != null ? TeacherShiftMapper.shiftToDto(teacher.getShift()): null);
+        dto.setTeacherShiftDto(teacher.getShift() != null ? TeacherShiftMapper.shiftToDto(teacher.getShift()) : null);
+//        dto.setSelectedShift(ShiftMapper.shiftToDto(teacher.getShift()));
 
-        dto.setActive(teacher.getActive() != null ? teacher.getActive(): true);
-        dto.setContacts(teacher.getContacts() != null ? contactsForDto(teacher.getContacts()) : new ArrayList<ContactDto>());
+        dto.setActive(teacher.getActive() != null ? teacher.getActive() : true);
+//        dto.setContacts(teacher.getContacts() != null ? contactsForDto(teacher.getContacts()) : new ArrayList<ContactDto>());
+        dto.setContacts(teacher.getContacts() != null
+                ? ContactMapper.contactToDto2(teacher.getContacts()) : new ContactDto2());
 
         dto.setDateCreated(teacher.getCreatedDateTime());
+        dto.setDateModified(teacher.getModifiedDateAndTime());
 
         return dto;
-        //ToDo this subjects pakurti
+
     }
 
     public static TeacherDto teacherToDto(Optional<Teacher> teacher) {
@@ -40,57 +44,61 @@ public class TeacherMapper {
                 ? teacherToDto(teacher.get())
                 : new TeacherDto();
     }
-    public static Set<TeacherDto> teacherToDto(List<Teacher> teacher) {
+
+    public static List<TeacherDto> teacherToDto(List<Teacher> teacher) {
 
         return !teacher.isEmpty()
-                ? teacher.stream().map(t -> teacherToDto(t)).collect(Collectors.toSet())
-                : new HashSet<TeacherDto>();
+                ? teacher.stream().map(t -> teacherToDto(t)).toList()
+                : new ArrayList<TeacherDto>();
     }
+
     //to DTO Helpers
-    private static List<ContactDto> contactsForDto(List<Contact> contacts) {
+//    private static List<ContactDto> contactsForDto(List<Contact> contacts) {
+//
+//        return contacts.stream()
+//                .map(c -> ContactMapper.contactToDto(c))
+//                .toList();
+//    }
 
-        return contacts.stream()
-                .map(c -> ContactMapper.contactToDto(c))
-                .toList();
-    }
-    private static List<Contact> contactsForTeacher(List<ContactDto> contacts) {
-        return contacts.stream()
-                .map(c -> ContactMapper.contactFromDto(c))
-                .toList();
-    }
-
-
-
+//    private static List<Contact> contactsForTeacher(List<ContactDto> contacts) {
+//        return contacts.stream()
+//                .map(c -> ContactMapper.contactFromDto(c))
+//                .toList();
+//    }
     // DTO to teacher
 
     public static Teacher teacherFromDto(TeacherDto dto) {
         Teacher teacher = new Teacher();
         teacher.setId(dto.getId() != null ? dto.getId() : null);
-        teacher.setfName(dto.getfName().trim());
-        teacher.setlName(dto.getlName().trim());
-        teacher.setNickName(dto.getNickName().trim());
-        teacher.setSubjects(TeacherSubjectMapper.subjectsFromDtos(dto.getSubjectsDtoList()));
+        teacher.setfName(dto.getfName() != null ? dto.getfName().trim() : "_empty");
+        teacher.setlName(dto.getlName() != null ? dto.getlName().trim() : "_empty");
+        teacher.setNickName(dto.getNickName() != null ? dto.getNickName().trim() : "_empty");
+        teacher.setSubjects(dto.getSubjectsList() != null
+                ? TeacherSubjectMapper.subjectsFromDtos(dto.getSubjectsList())
+                : null);
         teacher.setWorkHoursPerWeek(dto.getWorkHoursPerWeek());
 //        teacher.setShift(ShiftMapper.shiftFromDto(dto.getShiftDtoNew()));
-        teacher.setShift(TeacherShiftMapper.shiftFromDto(dto.getTeacherShiftDto()));
+//        teacher.setShift(ShiftMapper.shiftFromDto(dto.getSelectedShift()));
+//        teacher.setShift(TeacherShiftMapper.shiftFromDto(dto.get .getSelectedShift()));
         teacher.setActive(dto.getActive());
-        teacher.setContacts(dto.getContacts() != null ? contactsForTeacher(dto.getContacts()) : new ArrayList<Contact>());
+        teacher.setContacts(dto.getContacts() != null ? ContactMapper.contactFromDto2(dto.getContacts()) : new ArrayList<Contact>());
         //implement message
 
         return teacher;
     }
-    public static Set<Teacher> teacherFromDto(Set<TeacherDto> dtoList){
+
+    public static Set<Teacher> teacherFromDto(Set<TeacherDto> dtoList) {
         return !dtoList.isEmpty()
-                ? dtoList.stream().map(d->teacherFromDto(d)).collect(Collectors.toSet())
+                ? dtoList.stream().map(d -> teacherFromDto(d)).collect(Collectors.toSet())
                 : new HashSet<Teacher>();
     }
 
-    public static List<Contact> insertTeacherInContacts(Teacher teacher, List<ContactDto> contactsDto) {
-        return contactsDto.stream()
-                .map(ContactMapper::contactFromDto)
-                .peek(c -> c.setTeacher(teacher))
-                .toList();
-    }
+//    public static List<Contact> insertTeacherInContacts(Teacher teacher, List<ContactDto> contactsDto) {
+//        return contactsDto.stream()
+//                .map(ContactMapper::contactFromDto)
+//                .peek(c -> c.setTeacher(teacher))
+//                .toList();
+//    }
 
     //    public static List<Subject> subjectsFromDto(List<SubjectEntityDto> subjectList){
 //        var result = subjectList.stream()

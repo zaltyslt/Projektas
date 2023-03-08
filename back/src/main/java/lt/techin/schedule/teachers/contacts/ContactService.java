@@ -21,7 +21,7 @@ public class ContactService {
     public ContactService(ContactRepository contactRepository, TeacherRepository teacherRepository) {
         this.contactRepository = contactRepository;
         this.teacherRepository = teacherRepository;
-       dummyTeacher = new Teacher(0L, "_Dummy", "_Dummy");
+       dummyTeacher = new Teacher(0L, "_Dummy", "_Dummy", true);
     }
 
     @PostConstruct
@@ -63,6 +63,12 @@ public class ContactService {
         var result = contactRepository.findById(id);
         return result;
     }
+
+//    public List<Contact> saveContacts(Teacher teacher, List<Contact> contacts){
+//        for(Contact contact: contacts){
+//
+//        }
+//    }
 
     public void deleteContactsByTeacher(Teacher teacher){
         contactRepository.deleteAllByTeacher(teacher);

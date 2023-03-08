@@ -1,4 +1,4 @@
-package lt.techin.schedule.teachers;
+package trash;
 
 public class TestDto {
     private String key;
@@ -16,7 +16,7 @@ public class TestDto {
 
     @Override
     public String toString() {
-        return "TestDto{" +
+        return "ScheduleCreateDto{" +
                 "key='" + key + '\'' +
                 '}';
     }

@@ -26,10 +26,15 @@ export function CreateModule() {
   const [isPostUsed, setIsPostUsed] = useState(false);
   const [moduleErrors, setModuleErrors] = useState();
 
+  const clear = () => {
+    setNumber("");
+    setName("");
+  }
 
   const validation = () => {
     if (isValidNumber && isValidName && !isNumberEmpty && !isNameEmpty && !isNumberTooLong && !isNameTooLong) {
       createModule();
+      clear();
     }
   };
 

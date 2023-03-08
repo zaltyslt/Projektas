@@ -40,9 +40,9 @@ export function ViewProgram() {
           <Grid item sm={10}>
             <header>
               <h1>{program.programName}</h1>
-              <div>
+              {/* <div>
                 <span id="created-date">Sukurta: {program.createdDate}</span>
-              </div>
+              </div> */}
               <div>
                 <span id="modified-date">Paskutinį kartą redaguota: {program.modifiedDate}</span>
               </div>
