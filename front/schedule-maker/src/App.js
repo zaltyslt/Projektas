@@ -39,6 +39,7 @@ import { EditTeacher } from "./pages/teachers/EditTeacher";
 
 import { ScheduleList } from "./pages/schedules/ScheduleList";
 import { CreateSchedule } from "./pages/schedules/CreateSchedule";
+import { AddLesson } from "./pages/schedules/AddLesson";
 
 
 function App() {
@@ -86,6 +87,7 @@ function App() {
 
           {/*   SCHEDULE PATHS */}
           <Route path="/create-schedule" element={<CreateSchedule />}></Route>
+          <Route path="/add-lesson/:id" element={<AddLesson />}></Route>
         </Routes>
       </HashRouter>
     </div>
