@@ -69,7 +69,8 @@ public class TeacherServiceFind {
                     .map(TeacherMapper::teacherToDto)
                     .toList()
                 : new ArrayList<>();
-//            return new HashSet<TeacherDto>();
+
+
     }
 
     public Set<TeacherSubjectsDto> getMiniSubjects(){

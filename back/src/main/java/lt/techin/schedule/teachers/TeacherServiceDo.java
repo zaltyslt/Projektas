@@ -75,8 +75,8 @@ public class TeacherServiceDo {
             }
         }
 
-        if (teacherDto.getTeacherShiftDto() != null) {
-            Optional<Shift> shift = shiftRepository.findById(teacherDto.getTeacherShiftDto().getId());
+        if (teacherDto.getSelectedShift() != null) {
+            Optional<Shift> shift = shiftRepository.findById(teacherDto.getSelectedShift().getId());
             if (shift.isPresent()) {
                 newTeacher.setShift(shift.get());
             }
@@ -94,17 +94,17 @@ public class TeacherServiceDo {
         Teacher newTeacher = TeacherMapper.teacherFromDto(teacherDto);
 
         //jei tik norim isjungt, tai kitu lauku nekeiciam
-        if (presentTeacher.getActive() != newTeacher.getActive()) {
-            presentTeacher.setActive(!presentTeacher.getActive());
-            teacherRepository.save(presentTeacher);
-            return ResponseEntity.accepted().body(TeacherMapper.teacherToDto(presentTeacher));
-        }
+//        if (presentTeacher.getActive() != newTeacher.getActive()) {
+//            presentTeacher.setActive(!presentTeacher.getActive());
+//            teacherRepository.save(presentTeacher);
+//            return ResponseEntity.accepted().body(TeacherMapper.teacherToDto(presentTeacher));
+//        }
 
         int newTeacherHash = Objects.hash(newTeacher.getfName().toLowerCase(), newTeacher.getlName().toLowerCase());
 
         isNotDuplicate(newTeacher);
 
-        contactService.createContacts(newTeacher, newTeacher.getContacts());
+        contactService.updateContacts (newTeacher);
         newTeacher = teacherRepository.save(newTeacher);
 
         return ResponseEntity.ok(TeacherMapper.teacherToDto(newTeacher));
@@ -178,7 +178,7 @@ public class TeacherServiceDo {
             Map<ContactType, String> teacherContacts = teacher.getContacts().stream()
                     .collect(Collectors.toMap(c -> c.getContactType(), c -> c.getContactValue()));
 
-            if (newTeacherContacts.get(ContactType.PHONE_NUMBER).equals(teacherContacts.get(ContactType.PHONE_NUMBER)) &&
+            if (newTeacherContacts.get(ContactType.PHONE_NUMBER).equals(teacherContacts.get(ContactType.PHONE_NUMBER)) ||
                     newTeacherContacts.get(ContactType.DIRECT_EMAIL).equals(teacherContacts.get(ContactType.DIRECT_EMAIL))
             ) {
                 throw new TeacherException(HttpStatus.CONFLICT, "Bandoma įvesti esamą mokytoją !!!");

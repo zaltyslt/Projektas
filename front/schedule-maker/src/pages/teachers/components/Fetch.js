@@ -17,34 +17,78 @@ export async function getDataFrom(endPoint, callback) {
   return result;
 }
 
-export async function postDataTo(teacher, callback) {
-    const fetchResult = async () => {
-      const response = await fetch("/api/v1/teachers/create", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          id: teacher.body.id,
-          fName: teacher.body.fName,
-          lName: teacher.body.lName,
-          active: teacher.body.active,
-          workHoursPerWeek: teacher.body.workHoursPerWeek,
-          contacts: teacher.contacts,
-          teacherShiftDto: teacher.shift,
-          subjectsList: teacher.subjects,
-        }),
-      });
+// export async function postDataTo(teacher, callback) {
+//     const fetchResult = async () => {
+      
+//         const response = await fetch("/api/v1/teachers/create", {
+//         method: "POST",
+//         headers: { "Content-Type": "application/json" },
+//         body: JSON.stringify(
+        
+//     teacher
+       
+//       ),
+//       });
 
-      const body = await response.json();
-      const headers = response.headers;
-      const status = response.status;
-      return { body, headers, status };
-    };
+//       const body = await response.json();
+//       const headers = response.headers;
+//       const status = response.status;
+//       return { body, headers, status };
+//     };
   
-    const result = await fetchResult();
-    callback(result);
-  
-    return result;
-  }
+//     const result = await fetchResult();
+//     callback(result);
+//     console.log(result);
+//     return result;
+//   }
+
+export async function postDataTo(teacher) {
+  // console.log(teacher);
+  const response = await fetch("/api/v1/teachers/create", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(teacher),
+  });
+
+  const body = await response.json();
+  const headers = response.headers;
+  const status = response.status;
+  console.log(response);
+  // return { response };
+  return { body, headers, status };
+}
+
+export async function putDataTo(teacher) {
+  // console.log(teacher);
+  const response = await fetch("/api/v1/teachers/update?tid=" + teacher.id, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(teacher),
+  });
+
+  const result = await response.json();
+  const headers = response.headers;
+  const status = response.status;
+ console.log(result);
+  return { result };
+  // return { body, headers, status };
+}
+
+export async function switchActive(id) {
+  console.log(id);
+  const response = await fetch(`/api/v1/teachers/active?tid=${id}&active=false` ,{
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    // body: JSON.stringify(teacher),
+  });
+
+  const body = await response.json();
+  const headers = response.headers;
+  const status = response.status;
+  // console.log(response);
+  // return { response };
+  return { body, headers, status };
+}
    
 //    function draw(obj){
 //     for (const prop in obj) {

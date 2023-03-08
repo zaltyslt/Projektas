@@ -1,13 +1,20 @@
 import React from "react";
 import {EntityForm} from "./components/une";
+// import { useParams } from "react-router-dom";
+import { Teacher } from "./Teacher";
+import { postDataTo} from "./components/Fetch";
 
-export function CreateEntityPage() {
+export function CreateTeacher() {
  
-    function handleCreate(entity) {
-    // Make an API request to create the entity
-    console.log("Creating entity", entity);
-  }
+    async function handleCreate(teacher) {
+      
+      console.log(teacher);
+      
+        result = await postDataTo(teacher);
+      
+      console.log(result);
+      return result;
+    } 
 
-  return <EntityForm mode="create" onSave={handleCreate} />;
+  return <Teacher mode="create" onSave={handleCreate} />; 
 }
-

@@ -81,9 +81,9 @@ public class TeacherServiceGenerate {
 
 //         public Teacher(Long id, List< Contact > contacts, Set<Subject> subjects, Shift shift, String fName, String lName, String nickName,
 //         Boolean isActive, LocalDateTime createdDateTime, LocalDateTime modifiedDateAndTime, Integer workHoursPerWeek, Integer hashCode) {
-        Teacher t1 = new Teacher(null, null,subSet1,sh1,"Vardas1", "Pavarde1", "", true, LocalDateTime.now(),LocalDateTime.now(), 10);
-        Teacher t2 = new Teacher(null, null,subSet2,sh2,"Kitas2", "Kitoks2", "", true, LocalDateTime.now(),LocalDateTime.now(), 20);
-        Teacher t3 = new Teacher(null, null,subSet3,sh3,"Trečiokas", "Trečias", "", true, LocalDateTime.now(),LocalDateTime.now(), 30);
+        Teacher t1 = new Teacher(null, null,subSet1,sh1,"Vardas1", "Pavarde1",  true, LocalDateTime.now(),LocalDateTime.now(), 10);
+        Teacher t2 = new Teacher(null, null,subSet2,sh2,"Kitas2", "Kitoks2", true, LocalDateTime.now(),LocalDateTime.now(), 20);
+        Teacher t3 = new Teacher(null, null,subSet3,sh3,"Trečiokas", "Trečias", true, LocalDateTime.now(),LocalDateTime.now(), 30);
        var teach = teacherRepository.saveAll(Arrays.asList(t1,t2,t3));
 
         Contact con11 = new Contact(t1, ContactType.TEAMS_EMAIL, "Teams@1");

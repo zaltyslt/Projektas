@@ -27,6 +27,7 @@ export function TeacherList() {
   const [teachers, setTeachers] = useState([]);
   const [filteredTeachers, setFilteredTeachers] = useState([]);
   const [deletedTeachers, setDeletedTeachers] = useState([]);
+  const [deletedFiltered, setDeletedFiltered] = useState([]);
   // const [subjects, setSubjects] = useState([]);
 
   const [page, setPage] = useState(0);
@@ -36,25 +37,25 @@ export function TeacherList() {
   const [rowsPerPageP, setRowsPerPageP] = useState(10);
   const [isChecked, setChecked] = useState(false);
 
-  function CreateEntityPage() {
-    function handleCreate(entity) {
-      // Make an API request to create the entity
-      console.log("Creating entity", entity);
-    }
+  // function CreateEntityPage() {
+  //   function handleCreate(entity) {
+  //     // Make an API request to create the entity
+  //     console.log("Creating entity", entity);
+  //   }
 
-    return <EntityForm mode="create" onSave={handleCreate} />;
-  }
+  //   return <EntityForm mode="create" onSave={handleCreate} />;
+  // }
 
-  function UpdateEntityPage({ entityId }) {
-    function handleUpdate(entity) {
-      // Make an API request to update the entity
-      console.log("Updating entity", entity);
-    }
+  // function UpdateEntityPage({ entityId }) {
+  //   function handleUpdate(entity) {
+  //     // Make an API request to update the entity
+  //     console.log("Updating entity", entity);
+  //   }
 
-    return (
-      <EntityForm mode="update" entityId={entityId} onSave={handleUpdate} />
-    );
-  }
+  //   return (
+  //     <EntityForm mode="update" entityId={entityId} onSave={handleUpdate} />
+  //   );
+  // }
 
   useEffect(() => {
     fetchTeachers();
@@ -103,16 +104,17 @@ export function TeacherList() {
     setRowsPerPageP(parseInt(event.target.value, 10));
     setPageP(0);
   };
-
+//////////////////////
   const handleSearch = (event) => {
     // console.log(teachers);
+    
     if (event.length === 0) {
       setFilteredTeachers(teachers);
     } else {
       const filtered = teachers.filter((teacher) => {
         const teacherFName = teacher.fName.toLowerCase();
         const teacherLName = teacher.lName.toLowerCase();
-        const shift = teacher.teacherShiftDto.name.toLowerCase();
+        const shift = teacher.selectedShift.name.toLowerCase();
         const moduleNamesArray = teacher.subjectsList
           .map((subject) => subject.name.toLowerCase())
           .flat();
@@ -124,8 +126,33 @@ export function TeacherList() {
           moduleNamesArray.some((name) => name.includes(event.toLowerCase()))
         );
       });
-
+    
       setFilteredTeachers(filtered);
+    }
+      if (isChecked) {
+        if (event.length === 0) {
+          setDeletedFiltered(deletedTeachers);
+        } else {
+          const deletedFiltered = deletedTeachers.filter((teacher) => {
+            const teacherFName = teacher.fName.toLowerCase();
+            const teacherLName = teacher.lName.toLowerCase();
+            const shift = teacher.selectedShift.name.toLowerCase();
+            const moduleNamesArray = teacher.subjectsList
+              .map((subject) => subject.name.toLowerCase())
+              .flat();
+
+            return (
+              teacherFName.includes(event.toLowerCase()) ||
+              teacherLName.includes(event.toLowerCase()) ||
+              shift.includes(event.toLowerCase()) ||
+              moduleNamesArray.some((name) =>
+                name.includes(event.toLowerCase())
+              )
+            );
+          });
+        
+      }
+      setDeletedFiltered(deletedFiltered);
     }
   };
 
@@ -150,9 +177,6 @@ export function TeacherList() {
           </Grid>
           <Grid item sm={2}>
             <Stack direction="row" justifyContent="flex-end">
-              <Link to="/teachers/create2">
-                <Button variant="contained">Pridėti naują2</Button>
-              </Link>
               <Link to="/teachers/create">
                 <Button variant="contained">Pridėti naują</Button>
               </Link>
@@ -171,13 +195,16 @@ export function TeacherList() {
           </Grid>
         </Grid>
 
-        <TableContainer component={Paper}>
-          <Table aria-label="custom pagination table">
+        <TableContainer component={Paper} style={{ width: "100%" }}>
+          <Table
+            aria-label="custom pagination table"
+            style={{ tableLayout: "fixed" }}
+          >
             <TableHead>
               <TableRow>
-                <TableCell>Vardas Pavardė</TableCell>
-                <TableCell>Dėstomi dalykai</TableCell>
-                <TableCell className="empty-activity">Pamaina</TableCell>
+                <TableCell align="left">Vardas Pavardė</TableCell>
+                <TableCell align="center">Dėstomi dalykai</TableCell>
+                <TableCell align="center">Pamaina</TableCell>
                 {/* <TableCell></TableCell> */}
               </TableRow>
             </TableHead>
@@ -190,19 +217,21 @@ export function TeacherList() {
                 : filteredTeachers
               ).map((teacher) => (
                 <TableRow key={teacher.id}>
-                  <TableCell component="th" scope="row">
+                  <TableCell component="th" scope="row" align="left">
                     <Link to={"/teachers/view/" + teacher.id}>
-                      {teacher.fName + " " + teacher.lName}
+                      {teacher.id +
+                        " View " +
+                        " " +
+                        teacher.fName +
+                        " " +
+                        teacher.lName}
                     </Link>
-
                     &nbsp;|&nbsp;
                     {/*                                 33370 */}
-                    <Link to={`/teachers/edit2/${teacher.id}`}>
-                      {` Edit ${teacher.fName} ${teacher.id}`}
-                    </Link>
+                    <Link to={`/teachers/edit/${teacher.id}`}>{` Edit `}</Link>
                   </TableCell>
 
-                  <TableCell>
+                  <TableCell align="center">
                     {teacher.subjectsList && teacher.subjectsList.length > 0
                       ? teacher.subjectsList.map((subjectItem, index) => {
                           {
@@ -212,13 +241,11 @@ export function TeacherList() {
                           }
                           return <p key={index}>{subjectItem.name}</p>;
                         })
-                      : "* Nepriskirta"}
+                      : ""}
                   </TableCell>
 
-                  <TableCell>
-                    {teacher.teacherShiftDto
-                      ? teacher.teacherShiftDto.name
-                      : "** Nepriskirta"}
+                  <TableCell align="center">
+                    {teacher.selectedShift ? teacher.selectedShift.name : ""}
                   </TableCell>
                 </TableRow>
               ))}
@@ -266,13 +293,13 @@ export function TeacherList() {
           />
         </FormGroup>
         {isChecked && (
-          <TableContainer component={Paper}>
+          <TableContainer component={Paper} style={{ width: "100%" }}>
             <Table aria-label="custom pagination table">
               <TableHead>
                 <TableRow>
-                  <TableCell>Vardas Pavardė</TableCell>
-                  <TableCell>Dėstomi dalykai</TableCell>
-                  <TableCell className="activity">Veiksmai</TableCell>
+                  <TableCell align="left">Vardas Pavardė</TableCell>
+                  <TableCell align="center">Dėstomi dalykai</TableCell>
+                  <TableCell align="center">Veiksmai</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -289,10 +316,10 @@ export function TeacherList() {
                     </TableCell>
                     <TableCell colSpan={6}>{teacher.active}</TableCell>
                     <TableCell colSpan={2} align="center"> */}
-                    <TableCell component="th" scope="row">
-                      {teacher.fName}
+                    <TableCell component="th" scope="row" align="left">
+                      {`${teacher.fName} ${teacher.lName}`}
                     </TableCell>
-                    <TableCell>
+                    <TableCell align="center">
                       {teacher.subjectsList && teacher.subjectsList.length > 0
                         ? teacher.subjectsList.map((subjectItem, index) => {
                             {

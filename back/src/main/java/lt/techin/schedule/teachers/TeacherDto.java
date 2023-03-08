@@ -1,6 +1,7 @@
 package lt.techin.schedule.teachers;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import lt.techin.schedule.shift.ShiftDto;
 import lt.techin.schedule.teachers.contacts.ContactDto2;
 import lt.techin.schedule.teachers.helpers.TeacherShiftDto;
 import lt.techin.schedule.teachers.helpers.TeacherSubjectsDto;
@@ -16,23 +17,19 @@ public class TeacherDto implements Serializable {
     private Long id;
     private String fName;
     private String lName;
-    private String nickName;
     private Set<TeacherSubjectsDto> subjectsList;
 //    private List<ContactDto> contacts;
     private ContactDto2 contacts;
-    private TeacherShiftDto teacherShiftDto;
+//    private TeacherShiftDto teacherShiftDto;
     //    private String savedSubjectsList;
-//    private ShiftDto selectedShift;
-    private Integer workHoursPerWeek;
+    private ShiftDto selectedShift;
+    private String workHoursPerWeek;
     private Boolean isActive;
 
     @JsonFormat(pattern = "yyyy.MM.dd HH:mm")
     private LocalDateTime dateCreated;
     @JsonFormat(pattern = "yyyy.MM.dd HH:mm")
     private LocalDateTime dateModified;
-
-    private String message;
-
 
     public TeacherDto() {
     }
@@ -64,14 +61,6 @@ public class TeacherDto implements Serializable {
         this.lName = lName;
     }
 
-    public String getNickName() {
-        return nickName;
-    }
-
-    public void setNickName(String nickName) {
-        this.nickName = nickName;
-    }
-
     public Set<TeacherSubjectsDto> getSubjectsList() {
         return subjectsList;
     }
@@ -88,19 +77,19 @@ public class TeacherDto implements Serializable {
         this.contacts = contacts;
     }
 
-    public TeacherShiftDto getTeacherShiftDto() {
-        return teacherShiftDto;
+    public ShiftDto getSelectedShift() {
+        return selectedShift;
     }
 
-    public void setTeacherShiftDto(TeacherShiftDto teacherShiftDto) {
-        this.teacherShiftDto = teacherShiftDto;
+    public void setSelectedShift(ShiftDto selectedShift) {
+        this.selectedShift = selectedShift;
     }
 
-    public Integer getWorkHoursPerWeek() {
+    public String getWorkHoursPerWeek() {
         return workHoursPerWeek;
     }
 
-    public void setWorkHoursPerWeek(Integer workHoursPerWeek) {
+    public void setWorkHoursPerWeek(String workHoursPerWeek) {
         this.workHoursPerWeek = workHoursPerWeek;
     }
 
@@ -128,30 +117,19 @@ public class TeacherDto implements Serializable {
         this.dateModified = dateModified;
     }
 
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
     @Override
     public String toString() {
         return "TeacherDto{" +
                 "id=" + id +
                 ", fName='" + fName + '\'' +
                 ", lName='" + lName + '\'' +
-                ", nickName='" + nickName + '\'' +
-                ", workHoursPerWeek=" + workHoursPerWeek +
-                ", isActive=" + isActive +
+                ", subjectsList=" + subjectsList +
                 ", contacts=" + contacts +
-                ", subjectsDtoList=" + subjectsList +
-                ", teacherShiftDto=" + teacherShiftDto +
-
+                ", selectedShift=" + selectedShift +
+                ", workHoursPerWeek='" + workHoursPerWeek + '\'' +
+                ", isActive=" + isActive +
                 ", dateCreated=" + dateCreated +
-                ", dateMotified=" + dateModified +
-                ", message='" + message + '\'' +
+                ", dateModified=" + dateModified +
                 '}';
     }
 }

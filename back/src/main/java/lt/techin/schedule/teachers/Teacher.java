@@ -63,8 +63,7 @@ public class Teacher implements Serializable {
     private String fName = "";
     @NotNull
     private String lName = "";
-    @NotNull
-    private String nickName;
+
     private Boolean isActive;
     @CreatedDate
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
@@ -110,14 +109,14 @@ public class Teacher implements Serializable {
         this.isActive = isActive;
     }
 
-    public Teacher(Long id, List<Contact> contacts, Set<Subject> subjects, Shift shift, String fName, String lName, String nickName, Boolean isActive, LocalDateTime createdDateTime, LocalDateTime modifiedDateAndTime, Integer workHoursPerWeek) {
+    public Teacher(Long id, List<Contact> contacts, Set<Subject> subjects, Shift shift, String fName, String lName, Boolean isActive, LocalDateTime createdDateTime, LocalDateTime modifiedDateAndTime, Integer workHoursPerWeek) {
         this.id = id;
         this.contacts = contacts;
         this.subjects = subjects;
         this.shift = shift;
         this.fName = fName;
         this.lName = lName;
-        this.nickName = nickName;
+
         this.isActive = isActive;
         this.createdDateTime = createdDateTime;
         this.modifiedDateAndTime = modifiedDateAndTime;
@@ -181,14 +180,6 @@ public class Teacher implements Serializable {
         this.lName = lName;
     }
 
-    public String getNickName() {
-        return nickName;
-    }
-
-    public void setNickName(String nickName) {
-        this.nickName = nickName;
-    }
-
     public Boolean getActive() {
         return isActive;
     }
@@ -226,7 +217,9 @@ public class Teacher implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Teacher teacher = (Teacher) o;
-        return id.equals(teacher.id) && Objects.equals(contacts, teacher.contacts) && Objects.equals(subjects, teacher.subjects) && Objects.equals(shift, teacher.shift) && Objects.equals(fName, teacher.fName) && Objects.equals(lName, teacher.lName) && Objects.equals(nickName, teacher.nickName) && Objects.equals(isActive, teacher.isActive) && Objects.equals(workHoursPerWeek, teacher.workHoursPerWeek);
+        return id.equals(teacher.id) && Objects.equals(contacts, teacher.contacts) && Objects.equals(subjects, teacher.subjects) &&
+                Objects.equals(shift, teacher.shift) && Objects.equals(fName, teacher.fName) && Objects.equals(lName, teacher.lName)
+              && Objects.equals(isActive, teacher.isActive) && Objects.equals(workHoursPerWeek, teacher.workHoursPerWeek);
     }
 
     @Override
@@ -243,7 +236,6 @@ public class Teacher implements Serializable {
                 ", shift=" + shift +
                 ", fName='" + fName + '\'' +
                 ", lName='" + lName + '\'' +
-                ", nickName='" + nickName + '\'' +
                 ", isActive=" + isActive +
                 ", createdDateTime=" + createdDateTime +
                 ", modifiedDateAndTime=" + modifiedDateAndTime +

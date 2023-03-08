@@ -21,21 +21,21 @@ public class TeacherControllerAction {
     @PostMapping(value = "/create", consumes = {MediaType.APPLICATION_JSON_VALUE}) //teacher create
     public ResponseEntity<TeacherDto> createTeacher(@RequestBody TeacherDto teacherDto) {
         var result = teacherDto;
-
-        if (result.getSubjectsList() != null &&
+//        return ResponseEntity.ok(teacherDto);
+        if (
+//                result.getSubjectsList() != null &&
                 result.getContacts() != null &&
-                result.getTeacherShiftDto() != null &&
+                result.getSelectedShift() != null &&
                 result.getWorkHoursPerWeek() != null &&
                 result.getActive() != null &&
-                result.getTeacherShiftDto() != null
+                result.getSelectedShift() != null
         ){
             return teacherServiceDo.createTeacher(result);
         }
-        throw new TeacherException(HttpStatus.EXPECTATION_FAILED,"Insuficient data!");
+        throw new TeacherException(HttpStatus.EXPECTATION_FAILED,"Nepakanka duomenų!");
+
     }
-
     @PostMapping(value = "/create/test", consumes = {MediaType.APPLICATION_JSON_VALUE}) //teacher create   sdf
-
 //public String testData(@RequestBody String payLoad) {
     public String testData(@RequestBody String payLoad) {
         var aa = payLoad;
@@ -57,7 +57,7 @@ public class TeacherControllerAction {
                 : "Not OK";
     }
 
-    @PatchMapping("/update")
+    @PutMapping("/update")
     public ResponseEntity<TeacherDto> updateTeacherDetails(@RequestParam("tid") Long teacherId, @RequestBody TeacherDto teacherDto) {
         return teacherServiceDo.updateTeacher(teacherId, teacherDto);
     }
