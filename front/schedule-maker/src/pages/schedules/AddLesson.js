@@ -32,6 +32,7 @@ export function AddLesson() {
   const hours = data.state.subject.subject.hours;
   const shiftId = data.state.schedule.schedule.groups.shift.id;
   const shift = data.state.schedule.schedule.groups.shift.name;
+  const groupId = data.state.schedule.schedule.groups.id;
 
   useEffect(() => {
     fetch(`api/v1/subjects/${params.id}`)
@@ -49,7 +50,7 @@ export function AddLesson() {
   }, []);
 
   const createLesson = () => {
-    fetch(`api/v1/lessons`, {
+    fetch(`api/v1/lessons/${scheduleId}?groupId=${groupId}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -60,8 +61,8 @@ export function AddLesson() {
         assignedHours: plannedHours,
         dateFrom,
         dateUntil,
-        lessonStartingTime,
-        lessonEndTime
+        startIntEnum: lessonStartingTime,
+        endIntEnum: lessonEndTime
       })
     })
   };
