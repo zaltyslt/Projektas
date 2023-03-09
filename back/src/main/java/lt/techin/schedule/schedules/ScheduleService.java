@@ -65,4 +65,8 @@ public class ScheduleService {
         }
         return null;
     }
+
+    public void planSchedule(PlannerDto plannerDto) {
+
+    }
 }
