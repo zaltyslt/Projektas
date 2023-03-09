@@ -10,6 +10,10 @@
     width: 12%;
 }
 
+.group-empty-activity {
+    width: 15%;
+}
+
 TableCell {
     width: 50%;
 }

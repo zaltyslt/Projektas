@@ -19,7 +19,7 @@ export function ViewGroup() {
         <Grid container rowSpacing={4}>
           <Grid item sm={10}>
             <header>
-              <h1>Grupė: {group.name}</h1>
+              <h1>{group.name}</h1>
               <span id="modified-date">
                 Paskutinį kartą redaguota: {group.modifiedDate}
               </span>
