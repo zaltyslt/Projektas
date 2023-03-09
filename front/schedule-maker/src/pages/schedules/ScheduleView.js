@@ -62,7 +62,13 @@ export function ScheduleView() {
                   <TableCell align="center">{subject.hours}</TableCell>
                   <TableCell align="center">?</TableCell>
                   <TableCell align="center" className="activity">
-                    <Link to={`/schedules/add-lesson/${subject.subject}`}>
+                    <Link
+                      to={`/schedules/add-lesson/${subject.subject}`}
+                      state={{
+                        schedule: {schedule},
+                        subject: {subject}
+                      }}
+                    >
                       <Button variant="contained">Planuoti</Button>
                     </Link>
                   </TableCell>

@@ -84,7 +84,7 @@ public class TeacherServiceFind {
         return TeacherSubjectMapper.subjectsToDtos(result);
     }
 
-    public List<Teacher> findTeachersBySubjectsId(Long subjectId) {
-        return teacherRepository.findTeachersBySubjectsId(subjectId);
+    public List<Teacher> findTeachersBySubjectsId(Long subjectId, Long shiftId) {
+        return teacherRepository.findTeachersBySubjectsId(subjectId).stream().filter(t -> t.getShift().getId().equals(shiftId)).collect(Collectors.toList());
     }
 }
