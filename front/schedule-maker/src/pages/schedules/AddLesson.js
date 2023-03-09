@@ -13,7 +13,6 @@ export function AddLesson() {
     fetch(`api/v1/subjects/${params.id}`)
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
         setSubject(data);
         setClassRooms(data.classRooms);
       });
