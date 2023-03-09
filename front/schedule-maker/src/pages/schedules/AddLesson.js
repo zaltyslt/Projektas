@@ -55,12 +55,11 @@ export function AddLesson() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        selectedClassRoom,
-        selectedTeacher,
-        hours,
+        classroom: selectedClassRoom,
+        teacher: selectedTeacher,
+        assignedHours: plannedHours,
         dateFrom,
         dateUntil,
-        plannedHours,
         lessonStartingTime,
         lessonEndTime
       })
