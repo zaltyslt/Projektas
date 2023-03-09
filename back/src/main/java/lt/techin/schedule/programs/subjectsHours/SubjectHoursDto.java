@@ -9,12 +9,23 @@ public class SubjectHoursDto {
     private Long id;
     private Subject subjectn;
     private String subjectName;
+
+    private Boolean deleted;
+
     private Long subject;
     private int hours;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime createdDate;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime modifiedDate;
+
+    public Boolean getDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(Boolean deleted) {
+        this.deleted = deleted;
+    }
 
     public Subject getSubjectn() {
         return subjectn;

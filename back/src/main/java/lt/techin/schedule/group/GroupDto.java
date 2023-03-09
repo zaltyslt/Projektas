@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lt.techin.schedule.config.DataFieldsLengthConstraints;
 
 import lt.techin.schedule.shift.ShiftDto;
+import lt.techin.schedule.validators.SchoolYearValid;
 import lt.techin.schedule.validators.TextValid;
 import lt.techin.schedule.programs.ProgramDto;
 
@@ -17,6 +18,7 @@ public class GroupDto {
     @TextValid(textMaximumLength = DataFieldsLengthConstraints.TEXT_FIELD_MAXIMUM_LENGTH)
     private String name;
 
+    @SchoolYearValid(textMaximumLength = DataFieldsLengthConstraints.TEXT_FIELD_MAXIMUM_LENGTH)
     private String schoolYear;
 
     private int studentAmount;

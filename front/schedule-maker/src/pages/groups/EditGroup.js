@@ -31,17 +31,24 @@ export function EditGroup() {
   const [programs, setPrograms] = useState([]);
   const [shifts, setShifts] = useState([]);
 
-  const [nameError, setNameError] = useState(false);
-  const [yearError, setYearError] = useState(false);
-  const [studentAmountError, setStudentAmountError] = useState(false);
   const [programError, setProgramError] = useState(false);
   const [shiftError, setShiftError] = useState(false);
 
+  const [nameError, setNameError] = useState(false);
   const [nameNotValid, setNameNotValid] = useState(false);
-  const [yearNotValid, setYearNotValid] = useState(false);
+  const [isNameTooLong, setIsNameTooLong] = useState(false);
 
-  const [error, setError] = useState("");
-  const [createMessage, setCreateMessage] = useState("");
+  const [yearError, setYearError] = useState(false);
+  const [yearNotValid, setYearNotValid] = useState(false);
+  const [isYearTooLong, setIsYearTooLong] = useState(false);
+
+  const [studentAmountError, setStudentAmountError] = useState(false);
+  const [studentAmountNotValid, setStudentAmountNotValid] = useState(false);
+  const [isStudentAmountTooLong, setIsStudentAmountTooLong] = useState(false);
+
+  const [successfulPost, setSuccessfulPost] = useState();
+  const [isPostUsed, setIsPostUsed] = useState(false);
+  const [groupErrors, setGroupErrors] = useState();
 
   const listUrl = useHref("/groups");
 
@@ -51,14 +58,16 @@ export function EditGroup() {
 
   useEffect(() => fetchShifts, []);
 
-  const fetchGroup = () => {
-    fetch("api/v1/group/view-group/" + params.id)
+  const fetchGroup = async () => {
+    await fetch("api/v1/group/view-group/" + params.id)
       .then((response) => response.json())
       .then((data) => {
         setGroup(data);
         setName(data.name);
         setSchoolYear(data.schoolYear);
         setStudentAmount(data.studentAmount);
+        setProgram(data.program);
+        setShift(data.shift);
       });
   };
 
@@ -75,42 +84,18 @@ export function EditGroup() {
   };
 
   const validation = () => {
-    setCreateMessage("");
-    const badSymbols = "!@#$%^&*_+={}<>|~`\\'";
-    let notValidName = name.split("").some((char) => badSymbols.includes(char));
-    let notValidYear = schoolYear.split("").some((char) => badSymbols.includes(char));
-
-    if (
-      name === "" &&
-      schoolYear === "" &&
-      studentAmount === "" &&
-      program === "" &&
-      shift === ""
-    ) {
-      setNameError(true);
-      setYearError(true);
-      setStudentAmountError(true);
+    if (program === "") {
       setProgramError(true);
-      setShiftError(true);
-    } else if (name === "") {
-      setNameError(true);
-    } else if (notValidName) {
-      setNameError(false);
-      setNameNotValid(true);
-    } else if (schoolYear === "") {
-      setYearError(true);
-    } else if (notValidYear) {
-      setYearError(false);
-      setYearNotValid(true);
-    } else if (studentAmount === "") {
-      setStudentAmountError(true);
-    } else if (program === "") {
-      setProgramError(true);
-    } else if (shift === "") {
-      setShiftError(true);
-    } else {
-      editGroup();
+      return;
     }
+    if (shift === "") {
+      setShiftError(true);
+      return;
+    }
+    if (nameError || nameNotValid || isNameTooLong || yearError || yearNotValid || isYearTooLong || studentAmountError || studentAmountNotValid || isStudentAmountTooLong) {
+      return;
+    }
+    editGroup();
   };
 
   const editGroup = () => {
@@ -126,20 +111,23 @@ export function EditGroup() {
         program,
         shift,
       }),
-    }).then((response) => {
-      let success = response.ok;
+    }) 
+    .then(response => response.json())
+    .then(data => {
+        handleAfterPost(data);
+  })
+};
 
-      response.json().then((response) => {
-        if (!success) {
-          setCreateMessage("");
-          setError(response.message);
-        } else {
-          setCreateMessage("Sėkmingai atnaujinta. ");
-          setError("");
-        }
-      });
-    });
-  };
+  const handleAfterPost = ((data) => {
+    if (data.valid) {
+        setSuccessfulPost(true);
+    }
+    else {
+        setGroupErrors(data)
+        setSuccessfulPost(false);
+    }
+    setIsPostUsed(true);
+  })
 
   const deleteGroup = (id) => {
     fetch("/api/v1/group/deactivate-group/" + id, {
@@ -150,11 +138,48 @@ export function EditGroup() {
       }).then(() => (window.location = listUrl));
   }
 
+  const badSymbols = "!@#$%^&*_+={}<>|~`\\'";
+  const textLength = 200;
+
+  const setNameAndCheck = (name) => {
+    setName(name);
+
+    (name.length === 0) ? setNameError(true) :  setNameError(false);
+
+    (name.length > textLength) ? setIsNameTooLong(true) : setIsNameTooLong(false);
+
+    const isValid = name.split('').some(char => badSymbols.includes(char));
+    (!isValid) ? setNameNotValid(false) : setNameNotValid(true);
+  }
+
+  const setSchoolYearAndCheck = (year) => {
+    setSchoolYear(year);
+
+    (year.length === 0) ? setYearError(true) :  setYearError(false);
+
+    (year.length > textLength) ? setIsYearTooLong(true) : setIsYearTooLong(false);
+
+    const isValidYearString = /^[0-9\/-]+$/.test(year);
+    (isValidYearString) ? setYearNotValid(false) : setYearNotValid(true);
+  }
+
+  const setStudentAmountAndCheck = (studentAmount) => {
+    setStudentAmount(studentAmount);
+
+    (studentAmount.length === 0) ? setStudentAmountError(true) :  setStudentAmountError(false);
+
+    (studentAmount.length > textLength) ? setIsStudentAmountTooLong(true) : setIsStudentAmountTooLong(false);
+
+    const isDigitsOnly = /^[0-9]+$/.test(studentAmount);
+    (isDigitsOnly) ? setStudentAmountNotValid(false) : setStudentAmountNotValid(true);
+  }
+
+
   return (
     <div>
       <Container>
         <h1>Redagavimas</h1>
-        <h3>{name}</h3>
+        <h3>{group.name}</h3>
         <span id="modified-date">
           Paskutinį kartą redaguota: {group.modifiedDate}
         </span>
@@ -165,20 +190,22 @@ export function EditGroup() {
               <TextField
                 fullWidth
                 required
-                error={nameError || nameNotValid}
+                error={nameError || nameNotValid || isNameTooLong}
                 helperText={
                   nameError
                     ? "Grupės pavadinimas yra privalomas"
                     : nameNotValid
                     ? "Laukas turi negalimų simbolių. "
-                    : ""
+                    : isNameTooLong
+                    ? "Pavadinimas negali būti ilgesnis nei 200 simbolių"
+                    : null
                 }
                 variant="outlined"
                 label="Grupės pavadinimas"
                 id="name"
                 name="name"
                 value={name}
-                onChange={(e) => setName(e.target.value)}
+                onChange={(e) => setNameAndCheck(e.target.value)}
               ></TextField>
             </Grid>
 
@@ -186,20 +213,22 @@ export function EditGroup() {
               <TextField
                 fullWidth
                 required
-                error={yearError || yearNotValid}
+                error={yearError || yearNotValid || isYearTooLong}
                 helperText={
                   yearError
                     ? "Privaloma nurodyti mokslo metus."
                     : yearNotValid
                     ? "Laukas turi negalimų simbolių. "
-                    : ""
+                    : isYearTooLong
+                    ? "Metai negali būti ilgesni nei 200 simbolių"
+                    : null
                 }
                 variant="outlined"
                 label="Mokslo metai"
                 id="schoolYear"
                 name="schoolYear"
                 value={schoolYear}
-                onChange={(e) => setSchoolYear(e.target.value)}
+                onChange={(e) => setSchoolYearAndCheck(e.target.value)}
               ></TextField>
             </Grid>
 
@@ -207,16 +236,22 @@ export function EditGroup() {
               <TextField
                 fullWidth
                 required
-                error={studentAmountError}
+                error={studentAmountError || studentAmountNotValid || isStudentAmountTooLong}
                 helperText={
-                  studentAmountError && "Privaloma nurodyti studentų kiekį."
+                  studentAmountError
+                  ? "Privaloma nurodyti studentų kiekį."
+                  : studentAmountNotValid
+                  ? "Laukas turi susidėti iš skaičių."
+                  : isStudentAmountTooLong
+                  ? "Studentų kiekio laukas negali būti ilgesnis nei 200 skaičių"
+                  : null
                 }
                 variant="outlined"
                 label="Studentų kiekis"
                 id="studentAmount"
                 name="studentAmount"
                 value={studentAmount}
-                onChange={(e) => setStudentAmount(Number(e.target.value))}
+                onChange={(e) => setStudentAmountAndCheck(e.target.value)}
               ></TextField>
             </Grid>
 
@@ -231,13 +266,13 @@ export function EditGroup() {
                   label="Programos pavadinimas"
                   labelId="program-label"
                   id="program"
-                  value={program}
+                  value={program.id || ''}
                   onChange={(e) => {
                     setProgram(e.target.value);
                   }}
                 >
                   {programs.map((program) => (
-                    <MenuItem key={program.id} value={program}>
+                    <MenuItem key={program.id} value={program.id}>
                       {program.programName}
                     </MenuItem>
                   ))}
@@ -256,25 +291,19 @@ export function EditGroup() {
                   label="Pamainos pavadinimas"
                   labelId="shift-label"
                   id="shift"
-                  value={shift}
+                  value={shift.id || ''}
                   onChange={(e) => {
-                    setShift(e.target.value);
+                    const selectedShift = shifts.find((s) => s.id === e.target.value);
+                    setShift(selectedShift || {});
                   }}
                 >
                   {shifts.map((shift) => (
-                    <MenuItem key={shift.id} value={shift}>
+                    <MenuItem key={shift.id} value={shift.id}>
                       {shift.name}
                     </MenuItem>
                   ))}
                 </Select>
               </FormControl>
-            </Grid>
-
-            <Grid item sm={10}>
-              {error && <Alert severity="warning">{error}</Alert>}
-              {createMessage && (
-                <Alert severity="success">{createMessage}</Alert>
-              )}
             </Grid>
 
             <Grid item sm={10}>
@@ -290,6 +319,36 @@ export function EditGroup() {
                 </Link>
               </Stack>
             </Grid>
+
+            <Grid item sm={10}>
+                {isPostUsed ? (
+                    successfulPost ? (
+                        <Alert severity="success"> Grupė sėkmingai pakeista.</Alert>
+                        ) : 
+                        (
+                        <Grid>
+                            <Alert severity="warning">Nepavyko pakeisti grupės.</Alert>
+                            {
+                                (groupErrors.passedValidation ?
+                                    (groupErrors.databaseErrors).map((databaseError, index) => (
+                                        <Alert key={index} severity="warning">
+                                        {databaseError}
+                                        </Alert>
+                                    )) 
+                                    :
+                                    Object.keys(groupErrors.validationErrors).map(key => (
+                                    <Alert key={key} severity="warning"> {groupErrors.validationErrors[key]} {key} laukelyje.
+                                    </Alert>
+                                    ))
+                                )
+                            }
+                        </Grid>
+                        )
+                    ) : 
+                    (
+                    <div></div>
+                    )}
+          </Grid>    
           </Grid>
         </form>
       </Container>

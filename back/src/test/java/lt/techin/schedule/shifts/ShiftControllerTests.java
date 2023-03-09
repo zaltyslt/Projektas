@@ -43,8 +43,6 @@ public class ShiftControllerTests {
         List<Shift> expectedShifts = List.of(shift1, shift2);
         when(shiftService.getActiveShifts()).thenReturn(expectedShifts);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/shift/get-active")).andDo(print());
-
         mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/shift/get-active"))
                 .andExpect(status().isOk())
                 .andExpect(content().json("[" +
