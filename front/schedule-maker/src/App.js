@@ -39,7 +39,7 @@ import { EditTeacher } from "./pages/teachers/EditTeacher";
 
 import { ScheduleList } from "./pages/schedules/ScheduleList";
 import { CreateSchedule } from "./pages/schedules/CreateSchedule";
-
+import { ViewSchedule } from "./pages/schedules/ViewSchedule";
 
 function App() {
   return (
@@ -86,6 +86,7 @@ function App() {
 
           {/*   SCHEDULE PATHS */}
           <Route path="/create-schedule" element={<CreateSchedule />}></Route>
+          <Route path="/schedules/view" element={<ViewSchedule />}></Route>
         </Routes>
       </HashRouter>
     </div>
