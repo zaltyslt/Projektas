@@ -43,7 +43,6 @@ export function ProgramList() {
     };
 
     const enableProgram = (event, program) => {
-        console.log(program)
         fetch(`api/v1/programs/enable-program/${program.id}`, {
             method: "PATCH",
             headers: {

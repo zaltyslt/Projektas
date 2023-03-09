@@ -17,6 +17,8 @@ public class SubjectHours {
     private String subjectName;
     private Long subject;
 
+    private Boolean deleted;
+
     private int hours;
     @CreatedDate
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
@@ -33,6 +35,14 @@ public class SubjectHours {
     @PreUpdate
     public void preUpdate() {
         modifiedDate = LocalDateTime.now();
+    }
+
+    public Boolean getDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(Boolean deleted) {
+        this.deleted = deleted;
     }
 
     public String getSubjectName() {

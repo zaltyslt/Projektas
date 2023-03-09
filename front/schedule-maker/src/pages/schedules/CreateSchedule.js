@@ -35,6 +35,8 @@ export function CreateSchedule() {
   const [dateFromEmpty, setDateFromEmpty] = useState(false);
   const [dateUntilEmpty, setDateUntilEmpty] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [errorLengthName, setErrorLengthName] = useState(false);
+  const [errorLengthYear, setErrorLengthYear] = useState(false);
 
   const badSymbols = "!@#$%^&*_+={}<>|~`\\'";
 
@@ -121,7 +123,7 @@ export function CreateSchedule() {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({        
+      body: JSON.stringify({
         schoolYear,
         semester,
         dateFrom,
@@ -193,16 +195,27 @@ export function CreateSchedule() {
                 label="Mokslo metai"
                 id="schoolYear"
                 name="schoolYear"
-                error={!schoolYearValid || schoolYearEmpty}
+                error={!schoolYearValid || schoolYearEmpty || errorLengthYear}
                 helperText={
                   !schoolYearValid
                     ? "Mokslo metai turi neleidžiamų simbolių."
                     : schoolYearEmpty
-                    ? "Mokslo metai negali būti tušti"
-                    : ""
+                      ? "Mokslo metai negali būti tušti"
+                      : errorLengthYear
+                      ? "Mokslo metai negali būti ilgesnis nei 200 simbolių"
+                      : ""
                 }
                 value={schoolYear}
-                onChange={(e) => validateSchoolYear(e.target.value)}
+                                onChange={(e) => {
+                  const input = e.target.value;
+                  if (input.length > 200) {
+                    setErrorLengthYear(true);
+                  } else {
+                    setErrorLengthYear(false);
+                  }
+                  validateSchoolYear(input);
+                }}
+                // onChange={(e) => validateSchoolYear(e.target.value)}
               ></TextField>
             </Grid>
 
@@ -211,19 +224,30 @@ export function CreateSchedule() {
                 fullWidth
                 required
                 variant="outlined"
-                label="Sesija"
+                label="Pavadinimas (pvz. pusmetis, mėnuo, savaitė, kt.)"
                 id="semester"
                 name="semester"
-                error={!semesterValid || semesterEmpty}
+                error={!semesterValid || semesterEmpty || errorLengthName}
                 helperText={
                   !semesterValid
-                    ? "Semestro pavadinimas turi neleidžiamų simbolių."
+                    ? "Pavadinimas turi neleidžiamų simbolių."
                     : semesterEmpty
-                    ? "Semestro pavadinimas negali būti tuščias"
-                    : ""
+                      ? "Pavadinimas negali būti tuščias"
+                                          : errorLengthName
+                    ? "Pavadinimas negali būti ilgesnis nei 200 simbolių"
+                      : ""
                 }
                 value={semester}
-                onChange={(e) => validateSemester(e.target.value)}
+                                onChange={(e) => {
+                  const input = e.target.value;
+                  if (input.length > 200) {
+                    setErrorLengthName(true);
+                  } else {
+                    setErrorLengthName(false);
+                  }
+                  validateSemester(input);
+                }}
+                // onChange={(e) => validateSemester(e.target.value)}
               ></TextField>
             </Grid>
 
