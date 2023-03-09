@@ -61,7 +61,7 @@ public class Teacher implements Serializable {
     @NotBlank
     @Size(min = 3, max = 30)
     private String fName = "";
-    @NotNull
+    @NotBlank
     private String lName = "";
 
     private Boolean isActive;

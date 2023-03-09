@@ -15,20 +15,13 @@ import java.util.stream.Collectors;
 @Service
 public class TeacherServiceFind {
     private final static Logger logger = LoggerFactory.getLogger(TeacherMapper.class);
-    private TeacherRepository teacherRepository;
-    private final ContactService contactService;
-    private ContactRepository contactRepository;
-    //    private SubjectService subjectService;
-    private SubjectRepository subjectRepository;
+    private final TeacherRepository teacherRepository;
+    private final SubjectRepository subjectRepository;
 
-    public TeacherServiceFind(TeacherRepository teacherRepository, ContactService contactService, ContactRepository contactRepository, SubjectService subjectService, SubjectRepository subjectRepository) {
+    public TeacherServiceFind(TeacherRepository teacherRepository, SubjectRepository subjectRepository) {
         this.teacherRepository = teacherRepository;
-        this.contactService = contactService;
-        this.contactRepository = contactRepository;
-//        this.subjectService = subjectService;
         this.subjectRepository = subjectRepository;
     }
-
     public List<TeacherDto> getAllTeachers() {
         List<Teacher> teachers = teacherRepository.findAll();
         return TeacherMapper.teachersToDtos(teachers);

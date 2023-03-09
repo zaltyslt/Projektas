@@ -8,6 +8,7 @@ import lt.techin.schedule.teachers.helpers.TeacherSubjectsDto;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -34,6 +35,12 @@ public class TeacherDto implements Serializable {
     public TeacherDto() {
     }
 
+    public TeacherDto(Long id, String fName, String lName, Boolean isActive) {
+        this.id = id;
+        this.fName = fName;
+        this.lName = lName;
+        this.isActive = isActive;
+    }
 /////////////////////////
 
 
@@ -115,6 +122,19 @@ public class TeacherDto implements Serializable {
 
     public void setDateModified(LocalDateTime dateModified) {
         this.dateModified = dateModified;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        TeacherDto that = (TeacherDto) o;
+        return Objects.equals(id, that.id) && Objects.equals(fName, that.fName) && Objects.equals(lName, that.lName) && Objects.equals(subjectsList, that.subjectsList) && Objects.equals(contacts, that.contacts) && Objects.equals(selectedShift, that.selectedShift) && Objects.equals(workHoursPerWeek, that.workHoursPerWeek) && Objects.equals(isActive, that.isActive) && Objects.equals(dateCreated, that.dateCreated) && Objects.equals(dateModified, that.dateModified);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, fName, lName, subjectsList, contacts, selectedShift, workHoursPerWeek, isActive, dateCreated, dateModified);
     }
 
     @Override

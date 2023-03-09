@@ -33,6 +33,7 @@ import "../teachers/Teacher.css";
 
 export function Teacher({ mode, teacherId, onSave, handleSave }) {
   const [subjects, setSubjects] = useState([]);
+  const [subject, setSubject] = useState([]);
   const [chosenSubjects, setChosenSubjects] = useState([]);
   const [freeSubjects, setFreeSubjects] = useState([]);
   const [showSubjSelect, setShowSubjSelect] = useState(false); //show/hide
@@ -129,9 +130,13 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
   async function fetchData() {
     getDataFrom("api/v1/teachers/subjects", (data) => {
       if (data) {
+        console.log(data);
         setSubjects(data);
         setFreeSubjects(data);
       } else {
+        console.log("data");
+        setSubjects([]);
+        setFreeSubjects([]);
         setErrorMessage("Nepavyko parsiųsti duomenų iš serverio. (Subject)");
       }
     });
@@ -173,7 +178,10 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
     const { id, value } = event.target;
     const prefix = id.split(".");
     if (prefix[0] === "contacts") {
-      setTeacher((prevTeacher) => ({ ...prevTeacher,contacts: { ...prevTeacher.contacts, [prefix[1]]: value },}));
+      setTeacher((prevTeacher) => ({
+        ...prevTeacher,
+        contacts: { ...prevTeacher.contacts, [prefix[1]]: value },
+      }));
     } else {
       setTeacher((prevTeacher) => ({ ...prevTeacher, [id]: value }));
     }
@@ -234,6 +242,7 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
   ];
 
   useEffect(() => {
+    console.log(freeSubjects);
     const tempSubjects = subjects.filter(
       (subA) =>
         !chosenSubjects.map((subC) => subC.subjectId).includes(subA.subjectId)
@@ -281,7 +290,13 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
     setShift(tempShift);
   };
 
-    return (
+  // async function showInfo() {
+  //   console.log("s "+subjects);
+  //   console.log("f "+freeSubjects);
+  //   console.log("c "+chosenSubjects);
+  // }
+
+  return (
     <Container style={{ maxWidth: "75rem" }}>
       <form>
         <Grid item sm={7}>
@@ -327,8 +342,11 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
           </Grid>
 
           {/* //33370 */}
-          <Grid item sm={7}>
-            
+          <Grid item sm={2}></Grid>
+          <Grid item sm={5}>
+            {/* <Button variant="contained" onClick={showInfo}>
+              ShowInfo
+            </Button> */}
           </Grid>
 
           <Grid item sm={5}>
@@ -366,7 +384,7 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
               id="contacts.phoneNumber"
               value={(teacher.contacts && teacher.contacts.phoneNumber) || ""}
               onChange={(e) => {
-               handleChange(e);
+                handleChange(e);
               }}
               onBlur={(e) => {
                 validate({
@@ -391,7 +409,7 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
               id="contacts.directEmail"
               value={(teacher.contacts && teacher.contacts.directEmail) || ""}
               onChange={(e) => {
-               handleChange(e);
+                handleChange(e);
               }}
               onBlur={(e) => {
                 validate({
@@ -437,7 +455,7 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
               id="contacts.teamsEmail"
               value={(teacher.contacts && teacher.contacts.teamsEmail) || ""}
               onChange={(e) => {
-              handleChange(e);
+                handleChange(e);
               }}
               onBlur={(e) =>
                 validate({
@@ -489,7 +507,7 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
                 }
                 onChange={(e) => {
                   handleShiftChange(e.target.value);
-                                 }}
+                }}
               >
                 {shifts &&
                   shifts.map((shift) => (
@@ -499,7 +517,7 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
                     </MenuItem>
                   ))}
               </Select>
-             </FormControl>
+            </FormControl>
           </Grid>
           <Grid item sm={7}></Grid>
 
@@ -511,24 +529,25 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
                   label="Dalyko pavadinimas"
                   labelId="subject-label"
                   id="subject"
-                  value={subject}
+                  value={subject || ""} //not dangerous for life
                   defaultOpen={true}
                   onChange={(e) => {
                     handleAddChosen(e.target.value);
                   }}
                 >
-                  {freeSubjects.map(
-                    (
-                      subject //map <======
-                    ) => (
-                      <MenuItem
-                        key={"1131" + subject.subjectId}
-                        value={subject}
-                      >
-                        {subject.name}
-                      </MenuItem>
-                    )
-                  )}
+                  {freeSubjects &&
+                    freeSubjects.map(
+                      (
+                        subject //map <======
+                      ) => (
+                        <MenuItem
+                          key={"1131" + subject.subjectId}
+                          value={subject}
+                        >
+                          {subject.name}
+                        </MenuItem>
+                      )
+                    )}
                 </Select>
               </FormControl>
             )}

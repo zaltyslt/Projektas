@@ -10,7 +10,7 @@ export async function getDataFrom(endPoint, callback) {
   if (result.status < 300) {
     data = await result.json();
   } else {
-    window.alert("Fetch " + result.status);
+    // window.alert("Fetch " + result.status);
     data = {
       message: "Operacija nepavyko!",
       status: result.status,

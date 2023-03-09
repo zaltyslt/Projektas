@@ -2,7 +2,7 @@
   "name": "mdb-react-template",
   "version": "5.1.0",
   "description": "template for mdb-react-ui-kit",
-  "homepage": "http://localhost:8080/schedule-maker" ,
+  "homepage": "http://localhost:8080/schedule-maker",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.10.5",
@@ -13,7 +13,7 @@
     "react": "^18.1.0",
     "react-dom": "^18.1.0",
     "react-router-dom": "^6.8.1",
-    "react-scripts": "5.0.1",
+    "react-scripts": "^5.0.1",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
