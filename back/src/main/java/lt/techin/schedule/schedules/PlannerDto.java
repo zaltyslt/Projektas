@@ -1,43 +1,43 @@
 package lt.techin.schedule.schedules;
 
 import lt.techin.schedule.classrooms.Classroom;
-import lt.techin.schedule.shift.Shift;
 import lt.techin.schedule.teachers.Teacher;
+import lt.techin.schedule.teachers.TeacherEntityDto;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 public class PlannerDto {
 
-    private Teacher teacher;
+    private TeacherEntityDto teacher;
 
     private Classroom classroom;
 
-    int assignedHours;
+    private int assignedHours;
 
-    int unassignedHours;
+//    int unassignedHours;
 
-    private Set<LocalDate> dates;
+//    private Set<LocalDate> dates;
+    private LocalDate dateFrom;
 
-    private Shift shift;
+    private LocalDate dateUntil;
+
+    private int startIntEnum;
+
+    private int endIntEnum;
+
 
     public PlannerDto() {
     }
 
-    public PlannerDto(Teacher teacher, Classroom classroom, int assignedHours, int unassignedHours, Set<LocalDate> dates, Shift shift) {
-        this.teacher = teacher;
-        this.classroom = classroom;
-        this.assignedHours = assignedHours;
-        this.unassignedHours = unassignedHours;
-        this.dates = dates;
-        this.shift = shift;
-    }
 
-    public Teacher getTeacher() {
+
+    public TeacherEntityDto getTeacher() {
         return teacher;
     }
 
-    public void setTeacher(Teacher teacher) {
+    public void setTeacher(TeacherEntityDto teacher) {
         this.teacher = teacher;
     }
 
@@ -57,27 +57,51 @@ public class PlannerDto {
         this.assignedHours = assignedHours;
     }
 
-    public int getUnassignedHours() {
-        return unassignedHours;
+//    public int getUnassignedHours() {
+//        return unassignedHours;
+//    }
+//
+//    public void setUnassignedHours(int unassignedHours) {
+//        this.unassignedHours = unassignedHours;
+//    }
+//
+//    public Set<LocalDate> getDates() {
+//        return dates;
+//    }
+//
+//    public void setDates(Set<LocalDate> dates) {
+//        this.dates = dates;
+//    }
+
+    public int getStartIntEnum() {
+        return startIntEnum;
     }
 
-    public void setUnassignedHours(int unassignedHours) {
-        this.unassignedHours = unassignedHours;
+    public void setStartIntEnum(int startIntEnum) {
+        this.startIntEnum = startIntEnum;
     }
 
-    public Set<LocalDate> getDates() {
-        return dates;
+    public int getEndIntEnum() {
+        return endIntEnum;
     }
 
-    public void setDates(Set<LocalDate> dates) {
-        this.dates = dates;
+    public void setEndIntEnum(int endIntEnum) {
+        this.endIntEnum = endIntEnum;
     }
 
-    public Shift getShift() {
-        return shift;
+    public LocalDate getDateFrom() {
+        return dateFrom;
     }
 
-    public void setShift(Shift shift) {
-        this.shift = shift;
+    public void setDateFrom(LocalDate dateFrom) {
+        this.dateFrom = dateFrom;
+    }
+
+    public LocalDate getDateUntil() {
+        return dateUntil;
+    }
+
+    public void setDateUntil(LocalDate dateUntil) {
+        this.dateUntil = dateUntil;
     }
 }

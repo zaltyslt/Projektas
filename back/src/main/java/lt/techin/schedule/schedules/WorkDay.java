@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lt.techin.schedule.shift.Shift;
 import lt.techin.schedule.subject.Subject;
 import lt.techin.schedule.teachers.Teacher;
+import lt.techin.schedule.teachers.TeacherEntityDto;
 
 import java.time.LocalDate;
 import java.util.Objects;
@@ -25,26 +26,19 @@ public class WorkDay {
     @JoinColumn(name = "teacher_teacher_id")
     public Teacher teacher;
 
-    @ManyToOne
-    @JoinColumn(name = "shift_id")
-    public Shift shift;
+    private float lessonStart;
+
+    private float lessonEnd;
 
     public WorkDay() {
     }
 
-    public WorkDay(LocalDate date, Subject subject, Teacher teacher, Shift shift) {
+    public WorkDay(LocalDate date, Subject subject, Teacher teacher, float lessonStart, float lessonEnd) {
         this.date = date;
         this.subject = subject;
         this.teacher = teacher;
-        this.shift = shift;
-    }
-
-    public Shift getShift() {
-        return shift;
-    }
-
-    public void setShift(Shift shift) {
-        this.shift = shift;
+        this.lessonStart = lessonStart;
+        this.lessonEnd = lessonEnd;
     }
 
     public Teacher getTeacher() {
@@ -63,6 +57,30 @@ public class WorkDay {
         this.subject = subject;
     }
 
+    public float getLessonStart() {
+        return lessonStart;
+    }
+
+    public void setLessonStart(float lessonStart) {
+        this.lessonStart = lessonStart;
+    }
+
+    public float getLessonEnd() {
+        return lessonEnd;
+    }
+
+    public void setLessonEnd(float lessonEnd) {
+        this.lessonEnd = lessonEnd;
+    }
+
+    public LocalDate getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDate date) {
+        this.date = date;
+    }
+
     public Long getId() {
         return id;
     }
@@ -75,11 +93,11 @@ public class WorkDay {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof WorkDay workDay)) return false;
-        return Objects.equals(id, workDay.id) && Objects.equals(date, workDay.date) && Objects.equals(subject, workDay.subject) && Objects.equals(teacher, workDay.teacher) && Objects.equals(shift, workDay.shift);
+        return date.equals(workDay.date);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, date, subject, teacher, shift);
+        return Objects.hash(date);
     }
 }
