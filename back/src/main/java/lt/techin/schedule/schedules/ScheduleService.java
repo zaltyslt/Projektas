@@ -1,22 +1,14 @@
 package lt.techin.schedule.schedules;
 
-import lt.techin.schedule.classrooms.BuildingType;
-import lt.techin.schedule.classrooms.Classroom;
 import lt.techin.schedule.exceptions.ValidationException;
 import lt.techin.schedule.group.GroupRepository;
-import lt.techin.schedule.module.Module;
 import lt.techin.schedule.shift.LessonTime;
-import lt.techin.schedule.subject.Subject;
 import lt.techin.schedule.subject.SubjectRepository;
-import lt.techin.schedule.teachers.Teacher;
-import org.hibernate.jdbc.Work;
+import lt.techin.schedule.teachers.TeacherRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import static lt.techin.schedule.schedules.ScheduleMapper.toScheduleCreateDto;
@@ -26,13 +18,19 @@ public class ScheduleService {
     private final ScheduleRepository scheduleRepository;
     private final GroupRepository groupRepository;
     private final SubjectRepository subjectRepository;
+    private final TeacherRepository teacherRepository;
+
+    private final WorkDayRepository workDayRepository;
 
     public ScheduleService(ScheduleRepository scheduleRepository,
                            GroupRepository groupRepository,
-                           SubjectRepository subjectRepository) {
+                           SubjectRepository subjectRepository,
+                           TeacherRepository teacherRepository, WorkDayRepository workDayRepository) {
         this.scheduleRepository = scheduleRepository;
         this.groupRepository = groupRepository;
         this.subjectRepository = subjectRepository;
+        this.teacherRepository = teacherRepository;
+        this.workDayRepository = workDayRepository;
     }
 
     public List<Schedule> getAll() {
@@ -83,49 +81,66 @@ public class ScheduleService {
 
     public void addSubjectPlanToSchedule(Long scheduleId, Long subjectId, PlannerDto plannerDto) {
 
-        Schedule scheduleee = new Schedule();
-        scheduleee.setId(1L);
-        scheduleee.setActive(true);
-        scheduleee.setSemester("semes");
-        scheduleee.setDateFrom(LocalDate.now());
-        scheduleee.setDateUntil(LocalDate.now());
-        scheduleee.setSchoolYear("100");
-        scheduleee.setCreatedDate(LocalDateTime.now());
-        scheduleee.setCreatedDate(LocalDateTime.now());
-        scheduleee.setGroups(null);
+//        Schedule scheduleee = new Schedule();
+//        scheduleee.setId(1L);
+//        scheduleee.setActive(true);
+//        scheduleee.setSemester("semes");
+//        scheduleee.setDateFrom(LocalDate.now());
+//        scheduleee.setDateUntil(LocalDate.now());
+//        scheduleee.setSchoolYear("100");
+//        scheduleee.setCreatedDate(LocalDateTime.now());
+//        scheduleee.setCreatedDate(LocalDateTime.now());
+//        scheduleee.setGroups(null);
+//
+//        Classroom classroom = new Classroom();
+//        classroom.setId(1L);
+//        classroom.setClassroomName("name");
+//        classroom.setBuilding(BuildingType.AKADEMIJA);
+//        classroom.setActive(true);
+//        classroom.setDescription("descr");
+//        classroom.setCreatedDate(LocalDateTime.now());
+//        classroom.setModifiedDate(LocalDateTime.now());
+//
+//        Subject ssu = new Subject();
+//        ssu.setId(subjectId);
+//        ssu.setName("Subjektas");
+//        ssu.setDescription("Desc");
+//        ssu.setClassRooms(Set.of(classroom));
+//
+//        ssu.setModule(new Module(1L, "10", "NameModule", LocalDateTime.now(), LocalDateTime.now(), false));
+//        subjectRepository.save(ssu);
 
-        Classroom classroom = new Classroom();
-        classroom.setId(1L);
-        classroom.setClassroomName("name");
-        classroom.setBuilding(BuildingType.AKADEMIJA);
-        classroom.setActive(true);
-        classroom.setDescription("descr");
-        classroom.setCreatedDate(LocalDateTime.now());
-        classroom.setModifiedDate(LocalDateTime.now());
 
-        Subject ssu = new Subject();
-        ssu.setId(subjectId);
-        ssu.setName("Subjektas");
-        ssu.setDescription("Desc");
-        ssu.setClassRooms(Set.of(classroom));
+//        Schedule currentSchedule = scheduleee; //findById(scheduleId);
+//        Subject subject = subjectRepository.findById(subjectId).orElse(null);
 
-        ssu.setModule(new Module(1L, "10", "NameModule", LocalDateTime.now(), LocalDateTime.now(), false));
-        subjectRepository.save(ssu);
+        var existingSchedule = scheduleRepository.findById(scheduleId).orElseThrow();
+        var existingSubject = subjectRepository.findById(subjectId).orElseThrow();
+        var existingTeacher = teacherRepository.findById(plannerDto.getTeacher().getId()).orElseThrow();
 
 
-        Schedule currentSchedule = scheduleee; //findById(scheduleId);
-        Subject subject = subjectRepository.findById(subjectId).orElse(null);
+//        if (existingSchedule != null && existingSubject != null) {
+//            LocalDate startDate = plannerDto.getDateFrom();
+//            LocalDate endDate = plannerDto.getDateUntil();
+//
+//            //Used so stream would include last day also
+//            startDate.datesUntil(endDate.plusDays(1)).forEach(date -> {
+//                existingSchedule.addWorkDay(new WorkDay(date, existingSubject, existingTeacher,
+//                            LessonTime.getLessonTimeByInt(plannerDto.getStartIntEnum()).getLessonStartFloat(),
+//                            LessonTime.getLessonTimeByInt(plannerDto.getEndIntEnum()).getLessonEndFloat()));
+//            });
+//        }
 
-        if (currentSchedule != null && subject != null) {
-            LocalDate startDate = plannerDto.getDateFrom();
-            LocalDate endDate = plannerDto.getDateUntil();
+        LocalDate date = plannerDto.getDateFrom();
+        int hours = plannerDto.getAssignedHours();
+        int interval = plannerDto.getEndIntEnum() - plannerDto.getStartIntEnum() + 1;
 
-            //Used so stream would include last day also
-            startDate.datesUntil(endDate.plusDays(1)).forEach(date -> {
-                    currentSchedule.addWorkDay(new WorkDay(date, subject, new Teacher(),
-                            LessonTime.getLessonTimeByInt(plannerDto.getStartIntEnum()).getLessonStartFloat(),
-                            LessonTime.getLessonTimeByInt(plannerDto.getEndIntEnum()).getLessonEndFloat()));
-            });
+        for(int i = 1; i <= hours; i+=interval) {
+            WorkDay workDay = new WorkDay(date, existingSubject, existingTeacher, existingSchedule, LessonTime.getLessonTimeByInt(plannerDto.getStartIntEnum()).getLessonStartFloat(), LessonTime.getLessonTimeByInt(plannerDto.getEndIntEnum()).getLessonEndFloat());
+            workDayRepository.save(workDay);
+            existingSchedule.addWorkDay(workDay);
+            scheduleRepository.save(existingSchedule);
+            date = date.plusDays(1);
         }
     }
 

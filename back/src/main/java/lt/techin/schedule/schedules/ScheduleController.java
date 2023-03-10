@@ -65,9 +65,9 @@ public class ScheduleController {
 
     @PutMapping("/plan-schedule/{scheduleId}")
     public void planSchedule(@PathVariable Long scheduleId, @RequestParam Long subjectId, @RequestBody PlannerDto plannerDto) {
-        System.out.println(scheduleId + " " + plannerDto.getAssignedHours() + " " + plannerDto.getEndIntEnum() + " " + plannerDto.getStartIntEnum() + " " +
-                " " + plannerDto.getDateFrom() + " " +  plannerDto.getDateUntil() + " " + plannerDto.getClassroom() +
-                plannerDto.getTeacher() + " " + subjectId);
+//        System.out.println(scheduleId + " " + plannerDto.getAssignedHours() + " " + plannerDto.getEndIntEnum() + " " + plannerDto.getStartIntEnum() + " " +
+//                " " + plannerDto.getDateFrom() + " " +  plannerDto.getDateUntil() + " " + plannerDto.getClassroom() +
+//                plannerDto.getTeacher() + " " + subjectId);
         scheduleService.addSubjectPlanToSchedule(scheduleId, subjectId, plannerDto);
     }
 }

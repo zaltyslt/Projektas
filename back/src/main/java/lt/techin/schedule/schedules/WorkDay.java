@@ -45,16 +45,15 @@ public class WorkDay {
     public WorkDay() {
     }
 
-    public WorkDay(LocalDate date, Subject subject, Teacher teacher, float lessonStart, float lessonEnd) {
-        this.date = date;
-        this.subject = subject;
-        this.teacher = teacher;
-        this.lessonStart = lessonStart;
-        this.lessonEnd = lessonEnd;
-    }
+//    public WorkDay(LocalDate date, Subject subject, Teacher teacher, float lessonStart, float lessonEnd) {
+//        this.date = date;
+//        this.subject = subject;
+//        this.teacher = teacher;
+//        this.lessonStart = lessonStart;
+//        this.lessonEnd = lessonEnd;
+//    }
 
-    public WorkDay(Long id, LocalDate date, Subject subject, Teacher teacher, Schedule schedule, float lessonStart, float lessonEnd) {
-        this.id = id;
+    public WorkDay(LocalDate date, Subject subject, Teacher teacher, Schedule schedule, float lessonStart, float lessonEnd) {
         this.date = date;
         this.subject = subject;
         this.teacher = teacher;

@@ -44,14 +44,14 @@ export function AddLesson() {
   }, []);
 
   useEffect(() => {
-    fetch(`api/v1/teachers/subject?subjectId=${params.id}&shiftId=${shiftId}`)
+    fetch(`api/v1/teachers/subject?subjectId=${params.id}&shiftId=${shiftId}`, {})
       .then((response) => response.json())
       .then(setTeachers);
   }, []);
 
   const createLesson = () => {
-    fetch(`api/v1/lessons/${scheduleId}?groupId=${groupId}`, {
-      method: "POST",
+    fetch(`api/v1/schedules/plan-schedule/${scheduleId}?subjectId=${params.id}`, {
+      method: "PUT",
       headers: {
         "Content-Type": "application/json",
       },
