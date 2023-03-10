@@ -32,14 +32,14 @@ public class ApiExceptionHandler {
         return ResponseEntity.badRequest().body(errorDto);
     }
 
-    @ExceptionHandler(SubjectValidationException.class)
-    public ResponseEntity<ErrorDto> handleSubjectValidationException(HttpServletRequest request, SubjectValidationException subjectValidationException) {
-        logger.error("subjectValidationException: {}, for field: {}", subjectValidationException.getMessage(), subjectValidationException.getField());
+    @ExceptionHandler(ValidationException.class)
+    public ResponseEntity<ErrorDto> handleSubjectValidationException(HttpServletRequest request, ValidationException validationException) {
+        logger.error("validationException: {}, for field: {}", validationException.getMessage(), validationException.getField());
 
         var errorStatus = HttpStatus.BAD_REQUEST;
 
         var errorDto = new ErrorDto(request.getRequestURL().toString(),
-                subjectValidationException.getMessage(),
+                validationException.getMessage(),
                 errorStatus.value(),
                 errorStatus.getReasonPhrase(),
                 request.getRequestURL().toString(),

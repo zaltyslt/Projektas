@@ -1,7 +1,7 @@
 package lt.techin.schedule.subjects;
 
 import lt.techin.schedule.classrooms.Classroom;
-import lt.techin.schedule.exceptions.SubjectValidationException;
+import lt.techin.schedule.exceptions.ValidationException;
 import lt.techin.schedule.module.Module;
 import lt.techin.schedule.module.ModuleRepository;
 import lt.techin.schedule.subject.Subject;
@@ -98,7 +98,7 @@ public class SubjectServiceTest {
 
         when(subjectRepository.findAll()).thenReturn(subjects);
 
-        assertThrows(SubjectValidationException.class, () -> {subjectService.create(subject);});
+        assertThrows(ValidationException.class, () -> {subjectService.create(subject);});
 
     }
 

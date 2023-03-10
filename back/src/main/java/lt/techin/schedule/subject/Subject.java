@@ -36,7 +36,6 @@ public class Subject {
 
     @ManyToOne
     @JoinColumn(name = "module_id")
-
     @NotNull
     private Module module;
 

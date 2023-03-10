@@ -1,18 +1,11 @@
 package lt.techin.schedule.subject;
 
-
 import jakarta.persistence.EntityManager;
 import lt.techin.schedule.classrooms.ClassroomRepository;
-import lt.techin.schedule.exceptions.SubjectValidationException;
+import lt.techin.schedule.exceptions.ValidationException;
 import lt.techin.schedule.module.ModuleRepository;
-import org.hibernate.Filter;
-import org.hibernate.Session;
+import lt.techin.schedule.programs.subjectsHours.SubjectHoursRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -31,9 +24,14 @@ public class SubjectService {
     private final ClassroomRepository classroomRepository;
 
     @Autowired
+    private SubjectHoursRepository subjectHours;
+
+    @Autowired
     private EntityManager entityManager;
 
-    public SubjectService(SubjectRepository subjectRepository, ModuleRepository moduleRepository, ClassroomRepository classroomRepository) {
+    public SubjectService(SubjectRepository subjectRepository,
+                          ModuleRepository moduleRepository,
+                          ClassroomRepository classroomRepository) {
         this.subjectRepository = subjectRepository;
         this.moduleRepository = moduleRepository;
         this.classroomRepository = classroomRepository;
@@ -60,7 +58,7 @@ public class SubjectService {
         if (existing.size() > 0) {
             var subjectDto = toSubjectDto(subject);
 
-            throw new SubjectValidationException("Dalykas su tokiu pavadinimu, aprašu ir moduliu jau sukurtas.", "Subject", "Not unique", subjectDto.toString());
+            throw new ValidationException("Dalykas su tokiu pavadinimu, aprašu ir moduliu jau sukurtas.", "Subject", "Not unique", subjectDto.toString());
         } else {
             return subjectRepository.save(subject);
         }
@@ -69,6 +67,15 @@ public class SubjectService {
     public Subject delete(Long subjectId) {
         var existingSubject = subjectRepository.findById(subjectId).orElseThrow();
         existingSubject.setDeleted(true);
+
+
+        var existingsubjecthours = subjectHours.findBySubject(subjectId).orElse(null);
+        if (existingsubjecthours != null) {
+            existingsubjecthours.setDeleted(true);
+            subjectHours.save(existingsubjecthours);
+        }
+
+
         return subjectRepository.save(existingSubject);
     }
 
@@ -87,6 +94,13 @@ public class SubjectService {
     public Subject restoreSubject(Long id) {
         var subject = subjectRepository.findById(id).orElseThrow();
         subject.setDeleted(false);
+
+        var existingsubjecthours = subjectHours.findBySubject(id).orElse(null);
+        if (existingsubjecthours != null) {
+            existingsubjecthours.setDeleted(false);
+            subjectHours.save(existingsubjecthours);
+        }
+
         return subjectRepository.save(subject);
     }
 

@@ -69,7 +69,7 @@ export function GroupList() {
   };
 
   const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - subjects.length) : 0;
+    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - filteredGroups.length) : 0;
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -79,7 +79,7 @@ export function GroupList() {
     pageInDeleted > 0
       ? Math.max(
           0,
-          (1 + pageInDeleted) * rowsPerPageInDeleted - deletedSubjects.length
+          (1 + pageInDeleted) * rowsPerPageInDeleted - filteredDeletedGroups.length
         )
       : 0;
 
@@ -102,37 +102,35 @@ export function GroupList() {
       setFilteredGroups(groups);
       setFilteredDeletedGroups(deletedGroups);
     } else {
-      var groupsCurrent = undefined;
+      let groupsCurrent = undefined;
       let deletedGroupsCurrent = undefined;
 
-      var groupsTempByName = groups.filter((group) =>
+      let groupsTempByName = groups.filter((group) =>
         group.name.toLowerCase().includes(filterString.toLowerCase())
       );
-
       let deletedTempByName = deletedGroups.filter((group) =>
         group.name.toLowerCase().includes(filterString.toLowerCase())
       );
 
-      if (groupsTempByName.length != 0 || deletedTempByName.length != 0) {
+      if (groupsTempByName.length != 0) {
         groupsCurrent = groupsTempByName;
+      }
+      if (deletedTempByName.length != 0) {
         deletedGroupsCurrent = deletedTempByName;
       }
 
-      var groupsTempBySchoolYear = groups.filter((group) =>
+      let groupsTempBySchoolYear = groups.filter((group) =>
         group.schoolYear.includes(filterString)
       );
       let deletedGroupsTempBySchoolYear = deletedGroups.filter((group) =>
         group.schoolYear.includes(filterString)
       );
-      if (
-        groupsTempBySchoolYear.length != 0 ||
-        deletedGroupsTempBySchoolYear.length != 0
-      ) {
-        if (groupsCurrent !== undefined && deletedGroupsCurrent !== undefined) {
-          const newGroupsCurrent = [...groupsCurrent];
-          const newDeletedGroupsCurrent = [...deletedGroupsCurrent];
 
-          groupsTempBySchoolYear.forEach(function (element, index, array) {
+      if (groupsTempBySchoolYear.length != 0) {
+        if (groupsCurrent !== undefined ) {
+          const newGroupsCurrent = [...groupsCurrent];
+
+          groupsTempBySchoolYear.forEach(function (element) {
             const isPresent = groupsCurrent.some(
               (array) => JSON.stringify(array) === JSON.stringify(element)
             );
@@ -140,6 +138,15 @@ export function GroupList() {
               newGroupsCurrent.push(element);
             }
           });
+          groupsCurrent = newGroupsCurrent;
+        } 
+        else {
+          groupsCurrent = groupsTempBySchoolYear; 
+        }
+      }
+      if (deletedGroupsTempBySchoolYear.length != 0) {
+        if (deletedGroupsCurrent !== undefined) {
+          const newDeletedGroupsCurrent = [...deletedGroupsCurrent];
 
           deletedGroupsTempBySchoolYear.forEach(function (element) {
             const isPresent = deletedGroupsCurrent.some(
@@ -150,13 +157,13 @@ export function GroupList() {
             }
           });
           deletedGroupsCurrent = newDeletedGroupsCurrent;
-        } else {
-          groupsCurrent = groupsTempBySchoolYear;
+        }
+        else {
           deletedGroupsCurrent = deletedGroupsTempBySchoolYear;
         }
       }
 
-      var groupsTempByProgram = groups.filter((group) =>
+      let groupsTempByProgram = groups.filter((group) =>
         group.program.programName
           .toLowerCase()
           .includes(filterString.toLowerCase())
@@ -167,12 +174,11 @@ export function GroupList() {
           .includes(filterString.toLowerCase())
       );
 
-      if (groupsTempByProgram.length != 0 || deletedGroupsTempByProgram.length != 0) {
-        if (groupsCurrent !== undefined && deletedGroupsCurrent !== undefined) {
+      if (groupsTempByProgram.length != 0) {
+        if (groupsCurrent !== undefined) {
           const newGroupsCurrent = [...groupsCurrent];
-          const newDeletedGroupsCurrent = [...deletedGroupsCurrent];
 
-          groupsTempByProgram.forEach(function (element, index, programs) {
+          groupsTempByProgram.forEach(function (element) {
             const isPresent = groupsCurrent.some(
               (programs) => JSON.stringify(programs) === JSON.stringify(element)
             );
@@ -180,6 +186,16 @@ export function GroupList() {
               newGroupsCurrent.push(element);
             }
           });
+
+          groupsCurrent = newGroupsCurrent;
+        } 
+        else {
+          groupsCurrent = groupsTempByProgram;
+        }
+      }
+      if (deletedGroupsTempByProgram.length != 0) {
+        if (deletedGroupsCurrent !== undefined) {
+          const newDeletedGroupsCurrent = [...deletedGroupsCurrent];
 
           deletedGroupsTempByProgram.forEach(function (element) {
             const isPresent = deletedGroupsCurrent.some(
@@ -190,23 +206,28 @@ export function GroupList() {
             }
           });
 
-          groupsCurrent = newGroupsCurrent;
           deletedGroupsCurrent = newDeletedGroupsCurrent;
-        } else {
-          groupsCurrent = groupsTempByProgram;
+        }
+        else {
           deletedGroupsCurrent = deletedGroupsTempByProgram;
         }
       }
 
-      if (groupsCurrent !== undefined && deletedGroupsCurrent !== undefined) {
+      if (groupsCurrent !== undefined) {
         setFilteredGroups(groupsCurrent);
-        setFilteredDeletedGroups(deletedGroupsCurrent);
       } else {
         setFilteredGroups([]);
+      }
+
+      if (deletedGroupsCurrent !== undefined) {
+        setFilteredDeletedGroups(deletedGroupsCurrent);
+      }
+      else {
         setFilteredDeletedGroups([]);
       }
     }
-    //   setCurrentPageActive(0);
+    setPage(0);
+    setPageInDeleted(0);
   };
 
   return (

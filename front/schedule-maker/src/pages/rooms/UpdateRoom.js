@@ -29,6 +29,8 @@ export function UpdateClassroom() {
   const [errorEmptyDesc, setErrorEmptyDesc] = useState(false);
   const [errorSymbolsDesc, setErrorSymbolsDesc] = useState(false);
   const [errorBuilding, setErrorBuilding] = useState(false);
+    const [errorLengthName, setErrorLengthName] = useState(false);
+  const [errorLengthDesc, setErrorLengthDesc] = useState(false);
 
   const handleDescriptionChange = (event) => {
     setDescription(event.target.value);
@@ -144,12 +146,13 @@ export function UpdateClassroom() {
         <form>
           <Grid container rowSpacing={3}>
             <Grid item sm={10}>
-              <FormControl fullWidth>
-                <InputLabel id="building-label">Pastatas</InputLabel>
+            <FormControl fullWidth required error={errorBuilding}>
+              <InputLabel id="building-label">
+                {errorBuilding
+                  ? "Prašome pasirinkti pastatą."
+                  : "Pastatas"}</InputLabel>
                 <Select
                   required
-                  error={errorBuilding}
-                  helperText={errorBuilding && "Prašome pasirinkti pastatą."}
                   variant="outlined"
                   labelId="building-label"
                   id="building"
@@ -166,16 +169,31 @@ export function UpdateClassroom() {
               <TextField
                 fullWidth
                 required
-                error={errorEmptyName || errorSymbolsName}
-                helperText={errorEmptyName ? "Klasės pavadinimas yra privalomas."
+              error={errorEmptyName || errorSymbolsName || errorLengthName }
+              helperText={
+                errorEmptyName
+                  ? "Klasės pavadinimas yra privalomas."
                   : errorSymbolsName
-                    ? "Klasės pavadinimas turi neleidžiamų simbolių."
-                    : ""}
+                    ? "Klasės pavadinimas turi neleidžiamų simbolių." 
+                    : errorLengthName
+                    ? "Klasės pavadinimas negali būti ilgesnis nei 200 simbolių"
+                    : ""
+              }
                 variant="outlined"
                 id="classroomName"
                 label="Klasės pavadinimas"
                 value={classroomName}
-                onChange={(e) => setClassroomName(e.target.value)}
+              onChange={(e) => {
+                const input = e.target.value;
+                if (input.length > 200) {
+                  setErrorLengthName(true);
+                } else {
+                  setErrorLengthName(false);
+                }
+                setClassroomName(input);
+              }}
+                // onChange={(e) => setClassroomName(e.target.value)}
+
               ></TextField>
             </Grid>
             <Grid item sm={10}>
@@ -183,18 +201,30 @@ export function UpdateClassroom() {
                 fullWidth
                 multiline
                 required
-                error={errorEmptyDesc || errorSymbolsDesc}
+                error={errorEmptyDesc || errorSymbolsDesc || errorLengthDesc}
                 helperText={
                   errorEmptyDesc
                     ? "Klasės aprašas yra privalomas."
                     : errorSymbolsDesc
                       ? "Klasės aprašas turi neleidžiamų simbolių."
-                      : ""}
+                      : errorLengthDesc
+                      ? "Klasės aprašas negali būti ilgesnis nei 2000 simbolių"
+                      : ""
+                }
                 variant="outlined"
                 label="Klasės aprašas"
                 id="description"
                 value={description}
-                onChange={(e) => setDescription(e.target.value)}
+                onChange={(e) => {
+                  const input = e.target.value;
+                  if (input.length > 2000) {
+                    setErrorLengthDesc(true);
+                  } else {
+                    setErrorLengthDesc(false);
+                  }
+                  setDescription(input);
+                }}
+                // onChange={(e) => setDescription(e.target.value)}
               ></TextField>
             </Grid>
             <Grid item sm={10}>

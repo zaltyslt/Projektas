@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/v1/group")
@@ -31,6 +32,11 @@ public class GroupController {
     @GetMapping("/get-active")
     public List<Group> getActiveGroups() {
         return groupService.getActiveGroups();
+    }
+
+    @GetMapping("/get-active/small")
+    public List<GroupEntityDto> getActiveSmallGroups() {
+        return groupService.getActiveGroups().stream().map(GroupMapper::toGroupEntityDto).collect(Collectors.toList());
     }
 
     @GetMapping("/get-inactive")

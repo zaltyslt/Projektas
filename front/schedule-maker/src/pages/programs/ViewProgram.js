@@ -17,6 +17,7 @@ import {
   TableRow,
 } from "@mui/material";
 import { Container } from "@mui/system";
+import "./Program.css";
 
 export function ViewProgram() {
   const [program, setProgram] = useState({});
@@ -56,7 +57,7 @@ export function ViewProgram() {
             <Table aria-label="custom pagination table">
               <TableHead>
                 <TableRow>
-                  <TableCell>pavadinimas</TableCell>
+                  <TableCell>Pavadinimas</TableCell>
                   <TableCell>Valandos</TableCell>
                 </TableRow>
               </TableHead>
@@ -65,7 +66,20 @@ export function ViewProgram() {
                   .map((program) => (
                     <TableRow key={program.id}>
                       <TableCell component="th" scope="row">
-                        {program.subjectName}
+                        {/* {program.subjectName} */}
+
+                        {program.subjectName ? (
+                      program.deleted ? (
+                        <span className="Deleted">
+                          {program.subjectName}
+                        </span>
+                      ) : (
+                        program.subjectName
+                      )
+                    ) : (
+                      <span>Nenurodytas</span>
+                    )}
+
                       </TableCell>
                       <TableCell>{program.hours}</TableCell>
                     </TableRow>

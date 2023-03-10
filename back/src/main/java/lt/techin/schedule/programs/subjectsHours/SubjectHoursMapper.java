@@ -9,6 +9,7 @@ public class SubjectHoursMapper {
         subjectHoursDto.setHours(subjectHours.getHours());
         subjectHoursDto.setCreatedDate(subjectHours.getCreatedDate());
         subjectHoursDto.setModifiedDate(subjectHours.getModifiedDate());
+        subjectHoursDto.setDeleted(subjectHours.getDeleted());
 
         return subjectHoursDto;
     }
@@ -21,6 +22,7 @@ public class SubjectHoursMapper {
         subjectHours.setHours(subjectHoursDto.getHours());
         subjectHours.setCreatedDate(subjectHoursDto.getCreatedDate());
         subjectHours.setModifiedDate(subjectHoursDto.getModifiedDate());
+        subjectHours.setDeleted(subjectHoursDto.getDeleted());
 
         return subjectHours;
     }

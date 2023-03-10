@@ -12,7 +12,6 @@ import {
 
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import "./AddShift.css";
 import ".././pages.css";
 
 export function AddShift() {
