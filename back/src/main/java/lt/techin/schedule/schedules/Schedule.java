@@ -1,5 +1,6 @@
 package lt.techin.schedule.schedules;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lt.techin.schedule.group.Group;
@@ -22,8 +23,9 @@ public class Schedule {
     private Group groups;
 
     @OneToMany
-    @JoinColumn(name = "workday_id")
-    private LinkedHashSet<WorkDay> workingDays;
+//    @JoinColumn(name = "workday_id")
+    @JsonBackReference
+    private Set<WorkDay> workingDays;
 
     private String schoolYear;
     private String semester;
@@ -57,6 +59,7 @@ public class Schedule {
     }
 
     public Schedule() {
+        workingDays = new LinkedHashSet<>();
     }
 
     public Long getId() {
@@ -132,11 +135,11 @@ public class Schedule {
         this.dateUntil = dateUntil;
     }
 
-    public LinkedHashSet<WorkDay> getWorkingDays() {
+    public Set<WorkDay> getWorkingDays() {
         return workingDays;
     }
 
-    public void setWorkingDays(LinkedHashSet<WorkDay> workingDays) {
+    public void setWorkingDays(Set<WorkDay> workingDays) {
         this.workingDays = workingDays;
     }
 

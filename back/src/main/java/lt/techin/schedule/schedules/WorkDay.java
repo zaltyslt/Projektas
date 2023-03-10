@@ -26,9 +26,21 @@ public class WorkDay {
     @JoinColumn(name = "teacher_teacher_id")
     public Teacher teacher;
 
+    @ManyToOne
+    @JoinColumn(name = "schedule_id")
+    private Schedule schedule;
+
     private float lessonStart;
 
     private float lessonEnd;
+
+    public Schedule getSchedule() {
+        return schedule;
+    }
+
+    public void setSchedule(Schedule schedule) {
+        this.schedule = schedule;
+    }
 
     public WorkDay() {
     }
@@ -37,6 +49,16 @@ public class WorkDay {
         this.date = date;
         this.subject = subject;
         this.teacher = teacher;
+        this.lessonStart = lessonStart;
+        this.lessonEnd = lessonEnd;
+    }
+
+    public WorkDay(Long id, LocalDate date, Subject subject, Teacher teacher, Schedule schedule, float lessonStart, float lessonEnd) {
+        this.id = id;
+        this.date = date;
+        this.subject = subject;
+        this.teacher = teacher;
+        this.schedule = schedule;
         this.lessonStart = lessonStart;
         this.lessonEnd = lessonEnd;
     }
