@@ -8,6 +8,8 @@ import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Entity
 public class Schedule {
@@ -18,6 +20,10 @@ public class Schedule {
     @ManyToOne
     @JoinColumn(name = "group_id")
     private Group groups;
+
+    @OneToMany
+    @JoinColumn(name = "workday_id")
+    private LinkedHashSet<WorkDay> workingDays;
 
     private String schoolYear;
     private String semester;
@@ -124,5 +130,20 @@ public class Schedule {
 
     public void setDateUntil(LocalDate dateUntil) {
         this.dateUntil = dateUntil;
+    }
+
+    public LinkedHashSet<WorkDay> getWorkingDays() {
+        return workingDays;
+    }
+
+    public void setWorkingDays(LinkedHashSet<WorkDay> workingDays) {
+        this.workingDays = workingDays;
+    }
+
+    public void addWorkDay (WorkDay workDay) {
+        if (workingDays == null) {
+            workingDays = new LinkedHashSet<>();
+        }
+        workingDays.add(workDay);
     }
 }

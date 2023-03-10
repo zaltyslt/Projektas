@@ -1,5 +1,7 @@
 package lt.techin.schedule.schedules;
 
+import jakarta.validation.Valid;
+import lt.techin.schedule.shift.ShiftDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -61,5 +63,12 @@ public class ScheduleController {
         return toScheduleDto(enableSchedule);
     }
 
+    @PutMapping("/plan-schedule/{scheduleId}")
+    public void planSchedule(@PathVariable Long scheduleId, @RequestParam Long subjectId, @RequestBody PlannerDto plannerDto) {
+        System.out.println(scheduleId + " " + plannerDto.getAssignedHours() + " " + plannerDto.getEndIntEnum() + " " + plannerDto.getStartIntEnum() + " " +
+                " " + plannerDto.getDateFrom() + " " +  plannerDto.getDateUntil() + " " + plannerDto.getClassroom() +
+                plannerDto.getTeacher() + " " + subjectId);
+        scheduleService.addSubjectPlanToSchedule(scheduleId, subjectId, plannerDto);
+    }
 }
 

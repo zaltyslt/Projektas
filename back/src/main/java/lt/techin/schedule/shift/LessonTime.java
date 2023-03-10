@@ -40,6 +40,14 @@ public enum LessonTime {
         return String.format("%02d:%02d", minutes, seconds);
     }
 
+    public float getLessonStartFloat() {
+        return lessonStart;
+    }
+
+    public float getLessonEndFloat() {
+        return lessonEnd;
+    }
+
     public static LessonTime getLessonTimeByInt (int name) {
         return switch (name) {
             case 1 -> FIRST;

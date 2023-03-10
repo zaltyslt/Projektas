@@ -9,6 +9,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lt.techin.schedule.classrooms.Classroom;
 import lt.techin.schedule.module.Module;
+import lt.techin.schedule.schedules.PlannerDto;
 import lt.techin.schedule.teachers.Teacher;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
