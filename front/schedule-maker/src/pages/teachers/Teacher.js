@@ -6,6 +6,7 @@ import {
   InputLabel,
   Grid,
   MenuItem,
+  FormHelperText,
   Paper,
   Select,
   Stack,
@@ -21,6 +22,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Link, useHref } from "react-router-dom";
 import { width } from "@mui/system";
+
 import {
   validateText,
   validateEmail,
@@ -65,7 +67,7 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
   const [errorTeamsName, setErrorTeamsName] = useState(errorObject);
   const [errorTeamsMail, setErrorTeamsMail] = useState(errorObject);
   const [errorHours, setErrorHours] = useState(errorObject);
-  // const [errorShift, setErrorShift] = useState(errorObject);
+  const [errorShift, setErrorShift] = useState(errorObject);
 
   let navigate = useNavigate();
   const listUrl = useHref("/teachers");
@@ -82,40 +84,69 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
 
   function preCreateCheck() {
     let isCorrect = true;
-    //  console.log("boom");
 
-    if (!teacher.fName || teacher.fName === "" || errorFname.error) {
-      setErrorMessage("Įveskite/pataisykite vardą !");
+    if (!teacher.fName || teacher.fName === "") {
+      // setErrorMessage("Įveskite/pataisykite vardą !");
+      setErrorFname({ error: true, text: "Mokytojo vardas privalomas." });
       isCorrect = false;
-    } else if (!teacher.lName || teacher.lName === "" || errorLname.error) {
-      setErrorMessage("Įveskite/pataisykite pavardę !");
+    }
+    if (!teacher.lName || teacher.lName === "") {
+      setErrorLname({ error: true, text: "Mokytojo pavardė privaloma." });
       isCorrect = false;
-    } else if (
+    }
+    if (
+      !teacher.contacts ||
       !teacher.contacts.phoneNumber ||
-      teacher.contacts.phoneNumber === "" ||
+      teacher.contacts.phoneNumber === ""
+    ) {
+      setErrorPhoneNumber({
+        error: true,
+        text: "Kontaktinis telefonas privalomas.",
+      });
+      isCorrect = false;
+    }
+    if (
+      !teacher.contacts ||
       !teacher.contacts.directEmail ||
-      teacher.contacts.directEmail === "" ||
-      !teacher.contacts.teamsName ||
-      teacher.contacts.teamsName === "" ||
-      !teacher.contacts.teamsEmail ||
-      teacher.contacts.teamsEmail === "" ||
+      teacher.contacts.directEmail === ""
+    ) {
+      setErrorDirectMail({
+        error: true,
+        text: "Elektroninio pašto adresas privalomas.",
+      });
+      isCorrect = false;
+    }
+
+    if (
+      !teacher.selectedShift ||
+      !teacher.selectedShift.id ||
+      teacher.selectedShift.id === ""
+    ) {
+      setErrorShift({ error: true, text: "Pasirinkite pamainą." });
+      isCorrect = false;
+    }
+
+    if (
+      // teacher.contacts.teamsName === "" ||
+      // teacher.contacts.teamsEmail === "" ||
+      errorFname.error ||
+      errorLname.error ||
       errorPhoneNumber.error ||
       errorDirectMail.error ||
       errorTeamsName.error ||
       errorTeamsMail.error
     ) {
-      setErrorMessage("Įveskite/pataisykite kontaktinius duomenis !");
+      // setErrorMessage("Įveskite/pataisykite kontaktinius duomenis !");
       isCorrect = false;
-    } else if (teacher.workHoursPerWeek === "" || errorHours.error) {
-      setErrorMessage("Įveskite/pataisykite valandų skaičių !");
-      isCorrect = false;
-    } else if (!teacher.selectedShift.id || teacher.selectedShift.id === "") {
-      setErrorMessage("Pasirinkite pamainą");
-      isCorrect = false;
-    } else {
-      isCorrect = true;
     }
-
+    // else if (teacher.workHoursPerWeek === "" || errorHours.error) {
+    //   setErrorMessage("Įveskite/pataisykite valandų skaičių !");
+    //   isCorrect = false;
+    // }
+    // } else {
+    //   isCorrect = true;
+    // }
+console.log("isCorrect: " + isCorrect);
     isCorrect && createTeacher();
   }
 
@@ -163,18 +194,27 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
     });
   }
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setCreateMessage("");
-      setErrorMessage("");
-    }, 5000);
-
-    return () => {
-      clearTimeout(timer);
+  function clearErrorMessages() {
+     
+        setCreateMessage("");
+        setErrorMessage("");
+      
     };
-  }, [createMessage, errorMessage]);
+  
+  // useEffect(() => {
+  //   const timer = setTimeout(() => {
+  //     setCreateMessage("");
+  //     setErrorMessage("");
+  //   }, 5000);
+
+  //   return () => {
+  //     clearTimeout(timer);
+  //   };
+  // }, [createMessage, errorMessage]);
 
   function handleChange(event) {
+    clearErrorMessages();
+    
     const { id, value } = event.target;
     const prefix = id.split(".");
     if (prefix[0] === "contacts") {
@@ -203,16 +243,17 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
   }
 
   function applyResult(result) {
+    console.log(result);
+
     if (result.status > 299) {
       setCreateMessage("");
-      console.log(result);
       setErrorMessage(result.message);
     } else {
       if (mode === "update") {
         setCreateMessage("Duomenys atnaujinti sėkmingai.");
       } else {
         setCreateMessage("Mokytojas sukurtas");
-        clear();
+        // clear();
       }
       setErrorMessage("");
     }
@@ -286,7 +327,7 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
     console.log(tempShift);
     handleChange({ target: { id: "selectedShift", value: tempShift } });
     handleChange({ target: { id: "active", value: true } });
-
+    setErrorShift({error : false});
     setShift(tempShift);
   };
 
@@ -299,10 +340,7 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
   return (
     <Container style={{ maxWidth: "75rem" }}>
       <form>
-        <Grid item sm={7}>
-          {errorMessage && <Alert severity="warning">{errorMessage}</Alert>}
-          {createMessage && <Alert severity="success">{createMessage}</Alert>}
-        </Grid>
+      
         <h3 className="create-header">
           {" "}
           {mode === "update"
@@ -314,10 +352,15 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
           container
           direction="row"
           justifyContent="space-between"
-          alignItems="center"
+          alignItems="left"
           rowSpacing={3}
         >
-          <Grid item sm={5}>
+         <Grid item sm={6}>
+        {errorMessage  && <Alert severity="warning">{errorMessage}</Alert>}
+        {createMessage && <Alert severity="success">{createMessage}</Alert>}
+</Grid>
+<Grid item sm={6}></Grid>
+          <Grid item sm={6}>
             <TextField
               error={errorFname.error}
               helperText={errorFname.text}
@@ -340,16 +383,11 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
               }}
             ></TextField>
           </Grid>
+          <Grid item sm={6}></Grid>
 
           {/* //33370 */}
-          <Grid item sm={2}></Grid>
-          <Grid item sm={5}>
-            {/* <Button variant="contained" onClick={showInfo}>
-              ShowInfo
-            </Button> */}
-          </Grid>
 
-          <Grid item sm={5}>
+          <Grid item sm={6}>
             <TextField
               error={errorLname.error}
               helperText={errorLname.text}
@@ -371,9 +409,9 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
               }}
             ></TextField>
           </Grid>
-          <Grid item sm={7}></Grid>
+          <Grid item sm={6}></Grid>
 
-          <Grid item sm={5}>
+          <Grid item sm={6}>
             <TextField
               error={errorPhoneNumber.error}
               helperText={errorPhoneNumber.text}
@@ -396,9 +434,9 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
               }}
             ></TextField>
           </Grid>
-          <Grid item sm={7}></Grid>
+          <Grid item sm={6}></Grid>
 
-          <Grid item sm={5}>
+          <Grid item sm={6}>
             <TextField
               error={errorDirectMail.error}
               helperText={errorDirectMail.text}
@@ -421,13 +459,13 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
               }}
             ></TextField>
           </Grid>
-          <Grid item sm={7}></Grid>
-          <Grid item sm={5}>
+          <Grid item sm={6}></Grid>
+          <Grid item sm={6}>
             <TextField
               error={errorTeamsName.error}
               helperText={errorTeamsName.text}
               fullWidth
-              required
+              // required
               variant="outlined"
               label="Teams vardas"
               id="contacts.teamsName"
@@ -443,13 +481,13 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
               }}
             ></TextField>
           </Grid>
-          <Grid item sm={7}></Grid>
-          <Grid item sm={5}>
+          <Grid item sm={6}></Grid>
+          <Grid item sm={6}>
             <TextField
               error={errorTeamsMail.error}
               helperText={errorTeamsMail.text}
               fullWidth
-              required
+              // required
               variant="outlined"
               label="Teams el. paštas"
               id="contacts.teamsEmail"
@@ -467,22 +505,22 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
               }
             ></TextField>
           </Grid>
-          <Grid item sm={7}></Grid>
-          <Grid item sm={5}>
+          <Grid item sm={6}></Grid>
+          <Grid item sm={6}>
             <TextField
               error={errorHours.error}
               helperText={errorHours.text}
               fullWidth
-              required
+              // required
               variant="outlined"
               label="Valandos per savaitę"
               id="workHoursPerWeek"
-              value={teacher.workHoursPerWeek || 0}
+              value={teacher.workHoursPerWeek || ""}
               onBlur={(e) =>
                 validate({
                   name: "workHours",
                   min: 0,
-                  max: 80,
+                  max: 54,
                   value: e.target.value,
                 })
               }
@@ -492,9 +530,14 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
               }}
             ></TextField>
           </Grid>
-          <Grid item sm={7}></Grid>
-          <Grid item sm={5}>
-            <FormControl required fullWidth>
+          <Grid item sm={6}></Grid>
+          <Grid item sm={6}>
+            <FormControl
+              required
+              fullWidth
+              error={errorShift.error}
+              variant="outlined"
+            >
               <InputLabel id="shift-label">Pamaina</InputLabel>
               <Select
                 required
@@ -517,12 +560,16 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
                     </MenuItem>
                   ))}
               </Select>
+              {errorShift.error && (
+                <FormHelperText>{errorShift.text}</FormHelperText>
+              )}
             </FormControl>
           </Grid>
-          <Grid item sm={7}></Grid>
 
-          <Grid item sm={12}>
-            {showSubjSelect && (
+          <Grid item sm={6}></Grid>
+
+          {showSubjSelect && (
+            <Grid item sm={6}>
               <FormControl fullWidth>
                 <InputLabel id="subjects-label">Dalykai</InputLabel>
                 <Select
@@ -550,10 +597,11 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
                     )}
                 </Select>
               </FormControl>
-            )}
-          </Grid>
+            </Grid>
+          )}
+          {showSubjSelect && <Grid item sm={6}></Grid>}
 
-          <Grid item sm={12}>
+          <Grid item sm={6}>
             <TableContainer component={Paper} style={{ width: "100%" }}>
               <Table
                 style={{ tableLayout: "fixed" }}
@@ -562,7 +610,7 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
                 <TableHead>
                   <TableRow>
                     <TableCell align="left">Dėstomi dalykai</TableCell>
-                    <TableCell align="center">Moduliai </TableCell>
+                    {/* <TableCell align="center">Moduliai </TableCell> */}
                     <TableCell align="right">
                       <Button variant="contained" onClick={handleShowSubjects}>
                         Pridėti
@@ -579,9 +627,9 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
                           {subject.name}
                         </TableCell>
 
-                        <TableCell align="center">
+                        {/* <TableCell align="center">
                           {subject.module ? subject.module : <p>Nenurodytas</p>}
-                        </TableCell>
+                        </TableCell> */}
 
                         <TableCell align="right" className="activity">
                           <Button
@@ -597,15 +645,15 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
               </Table>
             </TableContainer>
           </Grid>
-
-          <Grid item sm={7}>
+          <Grid item sm={6}></Grid>
+          <Grid item sm={6}>
             {errorMessage && <Alert severity="warning">{errorMessage}</Alert>}
             {createMessage && <Alert severity="success">{createMessage}</Alert>}
           </Grid>
           <Grid item sm={12}>
             <Stack direction="row" spacing={2}>
               <Button variant="contained" onClick={preCreateCheck}>
-                {mode === "update" ? "Išsaugoti" : "Sukurti"}
+                {mode === "update" ? "Išsaugoti" : "Išsaugoti"}
               </Button>
               {mode === "update" && (
                 <Button variant="contained" onClick={deleteTeacher}>
@@ -613,9 +661,10 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
                 </Button>
               )}
 
-              <Button variant="contained" onClick={() => navigate(-1)}>
+              <Button variant="contained" onClick={() => navigate('/teachers')}>
                 Grįžti
               </Button>
+              
             </Stack>
           </Grid>
         </Grid>

@@ -168,16 +168,19 @@ export function TeacherList() {
           </Grid>
         </Grid>
 
-        <TableContainer component={Paper} style={{ width: "100%" }}>
-          <Table
-            aria-label="custom pagination table"
-            style={{ tableLayout: "fixed" }}
+        <TableContainer component={Paper} 
+        // style={{ width: "100%" }}
+        >
+          <Table 
+          // id="one"
+            // aria-label="custom pagination table"
+            // style={{ tableLayout: "fixed" }}
           >
             <TableHead>
               <TableRow>
-                <TableCell align="left">Vardas Pavardė</TableCell>
-                <TableCell align="center">Dėstomi dalykai</TableCell>
-                <TableCell align="center">Pamaina</TableCell>
+                <TableCell >*Vardas Pavardė</TableCell>
+                <TableCell >Dėstomi dalykai</TableCell>
+                <TableCell className="empty-activity">Pamaina</TableCell>
                 {/* <TableCell></TableCell> */}
               </TableRow>
             </TableHead>
@@ -198,7 +201,7 @@ export function TeacherList() {
                   
                   </TableCell>
 
-                  <TableCell align="center">
+                  <TableCell >
                     {teacher.subjectsList && teacher.subjectsList.length > 0
                       ? teacher.subjectsList.map((subjectItem, index) => {
                           
@@ -207,7 +210,7 @@ export function TeacherList() {
                       : ""}
                   </TableCell>
 
-                  <TableCell align="center">
+                  <TableCell >
                     {teacher.selectedShift ? teacher.selectedShift.name : ""}
                   </TableCell>
                 </TableRow>
@@ -250,19 +253,25 @@ export function TeacherList() {
           <FormControlLabel
             control={<Checkbox />}
             label="Ištrinti mokytojai"
+           
             onChange={(e) =>
               e.target.checked ? setChecked(true) : setChecked(false)
             }
           />
         </FormGroup>
-        {isChecked && (
-          <TableContainer component={Paper} style={{ width: "100%" }}>
-            <Table aria-label="custom pagination table">
+        {isChecked || true && (
+         
+         
+         
+         
+         
+          <TableContainer component={Paper} >
+            <Table aria-label="custom pagination table"  >
               <TableHead>
                 <TableRow>
-                  <TableCell align="left">Vardas Pavardė</TableCell>
-                  <TableCell align="center">Dėstomi dalykai</TableCell>
-                  <TableCell align="center">Veiksmai</TableCell>
+                  <TableCell >Vardas Pavardė</TableCell>
+                  <TableCell >Dėstomi dalykai</TableCell>
+                  <TableCell className="empty-activity">Veiksmai</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -279,10 +288,10 @@ export function TeacherList() {
                     </TableCell>
                     <TableCell colSpan={6}>{teacher.active}</TableCell>
                     <TableCell colSpan={2} align="center"> */}
-                    <TableCell component="th" scope="row" align="left">
+                    <TableCell component="th" scope="row" >
                       {`${teacher.fName} ${teacher.lName}`}
                     </TableCell>
-                    <TableCell align="center">
+                    <TableCell >
                       {teacher.subjectsList && teacher.subjectsList.length > 0
                         ? teacher.subjectsList.map((subjectItem, index) => {
                             {

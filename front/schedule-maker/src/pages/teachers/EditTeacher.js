@@ -19,6 +19,7 @@ export function UpdateTeacher() {
         teacher,
         "/api/v1/teachers/update?tid=" + teacher.id,
         "PUT"
+        // "/api/v1/teachers/create", "POST"
       );
     }
     console.log(result);

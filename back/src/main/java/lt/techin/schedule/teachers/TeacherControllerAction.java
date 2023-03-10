@@ -26,7 +26,7 @@ public class TeacherControllerAction {
 //                result.getSubjectsList() != null &&
                 result.getContacts() != null &&
                 result.getSelectedShift() != null &&
-                result.getWorkHoursPerWeek() != null &&
+//                result.getWorkHoursPerWeek() != null &&
                 result.getActive() != null &&
                 result.getSelectedShift() != null
         ){
