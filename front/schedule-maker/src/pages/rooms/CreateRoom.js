@@ -24,8 +24,10 @@ export function CreateRoom(props) {
   const [error, setError] = useState();
   const [errorEmptyName, setErrorEmptyName] = useState(false);
   const [errorSymbolsName, setErrorSymbolsName] = useState(false);
+  const [errorLengthName, setErrorLengthName] = useState(false);
   const [errorEmptyDesc, setErrorEmptyDesc] = useState(false);
   const [errorSymbolsDesc, setErrorSymbolsDesc] = useState(false);
+  const [errorLengthDesc, setErrorLengthDesc] = useState(false);
   const [errorBuilding, setErrorBuilding] = useState(false);
   const [success, setSuccess] = useState();
   const [active, setActive] = useState(true);
@@ -134,39 +136,61 @@ export function CreateRoom(props) {
             <TextField
               fullWidth
               required
-              error={errorEmptyName || errorSymbolsName}
+              error={errorEmptyName || errorSymbolsName || errorLengthName }
               helperText={
                 errorEmptyName
                   ? "Klasės pavadinimas yra privalomas."
                   : errorSymbolsName
-                    ? "Klasės pavadinimas turi neleidžiamų simbolių."
+                    ? "Klasės pavadinimas turi neleidžiamų simbolių." 
+                    : errorLengthName
+                    ? "Klasės pavadinimas negali būti ilgesnis nei 200 simbolių"
                     : ""
               }
               variant="outlined"
               id="classroomName"
               label="Klasės pavadinimas"
               value={classroomName}
-              onChange={(e) => setClassroomName(e.target.value)}
-            ></TextField>
+              onChange={(e) => {
+                const input = e.target.value;
+                if (input.length > 200) {
+                  setErrorLengthName(true);
+                } else {
+                  setErrorLengthName(false);
+                }
+                setClassroomName(input);
+              }}
+              // onChange={(e) => setClassroomName(e.target.value)}
+            />
           </Grid>
           <Grid item sm={10}>
             <TextField
               fullWidth
               multiline
               required
-              error={errorEmptyDesc || errorSymbolsDesc}
+              error={errorEmptyDesc || errorSymbolsDesc || errorLengthDesc}
               helperText={
                 errorEmptyDesc
                   ? "Klasės aprašas yra privalomas."
                   : errorSymbolsDesc
                     ? "Klasės aprašas turi neleidžiamų simbolių."
+                    : errorLengthDesc
+                    ? "Klasės aprašas negali būti ilgesnis nei 2000 simbolių"
                     : ""
               }
               variant="outlined"
               label="Klasės aprašas"
               id="description"
               value={description}
-              onChange={(e) => setDescription(e.target.value)}
+              onChange={(e) => {
+                const input = e.target.value;
+                if (input.length > 2000) {
+                  setErrorLengthDesc(true);
+                } else {
+                  setErrorLengthDesc(false);
+                }
+                setDescription(input);
+              }}
+              // onChange={(e) => setDescription(e.target.value)}
             ></TextField>
           </Grid>
           <Grid item sm={10}>
