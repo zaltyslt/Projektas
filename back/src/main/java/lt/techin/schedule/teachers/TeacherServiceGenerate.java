@@ -44,7 +44,7 @@ public class TeacherServiceGenerate {
 
     }
 
-    @EventListener(ApplicationReadyEvent.class)
+//    @EventListener(ApplicationReadyEvent.class)
     public void doSomethingAfterStartup() {
         Module mod1 = new Module(null, "A01", "I modulis", LocalDateTime.now(), LocalDateTime.now(), false);
         Module mod2 = new Module(null, "A02", "II modulis", LocalDateTime.now(), LocalDateTime.now(), false);

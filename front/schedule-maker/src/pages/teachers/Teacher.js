@@ -176,7 +176,8 @@ console.log("isCorrect: " + isCorrect);
       if (data) {
         setShifts(data);
       } else {
-        setErrorMessage("Nepavyko parsiųsti duomenų iš serverio. (Shift)");
+        setErrorMessage("Nepavyko parsiųsti duomenų iš serverio. (Pamaina)");
+        setShifts([]);
       }
     });
   }
@@ -189,7 +190,7 @@ console.log("isCorrect: " + isCorrect);
         setChosenSubjects(data.subjectsList);
       } else {
         setTeacher({});
-        setErrorMessage("Nepavyko parsiųsti duomenų iš serverio. (Shift)");
+        setErrorMessage("Nepavyko parsiųsti duomenų iš serverio. (Mokytojas)");
       }
     });
   }
