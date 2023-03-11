@@ -28,7 +28,7 @@ export function TeacherList() {
   const [deletedTeachers, setDeletedTeachers] = useState([]);
   const [deletedFiltered, setDeletedFiltered] = useState([]);
   
-  const [page, setPage] = useState(0);
+  const [pageA, setPageA] = useState(0);
   const [pageP, setPageP] = useState(0);
 
   const [rowsPerPageA, setRowsPerPageA] = useState(10);
@@ -61,16 +61,24 @@ export function TeacherList() {
       .then(setDeletedTeachers);
   };
 
-  const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPageA - teachers.length) : 0;
+  const emptyRowsA =
+    pageA > 0 ? Math.max(0, (1 + pageA) * rowsPerPageA - teachers.length) : 0;
+  const emptyRowsP =
+    pageP > 0 ? Math.max(0, (1 + pageP) * rowsPerPageA - teachers.length) : 0;
 
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
+  const handleChangePageA = (event, newPage) => {
+    setPageA(newPage); 
   };
 
-  const handleChangeRowsPerPage = (event) => {
+  const handleChangePageP = (event, newPageP) => {
+    console.log(event.id);
+    // console.log(newPage);
+      setPageP(newPageP); 
+    };
+
+  const handleChangeRowsPerPageA = (event) => {
     setRowsPerPageA(parseInt(event.target.value, 10));
-    setPage(0);
+    setPageA(0);
   };
 
   const handleChangeRowsPerPageP = (event) => {
@@ -172,13 +180,12 @@ export function TeacherList() {
         // style={{ width: "100%" }}
         >
           <Table 
-          // id="one"
-            // aria-label="custom pagination table"
+             aria-label="custom pagination table"
             // style={{ tableLayout: "fixed" }}
           >
             <TableHead>
               <TableRow>
-                <TableCell >*Vardas Pavardė</TableCell>
+                <TableCell >Vardas Pavardė</TableCell>
                 <TableCell >Dėstomi dalykai</TableCell>
                 <TableCell className="empty-activity">Pamaina</TableCell>
                 {/* <TableCell></TableCell> */}
@@ -187,8 +194,8 @@ export function TeacherList() {
             <TableBody>
               {(rowsPerPageA > 0
                 ? filteredTeachers.slice(
-                    page * rowsPerPageA,
-                    page * rowsPerPageA + rowsPerPageA
+                    pageA * rowsPerPageA,
+                    pageA * rowsPerPageA + rowsPerPageA
                   )
                 : filteredTeachers
               ).map((teacher) => (
@@ -217,8 +224,8 @@ export function TeacherList() {
               ))}
 
               {/* //////////////////////////// */}
-              {emptyRows > 0 && (
-                <TableRow style={{ height: 53 * emptyRows }}>
+              {emptyRowsA > 0 && (
+                <TableRow style={{ height: 53 * emptyRowsA }}>
                   <TableCell colSpan={6} />
                 </TableRow>
               )}
@@ -227,22 +234,16 @@ export function TeacherList() {
               <TableRow>
                 <TablePagination
                   labelRowsPerPage="Rodyti po"
+                  labelDisplayedRows={({ from, to, count }) =>`${from}-${to} iš ${count}`}
                   rowsPerPageOptions={[10, 20, { label: "Visi", value: -1 }]}
                   colSpan={3}
                   count={filteredTeachers.length}
-                  page={page}
-                  SelectProps={{
-                    inputProps: {
-                      "aria-label": "Rodyti po",
-                    },
-                    native: true,
-                  }}
-                  labelDisplayedRows={({ from, to, count }) =>
-                    `${from}-${to} iš ${count}`
-                  }
-                  onPageChange={handleChangePage}
+                  page={pageA}
+                  SelectProps={ {inputProps: {"aria-label": "Rodyti po",}, native: true, } }
+                //  Active
+                  onPageChange={handleChangePageA}
                   rowsPerPage={rowsPerPageA}
-                  onRowsPerPageChange={handleChangeRowsPerPage}
+                  onRowsPerPageChange={handleChangeRowsPerPageA}
                 ></TablePagination>
               </TableRow>
             </TableFooter>
@@ -277,8 +278,8 @@ export function TeacherList() {
               <TableBody>
                 {(rowsPerPageP > 0
                   ? deletedTeachers.slice(
-                      page * rowsPerPageP,
-                      page * rowsPerPageP + rowsPerPageP
+                      pageP * rowsPerPageP,
+                      pageP * rowsPerPageP + rowsPerPageP
                     )
                   : deletedTeachers
                 ).map((teacher) => (
@@ -314,8 +315,8 @@ export function TeacherList() {
                   </TableRow>
                 ))}
 
-                {emptyRows > 0 && (
-                  <TableRow style={{ height: 53 * emptyRows }}>
+                {emptyRowsP > 0 && (
+                  <TableRow style={{ height: 53 * emptyRowsP }}>
                     <TableCell colSpan={3} />
                   </TableRow>
                 )}
@@ -323,11 +324,12 @@ export function TeacherList() {
               <TableFooter>
                 <TableRow>
                   <TablePagination
-                    labelRowsPerPage="Rodyti po"
+                  id='inactive'
+                    labelRowsPerPage="NRodyti po"
                     rowsPerPageOptions={[10, 20, { label: "Visi", value: -1 }]}
                     colSpan={3}
                     count={deletedTeachers.length}
-                    page={page}
+                    page={pageP}
                     labelDisplayedRows={({ from, to, count }) =>
                       `${from}-${to} iš ${count}`
                     }
@@ -337,7 +339,8 @@ export function TeacherList() {
                       },
                       native: true,
                     }}
-                    onPageChange={handleChangePage}
+                    //inactive
+                    onPageChange={handleChangePageP}
                     rowsPerPage={rowsPerPageP}
                     onRowsPerPageChange={handleChangeRowsPerPageP}
                   ></TablePagination>

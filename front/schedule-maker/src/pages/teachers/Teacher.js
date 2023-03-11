@@ -556,8 +556,8 @@ console.log("isCorrect: " + isCorrect);
                 {shifts &&
                   shifts.map((shift) => (
                     <MenuItem key={shift.id} value={shift.id}>
-                      {" "}
-                      {shift.name}{" "}
+                     
+                      {shift.name}
                     </MenuItem>
                   ))}
               </Select>

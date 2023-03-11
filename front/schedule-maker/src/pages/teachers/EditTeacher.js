@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import { Teacher } from "./Teacher";
 import { postDataTo, putDataTo, switchActive } from "./components/Fetch";
 
-export function UpdateTeacher() {
+export function EditTeacher() {
   const { teacherId } = useParams();
   let result;
 

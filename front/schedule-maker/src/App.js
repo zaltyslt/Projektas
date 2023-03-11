@@ -35,7 +35,7 @@ import { EditSubject } from "./pages/subjects/EditSubject";
 import { TeacherList } from "./pages/teachers/TeacherList";
 import { ViewTeacher } from "./pages/teachers/ViewTeacher";
 import { CreateTeacher } from "./pages/teachers/CreateTeacher";
-import { UpdateTeacher } from "./pages/teachers/EditTeacher";
+import { EditTeacher } from "./pages/teachers/EditTeacher";
 
 
 import { ScheduleList } from "./pages/schedules/ScheduleList";
