@@ -10,19 +10,23 @@ import {
   TextField,
 } from "@mui/material";
 import { Container } from "@mui/system";
+import dayjs from 'dayjs';
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { useEffect, useState } from "react";
 import { Link, useAsyncError } from "react-router-dom";
+
 import "./Schedule.css";
+
 
 export function CreateSchedule() {
   const [groups, setGroups] = useState([]);
   const [group, setGroup] = useState("");
   const [schoolYear, setSchoolYear] = useState("");
   const [semester, setSemester] = useState("");
-  const [dateFrom, setDateFrom] = useState("");
-  const [dateUntil, setDateUntil] = useState("");
+  const [dateFrom, setDateFrom] = useState(dayjs(Date.now()));
+  const [dateUntil, setDateUntil] = useState(dayjs(Date.now()));
+  const [dateFormat, setDateFormat] = useState('YYYY/MM/DD');
 
   const [error, setError] = useState("");
   const [createMessage, setCreateMessage] = useState("");
@@ -69,12 +73,20 @@ export function CreateSchedule() {
     value.length === 0 ? setGroupEmpty(true) : setGroupEmpty(false);
   };
 
+  const dateToUtc = (date)=>{
+  const utcDate = new Date(date.$d.getTime() - (date.$d.getTimezoneOffset() * 60 * 1000));
+  return utcDate;
+}
+
   const validateDateFrom = (value) => {
+    
     setDateFrom(value);
+   
     if (value.length === 0) {
       setDateFromEmpty(true);
       setErrorMessage("Privaloma užpildyti");
     } else {
+      
       setDateFromEmpty(false);
       setErrorMessage("");
     }
@@ -156,8 +168,11 @@ export function CreateSchedule() {
     setErrorMessage("");
   };
 
+  
   return (
     <div>
+      {/* <LocalizationProvider dateAdapter={AdapterDayjs}> */}
+      <LocalizationProvider dateAdapter={AdapterDayjs}>
       <Container>
         <h3>Sukurti naują tvarkaraštį</h3>
         <form>
@@ -252,11 +267,12 @@ export function CreateSchedule() {
             </Grid>
 
             <Grid item sm={5}>
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
+              {/* <LocalizationProvider dateAdapter={AdapterDayjs}> */}
                 <DatePicker
                   className="DatePicker"
                   label="Nuo"
-                  format="YYYY/MM/DD"
+                  format={dateFormat}
+                  // value={dayjs('2022-04-17')}
                   value={dateFrom}
                   onChange={(e) => validateDateFrom(e)}
                   slotProps={{
@@ -265,15 +281,16 @@ export function CreateSchedule() {
                     },
                   }}
                 ></DatePicker>
-              </LocalizationProvider>
+              {/* </LocalizationProvider> */}
             </Grid>
 
             <Grid item sm={5}>
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
+              {/* <LocalizationProvider dateAdapter={AdapterDayjs}> */}
                 <DatePicker
                   className="DatePicker"
                   label="Iki"
-                  format="YYYY/MM/DD"
+                  // format="YYYY/MM/DD"
+                  format={dateFormat}
                   value={dateUntil}
                   onChange={(e) => validateDateUntil(e)}
                   slotProps={{
@@ -282,7 +299,7 @@ export function CreateSchedule() {
                     },
                   }}
                 ></DatePicker>
-              </LocalizationProvider>
+              {/* </LocalizationProvider> */}
             </Grid>
 
             <Grid item sm={10}>
@@ -306,6 +323,7 @@ export function CreateSchedule() {
           </Grid>
         </form>
       </Container>
+      </LocalizationProvider>
     </div>
   );
 }
