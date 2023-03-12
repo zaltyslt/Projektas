@@ -1,5 +1,9 @@
 {
   "dependencies": {
+    "@fullcalendar/daygrid": "^6.1.4",
+    "@fullcalendar/interaction": "^6.1.4",
+    "@fullcalendar/list": "^6.1.4",
+    "@fullcalendar/react": "^6.1.4",
     "@mui/x-date-pickers": "^6.0.0"
   }
 }

@@ -2,6 +2,8 @@ import "./App.css";
 import { HashRouter, Routes, Route } from "react-router-dom";
 import { Menu } from "./components/Menu";
 
+import Schedule from "./Schedule";
+
 import { GroupList } from "./pages/groups/GroupList";
 import { CreateGroup } from "./pages/groups/CreateGroup";
 import { ViewGroup } from "./pages/groups/ViewGroups";
@@ -39,6 +41,7 @@ import { EditTeacher } from "./pages/teachers/EditTeacher";
 
 import { ScheduleList } from "./pages/schedules/ScheduleList";
 import { CreateSchedule } from "./pages/schedules/CreateSchedule";
+
 
 
 function App() {
@@ -86,6 +89,7 @@ function App() {
 
           {/*   SCHEDULE PATHS */}
           <Route path="/create-schedule" element={<CreateSchedule />}></Route>
+          <Route path="/shedule-view" element={<Schedule />}></Route>
         </Routes>
       </HashRouter>
     </div>
