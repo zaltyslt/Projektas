@@ -19,10 +19,7 @@ public class TeacherDto implements Serializable {
     private String fName;
     private String lName;
     private Set<TeacherSubjectsDto> subjectsList;
-//    private List<ContactDto> contacts;
     private ContactDto2 contacts;
-//    private TeacherShiftDto teacherShiftDto;
-    //    private String savedSubjectsList;
     private ShiftDto selectedShift;
     private String workHoursPerWeek;
     private Boolean isActive;

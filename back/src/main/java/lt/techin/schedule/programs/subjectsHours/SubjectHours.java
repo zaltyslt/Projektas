@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @Entity
 public class SubjectHours {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @NotNull
     private String subjectName;

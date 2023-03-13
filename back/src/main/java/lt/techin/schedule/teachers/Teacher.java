@@ -1,11 +1,9 @@
 package lt.techin.schedule.teachers;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lt.techin.schedule.shift.Shift;
 import lt.techin.schedule.subject.Subject;
@@ -32,9 +30,6 @@ public class Teacher implements Serializable {
     @JsonIgnore
     @OneToMany(mappedBy = "teacher", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Contact> contacts;
-    //@JsonIgnore is used to ignore the logical property used in serialization and deserialization.
-//    @Transient @JsonIgnore
-//    private Set<Subject> subjectsList;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @JoinTable(
@@ -44,14 +39,6 @@ public class Teacher implements Serializable {
     @JsonManagedReference
     private Set<Subject> subjects;
 
-//    @JsonIgnore
-//    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
-//    @JsonManagedReference
-//    @JoinTable(
-//            name = "teacher_shifts",
-//            joinColumns = @JoinColumn(name = "teacher_id", referencedColumnName = "teacher_id"),
-//            inverseJoinColumns = @JoinColumn(name = "shift_id", referencedColumnName = "id"))
-//    private Shift shift;
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "shift_id")
@@ -59,7 +46,7 @@ public class Teacher implements Serializable {
     private  Shift shift;
 
     @NotBlank
-    @Size(min = 3, max = 30)
+    @Size(min = 1, max = 30)
     private String fName = "";
     @NotBlank
     private String lName = "";
@@ -80,13 +67,6 @@ public class Teacher implements Serializable {
         createdDateTime = LocalDateTime.now();
         modifiedDateAndTime = LocalDateTime.now();
         hashCode = hashCode();
-    }
-
-    @PostLoad
-    public void postLoad() {
-//        if (savedSubjectsList != null && !savedSubjectsList.isEmpty()) {
-//            subjects = TeacherService.loadSubjectsList(savedSubjectsList);
-//        }
     }
 
     @PreUpdate

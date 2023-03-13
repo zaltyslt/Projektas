@@ -44,7 +44,7 @@ public class TeacherServiceGenerate {
 
     }
 
-//    @EventListener(ApplicationReadyEvent.class)
+    //    @EventListener(ApplicationReadyEvent.class)
     public void doSomethingAfterStartup() {
         Module mod1 = new Module(null, "A01", "I modulis", LocalDateTime.now(), LocalDateTime.now(), false);
         Module mod2 = new Module(null, "A02", "II modulis", LocalDateTime.now(), LocalDateTime.now(), false);
@@ -69,8 +69,8 @@ public class TeacherServiceGenerate {
         Set<Subject> subSet2 = new HashSet<>();
         Set<Subject> subSet3 = new HashSet<>();
         subSet1.addAll(Arrays.asList(sub1, sub2, sub3));
-        subSet2.addAll(Arrays.asList(sub1 ));
-        subSet3.addAll(Arrays.asList( sub2, sub3));
+        subSet2.addAll(Arrays.asList(sub1));
+        subSet3.addAll(Arrays.asList(sub2, sub3));
         var sub = subjectRepository.saveAll(subSet1);
 
         Shift sh1 = new Shift("Pamaina1", LessonTime.FIRST.getLessonStart(), LessonTime.FIFTH.getLessonEnd(), true, 1, 5);
@@ -81,74 +81,33 @@ public class TeacherServiceGenerate {
 
 //         public Teacher(Long id, List< Contact > contacts, Set<Subject> subjects, Shift shift, String fName, String lName, String nickName,
 //         Boolean isActive, LocalDateTime createdDateTime, LocalDateTime modifiedDateAndTime, Integer workHoursPerWeek, Integer hashCode) {
-        Teacher t1 = new Teacher(null, null,subSet1,sh1,"Vardas1", "Pavarde1",  true, LocalDateTime.now(),LocalDateTime.now(), 10);
-        Teacher t2 = new Teacher(null, null,subSet2,sh2,"Kitas2", "Kitoks2", true, LocalDateTime.now(),LocalDateTime.now(), 20);
-        Teacher t3 = new Teacher(null, null,subSet3,sh3,"Trečiokas", "Trečias", true, LocalDateTime.now(),LocalDateTime.now(), 30);
-       var teach = teacherRepository.saveAll(Arrays.asList(t1,t2,t3));
+        Teacher t1 = new Teacher(null, null, subSet1, sh1, "Vardas1", "Pavarde1", true, LocalDateTime.now(), LocalDateTime.now(), 10);
+        Teacher t2 = new Teacher(null, null, subSet2, sh2, "Kitas2", "Kitoks2", true, LocalDateTime.now(), LocalDateTime.now(), 20);
+        Teacher t3 = new Teacher(null, null, subSet3, sh3, "Trečiokas", "Trečias", true, LocalDateTime.now(), LocalDateTime.now(), 30);
+        var teach = teacherRepository.saveAll(Arrays.asList(t1, t2, t3));
 
         Contact con11 = new Contact(t1, ContactType.TEAMS_EMAIL, "Teams@1");
         Contact con12 = new Contact(t1, ContactType.TEAMS_NAME, "Teams1");
         Contact con13 = new Contact(t1, ContactType.DIRECT_EMAIL, "Mail@1");
         Contact con14 = new Contact(t1, ContactType.PHONE_NUMBER, "8 000 11111");
-        List<Contact> t1con = new ArrayList<>(Arrays.asList(con11, con12,con13,con14));
+        List<Contact> t1con = new ArrayList<>(Arrays.asList(con11, con12, con13, con14));
         t1.setContacts(t1con);
 
         Contact con21 = new Contact(t2, ContactType.TEAMS_EMAIL, "Teams@2");
         Contact con22 = new Contact(t2, ContactType.TEAMS_NAME, "Teams2");
         Contact con23 = new Contact(t2, ContactType.DIRECT_EMAIL, "Mail@2");
         Contact con24 = new Contact(t2, ContactType.PHONE_NUMBER, "8 000 22222");
-        List<Contact> t2con = new ArrayList<>(Arrays.asList(con21, con22,con23,con24));
+        List<Contact> t2con = new ArrayList<>(Arrays.asList(con21, con22, con23, con24));
         t2.setContacts(t2con);
 
         Contact con31 = new Contact(t3, ContactType.TEAMS_EMAIL, "Teams@3");
         Contact con32 = new Contact(t3, ContactType.TEAMS_NAME, "Teams3");
         Contact con33 = new Contact(t3, ContactType.DIRECT_EMAIL, "Mail@3");
         Contact con34 = new Contact(t3, ContactType.PHONE_NUMBER, "8 000 33333");
-        List<Contact> t3con = new ArrayList<>(Arrays.asList(con31, con32,con33,con34));
+        List<Contact> t3con = new ArrayList<>(Arrays.asList(con31, con32, con33, con34));
         t3.setContacts(t3con);
-        teach = teacherRepository.saveAll(Arrays.asList(t1,t2,t3));
-
-//        Module(Long id, String number, String name, LocalDateTime createdDate, LocalDateTime modifiedDate, boolean deleted) {
+        teach = teacherRepository.saveAll(Arrays.asList(t1, t2, t3));
 
     }
-//        System.out.println("hello world, I have just started up");
-//   if(shiftRepository.count() < 2){
-//     shiftRepository.save(new Shift("Pirma", LessonTime.FIRST.toString(), LessonTime.SECOND.toString(), true,1,2 ));
-//    }
-//    if(subjectRepository.count() < 2){
-//        var subject = new Subject();
-////        subject.setId(1L);
-//        subject.setName("SubJectName");
-//        var teacher = new Teacher();
-//        teacher.setId(1L);
-//        var set = new HashSet<Teacher>();
-//        set.add(teacher);
-//        subject.setTeachers(set);
-//        subjectRepository.save(subject);
-//    }
-//    }
-    //    @EventListener(ApplicationReadyEvent.class)
-//    public void loadInitialTeacherData() {
-//        var optRecNumber = 2 - this.teacherRepository.count();
-//
-//        if (optRecNumber > 0) {
-//            String suffix = "";
-//            List<Teacher> teachers = new ArrayList<>();
-//            for (int i = 0; i < optRecNumber; i++) {
-//                suffix = Integer.toString(i);
-////                var teacher = new Teacher("Name" + suffix, "Surname" + suffix);
-//                var teacher = new Teacher(0L, "Name" + suffix, "Surname" + suffix);
-//                teacher.setNickName("aaa");
-//                teachers.add(teacher);
-//
-//            }
-//            try {
-//                var tt = teacherRepository.saveAll(teachers);
-//            } catch (Exception e) {
-//            //
-//            }
-//
-//        }
-//    }
 
 }

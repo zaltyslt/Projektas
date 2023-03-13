@@ -12,7 +12,7 @@ import java.util.Objects;
 @Entity
 public class Classroom {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(name = "classroomName")
     @Size(min = 1, max = 200)
