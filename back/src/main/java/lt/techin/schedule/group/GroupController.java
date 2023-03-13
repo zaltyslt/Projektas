@@ -6,8 +6,10 @@ import lt.techin.schedule.shift.Shift;
 import lt.techin.schedule.shift.ShiftDto;
 import lt.techin.schedule.shift.ShiftMapper;
 import lt.techin.schedule.shift.ShiftService;
+import lt.techin.schedule.teachers.TeacherDto;
 import lt.techin.schedule.validators.ValidationDto;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
@@ -56,10 +58,14 @@ public class GroupController {
     public void deactivateShift(@PathVariable Long groupID) {
         groupService.changeActiveGroupStatusByID(groupID, false);
     }
-
+    @PostMapping(value = "/add-group-test", consumes = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<Void> addGroupTest (@RequestBody @Valid String groupToAddDto, BindingResult bindingResult) {
+        var aa = groupToAddDto;
+        return ResponseEntity.ok().build();
+    }
     @PostMapping(value = "/add-group", consumes = {MediaType.APPLICATION_JSON_VALUE})
     public @ResponseBody ValidationDto addGroup (@RequestBody @Valid GroupDto groupToAddDto, BindingResult bindingResult) {
-        ValidationDto validationDto = new ValidationDto();
+       ValidationDto validationDto = new ValidationDto();
         if (bindingResult.hasErrors()) {
             List<ObjectError> errors = bindingResult.getAllErrors();
             for (int x = 0; x < bindingResult.getAllErrors().size(); x++) {

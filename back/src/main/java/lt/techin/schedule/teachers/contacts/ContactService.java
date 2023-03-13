@@ -7,9 +7,8 @@ import lt.techin.schedule.teachers.TeacherRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class ContactService {
@@ -21,7 +20,7 @@ public class ContactService {
     public ContactService(ContactRepository contactRepository, TeacherRepository teacherRepository) {
         this.contactRepository = contactRepository;
         this.teacherRepository = teacherRepository;
-       dummyTeacher = new Teacher(0L, "_Dummy", "_Dummy", true);
+        dummyTeacher = new Teacher(0L, "_Dummy", "_Dummy", true);
     }
 
     @PostConstruct
@@ -45,19 +44,29 @@ public class ContactService {
     }
 
     public List<Contact> getContactsByTeacherId(Long id) {
-       dummyTeacher.setId(id);
+        dummyTeacher.setId(id);
         var result = contactRepository.findContactsByTeacher(dummyTeacher);
         return result;
     }
 
     public List<Contact> createContacts(Teacher teacher, List<Contact> contacts) {
-        List<Contact> updatedContacts = contacts.stream()
-                            .peek(c->c.setTeacher(teacher))
-                            .toList();
+        List<Contact> filledContacts = contacts.stream()
+                .peek(c -> c.setTeacher(teacher))
+                .toList();
 
-        return contactRepository.saveAll( updatedContacts);
+        return contactRepository.saveAll(filledContacts);
     }
 
+    public List<Contact> updateContacts(Teacher teacher) {
+            contactRepository.deleteAllByTeacher(teacher);
+                 var newContacts = teacher.getContacts().stream()
+                         .map(c -> {c.setTeacher (teacher);
+                            return c;
+                         }).toList();
+
+        return contactRepository.saveAll(newContacts);
+
+    }
 
     public Optional<Contact> getContactById(Long id) {
         var result = contactRepository.findById(id);
@@ -70,7 +79,7 @@ public class ContactService {
 //        }
 //    }
 
-    public void deleteContactsByTeacher(Teacher teacher){
+    public void deleteContactsByTeacher(Teacher teacher) {
         contactRepository.deleteAllByTeacher(teacher);
     }
 }

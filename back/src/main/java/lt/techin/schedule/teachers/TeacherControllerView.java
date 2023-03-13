@@ -17,28 +17,13 @@ import java.util.Set;
 @RequestMapping(value = "/api/v1/teachers", produces = {MediaType.APPLICATION_JSON_VALUE})
 public class TeacherControllerView {
     private final TeacherServiceFind teacherFinder;
-    private final ContactService contactService;
-    private final SubjectService subjectService;
-    private final TeacherRepository teacherRepository;
-    @Autowired
-    public TeacherControllerView(TeacherServiceFind teacherFinder, ContactService contactService, SubjectService subjectService, TeacherRepository teacherRepository) {
+    //    private final ContactService contactService;
+//    private final SubjectService subjectService;
+//    private final TeacherRepository teacherRepository;
+
+    public TeacherControllerView(TeacherServiceFind teacherFinder) {
         this.teacherFinder = teacherFinder;
-        this.contactService = contactService;
-        this.subjectService = subjectService;
-        this.teacherRepository = teacherRepository;
     }
-
-//    @GetMapping
-//    @ResponseBody
-//    public ResponseEntity<Set<TeacherDto>> getAllTeachers(@RequestParam(value = "active", required = false) Optional<Boolean> isActive) {
-//
-//
-//        var result = teacherFinder.getAllTeachers(isActive);
-//        return !result.isEmpty()
-//                ? ResponseEntity.ok(result)
-//                : ResponseEntity.noContent().build();
-//    }
-
 
     @GetMapping
     @ResponseBody
@@ -49,26 +34,25 @@ public class TeacherControllerView {
         } else {
             teachers = teacherFinder.getAllTeachers();
         }
-    return  teachers;
+        return teachers;
 
     }
 
     @GetMapping(value = "/view") //view by teacherID via params
-    public ResponseEntity<TeacherDto> getTeacherById(@RequestParam(value = "tid", required = false) Long teacherId) {
-        var result =  teacherFinder.getTeacherById(teacherId);
+    public ResponseEntity<TeacherDto> getTeacherById(@RequestParam(value = "tid", required = true) Long teacherId) {
+        var result = teacherFinder.getTeacherById(teacherId);
 
         return result.getId() != null
                 ? ResponseEntity.ok(result)
                 : ResponseEntity.notFound().build();
 
     }
-    @GetMapping(value = "/subjects") //view by teacherID via params
-    public ResponseEntity<Set<TeacherSubjectsDto>> getTeacherById() {
-        var result =  teacherFinder.getMiniSubjects();
 
-        return result.size() > 0
-                ? ResponseEntity.ok(result)
-                : ResponseEntity.notFound().build();
+    @GetMapping(value = "/subjects") //get
+    public ResponseEntity<Set<TeacherSubjectsDto>> getActiveTeacherSubjectsDto() {
+        var result = teacherFinder.getMiniSubjects();
+
+        return ResponseEntity.ok(result);
 
     }
 }

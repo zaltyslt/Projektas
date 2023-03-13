@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="JpaLiquibaseChangesConfig">
+    <exclude-change idName="SCHEDULE" tagName="dropTable" />
+    <exclude-change idName="TEACHER_SHIFTS" tagName="dropTable" />
+    <exclude-change idName="WORK_DAY" tagName="dropTable" />
+    <exclude-change idName="SCHEDULE_SEQ" tagName="dropSequence" />
+    <exclude-change idName="WORK_DAY_SEQ" tagName="dropSequence" />
+  </component>
+</project>
