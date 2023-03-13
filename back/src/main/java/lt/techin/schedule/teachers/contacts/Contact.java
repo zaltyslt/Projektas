@@ -31,7 +31,7 @@ public class Contact implements Serializable {
     @Column(name = "contact_body")
     private String contactValue;
 
-    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "teacher_id", nullable = true) //nurodau, kad sitas Teacher DB laukas bus foreign key
     @OnDelete(action = OnDeleteAction.CASCADE) //will delete all contacts on teacher deletion
     @JsonBackReference

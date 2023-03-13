@@ -34,8 +34,10 @@ public class TeacherServiceDo {
     }
 
     public ResponseEntity<TeacherDto> createTeacher(TeacherDto teacherDto) {
-        Teacher newTeacher = TeacherMapper.teacherFromDto(teacherDto);
+       Teacher newTeacher = TeacherMapper.teacherFromDto(teacherDto);
 //        int newTeacherHash = Objects.hash(newTeacher.getfName().toLowerCase(), newTeacher.getlName().toLowerCase());
+
+
         newTeacher.setId(null);
 
         if (isNotDuplicate(newTeacher)) {
@@ -47,7 +49,7 @@ public class TeacherServiceDo {
             newTeacher.setId(null);
             newTeacher = teacherRepository.save(newTeacher);
         } else {
-            throw new RuntimeException("Teacher verification process failed.");
+            throw new RuntimeException("Teacher creation process failed.");
         }
 //        if (!teacherDto.getContacts().isE()) {
 //            List<Contact> contactsList = ContactMapper.contactFromDto(teacherDto.getContacts());
@@ -61,7 +63,7 @@ public class TeacherServiceDo {
         List<Contact> contactsToSave = ContactMapper.contactFromDto2(contactsDto);
         newTeacher.setContacts(contactsToSave);
 
-        if (!teacherDto.getSubjectsList().isEmpty()) {
+        if (teacherDto.getSubjectsList()!=null && !teacherDto.getSubjectsList().isEmpty()) {
             Set<Subject> subjectsFromDto = TeacherSubjectMapper.subjectsFromDtos(teacherDto.getSubjectsList());
 
             Set<Subject> foundSubjects = subjectsFromDto.stream()
@@ -71,10 +73,12 @@ public class TeacherServiceDo {
             if (!foundSubjects.isEmpty()) {
                 newTeacher.setSubjects(foundSubjects);
             }
+        } else{newTeacher.setSubjects(new HashSet<>());
+
         }
 
-        if (teacherDto.getTeacherShiftDto() != null) {
-            Optional<Shift> shift = shiftRepository.findById(teacherDto.getTeacherShiftDto().getId());
+        if (teacherDto.getSelectedShift() != null) {
+            Optional<Shift> shift = shiftRepository.findById(teacherDto.getSelectedShift().getId());
             if (shift.isPresent()) {
                 newTeacher.setShift(shift.get());
             }
@@ -92,17 +96,17 @@ public class TeacherServiceDo {
         Teacher newTeacher = TeacherMapper.teacherFromDto(teacherDto);
 
         //jei tik norim isjungt, tai kitu lauku nekeiciam
-        if (presentTeacher.getActive() != newTeacher.getActive()) {
-            presentTeacher.setActive(!presentTeacher.getActive());
-            teacherRepository.save(presentTeacher);
-            return ResponseEntity.accepted().body(TeacherMapper.teacherToDto(presentTeacher));
-        }
+//        if (presentTeacher.getActive() != newTeacher.getActive()) {
+//            presentTeacher.setActive(!presentTeacher.getActive());
+//            teacherRepository.save(presentTeacher);
+//            return ResponseEntity.accepted().body(TeacherMapper.teacherToDto(presentTeacher));
+//        }
 
         int newTeacherHash = Objects.hash(newTeacher.getfName().toLowerCase(), newTeacher.getlName().toLowerCase());
 
         isNotDuplicate(newTeacher);
 
-        contactService.createContacts(newTeacher, newTeacher.getContacts());
+        contactService.updateContacts (newTeacher);
         newTeacher = teacherRepository.save(newTeacher);
 
         return ResponseEntity.ok(TeacherMapper.teacherToDto(newTeacher));
@@ -176,7 +180,7 @@ public class TeacherServiceDo {
             Map<ContactType, String> teacherContacts = teacher.getContacts().stream()
                     .collect(Collectors.toMap(c -> c.getContactType(), c -> c.getContactValue()));
 
-            if (newTeacherContacts.get(ContactType.PHONE_NUMBER).equals(teacherContacts.get(ContactType.PHONE_NUMBER)) &&
+            if (newTeacherContacts.get(ContactType.PHONE_NUMBER).equals(teacherContacts.get(ContactType.PHONE_NUMBER)) ||
                     newTeacherContacts.get(ContactType.DIRECT_EMAIL).equals(teacherContacts.get(ContactType.DIRECT_EMAIL))
             ) {
                 throw new TeacherException(HttpStatus.CONFLICT, "Bandoma įvesti esamą mokytoją !!!");

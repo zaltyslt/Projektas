@@ -2,14 +2,14 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
-import { Button, Grid, Stack } from "@mui/material";
+import { Alert, Button, Grid, Stack } from "@mui/material";
 
 import { Container } from "@mui/system";
 
 export function ViewTeacher() {
   const [teacher, setTeacher] = useState([]);
   const [contacts, setContacts] = useState([]);
-  const [subjects, setSubjects] = useState([]);
+  const [message, setMessage] = useState([]);
   const [teacherSubjects, setTeacherSubjects] = useState([]);
   const [foundSubjects, setFoundSubjects] = useState([]);
   const params = useParams();
@@ -21,50 +21,15 @@ export function ViewTeacher() {
       .then((data) => {
         setTeacher(data);
         setContacts(data.contacts);
-        setTeacherSubjects(data.subjectsList)
-            });
-      };
-      
- 
-
-  // const getSubjectsData = () => {
-  //   fetch(`/api/v1/subjects`)
-  //     .then((response) => response.json())
-  //     .then((data) => {
-  //       setSubjects(data);
-  //       // console.log(subjects);
-  //     });
-  // };
-
-  // const mapTeacherSubjects = () => {
-  //   const newFoundSubjects = [];
-
-  //   teacherSubjects.forEach(
-  //     (teacherSubject) => {
-  //       // const found = numbers.find(number => number > 3);
-  //       const subject = subjects.find((s) => s.id === teacherSubject.subjectId);
-  //       if (subject) {
-  //         newFoundSubjects.push(subject);
-  //       }
-  //     });
-  //     setFoundSubjects(newFoundSubjects);
-  //     // console.log(newFoundSubjects);
-      
-  // };
+        setTeacherSubjects(data.subjectsList);
+        // console.log(data);
+      });
+  };
 
   useEffect(() => {
     getTeacherData();
+    
   }, []);
-
-  // useEffect(() => {
-  //   getSubjectsData();
-  // }, [teacher]);
-
-  // useEffect(() => {
-  //   mapTeacherSubjects();
-  // }, [subjects]);
-
-  // const filteredSubjectsArray = subjects.filter(o => teacher.subjectsDtoList.includes(o.id));
 
   return (
     <div>
@@ -72,35 +37,34 @@ export function ViewTeacher() {
         <Grid container rowSpacing={4}>
           <Grid item sm={10}>
             <header>
-              <h1>{teacher.fName +" "+ teacher.lName}</h1>
+              <h1>{teacher.fName + " " + teacher.lName}</h1>
+             
               <span id="modified-date">
                 Paskutinį kartą redaguota: {teacher.dateModified}
               </span>
             </header>
           </Grid>
 
-         
-
           <Grid item sm={12}>
             <h4>Kontaktinis telefonas</h4>
             <p>{contacts.phoneNumber ? contacts.phoneNumber : "n"}</p>
-            </Grid>
+          </Grid>
 
-            <Grid item sm={12}>
+          <Grid item sm={12}>
             <h4>El. paštas</h4>
             <p>{contacts.directEmail ? contacts.directEmail : "n"}</p>
           </Grid>
-         
+
           <Grid item sm={12}>
             <h4>Teams vardas</h4>
             <p>{contacts.teamsName ? contacts.teamsName : "n"}</p>
-            </Grid>
+          </Grid>
 
-        <Grid item sm={12}>
+          <Grid item sm={12}>
             <h4>Teams el. paštas</h4>
             <p>{contacts.teamsEmail ? contacts.teamsEmail : "n"}</p>
           </Grid>
-        
+
           <Grid item sm={12}>
             <h4>Valandos per savaitę</h4>
             <p>{teacher.workHoursPerWeek && teacher.workHoursPerWeek}</p>
@@ -108,9 +72,9 @@ export function ViewTeacher() {
           <Grid item sm={12}>
             <h4>Galima pamaina</h4>
             <p>
-              {teacher.teacherShiftDto
-                ? teacher.teacherShiftDto.name
-                : "niGaunu"}
+              {teacher.selectedShift
+                ? teacher.selectedShift.name
+                : "Duomenys nepasiekiami"}
             </p>
           </Grid>
 
@@ -124,9 +88,9 @@ export function ViewTeacher() {
 
           <Grid item sm={12}>
             <Stack direction="row" spacing={2}>
-              {/* <Link to={`/teachers/edit/${teacher.id}`}>
+              <Link to={`/teachers/edit/${teacher.id}`}>
                 <Button variant="contained">Redaguoti</Button>
-              </Link> */}
+              </Link>
               <Button variant="contained" onClick={() => navigate(-1)}>
                 Grįžti
               </Button>

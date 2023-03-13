@@ -163,7 +163,7 @@ export function CreateSubject() {
               fullWidth
               required
               multiline
-              error={descriptionError || descriptionNotValid}
+              // error={descriptionError || descriptionNotValid}
               helperText={
                 descriptionError
                   ? "Dalyko aprašas yra privalomas. "

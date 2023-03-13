@@ -37,6 +37,7 @@ import { ViewTeacher } from "./pages/teachers/ViewTeacher";
 import { CreateTeacher } from "./pages/teachers/CreateTeacher";
 import { EditTeacher } from "./pages/teachers/EditTeacher";
 
+
 import { ScheduleList } from "./pages/schedules/ScheduleList";
 import { CreateSchedule } from "./pages/schedules/CreateSchedule";
 
@@ -83,9 +84,10 @@ function App() {
           <Route path="/teachers/view/:id" element={<ViewTeacher />}></Route>
           <Route path="/teachers/create" element={<CreateTeacher />}></Route>
           <Route path="/teachers/edit/:id" element={<EditTeacher />}></Route>
-
-          {/*   SCHEDULE PATHS */}
+           {/*   SCHEDULE PATHS */}
           <Route path="/create-schedule" element={<CreateSchedule />}></Route>
+
+
         </Routes>
       </HashRouter>
     </div>
