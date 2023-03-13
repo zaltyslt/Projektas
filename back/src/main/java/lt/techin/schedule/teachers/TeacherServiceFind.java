@@ -43,8 +43,7 @@ public class TeacherServiceFind {
 
     public Set<TeacherDto> getTeachersBySubjects(Subject subject) {
         var result = teacherRepository.getTeacherBySubject(subject);
-        //Comparator<Teacher> byLastName = Comparator.comparing(Teacher::getlName);
-        return !result.isEmpty()
+                return !result.isEmpty()
                 ? result.stream()
                 .sorted(Comparator.comparing(Teacher::getlName))
                 .filter(t -> t.getSubjects().contains(subject)) //just to be sure :)

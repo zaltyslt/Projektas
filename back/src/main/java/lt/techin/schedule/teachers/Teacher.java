@@ -32,9 +32,6 @@ public class Teacher implements Serializable {
     @JsonIgnore
     @OneToMany(mappedBy = "teacher", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Contact> contacts;
-    //@JsonIgnore is used to ignore the logical property used in serialization and deserialization.
-//    @Transient @JsonIgnore
-//    private Set<Subject> subjectsList;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @JoinTable(
@@ -44,14 +41,6 @@ public class Teacher implements Serializable {
     @JsonManagedReference
     private Set<Subject> subjects;
 
-//    @JsonIgnore
-//    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
-//    @JsonManagedReference
-//    @JoinTable(
-//            name = "teacher_shifts",
-//            joinColumns = @JoinColumn(name = "teacher_id", referencedColumnName = "teacher_id"),
-//            inverseJoinColumns = @JoinColumn(name = "shift_id", referencedColumnName = "id"))
-//    private Shift shift;
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "shift_id")
@@ -80,13 +69,6 @@ public class Teacher implements Serializable {
         createdDateTime = LocalDateTime.now();
         modifiedDateAndTime = LocalDateTime.now();
         hashCode = hashCode();
-    }
-
-    @PostLoad
-    public void postLoad() {
-//        if (savedSubjectsList != null && !savedSubjectsList.isEmpty()) {
-//            subjects = TeacherService.loadSubjectsList(savedSubjectsList);
-//        }
     }
 
     @PreUpdate
