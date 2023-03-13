@@ -1,5 +1,7 @@
 package lt.techin.schedule.teachers;
 
+import lt.techin.schedule.shift.ShiftDto;
+import lt.techin.schedule.shift.ShiftMapper;
 import lt.techin.schedule.teachers.contacts.Contact;
 import lt.techin.schedule.teachers.contacts.ContactDto2;
 import lt.techin.schedule.teachers.contacts.ContactMapper;
@@ -17,14 +19,13 @@ public class TeacherMapper {
         dto.setId(teacher.getId());
         dto.setfName(teacher.getfName() != null ? teacher.getfName() : "");
         dto.setlName(teacher.getlName() != null ? teacher.getlName() : "");
-        dto.setNickName(teacher.getNickName() != null ? teacher.getNickName() : "");
 
         dto.setSubjectsList(teacher.getSubjects() != null
                 ? TeacherSubjectMapper.subjectsToDtos(teacher.getSubjects())
                 : new HashSet<TeacherSubjectsDto>());
-        dto.setWorkHoursPerWeek(teacher.getWorkHoursPerWeek() != null ? teacher.getWorkHoursPerWeek() : 0);
-        dto.setTeacherShiftDto(teacher.getShift() != null ? TeacherShiftMapper.shiftToDto(teacher.getShift()) : null);
-//        dto.setSelectedShift(ShiftMapper.shiftToDto(teacher.getShift()));
+        dto.setWorkHoursPerWeek(teacher.getWorkHoursPerWeek() != null ? teacher.getWorkHoursPerWeek().toString() : "0");
+//        dto.setTeacherShiftDto(teacher.getShift() != null ? TeacherShiftMapper.shiftToDto(teacher.getShift()) : null);
+        dto.setSelectedShift(teacher.getShift() !=null ? ShiftMapper.shiftToDto(teacher.getShift()) : new ShiftDto());
 
         dto.setActive(teacher.getActive() != null ? teacher.getActive() : true);
 //        dto.setContacts(teacher.getContacts() != null ? contactsForDto(teacher.getContacts()) : new ArrayList<ContactDto>());
@@ -45,7 +46,7 @@ public class TeacherMapper {
                 : new TeacherDto();
     }
 
-    public static List<TeacherDto> teacherToDto(List<Teacher> teacher) {
+    public static List<TeacherDto> teachersToDtos(List<Teacher> teacher) {
 
         return !teacher.isEmpty()
                 ? teacher.stream().map(t -> teacherToDto(t)).toList()
@@ -72,11 +73,11 @@ public class TeacherMapper {
         teacher.setId(dto.getId() != null ? dto.getId() : null);
         teacher.setfName(dto.getfName() != null ? dto.getfName().trim() : "_empty");
         teacher.setlName(dto.getlName() != null ? dto.getlName().trim() : "_empty");
-        teacher.setNickName(dto.getNickName() != null ? dto.getNickName().trim() : "_empty");
         teacher.setSubjects(dto.getSubjectsList() != null
                 ? TeacherSubjectMapper.subjectsFromDtos(dto.getSubjectsList())
                 : null);
-        teacher.setWorkHoursPerWeek(dto.getWorkHoursPerWeek());
+        teacher.setWorkHoursPerWeek(Integer.parseInt(dto.getWorkHoursPerWeek()));
+        teacher.setShift(ShiftMapper.dtoToShift(dto.getSelectedShift()));
 //        teacher.setShift(ShiftMapper.shiftFromDto(dto.getShiftDtoNew()));
 //        teacher.setShift(ShiftMapper.shiftFromDto(dto.getSelectedShift()));
 //        teacher.setShift(TeacherShiftMapper.shiftFromDto(dto.get .getSelectedShift()));
@@ -93,19 +94,6 @@ public class TeacherMapper {
                 : new HashSet<Teacher>();
     }
 
-//    public static List<Contact> insertTeacherInContacts(Teacher teacher, List<ContactDto> contactsDto) {
-//        return contactsDto.stream()
-//                .map(ContactMapper::contactFromDto)
-//                .peek(c -> c.setTeacher(teacher))
-//                .toList();
-//    }
-
-    //    public static List<Subject> subjectsFromDto(List<SubjectEntityDto> subjectList){
-//        var result = subjectList.stream()
-//                .map(SubjectMapper::toSubjectFromEntityDto)
-//                .toList();
-//        return result;
-//    }
 
     public static TeacherEntityDto toTeacherEntityDto(Teacher teacher) {
         var teacherEntityDto = new TeacherEntityDto();

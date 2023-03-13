@@ -42,6 +42,7 @@ export function ModifyShift() {
         .then((response) => response.json())
         .then(data => {
             setCurrentShift(data);
+            console.log(data)
         });
     }, []);
 

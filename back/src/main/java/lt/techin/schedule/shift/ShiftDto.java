@@ -30,6 +30,7 @@ public class ShiftDto {
     private Integer startIntEnum;
     private Integer endIntEnum;
     private Boolean isActive;
+
 //    private Set<TeacherDto> teachers = null;
 
     public ShiftDto() {

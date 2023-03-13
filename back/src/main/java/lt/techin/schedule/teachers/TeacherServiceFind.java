@@ -15,32 +15,20 @@ import java.util.stream.Collectors;
 @Service
 public class TeacherServiceFind {
     private final static Logger logger = LoggerFactory.getLogger(TeacherMapper.class);
-    private TeacherRepository teacherRepository;
-    private final ContactService contactService;
-    private ContactRepository contactRepository;
-    //    private SubjectService subjectService;
-    private SubjectRepository subjectRepository;
+    private final TeacherRepository teacherRepository;
+    private final SubjectRepository subjectRepository;
 
-    public TeacherServiceFind(TeacherRepository teacherRepository, ContactService contactService, ContactRepository contactRepository, SubjectService subjectService, SubjectRepository subjectRepository) {
+    public TeacherServiceFind(TeacherRepository teacherRepository, SubjectRepository subjectRepository) {
         this.teacherRepository = teacherRepository;
-        this.contactService = contactService;
-        this.contactRepository = contactRepository;
-//        this.subjectService = subjectService;
         this.subjectRepository = subjectRepository;
     }
-
     public List<TeacherDto> getAllTeachers() {
         List<Teacher> teachers = teacherRepository.findAll();
-        return TeacherMapper.teacherToDto(teachers);
+        return TeacherMapper.teachersToDtos(teachers);
     }
 
     public TeacherDto getTeacherById(Long id) {
-//        Optional<Teacher> result = null;
 
-//        try{
-//         result = teacherRepository.findById(id);}
-//
-//catch(Exception e){}
       var  result = teacherRepository.findById(id);
         return result.isPresent()
                 ? TeacherMapper.teacherToDto(result)
@@ -50,7 +38,7 @@ public class TeacherServiceFind {
     public List<TeacherDto> getTeachersByName(String name) {
         name = "%" + name.toLowerCase() + "%";
         var result = teacherRepository.getTeachersByNameFragment(name);
-        return TeacherMapper.teacherToDto(result);
+        return TeacherMapper.teachersToDtos(result);
     }
 
     public Set<TeacherDto> getTeachersBySubjects(Subject subject) {
@@ -74,7 +62,8 @@ public class TeacherServiceFind {
                     .map(TeacherMapper::teacherToDto)
                     .toList()
                 : new ArrayList<>();
-//            return new HashSet<TeacherDto>();
+
+
     }
 
     public Set<TeacherSubjectsDto> getMiniSubjects(){

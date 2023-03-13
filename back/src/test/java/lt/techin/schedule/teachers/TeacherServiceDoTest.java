@@ -14,8 +14,6 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
-//import lt.techin.schedule.shift.ShiftDTO;
-
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -37,7 +35,7 @@ class TeacherServiceDoTest {
 
         Teacher t1 = new Teacher(1L, "John", "Doe", true);
         Teacher t2 = new Teacher(2L, "John", "Doe", true);
-        t2.setNickName("two");
+
        teachers.addAll(Arrays.asList(t1,t2));
 
         int teacherHash = Objects.hash("John".toLowerCase(), "Doe".toLowerCase());

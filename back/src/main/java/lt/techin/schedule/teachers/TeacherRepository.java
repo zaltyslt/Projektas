@@ -14,7 +14,7 @@ public interface TeacherRepository extends JpaRepository<Teacher,Long> {
 
     @Query("SELECT e FROM Teacher e WHERE lower(e.fName) LIKE lower(:fragment) " +
             "                           OR lower(e.lName) LIKE lower(:fragment) " +
-            "                           OR lower(e.nickName) LIKE lower(:fragment) " +
+
             "ORDER BY e.lName DESC")
     List<Teacher> getTeachersByNameFragment(String fragment);
 
