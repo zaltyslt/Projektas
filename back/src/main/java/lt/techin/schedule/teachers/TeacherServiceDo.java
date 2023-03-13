@@ -35,8 +35,6 @@ public class TeacherServiceDo {
 
     public ResponseEntity<TeacherDto> createTeacher(TeacherDto teacherDto) {
        Teacher newTeacher = TeacherMapper.teacherFromDto(teacherDto);
-//        int newTeacherHash = Objects.hash(newTeacher.getfName().toLowerCase(), newTeacher.getlName().toLowerCase());
-
 
         newTeacher.setId(null);
 
@@ -51,13 +49,7 @@ public class TeacherServiceDo {
         } else {
             throw new RuntimeException("Teacher creation process failed.");
         }
-//        if (!teacherDto.getContacts().isE()) {
-//            List<Contact> contactsList = ContactMapper.contactFromDto(teacherDto.getContacts());
-//            if (!contactsList.isEmpty()) {
-//                var contacts = contactService.createContacts(newTeacher, contactsList);
-//                newTeacher.setContacts(contacts);
-//            }
-//        }
+
         ContactDto2 contactsDto = teacherDto.getContacts();
         contactsDto.setTeacherId(newTeacher.getId());
         List<Contact> contactsToSave = ContactMapper.contactFromDto2(contactsDto);
@@ -94,13 +86,6 @@ public class TeacherServiceDo {
                 .orElseThrow(() -> new TeacherException(HttpStatus.NOT_FOUND, "Mokytojas nerastas"));
 
         Teacher newTeacher = TeacherMapper.teacherFromDto(teacherDto);
-
-        //jei tik norim isjungt, tai kitu lauku nekeiciam
-//        if (presentTeacher.getActive() != newTeacher.getActive()) {
-//            presentTeacher.setActive(!presentTeacher.getActive());
-//            teacherRepository.save(presentTeacher);
-//            return ResponseEntity.accepted().body(TeacherMapper.teacherToDto(presentTeacher));
-//        }
 
         int newTeacherHash = Objects.hash(newTeacher.getfName().toLowerCase(), newTeacher.getlName().toLowerCase());
 

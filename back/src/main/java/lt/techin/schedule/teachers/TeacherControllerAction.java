@@ -21,30 +21,29 @@ public class TeacherControllerAction {
     @PostMapping(value = "/create", consumes = {MediaType.APPLICATION_JSON_VALUE}) //teacher create
     public ResponseEntity<TeacherDto> createTeacher(@RequestBody TeacherDto teacherDto) {
         var result = teacherDto;
-//        return ResponseEntity.ok(teacherDto);
+
         if (
-//                result.getSubjectsList() != null &&
                 result.getContacts() != null &&
-                result.getSelectedShift() != null &&
-//                result.getWorkHoursPerWeek() != null &&
-                result.getActive() != null &&
-                result.getSelectedShift() != null
-        ){
+                        result.getSelectedShift() != null &&
+                        result.getWorkHoursPerWeek() != null &&
+                        result.getActive() != null &&
+                        result.getSelectedShift() != null
+        ) {
             return teacherServiceDo.createTeacher(result);
         }
-        throw new TeacherException(HttpStatus.EXPECTATION_FAILED,"Nepakanka duomenų!");
+        throw new TeacherException(HttpStatus.EXPECTATION_FAILED, "Nepakanka duomenų!");
 
     }
-    @PostMapping(value = "/create/test", consumes = {MediaType.APPLICATION_JSON_VALUE}) //teacher create   sdf
-//public String testData(@RequestBody String payLoad) {
+
+    @PostMapping(value = "/create/test", consumes = {MediaType.APPLICATION_JSON_VALUE})
+    //public String testData(@RequestBody String payLoad) {
     public String testData(@RequestBody String payLoad) {
         var aa = payLoad;
         ObjectMapper objectMapper = new ObjectMapper();
         Object jsonObject = new Object();
         Exception ee;
         try {
-       jsonObject = objectMapper.readValue(payLoad, TeacherDto.class);
-//       jsonObject = objectMapper.readValue(payLoad, TeacherSubjectsDto.class);
+            jsonObject = objectMapper.readValue(payLoad, TeacherDto.class);
             var res = objectMapper.writeValueAsString(jsonObject);
         } catch (
                 Exception e) {
