@@ -1,6 +1,7 @@
 package lt.techin.schedule.schedules;
 
 import lt.techin.schedule.group.Group;
+import lt.techin.schedule.schedules.planner.WorkDay;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

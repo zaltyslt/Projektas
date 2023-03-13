@@ -2,6 +2,7 @@ import {
   Alert,
   Button,
   FormControl,
+  FormHelperText,
   Grid,
   InputLabel,
   MenuItem,
@@ -14,6 +15,7 @@ import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { useEffect, useState } from "react";
 import { Link, useAsyncError } from "react-router-dom";
+import { dateToUtc } from "../../helpers/helpers";
 import "./Schedule.css";
 
 export function CreateSchedule() {
@@ -70,24 +72,20 @@ export function CreateSchedule() {
   };
 
   const validateDateFrom = (value) => {
-    setDateFrom(value);
+    setDateFrom(dateToUtc(value));
     if (value.length === 0) {
       setDateFromEmpty(true);
-      setErrorMessage("Privaloma užpildyti");
     } else {
       setDateFromEmpty(false);
-      setErrorMessage("");
     }
   };
 
   const validateDateUntil = (value) => {
-    setDateUntil(value);
+    setDateUntil(dateToUtc(value));
     if (value.length === 0) {
       setDateUntilEmpty(true);
-      setErrorMessage("Privaloma užpildyti");
     } else {
       setDateFromEmpty(false);
-      setErrorMessage("");
     }
   };
 
@@ -200,13 +198,13 @@ export function CreateSchedule() {
                   !schoolYearValid
                     ? "Mokslo metai turi neleidžiamų simbolių."
                     : schoolYearEmpty
-                      ? "Mokslo metai negali būti tušti"
-                      : errorLengthYear
-                      ? "Mokslo metai negali būti ilgesnis nei 200 simbolių"
-                      : ""
+                    ? "Mokslo metai negali būti tušti"
+                    : errorLengthYear
+                    ? "Mokslo metai negali būti ilgesnis nei 200 simbolių"
+                    : ""
                 }
                 value={schoolYear}
-                                onChange={(e) => {
+                onChange={(e) => {
                   const input = e.target.value;
                   if (input.length > 200) {
                     setErrorLengthYear(true);
@@ -232,13 +230,13 @@ export function CreateSchedule() {
                   !semesterValid
                     ? "Pavadinimas turi neleidžiamų simbolių."
                     : semesterEmpty
-                      ? "Pavadinimas negali būti tuščias"
-                                          : errorLengthName
+                    ? "Pavadinimas negali būti tuščias"
+                    : errorLengthName
                     ? "Pavadinimas negali būti ilgesnis nei 200 simbolių"
-                      : ""
+                    : ""
                 }
                 value={semester}
-                                onChange={(e) => {
+                onChange={(e) => {
                   const input = e.target.value;
                   if (input.length > 200) {
                     setErrorLengthName(true);
@@ -259,13 +257,11 @@ export function CreateSchedule() {
                   format="YYYY/MM/DD"
                   value={dateFrom}
                   onChange={(e) => validateDateFrom(e)}
-                  slotProps={{
-                    textField: {
-                      helperText: errorMessage,
-                    },
-                  }}
                 ></DatePicker>
               </LocalizationProvider>
+              {dateFromEmpty && (
+                <FormHelperText error>Privaloma pasirinkti datą</FormHelperText>
+              )}
             </Grid>
 
             <Grid item sm={5}>
@@ -276,13 +272,11 @@ export function CreateSchedule() {
                   format="YYYY/MM/DD"
                   value={dateUntil}
                   onChange={(e) => validateDateUntil(e)}
-                  slotProps={{
-                    textField: {
-                      helperText: errorMessage,
-                    },
-                  }}
                 ></DatePicker>
               </LocalizationProvider>
+              {dateFromEmpty && (
+                <FormHelperText error>Privaloma pasirinkti datą</FormHelperText>
+              )}
             </Grid>
 
             <Grid item sm={10}>

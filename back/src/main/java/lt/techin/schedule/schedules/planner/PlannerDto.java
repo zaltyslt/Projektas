@@ -1,4 +1,4 @@
-package lt.techin.schedule.schedules;
+package lt.techin.schedule.schedules.planner;
 
 import lt.techin.schedule.classrooms.Classroom;
 import lt.techin.schedule.teachers.Teacher;
@@ -28,8 +28,6 @@ public class PlannerDto {
 
     public PlannerDto() {
     }
-
-
 
     public TeacherEntityDto getTeacher() {
         return teacher;

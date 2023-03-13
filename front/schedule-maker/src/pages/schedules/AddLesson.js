@@ -2,6 +2,7 @@ import {
   Alert,
   Button,
   FormControl,
+  FormHelperText,
   Grid,
   InputLabel,
   MenuItem,
@@ -12,8 +13,11 @@ import {
 import { Container } from "@mui/system";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import { Link, useLocation, useParams } from "react-router-dom";
+import { lessons } from "../../helpers/constants";
+import { dateToUtc } from "../../helpers/helpers";
 
 export function AddLesson() {
   const [subject, setSubject] = useState({});
@@ -23,11 +27,17 @@ export function AddLesson() {
   const [selectedTeacher, setSelectedTeacher] = useState("");
   const [dateFrom, setDateFrom] = useState("");
   const [plannedHours, setPlannedHours] = useState("");
-  const [lessonStartingTime, setLessonStartingTime] = useState("");
-  const [lessonEndTime, setLessonEndTime] = useState("");
+  const [lessonStartingTime, setLessonStartingTime] = useState("1");
+  const [lessonEndTime, setLessonEndTime] = useState("1");
 
   const [error, setError] = useState("");
   const [createMessage, setCreateMessage] = useState("");
+  const [teacherEmpty, setTeacherEmpty] = useState(false);
+  const [classRoomEmpty, setClassRoomEmpty] = useState(false);
+  const [hoursEmpty, setHoursEmpty] = useState(false);
+  const [hoursNotValid, setHoursNotValid] = useState(false);
+  const [dateFromEmpty, setDateFromEmpty] = useState(false);
+  const [isValidShiftTime, setIsValidShiftTime] = useState(true);
 
   const params = useParams();
   const data = useLocation();
@@ -47,6 +57,14 @@ export function AddLesson() {
 
   useEffect(() => fetchTeachers, []);
 
+  useEffect(() => {
+    if (parseInt(lessonStartingTime) > parseInt(lessonEndTime)) {
+      setIsValidShiftTime(false);
+    } else {
+      setIsValidShiftTime(true);
+    }
+  }, [lessonStartingTime, lessonEndTime]);
+
   const fetchTeachers = () => {
     fetch(
       `api/v1/teachers/subject?subjectId=${params.id}&shiftId=${shiftId}`,
@@ -64,6 +82,8 @@ export function AddLesson() {
     setLessonStartingTime("");
     setLessonEndTime("");
     setDateFrom("");
+    setTeacherEmpty(false);
+    setClassRoomEmpty(false);
   };
 
   const createLesson = () => {
@@ -99,22 +119,45 @@ export function AddLesson() {
     });
   };
 
-  const lessons = [
-    { value: "1", label: "1 pamoka" },
-    { value: "2", label: "2 pamoka" },
-    { value: "3", label: "3 pamoka" },
-    { value: "4", label: "4 pamoka" },
-    { value: "5", label: "5 pamoka" },
-    { value: "6", label: "6 pamoka" },
-    { value: "7", label: "7 pamoka" },
-    { value: "8", label: "8 pamoka" },
-    { value: "9", label: "9 pamoka" },
-    { value: "10", label: "10 pamoka" },
-    { value: "11", label: "11 pamoka" },
-    { value: "12", label: "12 pamoka" },
-    { value: "13", label: "13 pamoka" },
-    { value: "14", label: "14 pamoka" },
-  ];
+  const validateHours = (value) => {
+    setPlannedHours(value);
+    value.length === 0 ? setHoursEmpty(true) : setHoursEmpty(false);
+
+    const isValidHourString = /^[0-9]+$/.test(value);
+    isValidHourString ? setHoursNotValid(false) : setHoursNotValid(true);
+  };
+
+  const validateDate = (value) => {
+    setDateFrom(dateToUtc(value));
+    if (value.length === 0) {
+      setDateFromEmpty(true);
+    } else {
+      setDateFromEmpty(false);
+    }
+  };
+
+  const validation = () => {
+    if (selectedTeacher === "") {
+      setTeacherEmpty(true);
+      return;
+    }
+    if (selectedClassRoom === "") {
+      setClassRoomEmpty(true);
+      return;
+    }
+    if (plannedHours === "") {
+      setHoursEmpty(true);
+      return;
+    }
+    if (dateFrom === "") {
+      setDateFromEmpty(true);
+      return;
+    }
+    if (hoursEmpty || hoursNotValid || dateFromEmpty) {
+      return;
+    }
+    createLesson();
+  };
 
   return (
     <div>
@@ -124,8 +167,10 @@ export function AddLesson() {
         <form>
           <Grid container rowSpacing={2} spacing={2}>
             <Grid item sm={10}>
-              <FormControl fullWidth required>
-                <InputLabel id="teacher-label">Mokytojas</InputLabel>
+              <FormControl fullWidth required error={teacherEmpty}>
+                <InputLabel id="teacher-label">
+                  {teacherEmpty ? "Privaloma pasirinkti mokytoją" : "Mokytojas"}
+                </InputLabel>
                 <Select
                   label="Moktyojas"
                   labelId="teacher-label"
@@ -145,8 +190,12 @@ export function AddLesson() {
             </Grid>
 
             <Grid item sm={10}>
-              <FormControl fullWidth required>
-                <InputLabel id="classroom-label">Klasės pavadinimas</InputLabel>
+              <FormControl fullWidth required error={classRoomEmpty}>
+                <InputLabel id="classroom-label">
+                  {classRoomEmpty
+                    ? "Privaloma pasirinkti klasę"
+                    : "Klasės pavadinimas"}
+                </InputLabel>
                 <Select
                   label="Klasės pavadinimas"
                   labelId="classroom-label"
@@ -196,28 +245,40 @@ export function AddLesson() {
                   label="Nuo"
                   format="YYYY/MM/DD"
                   value={dateFrom}
-                  onChange={(e) => setDateFrom(e)}
+                  onChange={(e) => validateDate(e)}
                 ></DatePicker>
               </LocalizationProvider>
+              {dateFromEmpty && (
+                <FormHelperText error>Privaloma pasirinkti datą</FormHelperText>
+              )}
             </Grid>
 
             <Grid item sm={5}>
               <TextField
                 fullWidth
                 required
+                error={hoursEmpty || hoursNotValid}
+                helperText={
+                  hoursEmpty
+                    ? "Privaloma pasirinkti planuojamų valandų skaičių"
+                    : hoursNotValid
+                    ? "Laukas turi susidėti iš skaičių"
+                    : ""
+                }
                 variant="outlined"
                 label="Planuojamų valandų skaičius: "
                 id="notPlannedHours"
                 name="notPlannedHours"
                 value={plannedHours}
-                onChange={(e) => setPlannedHours(e.target.value)}
+                onChange={(e) => validateHours(e.target.value)}
               ></TextField>
             </Grid>
 
             <Grid item sm={5}>
-              <InputLabel id="classroom-label">Pamoka nuo:</InputLabel>
+              <InputLabel id="lessons-start-label">Pamoka nuo:</InputLabel>
               <Select
                 fullWidth
+                error={!isValidShiftTime}
                 variant="outlined"
                 label="Pamokų pradžia"
                 id="lesson-start"
@@ -230,15 +291,20 @@ export function AddLesson() {
                   </MenuItem>
                 ))}
               </Select>
+              {!isValidShiftTime && (
+                <FormHelperText error>
+                  Pirma pamoka negali prasidėti vėliau negu paskutinė pamoka.
+                </FormHelperText>
+              )}
             </Grid>
 
             <Grid item sm={5}>
-              <InputLabel id="classroom-label">
+              <InputLabel id="lesson-end-label">
                 Pamoka iki (imtinai):
               </InputLabel>
               <Select
                 fullWidth
-                multiline
+                error={!isValidShiftTime}
                 variant="outlined"
                 label="Pamokų pabaiga"
                 id="lesson-end"
@@ -251,11 +317,16 @@ export function AddLesson() {
                   </MenuItem>
                 ))}
               </Select>
+              {!isValidShiftTime && (
+                <FormHelperText error>
+                  Pirma pamoka negali prasidėti vėliau negu paskutinė pamoka.
+                </FormHelperText>
+              )}
             </Grid>
 
             <Grid item sm={10}>
               <Stack direction="row" spacing={2}>
-                <Button variant="contained" onClick={createLesson}>
+                <Button variant="contained" onClick={validation}>
                   Suplanuoti
                 </Button>
                 <Link to={`/schedules/${scheduleId}`}>

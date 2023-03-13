@@ -2,6 +2,9 @@ package lt.techin.schedule.schedules;
 
 import lt.techin.schedule.exceptions.ValidationException;
 import lt.techin.schedule.group.GroupRepository;
+import lt.techin.schedule.schedules.planner.PlannerDto;
+import lt.techin.schedule.schedules.planner.WorkDay;
+import lt.techin.schedule.schedules.planner.WorkDayRepository;
 import lt.techin.schedule.shift.LessonTime;
 import lt.techin.schedule.subject.SubjectRepository;
 import lt.techin.schedule.teachers.TeacherRepository;
@@ -77,43 +80,6 @@ public class ScheduleService {
             return scheduleRepository.save(existingSchedule);
         }
         return null;
-    }
-
-    public Boolean addSubjectPlanToSchedule(Long scheduleId, Long subjectId, PlannerDto plannerDto) {
-        var existingSchedule = scheduleRepository.findById(scheduleId).orElseThrow(()-> new ValidationException("Tvarkaraštis neegzistuoja", "Schedule", "Does not exist", scheduleId.toString()));
-        var existingSubject = subjectRepository.findById(subjectId).orElseThrow(()-> new ValidationException("Pasirinktas dalykas neegzistuoja", "Subject", "Does no exist", subjectId.toString()));
-        var existingTeacher = teacherRepository.findById(plannerDto.getTeacher().getId()).orElseThrow(()-> new ValidationException("Pasirinktas mokytojas neegzistuoja", "Teacher", "Does not exist", plannerDto.getTeacher().getId().toString()));
-
-        LocalDate date = plannerDto.getDateFrom();
-        int hours = plannerDto.getAssignedHours();
-        int interval = plannerDto.getEndIntEnum() - plannerDto.getStartIntEnum() + 1;
-        int days = hours/interval;
-        int leftHours = hours % interval;
-        int created = 0;
-
-        if (leftHours == 0) {
-            for (int i = 1; i <= days; i++) {
-                WorkDay workDay = new WorkDay(date, existingSubject, existingTeacher, existingSchedule, LessonTime.getLessonTimeByInt(plannerDto.getStartIntEnum()).getLessonStartFloat(), LessonTime.getLessonTimeByInt(plannerDto.getEndIntEnum()).getLessonEndFloat());
-                workDayRepository.save(workDay);
-                date = date.plusDays(1);
-                created++;
-            }
-        } else {
-            for (int i = 1; i <= days; i++) {
-                WorkDay workDay = new WorkDay(date, existingSubject, existingTeacher, existingSchedule, LessonTime.getLessonTimeByInt(plannerDto.getStartIntEnum()).getLessonStartFloat(), LessonTime.getLessonTimeByInt(plannerDto.getEndIntEnum()).getLessonEndFloat());
-                workDayRepository.save(workDay);
-                date = date.plusDays(1);
-                created++;
-            }
-            WorkDay lastWorkDay = new WorkDay(date, existingSubject, existingTeacher, existingSchedule, LessonTime.getLessonTimeByInt(plannerDto.getStartIntEnum()).getLessonStartFloat(), LessonTime.getLessonTimeByInt(plannerDto.getStartIntEnum() + leftHours - 1).getLessonEndFloat());
-            workDayRepository.save(lastWorkDay);
-            created++;
-        }
-       if(created >=1) {
-           return true;
-       } else {
-           return false;
-       }
     }
 
 }

@@ -1,10 +1,9 @@
-package lt.techin.schedule.schedules;
+package lt.techin.schedule.schedules.planner;
 
 import jakarta.persistence.*;
-import lt.techin.schedule.shift.Shift;
+import lt.techin.schedule.schedules.Schedule;
 import lt.techin.schedule.subject.Subject;
 import lt.techin.schedule.teachers.Teacher;
-import lt.techin.schedule.teachers.TeacherEntityDto;
 
 import java.time.LocalDate;
 import java.util.Objects;
