@@ -134,14 +134,36 @@ public class ScheduleService {
         LocalDate date = plannerDto.getDateFrom();
         int hours = plannerDto.getAssignedHours();
         int interval = plannerDto.getEndIntEnum() - plannerDto.getStartIntEnum() + 1;
+        int days = hours/interval;
+        int leftHours = hours % interval;
+        System.out.println(days);
+        System.out.println(leftHours);
 
-        for(int i = 1; i <= hours; i+=interval) {
-            WorkDay workDay = new WorkDay(date, existingSubject, existingTeacher, existingSchedule, LessonTime.getLessonTimeByInt(plannerDto.getStartIntEnum()).getLessonStartFloat(), LessonTime.getLessonTimeByInt(plannerDto.getEndIntEnum()).getLessonEndFloat());
-            workDayRepository.save(workDay);
-            existingSchedule.addWorkDay(workDay);
+        if (leftHours == 0) {
+            for (int i = 1; i <= days; i++) {
+                WorkDay workDay = new WorkDay(date, existingSubject, existingTeacher, existingSchedule, LessonTime.getLessonTimeByInt(plannerDto.getStartIntEnum()).getLessonStartFloat(), LessonTime.getLessonTimeByInt(plannerDto.getEndIntEnum()).getLessonEndFloat());
+                workDayRepository.save(workDay);
+                existingSchedule.addWorkDay(workDay);
+                scheduleRepository.save(existingSchedule);
+                date = date.plusDays(1);
+            }
+        } else {
+            for (int i = 1; i <= days; i++) {
+                WorkDay workDay = new WorkDay(date, existingSubject, existingTeacher, existingSchedule, LessonTime.getLessonTimeByInt(plannerDto.getStartIntEnum()).getLessonStartFloat(), LessonTime.getLessonTimeByInt(plannerDto.getEndIntEnum()).getLessonEndFloat());
+                workDayRepository.save(workDay);
+                existingSchedule.addWorkDay(workDay);
+                scheduleRepository.save(existingSchedule);
+                date = date.plusDays(1);
+            }
+            WorkDay lastWorkDay = new WorkDay(date, existingSubject, existingTeacher, existingSchedule, LessonTime.getLessonTimeByInt(plannerDto.getStartIntEnum()).getLessonStartFloat(), LessonTime.getLessonTimeByInt(plannerDto.getStartIntEnum() + leftHours - 1).getLessonEndFloat());
+            workDayRepository.save(lastWorkDay);
+            existingSchedule.addWorkDay(lastWorkDay);
             scheduleRepository.save(existingSchedule);
             date = date.plusDays(1);
         }
+
+
+
     }
 
 }
