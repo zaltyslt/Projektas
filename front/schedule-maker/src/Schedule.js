@@ -29,9 +29,8 @@ class Schedule extends React.Component {
             }}
             events={[
               {
-                title: "Java dalykas",
+                title: "Java dalykas yra sudas as noriu miegoti ir valgyti ir miegoti ir valgyti ir miegoti ir valgyti ir miegoti.... Muhahahahhh galiu rasyti tiek kiek noriu!!!",
                 date: "2023-03-06",
-                description: "Java dalykas yra sudas as noriu miegoti ir valgyti ir miegoti ir valgyti ir miegoti ir valgyti ir miegoti ir valgyti ir dar kazka"
               },
               { title: "Java", date: "2023-03-07" },
               { title: "Java", date: "2023-03-08" },
@@ -41,7 +40,6 @@ class Schedule extends React.Component {
               { title: "Linux", date: "2023-03-15" }
             ]}
             weekends={false}
-            eventContent={renderEventContent}
           />
         </div>
       </div>
@@ -49,13 +47,5 @@ class Schedule extends React.Component {
   }
 }
 
-function renderEventContent(eventInfo) {
-  return (
-    <>
-      <b>{eventInfo.timeText}</b>
-      <p>{eventInfo.event._def.extendedProps.description}</p>
-    </>
-  );
-}
 
 export default Schedule;
