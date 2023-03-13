@@ -4,6 +4,7 @@ import {
   FormControl,
   Grid,
   InputLabel,
+  FormHelperText,
   MenuItem,
   Select,
   Stack,
@@ -24,7 +25,7 @@ export function CreateSchedule() {
   const [dateFrom, setDateFrom] = useState("");
   const [dateUntil, setDateUntil] = useState("");
 
-  const [error, setError] = useState("");
+  const [error, setError] = useState(false);
   const [createMessage, setCreateMessage] = useState("");
 
   const [semesterEmpty, setSemesterEmpty] = useState(false);
@@ -41,6 +42,10 @@ export function CreateSchedule() {
   const badSymbols = "!@#$%^&*_+={}<>|~`\\'";
 
   useEffect(() => fetchGroups, []);
+function sw(){
+  setDateFromEmpty(!dateFromEmpty);
+  setDateUntilEmpty(!dateUntilEmpty);
+}
 
   const fetchGroups = () => {
     fetch("api/v1/group/get-active/small")
@@ -69,8 +74,13 @@ export function CreateSchedule() {
     value.length === 0 ? setGroupEmpty(true) : setGroupEmpty(false);
   };
 
+  const dateToUtc = (date)=>{
+    const utcDate = dayjs(date.$d.getTime() - (date.$d.getTimezoneOffset() * 60 * 1000));
+    return utcDate;
+  }
   const validateDateFrom = (value) => {
-    setDateFrom(value);
+     const tempDate = dateToUtc(value);
+    setDateFrom(tempDate);
     if (value.length === 0) {
       setDateFromEmpty(true);
       setErrorMessage("Privaloma užpildyti");
@@ -79,9 +89,9 @@ export function CreateSchedule() {
       setErrorMessage("");
     }
   };
-
   const validateDateUntil = (value) => {
-    setDateUntil(value);
+    const tempDate = dateToUtc(value);
+     setDateUntil(tempDate);
     if (value.length === 0) {
       setDateUntilEmpty(true);
       setErrorMessage("Privaloma užpildyti");
@@ -258,13 +268,17 @@ export function CreateSchedule() {
                   label="Nuo"
                   format="YYYY/MM/DD"
                   value={dateFrom}
+                  
                   onChange={(e) => validateDateFrom(e)}
                   slotProps={{
                     textField: {
                       helperText: errorMessage,
+                      error: dateFromEmpty,
+                      
                     },
                   }}
                 ></DatePicker>
+                {dateFromEmpty && (<FormHelperText error>Privaloma pasirinkti data</FormHelperText> )}
               </LocalizationProvider>
             </Grid>
 
@@ -278,10 +292,13 @@ export function CreateSchedule() {
                   onChange={(e) => validateDateUntil(e)}
                   slotProps={{
                     textField: {
+                      
                       helperText: errorMessage,
+                      error: dateUntilEmpty,
                     },
                   }}
                 ></DatePicker>
+                 {dateUntilEmpty && (<FormHelperText error>Privaloma pasirinkti data</FormHelperText> )}
               </LocalizationProvider>
             </Grid>
 
@@ -300,7 +317,11 @@ export function CreateSchedule() {
 
                 <Link to="/">
                   <Button variant="contained">Grįžti</Button>
+                
                 </Link>
+                <Button variant="contained" onClick={sw}>
+                  Switch
+                </Button>
               </Stack>
             </Grid>
           </Grid>
