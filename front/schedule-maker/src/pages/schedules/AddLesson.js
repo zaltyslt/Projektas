@@ -1,4 +1,5 @@
 import {
+  Alert,
   Button,
   FormControl,
   Grid,
@@ -21,10 +22,12 @@ export function AddLesson() {
   const [teachers, setTeachers] = useState([]);
   const [selectedTeacher, setSelectedTeacher] = useState("");
   const [dateFrom, setDateFrom] = useState("");
-  const [dateUntil, setDateUntil] = useState("");
   const [plannedHours, setPlannedHours] = useState("");
   const [lessonStartingTime, setLessonStartingTime] = useState("");
   const [lessonEndTime, setLessonEndTime] = useState("");
+
+  const [error, setError] = useState("");
+  const [createMessage, setCreateMessage] = useState("");
 
   const params = useParams();
   const data = useLocation();
@@ -32,7 +35,6 @@ export function AddLesson() {
   const hours = data.state.subject.subject.hours;
   const shiftId = data.state.schedule.schedule.groups.shift.id;
   const shift = data.state.schedule.schedule.groups.shift.name;
-  const groupId = data.state.schedule.schedule.groups.id;
 
   useEffect(() => {
     fetch(`api/v1/subjects/${params.id}`)
@@ -43,28 +45,58 @@ export function AddLesson() {
       });
   }, []);
 
-  useEffect(() => {
-    fetch(`api/v1/teachers/subject?subjectId=${params.id}&shiftId=${shiftId}`, {})
+  useEffect(() => fetchTeachers, []);
+
+  const fetchTeachers = () => {
+    fetch(
+      `api/v1/teachers/subject?subjectId=${params.id}&shiftId=${shiftId}`,
+      {}
+    )
       .then((response) => response.json())
       .then(setTeachers);
-  }, []);
+  };
+
+  const clear = () => {
+    fetchTeachers();
+    setSelectedClassRoom("");
+    setSelectedTeacher("");
+    setPlannedHours("");
+    setLessonStartingTime("");
+    setLessonEndTime("");
+    setDateFrom("");
+  };
 
   const createLesson = () => {
-    fetch(`api/v1/schedules/plan-schedule/${scheduleId}?subjectId=${params.id}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        classroom: selectedClassRoom,
-        teacher: selectedTeacher,
-        assignedHours: plannedHours,
-        dateFrom,
-        dateUntil,
-        startIntEnum: lessonStartingTime,
-        endIntEnum: lessonEndTime
-      })
-    })
+    fetch(
+      `api/v1/schedules/plan-schedule/${scheduleId}?subjectId=${params.id}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          classroom: selectedClassRoom,
+          teacher: selectedTeacher,
+          assignedHours: plannedHours,
+          dateFrom,
+          startIntEnum: lessonStartingTime,
+          endIntEnum: lessonEndTime,
+        }),
+      }
+    ).then((response) => {
+      let success = response.ok;
+
+      response.json().then((response) => {
+        if (!success) {
+          setCreateMessage("");
+          setError(response.message);
+        } else {
+          setCreateMessage("Sėkmingai sukurta. ");
+          setError("");
+          clear();
+        }
+      });
+    });
   };
 
   const lessons = [
@@ -170,20 +202,9 @@ export function AddLesson() {
             </Grid>
 
             <Grid item sm={5}>
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DatePicker
-                  className="DatePicker"
-                  label="Iki"
-                  format="YYYY/MM/DD"
-                  value={dateUntil}
-                  onChange={(e) => setDateUntil(e)}
-                ></DatePicker>
-              </LocalizationProvider>
-            </Grid>
-
-            <Grid item sm={10}>
               <TextField
                 fullWidth
+                required
                 variant="outlined"
                 label="Planuojamų valandų skaičius: "
                 id="notPlannedHours"
@@ -197,7 +218,6 @@ export function AddLesson() {
               <InputLabel id="classroom-label">Pamoka nuo:</InputLabel>
               <Select
                 fullWidth
-                multiline
                 variant="outlined"
                 label="Pamokų pradžia"
                 id="lesson-start"
@@ -213,7 +233,9 @@ export function AddLesson() {
             </Grid>
 
             <Grid item sm={5}>
-              <InputLabel id="classroom-label">Pamoka iki:</InputLabel>
+              <InputLabel id="classroom-label">
+                Pamoka iki (imtinai):
+              </InputLabel>
               <Select
                 fullWidth
                 multiline
@@ -233,11 +255,20 @@ export function AddLesson() {
 
             <Grid item sm={10}>
               <Stack direction="row" spacing={2}>
-                <Button variant="contained" onClick={createLesson}>Suplanuoti</Button>
+                <Button variant="contained" onClick={createLesson}>
+                  Suplanuoti
+                </Button>
                 <Link to={`/schedules/${scheduleId}`}>
                   <Button variant="contained">Atšaukti</Button>
                 </Link>
               </Stack>
+            </Grid>
+
+            <Grid item sm={10}>
+              {error && <Alert severity="warning">{error}</Alert>}
+              {createMessage && (
+                <Alert severity="success">{createMessage}</Alert>
+              )}
             </Grid>
           </Grid>
         </form>

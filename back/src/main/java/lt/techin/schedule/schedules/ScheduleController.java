@@ -52,7 +52,7 @@ public class ScheduleController {
     @PatchMapping("/disable-schedule/{scheduleId}")
     public ScheduleDto disableSchedule(@PathVariable Long scheduleId) {
         var disableSchedule = scheduleService.disable(scheduleId);
-        logger.log(Level.INFO, "The schedule was disable: {0} ", scheduleId);
+        logger.log(Level.INFO, "The schedule was disabled: {0} ", scheduleId);
         return toScheduleDto(disableSchedule);
     }
 
@@ -64,11 +64,10 @@ public class ScheduleController {
     }
 
     @PutMapping("/plan-schedule/{scheduleId}")
-    public void planSchedule(@PathVariable Long scheduleId, @RequestParam Long subjectId, @RequestBody PlannerDto plannerDto) {
-//        System.out.println(scheduleId + " " + plannerDto.getAssignedHours() + " " + plannerDto.getEndIntEnum() + " " + plannerDto.getStartIntEnum() + " " +
-//                " " + plannerDto.getDateFrom() + " " +  plannerDto.getDateUntil() + " " + plannerDto.getClassroom() +
-//                plannerDto.getTeacher() + " " + subjectId);
-        scheduleService.addSubjectPlanToSchedule(scheduleId, subjectId, plannerDto);
+    public ResponseEntity<Boolean> planSchedule(@PathVariable Long scheduleId, @RequestParam Long subjectId, @RequestBody PlannerDto plannerDto) {
+        var createdDay = scheduleService.addSubjectPlanToSchedule(scheduleId, subjectId, plannerDto);
+        logger.log(Level.INFO, "The lessons for schedule {0} were created", scheduleId);
+        return ok(createdDay);
     }
 }
 

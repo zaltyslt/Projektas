@@ -21,8 +21,6 @@ public class PlannerDto {
 //    private Set<LocalDate> dates;
     private LocalDate dateFrom;
 
-    private LocalDate dateUntil;
-
     private int startIntEnum;
 
     private int endIntEnum;
@@ -95,13 +93,5 @@ public class PlannerDto {
 
     public void setDateFrom(LocalDate dateFrom) {
         this.dateFrom = dateFrom;
-    }
-
-    public LocalDate getDateUntil() {
-        return dateUntil;
-    }
-
-    public void setDateUntil(LocalDate dateUntil) {
-        this.dateUntil = dateUntil;
     }
 }
