@@ -75,7 +75,13 @@ public class TeacherServiceDo {
                 newTeacher.setShift(shift.get());
             }
         }
+        try{
         newTeacher = teacherRepository.save(newTeacher);
+        }catch(Exception e){
+            throw new TeacherException(HttpStatus.NOT_ACCEPTABLE,e.getMessage());
+
+
+        }
         return ResponseEntity.ok(TeacherMapper.teacherToDto(newTeacher));
 
 

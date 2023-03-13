@@ -1,11 +1,9 @@
 package lt.techin.schedule.teachers;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lt.techin.schedule.shift.Shift;
 import lt.techin.schedule.subject.Subject;
@@ -48,7 +46,7 @@ public class Teacher implements Serializable {
     private  Shift shift;
 
     @NotBlank
-    @Size(min = 3, max = 30)
+    @Size(min = 1, max = 30)
     private String fName = "";
     @NotBlank
     private String lName = "";

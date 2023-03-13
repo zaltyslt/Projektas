@@ -23,6 +23,7 @@ public class TeacherControllerAction {
         var result = teacherDto;
 
         if (
+//                result.getSubjectsList() != null &&
                 result.getContacts() != null &&
                         result.getSelectedShift() != null &&
                         result.getWorkHoursPerWeek() != null &&
