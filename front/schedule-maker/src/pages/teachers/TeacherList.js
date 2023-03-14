@@ -260,7 +260,7 @@ export function TeacherList() {
             }
           />
         </FormGroup>
-        {isChecked || true && (
+        {isChecked && (
          
          
          
@@ -325,7 +325,7 @@ export function TeacherList() {
                 <TableRow>
                   <TablePagination
                   id='inactive'
-                    labelRowsPerPage="NRodyti po"
+                    labelRowsPerPage="Rodyti po"
                     rowsPerPageOptions={[10, 20, { label: "Visi", value: -1 }]}
                     colSpan={3}
                     count={deletedTeachers.length}

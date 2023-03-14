@@ -34,7 +34,7 @@ export function validateText(field ) {
         
         const goodFormat = (inInterval && numberRegex) || field.value ==="";
         const text = "Įveskte sveiką skaičių nuo "+field.min+" iki " + field.max + ".";
-        console.log(inInterval+", "+ goodFormat);
+        
         return  {error: !goodFormat, text : !goodFormat ? text : "",};
      
        }   

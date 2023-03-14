@@ -58,11 +58,6 @@ public class GroupController {
     public void deactivateShift(@PathVariable Long groupID) {
         groupService.changeActiveGroupStatusByID(groupID, false);
     }
-    @PostMapping(value = "/add-group-test", consumes = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<Void> addGroupTest (@RequestBody @Valid String groupToAddDto, BindingResult bindingResult) {
-        var aa = groupToAddDto;
-        return ResponseEntity.ok().build();
-    }
     @PostMapping(value = "/add-group", consumes = {MediaType.APPLICATION_JSON_VALUE})
     public @ResponseBody ValidationDto addGroup (@RequestBody @Valid GroupDto groupToAddDto, BindingResult bindingResult) {
        ValidationDto validationDto = new ValidationDto();

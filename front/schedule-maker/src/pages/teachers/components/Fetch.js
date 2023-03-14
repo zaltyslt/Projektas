@@ -26,7 +26,7 @@ export async function getDataFrom(endPoint, callback) {
 
 export async function postDataTo(teacher, address, type) {
   const fetchResult = async () => {
-    console.log(teacher);
+    // console.log(teacher);
     const response = await fetch(address, {
       method: type,
       headers: { "Content-Type": "application/json" },

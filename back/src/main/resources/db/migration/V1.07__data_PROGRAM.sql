@@ -1,6 +1,6 @@
 create table PROGRAM
 (
-    ID            BIGINT  not null
+    ID            BIGINT  not null auto_increment
         primary key,
     ACTIVE        BOOLEAN not null,
     CREATED_DATE  TIMESTAMP,
@@ -9,5 +9,7 @@ create table PROGRAM
     PROGRAM_NAME  CHARACTER VARYING(200)
 );
 
-INSERT INTO PUBLIC.PROGRAM (ID, ACTIVE, CREATED_DATE, DESCRIPTION, MODIFIED_DATE, PROGRAM_NAME)
-VALUES (1, true, '2023-03-10 06:13:45.335905', 'programos aprasas', '2023-03-10 06:13:45.335905', 'pirma programa');
+INSERT INTO PUBLIC.PROGRAM (ACTIVE, CREATED_DATE, DESCRIPTION, MODIFIED_DATE, PROGRAM_NAME)
+VALUES (true, '2023-03-10 06:13:45.335905', 'programos aprasas', '2023-03-10 06:13:45.335905', 'pirma programa');
+INSERT INTO PUBLIC.PROGRAM (ACTIVE, CREATED_DATE, DESCRIPTION, MODIFIED_DATE, PROGRAM_NAME)
+VALUES (true, '2023-03-10 06:15:45.335905', 'programos 2 aprasas', '2023-03-10 06:13:45.335905', 'antra programa');
