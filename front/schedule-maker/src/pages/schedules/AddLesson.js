@@ -31,12 +31,15 @@ export function AddLesson() {
   const [lessonEndTime, setLessonEndTime] = useState("1");
 
   const [error, setError] = useState("");
+  const [errorMessageFrom, setErrorMessageFrom] = useState("");
   const [createMessage, setCreateMessage] = useState("");
   const [teacherEmpty, setTeacherEmpty] = useState(false);
   const [classRoomEmpty, setClassRoomEmpty] = useState(false);
   const [hoursEmpty, setHoursEmpty] = useState(false);
   const [hoursNotValid, setHoursNotValid] = useState(false);
   const [dateFromEmpty, setDateFromEmpty] = useState(false);
+  const [shiftStartEmpty, setShiftStartEmpty] = useState(false);
+  const [shiftEndEmpty, setShiftEndEmpty] = useState(false);
   const [isValidShiftTime, setIsValidShiftTime] = useState(true);
 
   const params = useParams();
@@ -119,6 +122,16 @@ export function AddLesson() {
     });
   };
 
+  const validateTeacher = (value) => {
+    setSelectedTeacher(value);
+    value.length === 0 ? setTeacherEmpty(true) : setTeacherEmpty(false);
+  };
+
+  const validateClassRoom = (value) => {
+    setSelectedClassRoom(value);
+    value.length === 0 ? setClassRoomEmpty(true) : setClassRoomEmpty(false);
+  };
+
   const validateHours = (value) => {
     setPlannedHours(value);
     value.length === 0 ? setHoursEmpty(true) : setHoursEmpty(false);
@@ -133,30 +146,49 @@ export function AddLesson() {
       setDateFromEmpty(true);
     } else {
       setDateFromEmpty(false);
+      setErrorMessageFrom("");
     }
   };
 
   const validation = () => {
-    if (selectedTeacher === "") {
+    let isValid = true;
+
+    if (selectedTeacher === "" || selectedTeacher === "undefined") {
       setTeacherEmpty(true);
-      return;
+      isValid = false;
     }
-    if (selectedClassRoom === "") {
+
+    if (selectedClassRoom === "" || selectedClassRoom === "undefined") {
       setClassRoomEmpty(true);
-      return;
+      isValid = false;
     }
-    if (plannedHours === "") {
-      setHoursEmpty(true);
-      return;
-    }
-    if (dateFrom === "") {
+
+    if (dateFrom === "" || dateFrom === "Undifined") {
       setDateFromEmpty(true);
-      return;
+      setErrorMessageFrom("Privaloma pasirinkti pradžios datą.");
+      isValid = false;
+    } else {
+      setDateFromEmpty(false);
     }
-    if (hoursEmpty || hoursNotValid || dateFromEmpty) {
-      return;
+
+    if (plannedHours === "" || plannedHours === "undefined") {
+      setHoursEmpty(true);
+      isValid = false;
     }
-    createLesson();
+
+    if (lessonStartingTime === "" || lessonStartingTime === "undefined") {
+      setShiftStartEmpty(true);
+      isValid = false;
+    }
+
+    if (lessonEndTime === "" || lessonEndTime === "undefined") {
+      setShiftEndEmpty(true);
+      isValid = false;
+    }
+
+    if (isValid) {
+      createLesson();
+    }
   };
 
   return (
@@ -168,16 +200,15 @@ export function AddLesson() {
           <Grid container rowSpacing={2} spacing={2}>
             <Grid item sm={10}>
               <FormControl fullWidth required error={teacherEmpty}>
-                <InputLabel id="teacher-label">
-                  {teacherEmpty ? "Privaloma pasirinkti mokytoją" : "Mokytojas"}
-                </InputLabel>
+                <InputLabel id="teacher-label">Mokytojas</InputLabel>
                 <Select
                   label="Moktyojas"
                   labelId="teacher-label"
                   id="classroom"
                   value={selectedTeacher}
+                  error={teacherEmpty}
                   onChange={(e) => {
-                    setSelectedTeacher(e.target.value);
+                    validateTeacher(e.target.value);
                   }}
                 >
                   {teachers.map((teacher) => (
@@ -186,23 +217,25 @@ export function AddLesson() {
                     </MenuItem>
                   ))}
                 </Select>
+                {teacherEmpty && (
+                  <FormHelperText error>
+                    Privaloma pasirinkti mokytoją.
+                  </FormHelperText>
+                )}
               </FormControl>
             </Grid>
 
             <Grid item sm={10}>
               <FormControl fullWidth required error={classRoomEmpty}>
-                <InputLabel id="classroom-label">
-                  {classRoomEmpty
-                    ? "Privaloma pasirinkti klasę"
-                    : "Klasės pavadinimas"}
-                </InputLabel>
+                <InputLabel id="classroom-label">Klasės pavadinimas</InputLabel>
                 <Select
                   label="Klasės pavadinimas"
                   labelId="classroom-label"
                   id="classroom"
+                  error={classRoomEmpty}
                   value={selectedClassRoom}
                   onChange={(e) => {
-                    setSelectedClassRoom(e.target.value);
+                    validateClassRoom(e.target.value);
                   }}
                 >
                   {classRooms.map((classroom) => (
@@ -211,6 +244,11 @@ export function AddLesson() {
                     </MenuItem>
                   ))}
                 </Select>
+                {classRoomEmpty && (
+                  <FormHelperText error>
+                    Privaloma pasirinkti klasę.
+                  </FormHelperText>
+                )}
               </FormControl>
             </Grid>
 
@@ -246,11 +284,14 @@ export function AddLesson() {
                   format="YYYY/MM/DD"
                   value={dateFrom}
                   onChange={(e) => validateDate(e)}
+                  slotProps={{
+                    textField: {
+                      helperText: errorMessageFrom,
+                      error: dateFromEmpty,
+                    },
+                  }}
                 ></DatePicker>
               </LocalizationProvider>
-              {dateFromEmpty && (
-                <FormHelperText error>Privaloma pasirinkti datą</FormHelperText>
-              )}
             </Grid>
 
             <Grid item sm={5}>
@@ -278,7 +319,7 @@ export function AddLesson() {
               <InputLabel id="lessons-start-label">Pamoka nuo:</InputLabel>
               <Select
                 fullWidth
-                error={!isValidShiftTime}
+                error={!isValidShiftTime || shiftStartEmpty}
                 variant="outlined"
                 label="Pamokų pradžia"
                 id="lesson-start"
@@ -296,6 +337,11 @@ export function AddLesson() {
                   Pirma pamoka negali prasidėti vėliau negu paskutinė pamoka.
                 </FormHelperText>
               )}
+              {shiftStartEmpty && (
+                <FormHelperText error>
+                  Privaloma pasirinkti pamoką.
+                </FormHelperText>
+              )}
             </Grid>
 
             <Grid item sm={5}>
@@ -304,7 +350,7 @@ export function AddLesson() {
               </InputLabel>
               <Select
                 fullWidth
-                error={!isValidShiftTime}
+                error={!isValidShiftTime || shiftEndEmpty}
                 variant="outlined"
                 label="Pamokų pabaiga"
                 id="lesson-end"
@@ -320,6 +366,11 @@ export function AddLesson() {
               {!isValidShiftTime && (
                 <FormHelperText error>
                   Pirma pamoka negali prasidėti vėliau negu paskutinė pamoka.
+                </FormHelperText>
+              )}
+              {shiftEndEmpty && (
+                <FormHelperText error>
+                  Privaloma pasirinkti pamoką.
                 </FormHelperText>
               )}
             </Grid>
