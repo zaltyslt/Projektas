@@ -1,7 +1,9 @@
 import {
   Alert,
   Button,
+  Checkbox,
   FormControl,
+  FormControlLabel,
   FormHelperText,
   Grid,
   InputLabel,
@@ -29,6 +31,7 @@ export function AddLesson() {
   const [plannedHours, setPlannedHours] = useState("");
   const [lessonStartingTime, setLessonStartingTime] = useState("1");
   const [lessonEndTime, setLessonEndTime] = useState("1");
+  const [online, setOnline] = useState(false);
 
   const [error, setError] = useState("");
   const [errorMessageFrom, setErrorMessageFrom] = useState("");
@@ -104,6 +107,7 @@ export function AddLesson() {
           dateFrom,
           startIntEnum: lessonStartingTime,
           endIntEnum: lessonEndTime,
+          online,
         }),
       }
     ).then((response) => {
@@ -121,6 +125,10 @@ export function AddLesson() {
       });
     });
   };
+
+  const handleCheck = (event) => {
+    setOnline(event.target.checked);
+  }
 
   const validateTeacher = (value) => {
     setSelectedTeacher(value);
@@ -250,6 +258,13 @@ export function AddLesson() {
                   </FormHelperText>
                 )}
               </FormControl>
+            </Grid>
+
+            <Grid item sm={10}>
+              <FormControlLabel
+                label="Nuotolinės pamokos"
+                control={<Checkbox onChange={handleCheck}></Checkbox>}
+              ></FormControlLabel>
             </Grid>
 
             <Grid item sm={10}>

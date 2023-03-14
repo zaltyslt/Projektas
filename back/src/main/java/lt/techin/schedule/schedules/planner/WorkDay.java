@@ -33,6 +33,8 @@ public class WorkDay {
 
     private float lessonEnd;
 
+    private Boolean online;
+
     public Schedule getSchedule() {
         return schedule;
     }
@@ -44,13 +46,14 @@ public class WorkDay {
     public WorkDay() {
     }
 
-    public WorkDay(LocalDate date, Subject subject, Teacher teacher, Schedule schedule, float lessonStart, float lessonEnd) {
+    public WorkDay(LocalDate date, Subject subject, Teacher teacher, Schedule schedule, float lessonStart, float lessonEnd, Boolean online) {
         this.date = date;
         this.subject = subject;
         this.teacher = teacher;
         this.schedule = schedule;
         this.lessonStart = lessonStart;
         this.lessonEnd = lessonEnd;
+        this.online = online;
     }
 
     public Teacher getTeacher() {
@@ -99,6 +102,14 @@ public class WorkDay {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Boolean getOnline() {
+        return online;
+    }
+
+    public void setOnline(Boolean online) {
+        this.online = online;
     }
 
     @Override
