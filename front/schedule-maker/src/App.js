@@ -2,7 +2,7 @@ import "./App.css";
 import { HashRouter, Routes, Route } from "react-router-dom";
 import { Menu } from "./components/Menu";
 
-import Schedule from "./Schedule";
+// import Schedule from "./pages/schedules/Schedule";
 
 import { GroupList } from "./pages/groups/GroupList";
 import { CreateGroup } from "./pages/groups/CreateGroup";
@@ -43,8 +43,7 @@ import { ScheduleList } from "./pages/schedules/ScheduleList";
 import { CreateSchedule } from "./pages/schedules/CreateSchedule";
 import { AddLesson } from "./pages/schedules/AddLesson";
 import { ScheduleView } from "./pages/schedules/ScheduleView";
-import { AddLessons } from "./pages/schedules/AddLessons";
-
+import { Schedule } from "./pages/schedules/Schedule";
 
 
 function App() {
@@ -94,8 +93,7 @@ function App() {
           <Route path="/create-schedule" element={<CreateSchedule />}></Route>
           <Route path="/schedules/add-lesson/:id" element={<AddLesson />}></Route>
           <Route path="/schedules/:id" element={<ScheduleView />}></Route>
-          <Route path="/add-lessons" element={<AddLessons />}></Route>
-          <Route path="/shedule-view" element={<Schedule />}></Route>
+          <Route path="/schedule-view" element={<Schedule />}></Route>
         </Routes>
       </HashRouter>
     </div>
