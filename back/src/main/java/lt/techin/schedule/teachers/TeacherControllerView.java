@@ -18,9 +18,6 @@ import java.util.stream.Collectors;
 @RequestMapping(value = "/api/v1/teachers", produces = {MediaType.APPLICATION_JSON_VALUE})
 public class TeacherControllerView {
     private final TeacherServiceFind teacherFinder;
-    //    private final ContactService contactService;
-//    private final SubjectService subjectService;
-//    private final TeacherRepository teacherRepository;
 
     public TeacherControllerView(TeacherServiceFind teacherFinder) {
         this.teacherFinder = teacherFinder;
@@ -29,7 +26,7 @@ public class TeacherControllerView {
     @GetMapping
     @ResponseBody
     public List<TeacherDto> getAllTeachers(@RequestParam(value = "active", required = false) Optional<Boolean> active) {
-        List<TeacherDto> teachers; //Fixme Dev remove
+        List<TeacherDto> teachers;
         if (active.isPresent()) {
             teachers = teacherFinder.getTeachersByActiveStatus(active.get());
         } else {

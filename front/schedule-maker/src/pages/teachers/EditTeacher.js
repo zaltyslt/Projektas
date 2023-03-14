@@ -4,12 +4,12 @@ import { Teacher } from "./Teacher";
 import { postDataTo, putDataTo, switchActive } from "./components/Fetch";
 
 export function EditTeacher() {
-  const { teacherId } = useParams();
+  const params = useParams();
   let result;
-
-  async function handleUpdate(teacher) {
-    console.log(teacher);
-
+   const teacherId = params.id;
+  console.log(params.id);
+   async function handleUpdate(teacher) {
+  
     if (typeof teacher === "number") {
       console.log("switch active");
       result = await switchActive(teacher);
@@ -22,7 +22,6 @@ export function EditTeacher() {
         // "/api/v1/teachers/create", "POST"
       );
     }
-    console.log(result);
     return result;
   }
 

@@ -146,7 +146,7 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
     // } else {
     //   isCorrect = true;
     // }
-console.log("isCorrect: " + isCorrect);
+// console.log("isCorrect: " + isCorrect);
     isCorrect && createTeacher();
   }
 
@@ -161,7 +161,7 @@ console.log("isCorrect: " + isCorrect);
   async function fetchData() {
     getDataFrom("api/v1/teachers/subjects", (data) => {
       if (data) {
-        console.log(data);
+        
         setSubjects(data);
         setFreeSubjects(data);
       } else {
@@ -231,7 +231,6 @@ console.log("isCorrect: " + isCorrect);
   const createTeacher = () => {
     async function teacherModifier(teacher) {
       const fetchResult = await onSave(teacher);
-      console.log(fetchResult);
       applyResult(fetchResult);
     }
 
@@ -244,8 +243,7 @@ console.log("isCorrect: " + isCorrect);
   }
 
   function applyResult(result) {
-    console.log(result);
-
+    
     if (result.status > 299) {
       setCreateMessage("");
       setErrorMessage(result.message);
@@ -284,7 +282,7 @@ console.log("isCorrect: " + isCorrect);
   ];
 
   useEffect(() => {
-    console.log(freeSubjects);
+   
     const tempSubjects = subjects.filter(
       (subA) =>
         !chosenSubjects.map((subC) => subC.subjectId).includes(subA.subjectId)
@@ -325,7 +323,7 @@ console.log("isCorrect: " + isCorrect);
 
   const handleShiftChange = (shiftId) => {
     const tempShift = shifts.find((shift) => shift.id === shiftId);
-    console.log(tempShift);
+    
     handleChange({ target: { id: "selectedShift", value: tempShift } });
     handleChange({ target: { id: "active", value: true } });
     setErrorShift({error : false});

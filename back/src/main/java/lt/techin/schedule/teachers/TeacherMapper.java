@@ -52,22 +52,6 @@ public class TeacherMapper {
                 ? teacher.stream().map(t -> teacherToDto(t)).toList()
                 : new ArrayList<TeacherDto>();
     }
-
-    //to DTO Helpers
-//    private static List<ContactDto> contactsForDto(List<Contact> contacts) {
-//
-//        return contacts.stream()
-//                .map(c -> ContactMapper.contactToDto(c))
-//                .toList();
-//    }
-
-//    private static List<Contact> contactsForTeacher(List<ContactDto> contacts) {
-//        return contacts.stream()
-//                .map(c -> ContactMapper.contactFromDto(c))
-//                .toList();
-//    }
-    // DTO to teacher
-
     public static Teacher teacherFromDto(TeacherDto dto) {
         Teacher teacher = new Teacher();
         teacher.setId(dto.getId() != null ? dto.getId() : null);
@@ -78,9 +62,6 @@ public class TeacherMapper {
                 : null);
         teacher.setWorkHoursPerWeek(Integer.parseInt(dto.getWorkHoursPerWeek()));
         teacher.setShift(ShiftMapper.dtoToShift(dto.getSelectedShift()));
-//        teacher.setShift(ShiftMapper.shiftFromDto(dto.getShiftDtoNew()));
-//        teacher.setShift(ShiftMapper.shiftFromDto(dto.getSelectedShift()));
-//        teacher.setShift(TeacherShiftMapper.shiftFromDto(dto.get .getSelectedShift()));
         teacher.setActive(dto.getActive());
         teacher.setContacts(dto.getContacts() != null ? ContactMapper.contactFromDto2(dto.getContacts()) : new ArrayList<Contact>());
         //implement message
