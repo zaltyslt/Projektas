@@ -50,7 +50,7 @@ public class ScheduleController {
     @PatchMapping("/disable-schedule/{scheduleId}")
     public ScheduleDto disableSchedule(@PathVariable Long scheduleId) {
         var disableSchedule = scheduleService.disable(scheduleId);
-        logger.log(Level.INFO, "The schedule was disable: {0} ", scheduleId);
+        logger.log(Level.INFO, "The schedule was disabled: {0} ", scheduleId);
         return toScheduleDto(disableSchedule);
     }
 
@@ -60,6 +60,5 @@ public class ScheduleController {
         logger.log(Level.INFO, "The schedule was enabled: {0} ", scheduleId);
         return toScheduleDto(enableSchedule);
     }
-
 }
 
