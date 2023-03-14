@@ -14,8 +14,6 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static lt.techin.schedule.programs.ProgramMapper.toProgram;
-import static lt.techin.schedule.programs.ProgramMapper.toProgramDto;
 import static org.springframework.http.ResponseEntity.ok;
 
 @RestController
@@ -44,12 +42,12 @@ public class ProgramController {
     @GetMapping(value = "/program/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<ProgramDto> getProgram(@PathVariable Long id) {
         logger.log(Level.INFO, "The program is rendered: {0} ", id);
-        return ResponseEntity.ok(toProgramDto(programService.finById(id)));
+        return ResponseEntity.ok(ProgramMapper.toProgramDto(programService.finById(id)));
     }
 
     @PostMapping(value = "/create-program", consumes = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Map<String, String>> createProgram(@RequestBody ProgramDto programDto) {
-        var createProgram = programService.create(toProgram(programDto));
+        var createProgram = programService.create(ProgramMapper.toProgram(programDto));
         if (createProgram == null) {
             logger.info("The program is already created");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -57,29 +55,29 @@ public class ProgramController {
         }
         logger.info("The program was created, successfully");
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(Map.of("message", (toProgramDto(createProgram).toString())));
+                .body(Map.of("message", (ProgramMapper.toProgramDto(createProgram).toString())));
     }
 
     @PatchMapping("/update-program/{programId}")
     public ResponseEntity<ProgramDto> updateProgram(@PathVariable Long programId,
                                                     @RequestBody ProgramDto programDto) {
-        var updatedProgram = programService.update(programId, toProgram(programDto));
+        var updatedProgram = programService.update(programId, ProgramMapper.toProgram(programDto));
         logger.info("The program was updated, successfully");
-        return ok(toProgramDto(updatedProgram));
+        return ok(ProgramMapper.toProgramDto(updatedProgram));
     }
 
     @PatchMapping("/disable-program/{programId}")
     public ProgramDto disableProgram(@PathVariable Long programId) {
         var disableProgram = programService.disable(programId);
         logger.log(Level.INFO, "The program was disable: {0} ", programId);
-        return toProgramDto(disableProgram);
+        return ProgramMapper.toProgramDto(disableProgram);
     }
 
     @PatchMapping("/enable-program/{programId}")
     public ProgramDto enableProgram(@PathVariable Long programId) {
         var enableProgram = programService.enable(programId);
         logger.log(Level.INFO, "The program was enabled: {0} ", programId);
-        return toProgramDto(enableProgram);
+        return ProgramMapper.toProgramDto(enableProgram);
     }
 
     @PostMapping(value = "/create-program-hours", consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -89,7 +87,7 @@ public class ProgramController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(Map.of("message", "Prašome pridėti dalyką"));
         }
-        var createProgram = programService.createWithSubjectList(toProgram(programDto));
+        var createProgram = programService.createWithSubjectList(ProgramMapper.toProgram(programDto));
         if (createProgram == null) {
             logger.info("The program is already created");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -97,7 +95,7 @@ public class ProgramController {
         }
         logger.info("The program was created, successfully");
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(Map.of("message", (toProgramDto(createProgram)).toString()));
+                .body(Map.of("message", (ProgramMapper.toProgramDto(createProgram)).toString()));
     }
 
     @PatchMapping(value = "/update-hours-program/{programId}", consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -121,7 +119,7 @@ public class ProgramController {
             programService.update(program.getId(), program);
             logger.info("The program was updated, successfully");
             return ResponseEntity.status(HttpStatus.CREATED)
-                    .body(Map.of("message", (toProgramDto(program)).toString()));
+                    .body(Map.of("message", (ProgramMapper.toProgramDto(program)).toString()));
         } else {
             logger.info("getSubjectHoursList is empty");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
