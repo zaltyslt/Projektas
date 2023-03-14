@@ -35,17 +35,24 @@ export function CreateSchedule() {
   const [schoolYearValid, setSchoolYearValid] = useState(true);
   const [dateFromEmpty, setDateFromEmpty] = useState(false);
   const [dateUntilEmpty, setDateUntilEmpty] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
+  // const [dateIntervalError, setDateIntervalError] = useState(false);
+  
+  const [errorMessage, setErrorMessage] = useState(false);
+  
+  const [errorMessageF, setErrorMessageF] = useState("");
+  const [errorMessageU, setErrorMessageU] = useState("");
+
   const [errorLengthName, setErrorLengthName] = useState(false);
   const [errorLengthYear, setErrorLengthYear] = useState(false);
 
+  const dayjs = require("dayjs");
   const badSymbols = "!@#$%^&*_+={}<>|~`\\'";
 
   useEffect(() => fetchGroups, []);
-function sw(){
-  setDateFromEmpty(!dateFromEmpty);
-  setDateUntilEmpty(!dateUntilEmpty);
-}
+  function sw() {
+    setDateFromEmpty(!dateFromEmpty);
+    setDateUntilEmpty(!dateUntilEmpty);
+  }
 
   const fetchGroups = () => {
     fetch("api/v1/group/get-active/small")
@@ -74,56 +81,99 @@ function sw(){
     value.length === 0 ? setGroupEmpty(true) : setGroupEmpty(false);
   };
 
-  const dateToUtc = (date)=>{
-    const utcDate = dayjs(date.$d.getTime() - (date.$d.getTimezoneOffset() * 60 * 1000));
+  const dateToUtc = (date) => {
+    const utcDate = dayjs(
+      date.$d.getTime() - date.$d.getTimezoneOffset() * 60 * 1000
+    );
     return utcDate;
-  }
+  };
   const validateDateFrom = (value) => {
-     const tempDate = dateToUtc(value);
+    const tempDate = dateToUtc(value);
     setDateFrom(tempDate);
     if (value.length === 0) {
       setDateFromEmpty(true);
-      setErrorMessage("Privaloma užpildyti");
     } else {
       setDateFromEmpty(false);
-      setErrorMessage("");
+      setErrorMessageF("");
     }
   };
   const validateDateUntil = (value) => {
     const tempDate = dateToUtc(value);
-     setDateUntil(tempDate);
+    setDateUntil(tempDate);
+   
     if (value.length === 0) {
       setDateUntilEmpty(true);
-      setErrorMessage("Privaloma užpildyti");
     } else {
-      setDateFromEmpty(false);
-      setErrorMessage("");
+      setDateUntilEmpty(false);
+      setErrorMessageU("");
+      // if(dateIntervalError){
+      //   setDateIntervalError(false);
+      //   setDateFromEmpty(false);
+      //   setDateFrom(dateFrom);
+      // }
     }
   };
 
   const validation = () => {
-    if (
-      // group === "" &&
-      schoolYear === "" &&
-      semester === "" &&
-      dateFrom === "" &&
-      dateUntil === ""
-    ) {
-      setSemesterEmpty(true);
-      setGroupEmpty(true);
-      setSchoolYearEmpty(true);
-      setDateFromEmpty(true);
-      setDateUntilEmpty(true);
-      setErrorMessage("Privaloma užpildyti");
-    } else if (
-      // group === "" ||
-      schoolYear === "" ||
-      semester === "" ||
-      dateFrom === "" ||
-      dateUntil === ""
-    ) {
-    } else {
-      createSchedule();
+    // if (
+    //   group === "" &&
+    //   schoolYear === "" &&
+    //   semester === "" &&
+    //   dateFrom === "" &&
+    //   dateUntil === ""
+    // ) {
+    //   setSemesterEmpty(true);
+    //   setGroupEmpty(true);
+    //   setSchoolYearEmpty(true);
+    //   setDateFromEmpty(true);
+    //   setDateUntilEmpty(true);
+    //   setErrorMessage("Privaloma užpildyti");
+    // } else if (
+    //   group === "" ||
+    //   schoolYear === "" ||
+    //   semester === "" ||
+    //   dateFrom === "" ||
+    //   dateUntil === ""
+    // ) {
+      let isValid = true;
+      if (group === "" || group === "undefined") {
+        setGroupEmpty(true);
+        isValid = false;
+      }
+
+      if (schoolYear === "" || schoolYear === "undefined") {
+        setSchoolYearEmpty(true);
+        isValid = false;
+      }
+      if (semester === "" || semester === "undefined") {
+        setSemesterEmpty(true);
+        isValid = false;
+      }
+      if (dateFrom === "" || dateFrom === "undefined") {
+        setDateFromEmpty(true);
+        setErrorMessageF("Data nuo yra privaloma.")
+        isValid = false;
+      } else {
+        setDateFromEmpty(false);
+      }
+      if (dateUntil === "" || dateUntil === "undefined") {
+        setDateUntilEmpty(true);
+        setErrorMessageU("Data iki yra privaloma.")
+        isValid = false;
+      } else {
+        setDateUntilEmpty(false);
+      }
+      
+   if(dateFrom !== "" && dateUntil !== "" && dateFrom.isAfter(dateUntil)){
+        setErrorMessageU("Diena iki negali būti vėliau už dieną nuo.");
+        setDateFromEmpty(true);
+        setDateUntilEmpty(true);
+        isValid = false;
+      }
+    
+    if(isValid){
+      //createSchedule();
+      console.log("creating");
     }
   };
 
@@ -174,13 +224,15 @@ function sw(){
           <Grid container rowSpacing={2} spacing={2}>
             <Grid item sm={10}>
               <FormControl fullWidth required error={groupEmpty}>
-                <InputLabel id="group-label">
+                {/* <InputLabel id="group-label">
                   {groupEmpty
                     ? "Privaloma pasirinkti grupę"
                     : "Gupės pavadinimas"}
-                </InputLabel>
+                </InputLabel> */}
+                <InputLabel id="group-label"> Gupės pavadinimas </InputLabel>
                 <Select
                   label="Grupės pavadinimas"
+                  error={groupEmpty}
                   labelId="group-label"
                   id="group"
                   value={group}
@@ -194,6 +246,11 @@ function sw(){
                     </MenuItem>
                   ))}
                 </Select>
+                {groupEmpty && (
+                  <FormHelperText error>
+                    Privaloma pasirinkti grupę.
+                  </FormHelperText>
+                )}
               </FormControl>
             </Grid>
 
@@ -210,13 +267,13 @@ function sw(){
                   !schoolYearValid
                     ? "Mokslo metai turi neleidžiamų simbolių."
                     : schoolYearEmpty
-                      ? "Mokslo metai negali būti tušti"
-                      : errorLengthYear
-                      ? "Mokslo metai negali būti ilgesnis nei 200 simbolių"
-                      : ""
+                    ? "Mokslo metai negali būti tušti"
+                    : errorLengthYear
+                    ? "Mokslo metai negali būti ilgesnis nei 200 simbolių"
+                    : ""
                 }
                 value={schoolYear}
-                                onChange={(e) => {
+                onChange={(e) => {
                   const input = e.target.value;
                   if (input.length > 200) {
                     setErrorLengthYear(true);
@@ -242,13 +299,13 @@ function sw(){
                   !semesterValid
                     ? "Pavadinimas turi neleidžiamų simbolių."
                     : semesterEmpty
-                      ? "Pavadinimas negali būti tuščias"
-                                          : errorLengthName
+                    ? "Pavadinimas negali būti tuščias"
+                    : errorLengthName
                     ? "Pavadinimas negali būti ilgesnis nei 200 simbolių"
-                      : ""
+                    : ""
                 }
                 value={semester}
-                                onChange={(e) => {
+                onChange={(e) => {
                   const input = e.target.value;
                   if (input.length > 200) {
                     setErrorLengthName(true);
@@ -268,17 +325,15 @@ function sw(){
                   label="Nuo"
                   format="YYYY/MM/DD"
                   value={dateFrom}
-                  
                   onChange={(e) => validateDateFrom(e)}
                   slotProps={{
                     textField: {
-                      helperText: errorMessage,
+                      helperText: errorMessageF,
                       error: dateFromEmpty,
-                      
                     },
                   }}
                 ></DatePicker>
-                {dateFromEmpty && (<FormHelperText error>Privaloma pasirinkti data</FormHelperText> )}
+               
               </LocalizationProvider>
             </Grid>
 
@@ -292,13 +347,12 @@ function sw(){
                   onChange={(e) => validateDateUntil(e)}
                   slotProps={{
                     textField: {
-                      
-                      helperText: errorMessage,
+                      helperText: errorMessageU,
                       error: dateUntilEmpty,
                     },
                   }}
                 ></DatePicker>
-                 {dateUntilEmpty && (<FormHelperText error>Privaloma pasirinkti data</FormHelperText> )}
+              
               </LocalizationProvider>
             </Grid>
 
@@ -317,11 +371,10 @@ function sw(){
 
                 <Link to="/">
                   <Button variant="contained">Grįžti</Button>
-                
                 </Link>
-                <Button variant="contained" onClick={sw}>
+                {/* <Button variant="contained" onClick={sw}>
                   Switch
-                </Button>
+                </Button> */}
               </Stack>
             </Grid>
           </Grid>
