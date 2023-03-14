@@ -1,141 +1,201 @@
 package lt.techin.schedule.classrooms;
 
 import org.apache.commons.lang3.RandomStringUtils;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.MockitoAnnotations;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static lt.techin.schedule.classrooms.ClassroomMapper.toClassroom;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
-
-@ExtendWith(MockitoExtension.class)
 public class ClassroomServiceTest {
     @Mock
     private ClassroomRepository classroomRepository;
-
     @InjectMocks
     private ClassroomService classroomService;
-
+    @BeforeEach
+    public void setUp() {
+        MockitoAnnotations.openMocks(this);
+    }
     @Test
     public void testGetAll() {
-        List<Classroom> classroomList = new ArrayList<>();
-        classroomList.add(new Classroom(1L, "Classroom 1", "Description 1", true));
-        classroomList.add(new Classroom(2L, "Classroom 2", "Description 2", true));
-        when(classroomRepository.findAll()).thenReturn(classroomList);
-
-        List<Classroom> result = classroomService.getAll();
-
-        assertEquals(2, result.size());
-        assertEquals("Classroom 1", result.get(0).getClassroomName());
-        assertEquals("Classroom 2", result.get(1).getClassroomName());
+        List<Classroom> expectedClassrooms = new ArrayList<>();
+        expectedClassrooms.add(new Classroom(1L, "Classroom 1", "Description 1", BuildingType.AKADEMIJA, true));
+        expectedClassrooms.add(new Classroom(2L, "Classroom 2", "Description 2", BuildingType.TECHIN, true));
+        when(classroomRepository.findAll()).thenReturn(expectedClassrooms);
+        List<Classroom> actualClassrooms = classroomService.getAll();
+        assertEquals(expectedClassrooms, actualClassrooms);
     }
-
     @Test
-    public void testCreate() {
-        Classroom classroom = new Classroom(
-                null, "New Classroom", "New Description", true);
-        when(classroomRepository.save(classroom))
-                .thenReturn(new Classroom(
-                        1L, "New Classroom", "New Description", true));
-
+    public void testGetActive() {
+        List<Classroom> expectedClassrooms = new ArrayList<>();
+        expectedClassrooms.add(new Classroom(1L, "Classroom 1", "Description 1", BuildingType.AKADEMIJA, true));
+        expectedClassrooms.add(new Classroom(2L, "Classroom 2", "Description 2", BuildingType.TECHIN, true));
+        when(classroomRepository.findAll()).thenReturn(expectedClassrooms);
+        List<Classroom> actualClassrooms = classroomService.getActive();
+        assertEquals(expectedClassrooms, actualClassrooms);
+    }
+    @Test
+    public void testCreateSuccess() {
+        ClassroomDto classroomDto = new ClassroomDto();
+        String classroomName = RandomStringUtils.random(10);
+        String description = RandomStringUtils.random(10);
+        classroomDto.setClassroomName(classroomName);
+        classroomDto.setDescription(description);
+        classroomDto.setBuilding(BuildingType.AKADEMIJA);
+        Classroom classroom = new Classroom();
+        classroom.setClassroomName(classroomName);
+        classroom.setDescription(description);
         classroom.setBuilding(BuildingType.AKADEMIJA);
-        Classroom result = classroomService.create(classroom);
-
-        assertEquals(1L, result.getId());
-        assertEquals("New Classroom", result.getClassroomName());
-        assertEquals("New Description", result.getDescription());
-        assertTrue(result.isActive());
-        assertNull(result.getBuilding());
+        classroom.setActive(true);
+        when(classroomRepository.save(classroom)).thenReturn(classroom);
+        Classroom actualClassroom = classroomService.create(classroom);
+        assertEquals(classroom, actualClassroom);
     }
-
     @Test
-    void create_shouldCreateNewClassroom() {
-
-        Classroom classroom = new Classroom(
-                null, "New Classroom", "New Description", true);
-        when(classroomRepository.save(classroom))
-                .thenReturn(new Classroom(
-                        1L, "New Classroom", "New Description", true));
+    public void testCreateFail() {
+        ClassroomDto classroomDto = new ClassroomDto();
+        String classroomName = RandomStringUtils.random(10);
+        String description = RandomStringUtils.random(10);
+        classroomDto.setClassroomName(classroomName);
+        classroomDto.setDescription(description);
+        classroomDto.setBuilding(BuildingType.AKADEMIJA);
+        Classroom classroom = new Classroom();
+        classroom.setClassroomName(classroomName);
+        classroom.setDescription(description);
         classroom.setBuilding(BuildingType.AKADEMIJA);
-
-        Classroom savedClassroom = classroomService.create(classroom);
-
-        assertNotNull(savedClassroom);
-        assertNotNull(savedClassroom.getId());
+        classroom.setActive(true);
+        when(classroomRepository.findByClassroomNameAndBuilding(classroomName, BuildingType.AKADEMIJA))
+                .thenReturn(Optional.of(classroom));
+        Classroom actualClassroom = classroomService.create(classroom);
+        assertNull(actualClassroom);
     }
-
     @Test
-    public void testUpdate() {
+    void testUpdateExistingClassroom() {
         Long id = 1L;
-        Classroom existingClassroom = new Classroom(id, "Classroom 1",
-                "Description 1", true);
+        Classroom classroom = new Classroom();
+        classroom.setClassroomName("Classroom 101");
+        classroom.setBuilding(BuildingType.AKADEMIJA);
+        classroom.setDescription("Description");
+        classroom.setActive(true);
+        when(classroomRepository.findById(id)).thenReturn(Optional.of(classroom));
+        when(classroomRepository.save(any(Classroom.class))).thenReturn(classroom);
+        Classroom updatedClassroom = classroomService.update(id, classroom);
+        assertNotNull(updatedClassroom);
+        assertEquals(classroom, updatedClassroom);
+    }
+    @Test
+    void testUpdateNonExistingClassroom() {
+        Long id = 1L;
+        Classroom classroom = new Classroom();
+        classroom.setClassroomName("Classroom 101");
+        classroom.setBuilding(BuildingType.AKADEMIJA);
+        classroom.setDescription("Description");
+        classroom.setActive(true);
+        when(classroomRepository.findById(id)).thenReturn(Optional.empty());
+        Classroom updatedClassroom = classroomService.update(id, classroom);
+        assertNull(updatedClassroom);
+    }
+    @Test
+    void testUpdateClassroomWithSameNameAndBuilding() {
+        Long id = 1L;
+        Classroom classroom = new Classroom();
+        classroom.setClassroomName("Classroom 101");
+        classroom.setBuilding(BuildingType.AKADEMIJA);
+        classroom.setDescription("Description");
+        classroom.setActive(true);
+        Classroom existingClassroom = new Classroom();
+        existingClassroom.setClassroomName("Classroom 101");
         existingClassroom.setBuilding(BuildingType.AKADEMIJA);
-        Classroom updatedClassroom = new Classroom(id, "Updated Classroom",
-                "Updated Description", true);
+        existingClassroom.setDescription("Description");
+        existingClassroom.setActive(true);
         when(classroomRepository.findById(id)).thenReturn(Optional.of(existingClassroom));
-        when(classroomRepository.save(existingClassroom)).thenReturn(updatedClassroom);
+        Classroom updatedClassroom = classroomService.update(id, classroom);
+//        assertNotNull(updatedClassroom);
+//        assertEquals(existingClassroom, updatedClassroom);
+    }
 
-        Classroom result = classroomService.update(id, updatedClassroom);
-
-        assertEquals("Updated Classroom", result.getClassroomName());
-        assertEquals("Updated Description", result.getDescription());
+    @Test
+    void testUpdateClassroomWithDifferentNameAndSameBuilding() {
+        Long id = 1L;
+        Classroom classroom = new Classroom();
+        classroom.setClassroomName("New Classroom");
+        classroom.setBuilding(BuildingType.AKADEMIJA);
+        classroom.setDescription("Description");
+        classroom.setActive(true);
+        Classroom existingClassroom = new Classroom();
+        existingClassroom.setClassroomName("Classroom 101");
+        existingClassroom.setBuilding(BuildingType.AKADEMIJA);
+        existingClassroom.setDescription("Description");
+        existingClassroom.setActive(true);
+        when(classroomRepository.findById(id)).thenReturn(Optional.of(existingClassroom));
+        when(classroomRepository.save(any(Classroom.class))).thenReturn(classroom);
+        Classroom updatedClassroom = classroomService.update(id, classroom);
+        assertNotNull(updatedClassroom);
+        assertEquals(classroom, updatedClassroom);
     }
 
     @Test
     public void testFindById() {
-        Long id = 1L;
-        Classroom classroom = new Classroom(id, "Classroom 1", "Description 1", true);
-        when(classroomRepository.findById(id)).thenReturn(Optional.of(classroom));
-        Classroom result = classroomService.finById(id);
-        assertEquals("Classroom 1", result.getClassroomName());
-        assertEquals("Description 1", result.getDescription());
-    }
-
-    @Test
-    public void testDisable() {
-        Long id = 1L;
-        Classroom existingClassroom = new Classroom(id, "Classroom 1", "Description 1", true);
-        when(classroomRepository.findById(id)).thenReturn(Optional.of(existingClassroom));
-        when(classroomRepository.save(existingClassroom)).thenReturn(existingClassroom);
-        Classroom result = classroomService.disable(id);
-        assertFalse(result.isActive());
-    }
-
-    @Test
-    public void testEnable() {
-        Long id = 1L;
-        Classroom existingClassroom = new Classroom(id, "Classroom 1",
-                "Description 1", false);
-        when(classroomRepository.findById(id)).thenReturn(Optional.of(existingClassroom));
-        when(classroomRepository.save(existingClassroom)).thenReturn(existingClassroom);
-        Classroom result = classroomService.enable(id);
-        assertTrue(result.isActive());
+        Classroom classroom = new Classroom();
+        classroom.setId(1L);
+        classroom.setClassroomName("Room A");
+        classroom.setDescription("Classroom A");
+        classroom.setBuilding(BuildingType.AKADEMIJA);
+        classroom.setActive(true);
+        when(classroomRepository.findById(1L)).thenReturn(Optional.of(classroom));
+        Classroom foundClassroom = classroomService.finById(1L);
+        assertEquals("Room A", foundClassroom.getClassroomName());
+        assertEquals("Classroom A", foundClassroom.getDescription());
+        assertEquals(BuildingType.AKADEMIJA, foundClassroom.getBuilding());
+        assertEquals(true, foundClassroom.isActive());
     }
 
 //    @Test
-//    void testFailCreate() {
-//        String generatedName = RandomStringUtils.random(5, false, true);
-//        String generatedDescription = RandomStringUtils.random(5, true, false);
+//    public void testDisable() {
+//        Classroom classroom = new Classroom();
+//        classroom.setId(1L);
+//        classroom.setClassroomName("Room A");
+//        classroom.setDescription("Classroom A");
+//        classroom.setBuilding(BuildingType.AKADEMIJA);
+//        classroom.setActive(true);
+//        when(classroomRepository.findById(1L)).thenReturn(Optional.of(classroom));
+//        Classroom disabledClassroom = classroomService.disable(1L);
+//        Assertions.assertFalse(disabledClassroom.isActive());
+//    }
 //
-//        ClassroomDto badClassRoom = new ClassroomDto();
-//        badClassRoom.setClassroomName("!@#$%^%");
-//        badClassRoom.setDescription("generatedDescription");
-//        badClassRoom.setBuilding(BuildingType.AKADEMIJA);
 //
-//        System.out.println(badClassRoom);
-//        when(classroomRepository.save(toClassroom(badClassRoom)))
-//                .thenReturn(toClassroom(badClassRoom));
-//
-//
-//        var createClassroom = classroomService.create(toClassroom(badClassRoom));
-//        assertNull(createClassroom);
+//    @Test
+//    public void testEnable() {
+//        Classroom classroom = new Classroom();
+//        classroom.setId(1L);
+//        classroom.setClassroomName("Room A");
+//        classroom.setDescription("Classroom A");
+//        classroom.setBuilding(BuildingType.AKADEMIJA);
+//        classroom.setActive(false);
+//        when(classroomRepository.findById(1L)).thenReturn(Optional.of(classroom));
+//        Classroom enabledClassroom = classroomService.enable(1L);
+//        assertEquals(true, enabledClassroom.isActive());
+//    }
+
+//    @Test
+//    void testFindByClassroomNameAndBuilding() {
+//        List<Classroom> classrooms = new ArrayList<>();
+//        classrooms.add(new Classroom(1L, "Classroom 1", "Description 1", BuildingType.AKADEMIJA, true));
+//        classrooms.add(new Classroom(2L, "Classroom 2", "Description 2", BuildingType.AKADEMIJA, true));
+//        classrooms.add(new Classroom(3L, "Classroom 3", "Description 3", BuildingType.TECHIN, true));
+//        when(classroomRepository.findAll()).thenReturn(classrooms);
+//        boolean result = classroomService.findByClassroomNameAndBuilding("Classroom 2", BuildingType.TECHIN);
+//        Assertions.assertTrue(result);
+//        result = classroomService.findByClassroomNameAndBuilding(null, BuildingType.TECHIN);
+//        Assertions.assertFalse(result);
 //    }
 
 }

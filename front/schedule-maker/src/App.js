@@ -41,6 +41,7 @@ import { ScheduleList } from "./pages/schedules/ScheduleList";
 import { CreateSchedule } from "./pages/schedules/CreateSchedule";
 import { AddLesson } from "./pages/schedules/AddLesson";
 import { ScheduleView } from "./pages/schedules/ScheduleView";
+import { AddLessons } from "./pages/schedules/AddLessons";
 
 
 function App() {
@@ -90,6 +91,7 @@ function App() {
           <Route path="/create-schedule" element={<CreateSchedule />}></Route>
           <Route path="/schedules/add-lesson/:id" element={<AddLesson />}></Route>
           <Route path="/schedules/:id" element={<ScheduleView />}></Route>
+          <Route path="/add-lessons" element={<AddLessons />}></Route>
         </Routes>
       </HashRouter>
     </div>
