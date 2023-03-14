@@ -3,6 +3,7 @@ package lt.techin.schedule.schedules;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lt.techin.schedule.group.Group;
+import nonapi.io.github.classgraph.json.JSONUtils;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 

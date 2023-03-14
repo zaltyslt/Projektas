@@ -66,6 +66,7 @@ public class Subject {
 
     private Boolean deleted;
 
+
     @PrePersist
     public void prePersist() {
         createdDate = LocalDateTime.now();
