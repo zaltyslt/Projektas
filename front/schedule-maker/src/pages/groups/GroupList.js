@@ -259,10 +259,10 @@ export function GroupList() {
           <Table aria-label="custom pagination table">
             <TableHead>
               <TableRow>
-                <TableCell style={{ width: "50px" }}>Grupė</TableCell>
-                <TableCell style={{ width: "100px" }}>Programa</TableCell>
-                <TableCell style={{ width: "100px" }} align="center">Mokslo metai</TableCell>
-                <TableCell style={{ width: "100px" }} align="center">Studentų kiekis</TableCell>
+                <TableCell style={{ width: "250px" }}>Grupė</TableCell>
+                <TableCell style={{ width: "250px" }}>Programa</TableCell>
+                <TableCell style={{ width: "250px" }}>Mokslo metai</TableCell>
+                <TableCell>Studentų kiekis</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -278,8 +278,8 @@ export function GroupList() {
                     <Link to={"/groups/view/" + group.id}>{group.name}</Link>
                   </TableCell>
                   <TableCell>{group.program.programName}</TableCell>
-                  <TableCell align="center">{group.schoolYear}</TableCell>
-                  <TableCell align="center">{group.studentAmount}</TableCell>
+                  <TableCell>{group.schoolYear}</TableCell>
+                  <TableCell>{group.studentAmount}</TableCell>
                 </TableRow>
               ))}
 
@@ -329,11 +329,11 @@ export function GroupList() {
             <Table aria-label="custom pagination table">
               <TableHead>
                 <TableRow>
-                  <TableCell>Grupė</TableCell>
-                  <TableCell>Programa</TableCell>
-                  <TableCell align="center">Mokslo metai</TableCell>
-                  <TableCell align="center">Studentų kiekis</TableCell>
-                  <TableCell className="activity"></TableCell>
+                  <TableCell style={{ width: "250px" }}>Grupė</TableCell>
+                  <TableCell style={{ width: "250px" }}>Programa</TableCell>
+                  <TableCell style={{ width: "250px" }}>Mokslo metai</TableCell>
+                  <TableCell>Studentų kiekis</TableCell>
+                  <TableCell></TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -350,9 +350,9 @@ export function GroupList() {
                       {group.name}
                     </TableCell>
                     <TableCell>{group.program.programName}</TableCell>
-                    <TableCell align="center">{group.schoolYear}</TableCell>
-                    <TableCell align="center">{group.studentAmount}</TableCell>
-                    <TableCell align="center" className="activity">
+                    <TableCell>{group.schoolYear}</TableCell>
+                    <TableCell>{group.studentAmount}</TableCell>
+                    <TableCell className="activity">
                       <Button
                         variant="contained"
                         onClick={() => handleRestore(group.id)}

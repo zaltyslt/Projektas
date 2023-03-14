@@ -144,8 +144,8 @@ export function SubjectList() {
           <Table aria-label="custom pagination table">
             <TableHead>
               <TableRow>
-                <TableCell>Dalyko pavadinimas</TableCell>
-                <TableCell>Modulio pavadinimas</TableCell>
+                <TableCell style={{ width: "500px" }} >Dalyko pavadinimas</TableCell>
+                <TableCell >Modulio pavadinimas</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -224,9 +224,9 @@ export function SubjectList() {
             <Table aria-label="custom pagination table">
               <TableHead>
                 <TableRow>
-                  <TableCell>Dalyko pavadinimas</TableCell>
-                  <TableCell>Modulio pavadinimas</TableCell>
-                  <TableCell className="activity"></TableCell>
+                  <TableCell style={{ width: "500px" }}>Dalyko pavadinimas</TableCell>
+                  <TableCell style={{ width: "500px" }}>Modulio pavadinimas</TableCell>
+                  <TableCell ></TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
