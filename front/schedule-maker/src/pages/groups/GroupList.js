@@ -69,7 +69,9 @@ export function GroupList() {
   };
 
   const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - filteredGroups.length) : 0;
+    page > 0
+      ? Math.max(0, (1 + page) * rowsPerPage - filteredGroups.length)
+      : 0;
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -79,7 +81,8 @@ export function GroupList() {
     pageInDeleted > 0
       ? Math.max(
           0,
-          (1 + pageInDeleted) * rowsPerPageInDeleted - filteredDeletedGroups.length
+          (1 + pageInDeleted) * rowsPerPageInDeleted -
+            filteredDeletedGroups.length
         )
       : 0;
 
@@ -127,7 +130,7 @@ export function GroupList() {
       );
 
       if (groupsTempBySchoolYear.length != 0) {
-        if (groupsCurrent !== undefined ) {
+        if (groupsCurrent !== undefined) {
           const newGroupsCurrent = [...groupsCurrent];
 
           groupsTempBySchoolYear.forEach(function (element) {
@@ -139,9 +142,8 @@ export function GroupList() {
             }
           });
           groupsCurrent = newGroupsCurrent;
-        } 
-        else {
-          groupsCurrent = groupsTempBySchoolYear; 
+        } else {
+          groupsCurrent = groupsTempBySchoolYear;
         }
       }
       if (deletedGroupsTempBySchoolYear.length != 0) {
@@ -157,8 +159,7 @@ export function GroupList() {
             }
           });
           deletedGroupsCurrent = newDeletedGroupsCurrent;
-        }
-        else {
+        } else {
           deletedGroupsCurrent = deletedGroupsTempBySchoolYear;
         }
       }
@@ -188,8 +189,7 @@ export function GroupList() {
           });
 
           groupsCurrent = newGroupsCurrent;
-        } 
-        else {
+        } else {
           groupsCurrent = groupsTempByProgram;
         }
       }
@@ -207,8 +207,7 @@ export function GroupList() {
           });
 
           deletedGroupsCurrent = newDeletedGroupsCurrent;
-        }
-        else {
+        } else {
           deletedGroupsCurrent = deletedGroupsTempByProgram;
         }
       }
@@ -221,8 +220,7 @@ export function GroupList() {
 
       if (deletedGroupsCurrent !== undefined) {
         setFilteredDeletedGroups(deletedGroupsCurrent);
-      }
-      else {
+      } else {
         setFilteredDeletedGroups([]);
       }
     }
@@ -261,10 +259,10 @@ export function GroupList() {
           <Table aria-label="custom pagination table">
             <TableHead>
               <TableRow>
-                <TableCell>Grupė</TableCell>
-                <TableCell>Programa</TableCell>
-                <TableCell align="center">Mokslo metai</TableCell>
-                <TableCell align="center">Studentų kiekis</TableCell>
+                <TableCell style={{ width: "50px" }}>Grupė</TableCell>
+                <TableCell style={{ width: "100px" }}>Programa</TableCell>
+                <TableCell style={{ width: "100px" }} align="center">Mokslo metai</TableCell>
+                <TableCell style={{ width: "100px" }} align="center">Studentų kiekis</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>

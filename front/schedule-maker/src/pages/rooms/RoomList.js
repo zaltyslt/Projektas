@@ -227,7 +227,7 @@ export function RoomList() {
               <TableRow>
                 <TablePagination
                   labelRowsPerPage="Rodyti po"
-                  rowsPerPageOptions={[10, 20, { label: "Visi", value: filteredClassrooms.length }]}
+                  rowsPerPageOptions={[10, 20, { label: "Visi", value: -1 }]}
                   labelDisplayedRows={({ from, to, count }) =>
                     `${from}-${to} iš ${count}`
                   }
@@ -293,7 +293,7 @@ export function RoomList() {
                 <TableRow>
                   <TablePagination
                      labelRowsPerPage="Rodyti po"
-                     rowsPerPageOptions={[10, 20, { label: "Visi", value: filteredDisabledClassrooms.length }]}
+                     rowsPerPageOptions={[10, 20, { label: "Visi", value: -1 }]}
                      labelDisplayedRows={({ from, to, count }) => `${from}-${to} iš ${count}`}
                      colSpan={3}
                      count={filteredDisabledClassrooms.length}

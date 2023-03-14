@@ -134,7 +134,7 @@ export function ModuleList() {
           <Table aria-label="custom pagination table">
             <TableHead>
               <TableRow>
-                <TableCell>Modulio kodas</TableCell>
+              <TableCell style={{ width: "500px" }}>Modulio kodas</TableCell>
                 <TableCell>Modulio pavadinimas</TableCell>
                 <TableCell className="empty-activity"></TableCell>
               </TableRow>
@@ -206,7 +206,7 @@ export function ModuleList() {
             <Table aria-label="custom pagination table">
               <TableHead>
                 <TableRow>
-                  <TableCell>Modulio kodas</TableCell>
+                  <TableCell style={{ width: "500px" }}>Modulio kodas</TableCell>
                   <TableCell>Modulio pavadinimas</TableCell>
                   <TableCell className="activity"></TableCell>
                 </TableRow>
