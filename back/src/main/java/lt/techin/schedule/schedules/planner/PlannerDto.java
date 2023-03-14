@@ -25,6 +25,7 @@ public class PlannerDto {
 
     private int endIntEnum;
 
+    private Boolean online;
 
     public PlannerDto() {
     }
@@ -91,5 +92,13 @@ public class PlannerDto {
 
     public void setDateFrom(LocalDate dateFrom) {
         this.dateFrom = dateFrom;
+    }
+
+    public Boolean getOnline() {
+        return online;
+    }
+
+    public void setOnline(Boolean online) {
+        this.online = online;
     }
 }
