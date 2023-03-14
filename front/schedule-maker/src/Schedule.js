@@ -9,10 +9,26 @@ import FullCalendar from "@fullcalendar/react";
 class Schedule extends React.Component {
   state = {
     weekendsVisible: true,
-    currentEvents: []
+    currentEvents: [],
+    scheduleData: []
   };
 
+  componentDidMount() {
+    fetch("/api/schedule")
+      .then(response => response.json())
+      .then(data => this.setState({ scheduleData: data }))
+      .catch(error => console.error(error));
+  }
+
   render() {
+    const { scheduleData } = this.state;
+    const events = scheduleData.map(schedule => ({
+      title: schedule.subject.name,
+      start: schedule.date,
+      end: schedule.date,
+      allDay: true
+    }));
+
     return (
       <div className="maincontainer">
         <div id="container">
@@ -27,18 +43,7 @@ class Schedule extends React.Component {
               center: "title",
               right: "dayGridMonth,dayGridWeek,dayGridDay,listWeek"
             }}
-            events={[
-              {
-                title: "Java dalykas yra sudas as noriu miegoti ir valgyti ir miegoti ir valgyti ir miegoti ir valgyti ir miegoti.... Muhahahahhh galiu rasyti tiek kiek noriu!!!",
-                date: "2023-03-06",
-              },
-              { title: "Java", date: "2023-03-07" },
-              { title: "Java", date: "2023-03-08" },
-              { title: "Java", date: "2023-03-09" },
-              { title: "Java", date: "2023-03-10" },
-              { title: "Linux", date: "2023-03-14" },
-              { title: "Linux", date: "2023-03-15" }
-            ]}
+            events={events}
             weekends={false}
           />
         </div>
@@ -46,6 +51,5 @@ class Schedule extends React.Component {
     );
   }
 }
-
 
 export default Schedule;
