@@ -36,8 +36,6 @@ export function AddLesson() {
   const [error, setError] = useState("");
   const [errorMessageFrom, setErrorMessageFrom] = useState("");
   const [createMessage, setCreateMessage] = useState("");
-  const [teacherEmpty, setTeacherEmpty] = useState(false);
-  const [classRoomEmpty, setClassRoomEmpty] = useState(false);
   const [hoursEmpty, setHoursEmpty] = useState(false);
   const [hoursNotValid, setHoursNotValid] = useState(false);
   const [dateFromEmpty, setDateFromEmpty] = useState(false);
@@ -130,16 +128,6 @@ export function AddLesson() {
     setOnline(event.target.checked);
   }
 
-  const validateTeacher = (value) => {
-    setSelectedTeacher(value);
-    value.length === 0 ? setTeacherEmpty(true) : setTeacherEmpty(false);
-  };
-
-  const validateClassRoom = (value) => {
-    setSelectedClassRoom(value);
-    value.length === 0 ? setClassRoomEmpty(true) : setClassRoomEmpty(false);
-  };
-
   const validateHours = (value) => {
     setPlannedHours(value);
     value.length === 0 ? setHoursEmpty(true) : setHoursEmpty(false);
@@ -160,16 +148,6 @@ export function AddLesson() {
 
   const validation = () => {
     let isValid = true;
-
-    if (selectedTeacher === "" || selectedTeacher === "undefined") {
-      setTeacherEmpty(true);
-      isValid = false;
-    }
-
-    if (selectedClassRoom === "" || selectedClassRoom === "undefined") {
-      setClassRoomEmpty(true);
-      isValid = false;
-    }
 
     if (dateFrom === "" || dateFrom === "Undifined") {
       setDateFromEmpty(true);
@@ -207,16 +185,15 @@ export function AddLesson() {
         <form>
           <Grid container rowSpacing={2} spacing={2}>
             <Grid item sm={10}>
-              <FormControl fullWidth required error={teacherEmpty}>
+              <FormControl fullWidth>
                 <InputLabel id="teacher-label">Mokytojas</InputLabel>
                 <Select
                   label="Moktyojas"
                   labelId="teacher-label"
                   id="classroom"
                   value={selectedTeacher}
-                  error={teacherEmpty}
                   onChange={(e) => {
-                    validateTeacher(e.target.value);
+                    setSelectedTeacher(e.target.value);
                   }}
                 >
                   {teachers.map((teacher) => (
@@ -225,25 +202,19 @@ export function AddLesson() {
                     </MenuItem>
                   ))}
                 </Select>
-                {teacherEmpty && (
-                  <FormHelperText error>
-                    Privaloma pasirinkti mokytoją.
-                  </FormHelperText>
-                )}
               </FormControl>
             </Grid>
 
             <Grid item sm={10}>
-              <FormControl fullWidth required error={classRoomEmpty}>
+              <FormControl fullWidth>
                 <InputLabel id="classroom-label">Klasės pavadinimas</InputLabel>
                 <Select
                   label="Klasės pavadinimas"
                   labelId="classroom-label"
                   id="classroom"
-                  error={classRoomEmpty}
                   value={selectedClassRoom}
                   onChange={(e) => {
-                    validateClassRoom(e.target.value);
+                    setSelectedClassRoom(e.target.value);
                   }}
                 >
                   {classRooms.map((classroom) => (
@@ -252,11 +223,6 @@ export function AddLesson() {
                     </MenuItem>
                   ))}
                 </Select>
-                {classRoomEmpty && (
-                  <FormHelperText error>
-                    Privaloma pasirinkti klasę.
-                  </FormHelperText>
-                )}
               </FormControl>
             </Grid>
 
