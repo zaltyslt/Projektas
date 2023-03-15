@@ -20,7 +20,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "./ModuleList.css";
 import Stack from "@mui/material/Stack";
-import ".././pages.css"
+import ".././pages.css";
 
 export function ModuleList() {
   const [modules, setModules] = useState([]);
@@ -64,8 +64,13 @@ export function ModuleList() {
   };
 
   const emptyRowsInDeleted =
-  pageInDeleted > 0 ? Math.max(0, (1 + pageInDeleted) * rowsPerPageInDeleted - deletedModules.length) : 0;
-  
+    pageInDeleted > 0
+      ? Math.max(
+          0,
+          (1 + pageInDeleted) * rowsPerPageInDeleted - deletedModules.length
+        )
+      : 0;
+
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
@@ -134,9 +139,9 @@ export function ModuleList() {
           <Table aria-label="custom pagination table">
             <TableHead>
               <TableRow>
-                <TableCell>Modulio kodas</TableCell>
+                <TableCell style={{ width: "500px" }}>Modulio kodas</TableCell>
                 <TableCell>Modulio pavadinimas</TableCell>
-                <TableCell className="empty-activity"></TableCell>
+                <TableCell></TableCell>
               </TableRow>
             </TableHead>
 
@@ -206,16 +211,21 @@ export function ModuleList() {
             <Table aria-label="custom pagination table">
               <TableHead>
                 <TableRow>
-                  <TableCell>Modulio kodas</TableCell>
-                  <TableCell>Modulio pavadinimas</TableCell>
-                  <TableCell className="activity"></TableCell>
+                  <TableCell style={{ width: "500px" }}>
+                    Modulio kodas
+                  </TableCell>
+                  <TableCell style={{ width: "500px" }}>
+                    Modulio pavadinimas
+                  </TableCell>
+                  <TableCell></TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
                 {(rowsPerPage > 0
                   ? deletedModules.slice(
                       pageInDeleted * rowsPerPageInDeleted,
-                      pageInDeleted * rowsPerPageInDeleted + rowsPerPageInDeleted
+                      pageInDeleted * rowsPerPageInDeleted +
+                        rowsPerPageInDeleted
                     )
                   : deletedModules
                 ).map((module) => (
@@ -223,9 +233,11 @@ export function ModuleList() {
                     <TableCell component="th" scope="row">
                       {module.number}
                     </TableCell>
-                    <TableCell component="th" scope="row">{module.name}</TableCell>
+                    <TableCell component="th" scope="row">
+                      {module.name}
+                    </TableCell>
                     <TableCell align="center" className="activity">
-                      <Button 
+                      <Button
                         variant="contained"
                         onClick={() => handleRestore(module.id)}
                       >
