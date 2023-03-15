@@ -27,7 +27,7 @@ export function TeacherList() {
   const [filteredTeachers, setFilteredTeachers] = useState([]);
   const [deletedTeachers, setDeletedTeachers] = useState([]);
   const [deletedFiltered, setDeletedFiltered] = useState([]);
-
+  
   const [pageA, setPageA] = useState(0);
   const [pageP, setPageP] = useState(0);
 
@@ -87,7 +87,7 @@ export function TeacherList() {
   };
   //////////////////////
   const handleSearch = (event) => {
-    if (event.length === 0) {
+      if (event.length === 0) {
       setFilteredTeachers(teachers);
     } else {
       const filtered = teachers.filter((teacher) => {
@@ -103,10 +103,11 @@ export function TeacherList() {
           teacherLName.includes(event.toLowerCase()) ||
           shift.includes(event.toLowerCase()) ||
           moduleNamesArray.some((name) => name.includes(event.toLowerCase()))
-        );
-      });
+          );
+        });
 
-      setFilteredTeachers(filtered);
+        setFilteredTeachers(filtered);
+        setPageA(0);
     }
     if (isChecked) {
       if (event.length === 0) {
