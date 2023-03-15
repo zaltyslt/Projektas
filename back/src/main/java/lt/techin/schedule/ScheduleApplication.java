@@ -1,12 +1,9 @@
 package lt.techin.schedule;
 
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.flyway.FlywayAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.ApplicationContext;
@@ -19,7 +16,6 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
 import java.util.Map;
 
 @SpringBootApplication
-//(exclude = FlywayAutoConfiguration.class)
 public class ScheduleApplication extends SpringBootServletInitializer {
 	Logger logger = LoggerFactory.getLogger(ScheduleApplication.class);
 	public static void main(String[] args) {
@@ -40,5 +36,4 @@ public class ScheduleApplication extends SpringBootServletInitializer {
 	protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
 		return application.sources(ScheduleApplication.class);
 	}
-
 }

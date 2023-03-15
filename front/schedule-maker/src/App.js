@@ -76,11 +76,11 @@ function App() {
           <Route path="/modules/create" element={<CreateModule />} />
           <Route path="/modules/view/:id" element={<ViewModule />}></Route>
           <Route path="/modules/edit/:id" element={<EditModule />}></Route>
-
+          {/* SUBJECTS PATHAI */}
           <Route path="/subjects/create" element={<CreateSubject />} />
           <Route path="/subjects/view/:id" element={<ViewSubject />}></Route>
           <Route path="/subjects/edit/:id" element={<EditSubject />}></Route>
-
+          {/* GROUPS PATHAI */}
           <Route path="/groups/create" element={<CreateGroup />}></Route>
           <Route path="/groups/view/:id" element={<ViewGroup />}></Route>
           <Route path="/groups/edit/:id" element={<EditGroup />}></Route>
@@ -88,13 +88,12 @@ function App() {
           <Route path="/teachers/view/:id" element={<ViewTeacher />}></Route>
           <Route path="/teachers/create" element={<CreateTeacher />}></Route>
           <Route path="/teachers/edit/:id" element={<EditTeacher />}></Route>
-
           {/*   SCHEDULE PATHS */}
           <Route path="/create-schedule" element={<CreateSchedule />}></Route>
           <Route path="/schedules/add-lesson/:id" element={<AddLesson />}></Route>
-          <Route path="/schedules/:id" element={<ScheduleView />}></Route>
-          {/* <Route path="/schedules/:id" element={<Schedule />}></Route> */}
-          <Route path="/schedule-view" element={<Schedule />}></Route>
+          <Route path="/planning/:id" element={<ScheduleView />}></Route>
+          <Route path="/schedules/:id" element={<Schedule />}></Route>
+          {/* <Route path="/schedule-view" element={<Schedule />}></Route> */}
         </Routes>
       </HashRouter>
     </div>

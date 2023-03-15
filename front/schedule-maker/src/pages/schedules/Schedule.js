@@ -12,11 +12,8 @@ export function Schedule() {
   const [schedule, setSchedule] = useState([]);
   const params = useParams();
 
-    // console.log(schedule)
-
   useEffect(() => {
-      // fetch(`api/v1/schedules/${params.id}/lessons`)
-      fetch("http://localhost:8080/schedule-maker/api/v1/schedules/1/lessons")
+      fetch(`api/v1/schedules/${params.id}/lessons`)
         .then(response => response.json())
         .then(data => setSchedule(data))
         .catch(error => console.error(error));
@@ -56,7 +53,7 @@ export function Schedule() {
           headerToolbar={{
             left: "prev,next today",
             center: "title",
-            right: "dayGridMonth,dayGridWeek,dayGridDay,listWeek"
+            right: "dayGridMonth,dayGridWeek,dayGridDay"
           }}
           events={events}
           weekends={false}
@@ -65,4 +62,21 @@ export function Schedule() {
       </div>
     </div>
   );
+  // return (
+  //   <div className="maincontainer">
+  //     <div id="container">
+  //       <FullCalendar
+  //         locales={allLocales}
+  //         locale={"lt"}
+  //         plugins={[dayGridPlugin, interactionPlugin, listPlugin]}
+  //         initialView="dayGridMonth"
+  //         contentHeight="700px"
+  //         events={events}
+  //         weekends={false}
+  //         eventContent={renderEventContent}
+  //       />
+  //     </div>
+  //   </div>
+  // );
+  
 }
