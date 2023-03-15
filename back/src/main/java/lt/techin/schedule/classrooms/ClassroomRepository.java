@@ -9,4 +9,7 @@ import org.springframework.stereotype.Repository;
 public interface ClassroomRepository extends JpaRepository<Classroom, Long> {
     Page<Classroom> findByClassroomName
             (String classroomName, Pageable pageable);
+
+    Object findByClassroomNameAndBuilding(String classroomName, BuildingType akademija);
+
 }

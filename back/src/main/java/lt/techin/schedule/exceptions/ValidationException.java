@@ -28,4 +28,12 @@ public class ValidationException extends RuntimeException {
     public String getRejectedValue() {
         return rejectedValue;
     }
+
+    public String getCode() {
+        return null;
+    }
+
+    public String getValue() {
+        return null;
+    }
 }
