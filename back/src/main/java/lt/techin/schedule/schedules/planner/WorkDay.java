@@ -34,9 +34,9 @@ public class WorkDay {
     @JoinColumn(name = "classroom_id")
     private Classroom classroom;
 
-    private float lessonStart;
+    private String lessonStart;
 
-    private float lessonEnd;
+    private String lessonEnd;
 
     private Boolean online;
 
@@ -51,7 +51,7 @@ public class WorkDay {
     public WorkDay() {
     }
 
-    public WorkDay(LocalDate date, Subject subject, Teacher teacher, Schedule schedule, Classroom classroom, float lessonStart, float lessonEnd, Boolean online) {
+    public WorkDay(LocalDate date, Subject subject, Teacher teacher, Schedule schedule, Classroom classroom, String lessonStart, String lessonEnd, Boolean online) {
         this.date = date;
         this.subject = subject;
         this.teacher = teacher;
@@ -78,19 +78,19 @@ public class WorkDay {
         this.subject = subject;
     }
 
-    public float getLessonStart() {
+    public String getLessonStart() {
         return lessonStart;
     }
 
-    public void setLessonStart(float lessonStart) {
+    public void setLessonStart(String lessonStart) {
         this.lessonStart = lessonStart;
     }
 
-    public float getLessonEnd() {
+    public String getLessonEnd() {
         return lessonEnd;
     }
 
-    public void setLessonEnd(float lessonEnd) {
+    public void setLessonEnd(String lessonEnd) {
         this.lessonEnd = lessonEnd;
     }
 
