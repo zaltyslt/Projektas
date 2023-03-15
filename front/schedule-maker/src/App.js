@@ -93,6 +93,7 @@ function App() {
           <Route path="/create-schedule" element={<CreateSchedule />}></Route>
           <Route path="/schedules/add-lesson/:id" element={<AddLesson />}></Route>
           <Route path="/schedules/:id" element={<ScheduleView />}></Route>
+          {/* <Route path="/schedules/:id" element={<Schedule />}></Route> */}
           <Route path="/schedule-view" element={<Schedule />}></Route>
         </Routes>
       </HashRouter>

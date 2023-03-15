@@ -30,7 +30,7 @@ public class ScheduleServiceTest {
     public void setUp() {
         scheduleRepository = mock(ScheduleRepository.class);
         groupRepository = mock(GroupRepository.class);
-        scheduleService = new ScheduleService(scheduleRepository, groupRepository);
+//        scheduleService = new ScheduleService(scheduleRepository, groupRepository);
     }
 
     @Test

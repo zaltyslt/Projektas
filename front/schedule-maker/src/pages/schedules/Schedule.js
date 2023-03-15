@@ -5,44 +5,38 @@ import interactionPlugin from "@fullcalendar/interaction";
 import listPlugin from "@fullcalendar/list";
 import allLocales from "@fullcalendar/core/locales-all";
 import FullCalendar from "@fullcalendar/react";
+import { Link, useParams } from "react-router-dom";
 
 export function Schedule() {
   const [weekendsVisible, setWeekendsVisible] = useState(true);
   const [schedule, setSchedule] = useState([]);
+  const params = useParams();
+
+    // console.log(schedule)
 
   useEffect(() => {
-      fetch("http://localhost:8080/schedule-maker/api/v1/schedules/2/lessons")
+      // fetch(`api/v1/schedules/${params.id}/lessons`)
+      fetch("http://localhost:8080/schedule-maker/api/v1/schedules/1/lessons")
         .then(response => response.json())
         .then(data => setSchedule(data))
         .catch(error => console.error(error));
-  }, [1]
+  }, [params.id]
   );
 
   console.log(schedule)
 
-  // const events = schedule.map(schedule => ({
-  //   title: `${schedule.subject.name}
-  //   <br />
-  //   ${schedule.teacher.lName}
-  //   <br />
-  //   ${schedule.subject.classRooms[0].classroomName}`,
-  //   start: schedule.schedule.dateFrom,
-  //   end: schedule.schedule.dateUntil,
-  //   allDay: true,
-  // }));
-
   const events = schedule.map(schedule => ({
     title: `${schedule.subject.name}
       <br />
-      ${schedule.teacher.lName}
+      ${schedule.teacher.lName} ${schedule.teacher.fName}
       <br />
-      ${schedule.subject.classRooms.map(classroom => `${classroom.classroomName} (${classroom.classroomCapacity})`).join("<br/>")}`,
-    start: schedule.schedule.dateFrom,
-    end: schedule.schedule.dateUntil,
+      ${schedule.classroom.classroomName}
+      <br />
+      ${schedule.lessonStart} - ${schedule.lessonEnd}`,
+    start: schedule.date,
     allDay: true,
   }));
   
-
   const renderEventContent = (eventInfo) => (
     <>
       <b>{eventInfo.timeText}</b>
