@@ -7,22 +7,20 @@ export function EditTeacher() {
   const params = useParams();
   let result;
    const teacherId = params.id;
-  console.log(params.id);
+     
    async function handleUpdate(teacher) {
   
     if (typeof teacher === "number") {
-      console.log("switch active");
       result = await switchActive(teacher);
-    } else if (typeof teacher === "object") {
-      // console.log("update");
-      result = await postDataTo(
+    } 
+    else if (typeof teacher === "object") {
+      result =  await postDataTo(
         teacher,
         "/api/v1/teachers/update?tid=" + teacher.id,
         "PUT"
-        // "/api/v1/teachers/create", "POST"
       );
     }
-    return result;
+   return result;
   }
 
   return <Teacher mode="update" teacherId={teacherId} onSave={handleUpdate} />;

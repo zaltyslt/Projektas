@@ -23,16 +23,18 @@ public class TeacherControllerAction {
         var result = teacherDto;
 
         if (
-//                result.getSubjectsList() != null &&
+                result.getSelectedShift() != null &&
+                result.getfName() != null &&
+//              result.getSubjectsList() != null &&
                 result.getContacts() != null &&
-                        result.getSelectedShift() != null &&
-                        result.getWorkHoursPerWeek() != null &&
-                        result.getActive() != null &&
-                        result.getSelectedShift() != null
+                result.getSelectedShift() != null &&
+//              result.getWorkHoursPerWeek() != null &&
+                result.getActive() != null
         ) {
             return teacherServiceDo.createTeacher(result);
+        } else {
+            throw new TeacherException(HttpStatus.EXPECTATION_FAILED, "Nepakanka duomenų!");
         }
-        throw new TeacherException(HttpStatus.EXPECTATION_FAILED, "Nepakanka duomenų!");
 
     }
 

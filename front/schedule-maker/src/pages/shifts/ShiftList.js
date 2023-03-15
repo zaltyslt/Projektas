@@ -163,9 +163,8 @@ export function ShiftList() {
           <Table aria-label="custom pagination table">
             <TableHead>
               <TableRow>
-                <TableCell>Pamainos pavadinimas</TableCell>
+                <TableCell style={{ width: "500px" }} >Pamainos pavadinimas</TableCell>
                 <TableCell>Pamainos laikas</TableCell>
-                <TableCell className="empty-activity"></TableCell>
               </TableRow>
             </TableHead>
 
@@ -233,9 +232,9 @@ export function ShiftList() {
             <Table aria-label="custom pagination table">
               <TableHead>
                 <TableRow>
-                  <TableCell>Pamainos pavadinimas</TableCell>
-                  <TableCell>Pamainos laikas</TableCell>
-                  <TableCell className="activity"></TableCell>
+                  <TableCell style={{ width: "500px" }}>Pamainos pavadinimas</TableCell>
+                  <TableCell style={{ width: "500px" }} >Pamainos laikas</TableCell>
+                  <TableCell ></TableCell>
                 </TableRow>
               </TableHead>
 

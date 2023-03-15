@@ -25,6 +25,7 @@ import { Link } from "react-router-dom";
 export function TeacherList() {
   const [teachers, setTeachers] = useState([]);
   const [filteredTeachers, setFilteredTeachers] = useState([]);
+  
   const [deletedTeachers, setDeletedTeachers] = useState([]);
   const [deletedFiltered, setDeletedFiltered] = useState([]);
   
@@ -58,7 +59,11 @@ export function TeacherList() {
   const fetchDeletedTeachers = async () => {
     fetch("/api/v1/teachers?active=false")
       .then((response) => response.json())
-      .then(setDeletedTeachers);
+      .then((data ) => {setDeletedTeachers(data);
+      return data})
+      .then((data) => {
+        setDeletedFiltered(data);
+      });
   };
 
   const emptyRowsA =
@@ -67,14 +72,12 @@ export function TeacherList() {
     pageP > 0 ? Math.max(0, (1 + pageP) * rowsPerPageA - teachers.length) : 0;
 
   const handleChangePageA = (event, newPage) => {
-    setPageA(newPage); 
+    setPageA(newPage);
   };
 
   const handleChangePageP = (event, newPageP) => {
-    console.log(event.id);
-    // console.log(newPage);
-      setPageP(newPageP); 
-    };
+    setPageP(newPageP);
+  };
 
   const handleChangeRowsPerPageA = (event) => {
     setRowsPerPageA(parseInt(event.target.value, 10));
@@ -85,11 +88,9 @@ export function TeacherList() {
     setRowsPerPageP(parseInt(event.target.value, 10));
     setPageP(0);
   };
-//////////////////////
+  //////////////////////
   const handleSearch = (event) => {
-   
-    
-    if (event.length === 0) {
+      if (event.length === 0) {
       setFilteredTeachers(teachers);
     } else {
       const filtered = teachers.filter((teacher) => {
@@ -105,35 +106,35 @@ export function TeacherList() {
           teacherLName.includes(event.toLowerCase()) ||
           shift.includes(event.toLowerCase()) ||
           moduleNamesArray.some((name) => name.includes(event.toLowerCase()))
-        );
-      });
-    
-      setFilteredTeachers(filtered);
-    }
-      if (isChecked) {
-        if (event.length === 0) {
-          setDeletedFiltered(deletedTeachers);
-        } else {
-          const deletedFiltered = deletedTeachers.filter((teacher) => {
-            const teacherFName = teacher.fName.toLowerCase();
-            const teacherLName = teacher.lName.toLowerCase();
-            const shift = teacher.selectedShift.name.toLowerCase();
-            const moduleNamesArray = teacher.subjectsList
-              .map((subject) => subject.name.toLowerCase())
-              .flat();
-
-            return (
-              teacherFName.includes(event.toLowerCase()) ||
-              teacherLName.includes(event.toLowerCase()) ||
-              shift.includes(event.toLowerCase()) ||
-              moduleNamesArray.some((name) =>
-                name.includes(event.toLowerCase())
-              )
-            );
-          });
+          );
+        });
         
+        setFilteredTeachers(filtered);
+        setPageA(0);
+    }
+    if (isChecked) {
+      if (event.length === 0) {
+        setDeletedFiltered(deletedTeachers);
+      } else {
+        const deletedFiltered = deletedTeachers.filter((teacher) => {
+          const teacherFName = teacher.fName.toLowerCase();
+          const teacherLName = teacher.lName.toLowerCase();
+          // const shift = teacher.selectedShift.name.toLowerCase();
+          const subjectsNamesArray = teacher.subjectsList
+            .map((subject) => subject.name.toLowerCase())
+            .flat();
+
+          return (
+            teacherFName.includes(event.toLowerCase()) ||
+            teacherLName.includes(event.toLowerCase()) ||
+            // shift.includes(event.toLowerCase()) ||
+            subjectsNamesArray.some((name) => name.includes(event.toLowerCase()))
+          );
+        });
+       
+        setDeletedFiltered(deletedFiltered);
+        setPageP(0);
       }
-      setDeletedFiltered(deletedFiltered);
     }
   };
 
@@ -176,19 +177,17 @@ export function TeacherList() {
           </Grid>
         </Grid>
 
-        <TableContainer component={Paper} 
-        // style={{ width: "100%" }}
-        >
-          <Table 
-             aria-label="custom pagination table"
-            // style={{ tableLayout: "fixed" }}
-          >
+        <TableContainer component={Paper}>
+          <Table aria-label="custom pagination table">
             <TableHead>
               <TableRow>
-                <TableCell >Vardas Pavardė</TableCell>
-                <TableCell >Dėstomi dalykai</TableCell>
-                <TableCell className="empty-activity">Pamaina</TableCell>
-                {/* <TableCell></TableCell> */}
+                <TableCell style={{ width: "44%" }}>Vardas Pavardė</TableCell>
+                <TableCell style={{ width: "45%" }}>
+                  Dėstomi dalykai
+                </TableCell>
+                <TableCell >
+                  Pamaina
+                </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -202,22 +201,19 @@ export function TeacherList() {
                 <TableRow key={teacher.id}>
                   <TableCell component="th" scope="row" align="left">
                     <Link to={"/teachers/view/" + teacher.id}>
-                      {
-                        teacher.fName + " " + teacher.lName}
+                      {teacher.fName + " " + teacher.lName}
                     </Link>
-                  
                   </TableCell>
 
-                  <TableCell >
+                  <TableCell>
                     {teacher.subjectsList && teacher.subjectsList.length > 0
                       ? teacher.subjectsList.map((subjectItem, index) => {
-                          
                           return <p key={index}>{subjectItem.name}</p>;
                         })
                       : ""}
                   </TableCell>
 
-                  <TableCell >
+                  <TableCell>
                     {teacher.selectedShift ? teacher.selectedShift.name : ""}
                   </TableCell>
                 </TableRow>
@@ -234,13 +230,18 @@ export function TeacherList() {
               <TableRow>
                 <TablePagination
                   labelRowsPerPage="Rodyti po"
-                  labelDisplayedRows={({ from, to, count }) =>`${from}-${to} iš ${count}`}
+                  labelDisplayedRows={({ from, to, count }) =>
+                    `${from}-${to} iš ${count}`
+                  }
                   rowsPerPageOptions={[10, 20, { label: "Visi", value: -1 }]}
                   colSpan={3}
                   count={filteredTeachers.length}
                   page={pageA}
-                  SelectProps={ {inputProps: {"aria-label": "Rodyti po",}, native: true, } }
-                //  Active
+                  SelectProps={{
+                    inputProps: { "aria-label": "Rodyti po" },
+                    native: true,
+                  }}
+                  //  Active
                   onPageChange={handleChangePageA}
                   rowsPerPage={rowsPerPageA}
                   onRowsPerPageChange={handleChangeRowsPerPageA}
@@ -254,34 +255,34 @@ export function TeacherList() {
           <FormControlLabel
             control={<Checkbox />}
             label="Ištrinti mokytojai"
-           
             onChange={(e) =>
               e.target.checked ? setChecked(true) : setChecked(false)
             }
           />
         </FormGroup>
         {isChecked && (
-         
-         
-         
-         
-         
-          <TableContainer component={Paper} >
-            <Table aria-label="custom pagination table"  >
+          <TableContainer component={Paper}>
+            <Table aria-label="custom pagination table">
               <TableHead>
                 <TableRow>
-                  <TableCell >Vardas Pavardė</TableCell>
-                  <TableCell >Dėstomi dalykai</TableCell>
-                  <TableCell className="empty-activity">Veiksmai</TableCell>
+                  <TableCell style={{ width: "45%" }}>
+                    Vardas Pavardė
+                  </TableCell>
+                  <TableCell style={{ width: "45%" }}>
+                    Dėstomi dalykai
+                  </TableCell>
+                  <TableCell align="center">
+                    Veiksmai
+                  </TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
                 {(rowsPerPageP > 0
-                  ? deletedTeachers.slice(
+                  ? deletedFiltered.slice(
                       pageP * rowsPerPageP,
                       pageP * rowsPerPageP + rowsPerPageP
                     )
-                  : deletedTeachers
+                  : deletedFiltered
                 ).map((teacher) => (
                   <TableRow key={teacher.id}>
                     {/* <TableCell colSpan={6} component="th" scope="row">
@@ -289,10 +290,10 @@ export function TeacherList() {
                     </TableCell>
                     <TableCell colSpan={6}>{teacher.active}</TableCell>
                     <TableCell colSpan={2} align="center"> */}
-                    <TableCell component="th" scope="row" >
+                    <TableCell component="th" scope="row">
                       {`${teacher.fName} ${teacher.lName}`}
                     </TableCell>
-                    <TableCell >
+                    <TableCell>
                       {teacher.subjectsList && teacher.subjectsList.length > 0
                         ? teacher.subjectsList.map((subjectItem, index) => {
                             {
@@ -324,7 +325,7 @@ export function TeacherList() {
               <TableFooter>
                 <TableRow>
                   <TablePagination
-                  id='inactive'
+                    id="inactive"
                     labelRowsPerPage="Rodyti po"
                     rowsPerPageOptions={[10, 20, { label: "Visi", value: -1 }]}
                     colSpan={3}

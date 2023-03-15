@@ -164,11 +164,18 @@ public class TeacherServiceDo {
                 return true;
             }
         }
+//        Map<ContactType, String> newTeacherContacts = newTeacher.getContacts().stream()
+//                .collect(Collectors.toMap(c -> c.getContactType(), c -> c.getContactValue()));
+
         Map<ContactType, String> newTeacherContacts = newTeacher.getContacts().stream()
+                .filter(c -> c.getContactValue() != null)
                 .collect(Collectors.toMap(c -> c.getContactType(), c -> c.getContactValue()));
+
+
         for (Teacher teacher : teachers.values()) {
 
             Map<ContactType, String> teacherContacts = teacher.getContacts().stream()
+                    .filter(c -> c.getContactValue() != null)
                     .collect(Collectors.toMap(c -> c.getContactType(), c -> c.getContactValue()));
 
             if (newTeacherContacts.get(ContactType.PHONE_NUMBER).equals(teacherContacts.get(ContactType.PHONE_NUMBER)) ||
