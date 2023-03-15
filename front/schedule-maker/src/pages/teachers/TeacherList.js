@@ -105,10 +105,11 @@ export function TeacherList() {
           teacherLName.includes(event.toLowerCase()) ||
           shift.includes(event.toLowerCase()) ||
           moduleNamesArray.some((name) => name.includes(event.toLowerCase()))
-        );
-      });
-    
-      setFilteredTeachers(filtered);
+          );
+        });
+        
+        setFilteredTeachers(filtered);
+        setPageA(0);
     }
       if (isChecked) {
         if (event.length === 0) {
@@ -272,7 +273,7 @@ export function TeacherList() {
                 <TableRow>
                   <TableCell >Vardas Pavardė</TableCell>
                   <TableCell >Dėstomi dalykai</TableCell>
-                  <TableCell className="empty-activity">Veiksmai</TableCell>
+                  <TableCell className="empty-activity"></TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>

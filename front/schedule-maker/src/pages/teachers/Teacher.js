@@ -17,6 +17,7 @@ import {
   TableHead,
   TableRow,
   TextField,
+  Typography,
 } from "@mui/material";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
@@ -68,6 +69,7 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
   const [errorTeamsMail, setErrorTeamsMail] = useState(errorObject);
   const [errorHours, setErrorHours] = useState(errorObject);
   const [errorShift, setErrorShift] = useState(errorObject);
+  const [errorSubjectsList, setErrorSubjectsList] = useState(errorObject);
 
   let navigate = useNavigate();
   const listUrl = useHref("/teachers");
@@ -84,7 +86,7 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
 
   function preCreateCheck() {
     let isCorrect = true;
-
+    // console.log(teacher);
     if (!teacher.fName || teacher.fName === "") {
       // setErrorMessage("Įveskite/pataisykite vardą !");
       setErrorFname({ error: true, text: "Mokytojo vardas privalomas." });
@@ -114,6 +116,7 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
         error: true,
         text: "Elektroninio pašto adresas privalomas.",
       });
+      // console.log(teacher);
       isCorrect = false;
     }
 
@@ -126,19 +129,27 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
       isCorrect = false;
     }
 
-    if (
-      // teacher.contacts.teamsName === "" ||
-      // teacher.contacts.teamsEmail === "" ||
-      errorFname.error ||
-      errorLname.error ||
-      errorPhoneNumber.error ||
-      errorDirectMail.error ||
-      errorTeamsName.error ||
-      errorTeamsMail.error
-    ) {
-      // setErrorMessage("Įveskite/pataisykite kontaktinius duomenis !");
+    if (!teacher.subjectsList || teacher.subjectsList.length < 1) {
+      setErrorSubjectsList({
+        error: true,
+        text: "Dėstomus dalykus pasirinkti privaloma",
+      });
       isCorrect = false;
     }
+
+    // if (
+    // teacher.contacts.teamsName === "" ||
+    // teacher.contacts.teamsEmail === "" ||
+    //   errorFname.error ||
+    //   errorLname.error ||
+    //   errorPhoneNumber.error ||
+    //   errorDirectMail.error ||
+    //   errorTeamsName.error ||
+    //   errorTeamsMail.error
+    // ) {
+    // setErrorMessage("Įveskite/pataisykite kontaktinius duomenis !");
+    //   isCorrect = false;
+    // }
     // else if (teacher.workHoursPerWeek === "" || errorHours.error) {
     //   setErrorMessage("Įveskite/pataisykite valandų skaičių !");
     //   isCorrect = false;
@@ -146,7 +157,7 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
     // } else {
     //   isCorrect = true;
     // }
-// console.log("isCorrect: " + isCorrect);
+    // console.log("isCorrect: " + isCorrect);
     isCorrect && createTeacher();
   }
 
@@ -161,7 +172,6 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
   async function fetchData() {
     getDataFrom("api/v1/teachers/subjects", (data) => {
       if (data) {
-        
         setSubjects(data);
         setFreeSubjects(data);
       } else {
@@ -185,6 +195,7 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
   async function fetchTeacherData() {
     getDataFrom("api/v1/teachers/view?tid=" + teacherId, (data) => {
       if (data) {
+        console.log(data);
         setTeacher(data);
         setShift(data.selectedShift);
         setChosenSubjects(data.subjectsList);
@@ -196,12 +207,10 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
   }
 
   function clearErrorMessages() {
-     
-        setCreateMessage("");
-        setErrorMessage("");
-      
-    };
-  
+    setCreateMessage("");
+    setErrorMessage("");
+  }
+
   // useEffect(() => {
   //   const timer = setTimeout(() => {
   //     setCreateMessage("");
@@ -215,7 +224,7 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
 
   function handleChange(event) {
     clearErrorMessages();
-    
+
     const { id, value } = event.target;
     const prefix = id.split(".");
     if (prefix[0] === "contacts") {
@@ -231,19 +240,23 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
   const createTeacher = () => {
     async function teacherModifier(teacher) {
       const fetchResult = await onSave(teacher);
-      applyResult(fetchResult);
+      // console.log("fetchResult");
+      // console.log(await fetchResult.json());
+      applyResult(await fetchResult.json());
     }
 
     teacherModifier(teacher);
   };
 
-  async function deleteTeacher() {
+  // async 
+  function deleteTeacher() {
     onSave(teacher.id);
     window.location = listUrl;
   }
 
-  function applyResult(result) {
-    
+ function applyResult(result) {
+    // console.log(result);
+
     if (result.status > 299) {
       setCreateMessage("");
       setErrorMessage(result.message);
@@ -282,7 +295,6 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
   ];
 
   useEffect(() => {
-   
     const tempSubjects = subjects.filter(
       (subA) =>
         !chosenSubjects.map((subC) => subC.subjectId).includes(subA.subjectId)
@@ -303,6 +315,7 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
     );
     setFreeSubjects(removed);
     setShowSubjSelect(false);
+    setErrorSubjectsList({ status: false });
   };
 
   const handleRemoveChosen = (subjectRem) => {
@@ -323,10 +336,10 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
 
   const handleShiftChange = (shiftId) => {
     const tempShift = shifts.find((shift) => shift.id === shiftId);
-    
+
     handleChange({ target: { id: "selectedShift", value: tempShift } });
     handleChange({ target: { id: "active", value: true } });
-    setErrorShift({error : false});
+    setErrorShift({ error: false });
     setShift(tempShift);
   };
 
@@ -339,14 +352,15 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
   return (
     <Container style={{ maxWidth: "75rem" }}>
       <form>
-      
         <h3 className="create-header">
-          {" "}
-          {mode === "update"
-            ? "Redaguoti mokytojo duomenis"
-            : "Pridėti mokytoją"}
+          {mode === "update" ? "Redaguoti" : "Pridėti mokytoją"}
         </h3>
-
+        {mode === "update" && (
+          <Grid>
+            <h2>{teacher && (teacher.fName +" "+teacher.lName)}</h2>
+            <p>Paskutinį kartą redaguota: {teacher && teacher.dateModified}</p>
+          </Grid>
+        )}
         <Grid
           container
           direction="row"
@@ -354,11 +368,11 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
           alignItems="left"
           rowSpacing={3}
         >
-         <Grid item sm={6}>
-        {errorMessage  && <Alert severity="warning">{errorMessage}</Alert>}
-        {createMessage && <Alert severity="success">{createMessage}</Alert>}
-</Grid>
-<Grid item sm={6}></Grid>
+          <Grid item sm={6}>
+            {errorMessage && <Alert severity="warning">{errorMessage}</Alert>}
+            {createMessage && <Alert severity="success">{createMessage}</Alert>}
+          </Grid>
+          <Grid item sm={6}></Grid>
           <Grid item sm={6}>
             <TextField
               error={errorFname.error}
@@ -554,7 +568,6 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
                 {shifts &&
                   shifts.map((shift) => (
                     <MenuItem key={shift.id} value={shift.id}>
-                     
                       {shift.name}
                     </MenuItem>
                   ))}
@@ -602,6 +615,11 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
 
           <Grid item sm={6}>
             <TableContainer component={Paper} style={{ width: "100%" }}>
+              {/* {true && (
+                  <Typography color="error">
+                    There is an error with the data.
+                  </Typography> 
+                )} */}
               <Table
                 style={{ tableLayout: "fixed" }}
                 aria-label="custom pagination table"
@@ -626,10 +644,6 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
                           {subject.name}
                         </TableCell>
 
-                        {/* <TableCell align="center">
-                          {subject.module ? subject.module : <p>Nenurodytas</p>}
-                        </TableCell> */}
-
                         <TableCell align="right" className="activity">
                           <Button
                             variant="contained"
@@ -643,6 +657,15 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
                 </TableBody>
               </Table>
             </TableContainer>
+            {errorSubjectsList.error && (
+              <Alert
+                variant="outlined"
+                severity="error"
+                style={{ color: "#d32f2f" }}
+              >
+                {errorSubjectsList.text}
+              </Alert>
+            )}
           </Grid>
           <Grid item sm={6}></Grid>
           <Grid item sm={6}>
@@ -660,10 +683,9 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
                 </Button>
               )}
 
-              <Button variant="contained" onClick={() => navigate('/teachers')}>
+              <Button variant="contained" onClick={() => navigate("/teachers")}>
                 Grįžti
               </Button>
-              
             </Stack>
           </Grid>
         </Grid>

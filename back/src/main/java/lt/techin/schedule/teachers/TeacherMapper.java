@@ -60,7 +60,7 @@ public class TeacherMapper {
         teacher.setSubjects(dto.getSubjectsList() != null
                 ? TeacherSubjectMapper.subjectsFromDtos(dto.getSubjectsList())
                 : null);
-        teacher.setWorkHoursPerWeek(Integer.parseInt(dto.getWorkHoursPerWeek()));
+        teacher.setWorkHoursPerWeek(dto.getWorkHoursPerWeek() != null &&!dto.getWorkHoursPerWeek().equals("") ? Integer.parseInt(dto.getWorkHoursPerWeek()) : 0);
         teacher.setShift(ShiftMapper.dtoToShift(dto.getSelectedShift()));
         teacher.setActive(dto.getActive());
         teacher.setContacts(dto.getContacts() != null ? ContactMapper.contactFromDto2(dto.getContacts()) : new ArrayList<Contact>());
