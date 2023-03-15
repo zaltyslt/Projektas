@@ -13,9 +13,9 @@ public class WorkDayDto {
 
     private LocalDate date;
 
-    private float lessonStart;
+    private String lessonStart;
 
-    private float lessonEnd;
+    private String lessonEnd;
 
     private Boolean online;
 
@@ -28,7 +28,7 @@ public class WorkDayDto {
     public WorkDayDto() {
     }
 
-    public WorkDayDto(Long id, LocalDate date, float lessonStart, float lessonEnd, Boolean online, TeacherEntityDto teacher, SubjectSmallDto subject, ClassroomSmallDto classroom) {
+    public WorkDayDto(Long id, LocalDate date, String lessonStart, String lessonEnd, Boolean online, TeacherEntityDto teacher, SubjectSmallDto subject, ClassroomSmallDto classroom) {
         this.id = id;
         this.date = date;
         this.lessonStart = lessonStart;
@@ -55,19 +55,19 @@ public class WorkDayDto {
         this.date = date;
     }
 
-    public float getLessonStart() {
+    public String getLessonStart() {
         return lessonStart;
     }
 
-    public void setLessonStart(float lessonStart) {
+    public void setLessonStart(String lessonStart) {
         this.lessonStart = lessonStart;
     }
 
-    public float getLessonEnd() {
+    public String getLessonEnd() {
         return lessonEnd;
     }
 
-    public void setLessonEnd(float lessonEnd) {
+    public void setLessonEnd(String lessonEnd) {
         this.lessonEnd = lessonEnd;
     }
 
@@ -108,7 +108,7 @@ public class WorkDayDto {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         WorkDayDto that = (WorkDayDto) o;
-        return Float.compare(that.lessonStart, lessonStart) == 0 && Float.compare(that.lessonEnd, lessonEnd) == 0 && Objects.equals(id, that.id) && Objects.equals(date, that.date) && Objects.equals(online, that.online) && Objects.equals(teacher, that.teacher) && Objects.equals(subject, that.subject) && Objects.equals(classroom, that.classroom);
+        return Objects.equals(id, that.id) && Objects.equals(date, that.date) && Objects.equals(lessonStart, that.lessonStart) && Objects.equals(lessonEnd, that.lessonEnd) && Objects.equals(online, that.online) && Objects.equals(teacher, that.teacher) && Objects.equals(subject, that.subject) && Objects.equals(classroom, that.classroom);
     }
 
     @Override

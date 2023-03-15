@@ -16,7 +16,7 @@ public class WorkDayMapper {
         workDay.setDate(workDayDto.getDate());
         workDay.setOnline(workDayDto.getOnline());
         workDay.setLessonStart(workDayDto.getLessonStart());
-        workDay.setLessonEnd(workDayDto.getLessonStart());
+        workDay.setLessonEnd(workDayDto.getLessonEnd());
         workDay.setTeacher(toTeacherFromEntityDto(workDayDto.getTeacher()));
         workDay.setClassroom(toClassroomFromSmallDto(workDayDto.getClassroom()));
         workDay.setSubject(toSubjectFromSmallDto(workDayDto.getSubject()));
