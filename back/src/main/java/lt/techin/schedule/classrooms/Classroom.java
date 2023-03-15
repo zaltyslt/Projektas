@@ -29,6 +29,9 @@ public class Classroom {
     private LocalDateTime modifiedDate;
     private boolean active = true;
 
+    public Classroom(long l, String s, String s1, BuildingType akademija, boolean b) {
+    }
+
     @PrePersist
     public void prePersist() {
         createdDate = LocalDateTime.now();
