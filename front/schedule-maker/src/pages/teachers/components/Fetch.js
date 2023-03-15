@@ -68,7 +68,5 @@ export async function switchActive(id) {
       }
     );
     
-     console.log(`Response status: ${response.status}`);
-  
     return response;
 }
