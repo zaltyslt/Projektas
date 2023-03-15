@@ -42,6 +42,8 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
   const [showSubjSelect, setShowSubjSelect] = useState(false); //show/hide
 
   const [teacher, setTeacher] = useState({});
+  const [currentTacherName, setCurrentTeacherName] = useState('');
+
 
   // const [id, setid] = useState("");
   // const [fName, setFName] = useState("");
@@ -195,10 +197,11 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
   async function fetchTeacherData() {
     getDataFrom("api/v1/teachers/view?tid=" + teacherId, (data) => {
       if (data) {
-        console.log(data);
+        // console.log(data);
         setTeacher(data);
         setShift(data.selectedShift);
         setChosenSubjects(data.subjectsList);
+        setCurrentTeacherName(data.fName +" "+ data.lName);
       } else {
         setTeacher({});
         setErrorMessage("Nepavyko parsiųsti duomenų iš serverio. (Mokytojas)");
@@ -263,6 +266,7 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
     } else {
       if (mode === "update") {
         setCreateMessage("Duomenys atnaujinti sėkmingai.");
+        setCurrentTeacherName(teacher.fName +" "+teacher.lName);
       } else {
         setCreateMessage("Mokytojas sukurtas");
         // clear();
@@ -349,15 +353,20 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
   //   console.log("c "+chosenSubjects);
   // }
 
+  function showCurrent(){
+    console.log(currentTacherName);
+  }
+
   return (
     <Container style={{ maxWidth: "75rem" }}>
       <form>
         <h3 className="create-header">
-          {mode === "update" ? "Redaguoti" : "Pridėti mokytoją"}
+          {mode === "update" ? "Redagavimas" : "Pridėti mokytoją"}
         </h3>
         {mode === "update" && (
           <Grid>
-            <h2>{teacher && (teacher.fName +" "+teacher.lName)}</h2>
+            {/* <h2>{teacher && (teacher.fName +" "+teacher.lName)}</h2> */}
+            <h2>{currentTacherName}</h2>
             <p>Paskutinį kartą redaguota: {teacher && teacher.dateModified}</p>
           </Grid>
         )}
@@ -685,6 +694,9 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
 
               <Button variant="contained" onClick={() => navigate("/teachers")}>
                 Grįžti
+              </Button>
+              <Button variant="contained" onClick={showCurrent}>
+                Show
               </Button>
             </Stack>
           </Grid>

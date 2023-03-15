@@ -25,6 +25,7 @@ import { Link } from "react-router-dom";
 export function TeacherList() {
   const [teachers, setTeachers] = useState([]);
   const [filteredTeachers, setFilteredTeachers] = useState([]);
+  
   const [deletedTeachers, setDeletedTeachers] = useState([]);
   const [deletedFiltered, setDeletedFiltered] = useState([]);
   
@@ -58,7 +59,11 @@ export function TeacherList() {
   const fetchDeletedTeachers = async () => {
     fetch("/api/v1/teachers?active=false")
       .then((response) => response.json())
-      .then(setDeletedTeachers);
+      .then((data ) => {setDeletedTeachers(data);
+      return data})
+      .then((data) => {
+        setDeletedFiltered(data);
+      });
   };
 
   const emptyRowsA =
@@ -71,8 +76,6 @@ export function TeacherList() {
   };
 
   const handleChangePageP = (event, newPageP) => {
-    console.log(event.id);
-    // console.log(newPage);
     setPageP(newPageP);
   };
 
@@ -105,7 +108,7 @@ export function TeacherList() {
           moduleNamesArray.some((name) => name.includes(event.toLowerCase()))
           );
         });
-
+        
         setFilteredTeachers(filtered);
         setPageA(0);
     }
@@ -116,20 +119,22 @@ export function TeacherList() {
         const deletedFiltered = deletedTeachers.filter((teacher) => {
           const teacherFName = teacher.fName.toLowerCase();
           const teacherLName = teacher.lName.toLowerCase();
-          const shift = teacher.selectedShift.name.toLowerCase();
-          const moduleNamesArray = teacher.subjectsList
+          // const shift = teacher.selectedShift.name.toLowerCase();
+          const subjectsNamesArray = teacher.subjectsList
             .map((subject) => subject.name.toLowerCase())
             .flat();
 
           return (
             teacherFName.includes(event.toLowerCase()) ||
             teacherLName.includes(event.toLowerCase()) ||
-            shift.includes(event.toLowerCase()) ||
-            moduleNamesArray.some((name) => name.includes(event.toLowerCase()))
+            // shift.includes(event.toLowerCase()) ||
+            subjectsNamesArray.some((name) => name.includes(event.toLowerCase()))
           );
         });
+       
+        setDeletedFiltered(deletedFiltered);
+        setPageP(0);
       }
-      setDeletedFiltered(deletedFiltered);
     }
   };
 
@@ -273,11 +278,11 @@ export function TeacherList() {
               </TableHead>
               <TableBody>
                 {(rowsPerPageP > 0
-                  ? deletedTeachers.slice(
+                  ? deletedFiltered.slice(
                       pageP * rowsPerPageP,
                       pageP * rowsPerPageP + rowsPerPageP
                     )
-                  : deletedTeachers
+                  : deletedFiltered
                 ).map((teacher) => (
                   <TableRow key={teacher.id}>
                     {/* <TableCell colSpan={6} component="th" scope="row">
