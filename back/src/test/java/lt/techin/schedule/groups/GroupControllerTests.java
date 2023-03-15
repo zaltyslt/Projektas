@@ -5,8 +5,6 @@ import lt.techin.schedule.group.GroupController;
 import lt.techin.schedule.group.GroupService;
 import lt.techin.schedule.programs.Program;
 import lt.techin.schedule.shift.Shift;
-import lt.techin.schedule.shift.ShiftController;
-import lt.techin.schedule.shift.ShiftService;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.springframework.beans.factory.annotation.Autowired;

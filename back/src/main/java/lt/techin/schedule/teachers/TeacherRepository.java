@@ -26,6 +26,9 @@ public interface TeacherRepository extends JpaRepository<Teacher,Long> {
                     "ON TEACHER_SUBJECT.SUBJECT_ID=SUBJECT.ID " +
                     "Where TEACHER_SUBJECT.SUBJECT_ID = :subject" )
     Set<Teacher> getTeacherBySubject(Subject subject );
+
+    List<Teacher> findTeachersBySubjectsId(Long subjectId);
+
     List<Teacher> findByisActive(boolean active);
 
 }

@@ -13,6 +13,7 @@ import { Link, useHref } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import './ModifyShift.css';
+import { lessons } from "../../helpers/constants";
 
 export function ModifyShift() {
 
@@ -133,23 +134,6 @@ export function ModifyShift() {
         }
     }, [shiftStartingTime, shiftEndingTime]);
 
-    const lessonTimes = [
-        { value: '1', label: '1 pamoka' },
-        { value: '2', label: '2 pamoka' },
-        { value: '3', label: '3 pamoka' },
-        { value: '4', label: '4 pamoka' },
-        { value: '5', label: '5 pamoka' },
-        { value: '6', label: '6 pamoka' },
-        { value: '7', label: '7 pamoka' },
-        { value: '8', label: '8 pamoka' },
-        { value: '9', label: '9 pamoka' },
-        { value: '10', label: '10 pamoka' },
-        { value: '11', label: '11 pamoka' },
-        { value: '12', label: '12 pamoka' },
-        { value: '13', label: '13 pamoka' },
-        { value: '14', label: '14 pamoka' },
-      ];
-
     return (
        <div>
          <Container>
@@ -189,7 +173,7 @@ export function ModifyShift() {
                     id="description"
                     value={shiftStartingTime}
                     onChange={(e) => setShiftStartingTime(e.target.value)}>
-                    {lessonTimes.map((lessonTime) => (
+                    {lessons.map((lessonTime) => (
                         <MenuItem key={lessonTime.value} value={lessonTime.value}>
                         {lessonTime.label}
                         </MenuItem>
@@ -213,7 +197,7 @@ export function ModifyShift() {
                     id="description"
                     value={shiftEndingTime}
                     onChange={(e) => setShiftEndingTime(e.target.value)}>
-                    {lessonTimes.map((lessonTime) => (
+                    {lessons.map((lessonTime) => (
                         <MenuItem key={lessonTime.value} value={lessonTime.value}>
                         {lessonTime.label}
                         </MenuItem>

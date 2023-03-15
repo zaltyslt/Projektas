@@ -200,7 +200,7 @@ export function ScheduleList() {
                     )}
                     </TableCell>
                     <TableCell>
-                      <Link to={`/schedules/add-lessons/${schedule.id}`}>
+                      <Link to={`/schedules/${schedule.id}`}>
                         {schedule.schoolYear} m. {schedule.semester}
                       </Link></TableCell>
                     <TableCell></TableCell>

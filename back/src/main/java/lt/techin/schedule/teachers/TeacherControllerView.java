@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "/api/v1/teachers", produces = {MediaType.APPLICATION_JSON_VALUE})
@@ -51,5 +52,10 @@ public class TeacherControllerView {
 
         return ResponseEntity.ok(result);
 
+    }
+
+    @GetMapping(value = "/subject")
+    public List<TeacherEntityDto> getTeachersBySubject(@RequestParam Long subjectId, @RequestParam Long shiftId) {
+        return teacherFinder.findTeachersBySubjectsId(subjectId, shiftId).stream().map(TeacherMapper::toTeacherEntityDto).collect(Collectors.toList());
     }
 }

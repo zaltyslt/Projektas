@@ -23,6 +23,7 @@ public class ShiftController {
 
     @GetMapping("/get-active")
     public List<Shift> getActiveShifts() {
+        System.out.println("GEGE");
         return shiftService.getActiveShifts();
     }
 

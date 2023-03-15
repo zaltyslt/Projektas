@@ -12,6 +12,7 @@ public class ScheduleMapper {
         scheduleDto.setActive(schedule.isActive());
         scheduleDto.setCreatedDate(schedule.getCreatedDate());
         scheduleDto.setModifiedDate(schedule.getModifiedDate());
+        scheduleDto.setWorkingDays(schedule.getWorkingDays());
         return scheduleDto;
     }
 
@@ -26,6 +27,7 @@ public class ScheduleMapper {
         schedule.setActive(scheduleDto.isActive());
         schedule.setCreatedDate(scheduleDto.getCreatedDate());
         schedule.setModifiedDate(scheduleDto.getModifiedDate());
+        schedule.setWorkingDays(scheduleDto.getWorkingDays());
         return schedule;
     }
 

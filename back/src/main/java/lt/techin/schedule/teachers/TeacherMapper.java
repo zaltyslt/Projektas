@@ -76,4 +76,20 @@ public class TeacherMapper {
     }
 
 
+    public static TeacherEntityDto toTeacherEntityDto(Teacher teacher) {
+        var teacherEntityDto = new TeacherEntityDto();
+        teacherEntityDto.setId(teacher.getId());
+        teacherEntityDto.setfName(teacher.getfName());
+        teacherEntityDto.setlName(teacher.getlName());
+        return teacherEntityDto;
+    }
+
+    public static Teacher toTeacherFromEntityDto(TeacherEntityDto teacherEntityDto) {
+        var teacher = new Teacher();
+        teacher.setId(teacherEntityDto.getId());
+        teacher.setfName(teacherEntityDto.getfName());
+        teacher.setlName(teacherEntityDto.getlName());
+        return teacher;
+    }
+
 }
