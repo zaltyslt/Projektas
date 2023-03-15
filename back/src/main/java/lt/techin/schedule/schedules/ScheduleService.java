@@ -2,15 +2,11 @@ package lt.techin.schedule.schedules;
 
 import lt.techin.schedule.exceptions.ValidationException;
 import lt.techin.schedule.group.GroupRepository;
-import lt.techin.schedule.schedules.planner.PlannerDto;
-import lt.techin.schedule.schedules.planner.WorkDay;
 import lt.techin.schedule.schedules.planner.WorkDayRepository;
-import lt.techin.schedule.shift.LessonTime;
 import lt.techin.schedule.subject.SubjectRepository;
 import lt.techin.schedule.teachers.TeacherRepository;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -47,10 +43,10 @@ public class ScheduleService {
     public Schedule createSchedule(Schedule schedule, Long groupId) {
         var existingGroup = groupRepository.findById(groupId).orElseThrow(() ->
                 new ValidationException("Nurodyta grupė nerasta", "Group", "Does not exist", groupId.toString()));
-        schedule.setGroups(existingGroup);
+        schedule.setGroup(existingGroup);
 
         var existing = scheduleRepository.findAll();
-        existing = existing.stream().filter(s -> s.getGroups().getName().equalsIgnoreCase(existingGroup.getName()))
+        existing = existing.stream().filter(s -> s.getGroup().getName().equalsIgnoreCase(existingGroup.getName()))
                 .filter(s -> s.getDateFrom().equals(schedule.getDateFrom()))
                 .filter(s -> s.getDateUntil().equals(schedule.getDateUntil()))
                 .collect(Collectors.toList());

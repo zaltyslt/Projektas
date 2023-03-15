@@ -2,6 +2,7 @@ package lt.techin.schedule.schedules;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import io.swagger.v3.oas.models.links.Link;
 import jakarta.persistence.*;
 import lt.techin.schedule.group.Group;
 import lt.techin.schedule.schedules.planner.WorkDay;
@@ -20,7 +21,7 @@ public class Schedule {
 
     @ManyToOne
     @JoinColumn(name = "group_id")
-    private Group groups;
+    private Group group;
 
     @OneToMany
 //    @JoinColumn(name = "workday_id")
@@ -37,6 +38,12 @@ public class Schedule {
     @Column(name = "date_until", nullable = false)
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate dateUntil;
+
+    @ElementCollection
+    @CollectionTable(name = "subject_unassigned_time", joinColumns = @JoinColumn(name = "schedule_id"))
+    @MapKeyColumn(name = "subject_id")
+    @Column(name = "unassigned_time")
+    private Map<Long, Integer> subjectIdWithUnassignedTime;
 
     private boolean active = true;
     @CreatedDate
@@ -59,6 +66,7 @@ public class Schedule {
     }
 
     public Schedule() {
+        subjectIdWithUnassignedTime = new HashMap<>();
         workingDays = new LinkedHashSet<>();
     }
 
@@ -70,12 +78,12 @@ public class Schedule {
         this.id = id;
     }
 
-    public Group getGroups() {
-        return groups;
+    public Group getGroup() {
+        return group;
     }
 
-    public void setGroups(Group groups) {
-        this.groups = groups;
+    public void setGroup(Group group) {
+        this.group = group;
     }
 
     public String getSchoolYear() {
@@ -144,9 +152,26 @@ public class Schedule {
     }
 
     public void addWorkDay (WorkDay workDay) {
-        if (workingDays == null) {
-            workingDays = new LinkedHashSet<>();
-        }
         workingDays.add(workDay);
+    }
+
+    public Map<Long, Integer> getSubjectIdWithUnassignedTime() {
+        return subjectIdWithUnassignedTime;
+    }
+
+    public void setSubjectIdWithUnassignedTime(Map<Long, Integer> subjectIdWithUnassignedTime) {
+        this.subjectIdWithUnassignedTime = subjectIdWithUnassignedTime;
+    }
+
+    public Integer getUnassignedTimeWithSubjectId(Long subjectID) {
+        return subjectIdWithUnassignedTime.get(subjectID);
+    }
+
+    public Integer replaceUnassignedTime(Long subjectID, Integer newTime) {
+        return subjectIdWithUnassignedTime.replace(subjectID, newTime);
+    }
+
+    public void deleteUnassignedTimeWithSubjectId(Long subjectID) {
+        subjectIdWithUnassignedTime.remove(subjectID);
     }
 }
