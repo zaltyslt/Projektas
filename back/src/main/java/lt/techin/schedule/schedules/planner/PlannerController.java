@@ -30,7 +30,7 @@ public class PlannerController {
     }
 
     @GetMapping("/{scheduleId}/lessons")
-    public List<WorkDay> getWorkDays(@PathVariable Long scheduleId) {
-        return plannerService.getWorkDays(scheduleId);
+    public List<WorkDayDto> getWorkDays(@PathVariable Long scheduleId) {
+        return plannerService.getWorkDays(scheduleId).stream().map(WorkDayMapper::toWorkDayDto).toList();
     }
 }

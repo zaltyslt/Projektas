@@ -60,4 +60,22 @@ public class SubjectMapper {
         return subject;
     }
 
+    public static Subject toSubjectFromSmallDto(SubjectSmallDto subjectSmallDto) {
+        var subject = new Subject();
+
+        subject.setId(subjectSmallDto.getId());
+        subject.setName(subjectSmallDto.getName());
+
+        return subject;
+    }
+
+    public static SubjectSmallDto toSubjectSmallDto(Subject subject) {
+        var subjectSmallDto = new SubjectSmallDto();
+
+        subjectSmallDto.setId(subject.getId());
+        subjectSmallDto.setName(subject.getName());
+
+        return subjectSmallDto;
+    }
+
 }
