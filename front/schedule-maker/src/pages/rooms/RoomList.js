@@ -199,9 +199,8 @@ export function RoomList() {
           <Table aria-label="custom pagination table">
             <TableHead>
               <TableRow>
-                <TableCell>Klasės pavadinimas</TableCell>
+                <TableCell style={{ width: "500px" }} >Klasės pavadinimas</TableCell>
                 <TableCell>Pastatas</TableCell>
-                <TableCell className="empty-activity"></TableCell>
               </TableRow>
             </TableHead>
 
@@ -227,7 +226,7 @@ export function RoomList() {
               <TableRow>
                 <TablePagination
                   labelRowsPerPage="Rodyti po"
-                  rowsPerPageOptions={[10, 20, { label: "Visi", value: filteredClassrooms.length }]}
+                  rowsPerPageOptions={[10, 20, { label: "Visi", value: -1 }]}
                   labelDisplayedRows={({ from, to, count }) =>
                     `${from}-${to} iš ${count}`
                   }
@@ -257,9 +256,9 @@ export function RoomList() {
             <Table aria-label="custom pagination table">
               <TableHead>
                 <TableRow>
-                  <TableCell>Klasės pavadinimas</TableCell>
-                  <TableCell>Pastatas</TableCell>
-                  <TableCell className="activity"></TableCell>
+                  <TableCell style={{ width: "500px" }} >Klasės pavadinimas</TableCell>
+                  <TableCell style={{ width: "500px" }} >Pastatas</TableCell>
+                  <TableCell></TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -293,7 +292,7 @@ export function RoomList() {
                 <TableRow>
                   <TablePagination
                      labelRowsPerPage="Rodyti po"
-                     rowsPerPageOptions={[10, 20, { label: "Visi", value: filteredDisabledClassrooms.length }]}
+                     rowsPerPageOptions={[10, 20, { label: "Visi", value: -1 }]}
                      labelDisplayedRows={({ from, to, count }) => `${from}-${to} iš ${count}`}
                      colSpan={3}
                      count={filteredDisabledClassrooms.length}
