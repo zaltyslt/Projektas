@@ -24,4 +24,22 @@ public class ClassroomMapper {
         classroom.setModifiedDate(classroomDto.getModifiedDate());
         return classroom;
     }
+
+    public static Classroom toClassroomFromSmallDto(ClassroomSmallDto classroomSmallDto) {
+        var classroom = new Classroom();
+
+        classroom.setId(classroomSmallDto.getId());
+        classroom.setClassroomName(classroomSmallDto.getClassroomName());
+
+        return classroom;
+    }
+
+    public static ClassroomSmallDto toClassroomSmallDto(Classroom classroom) {
+        var classroomSmallDto = new ClassroomSmallDto();
+
+        classroomSmallDto.setId(classroom.getId());
+        classroomSmallDto.setClassroomName(classroom.getClassroomName());
+
+        return classroomSmallDto;
+    }
 }
