@@ -6,6 +6,7 @@ import io.swagger.v3.oas.models.links.Link;
 import jakarta.persistence.*;
 import lt.techin.schedule.group.Group;
 import lt.techin.schedule.schedules.planner.WorkDay;
+import nonapi.io.github.classgraph.json.JSONUtils;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 

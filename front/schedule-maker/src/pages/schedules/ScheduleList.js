@@ -174,6 +174,7 @@ export function ScheduleList() {
               <TableRow>
                 <TableCell>Grupės pavadinimas</TableCell>
                 <TableCell>Tvarkaraštis</TableCell>
+                <TableCell></TableCell>
                 <TableCell className="empty-activity"></TableCell>
               </TableRow>
             </TableHead>
@@ -202,6 +203,10 @@ export function ScheduleList() {
                     <TableCell>
                       <Link to={`/schedules/${schedule.id}`}>
                         {schedule.schoolYear} m. {schedule.semester}
+                      </Link></TableCell>
+                      <TableCell>
+                      <Link to={`/planning/${schedule.id}`}>
+                        Planuoti
                       </Link></TableCell>
                     <TableCell></TableCell>
                   </TableRow>

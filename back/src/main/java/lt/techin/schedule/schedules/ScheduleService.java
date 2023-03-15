@@ -33,6 +33,11 @@ public class ScheduleService {
     }
 
     public List<Schedule> getAll() {
+        var schedule = scheduleRepository.findAll();
+        for (Schedule schedule1 : schedule) {
+            System.out.println(schedule1.getDateFrom().getDayOfWeek());
+
+        }
         return scheduleRepository.findAll();
     }
 
@@ -44,7 +49,7 @@ public class ScheduleService {
         var existingGroup = groupRepository.findById(groupId).orElseThrow(() ->
                 new ValidationException("Nurodyta grupė nerasta", "Group", "Does not exist", groupId.toString()));
         schedule.setGroup(existingGroup);
-
+        
         var existing = scheduleRepository.findAll();
         existing = existing.stream().filter(s -> s.getGroup().getName().equalsIgnoreCase(existingGroup.getName()))
                 .filter(s -> s.getDateFrom().equals(schedule.getDateFrom()))

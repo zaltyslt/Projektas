@@ -26,6 +26,7 @@ public class ScheduleController {
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE})
     public List<ScheduleDto> getScheduleList() {
         logger.info("Get All Schedule List");
+        System.out.println();
         return scheduleService.getAll().stream().map(ScheduleMapper::toScheduleDto).toList();
     }
 
