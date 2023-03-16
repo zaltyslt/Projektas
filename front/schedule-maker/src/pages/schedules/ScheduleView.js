@@ -18,7 +18,6 @@ export function ScheduleView() {
   const [subjects, setSubjects] = useState([]);
   const params = useParams();
 
-
   useEffect(() => {
     fetch(`api/v1/schedules/schedule/${params.id}`)
       .then((response) => response.json())
@@ -63,8 +62,8 @@ export function ScheduleView() {
                   <TableCell align="center">{subject.hours}</TableCell>
                   <TableCell align="center">
                     {
-                      (subject.id in schedule.subjectIdWithUnassignedTime) ?
-                      schedule.subjectIdWithUnassignedTime[subject.id] :
+                      (subject.subject in schedule.subjectIdWithUnassignedTime) ?
+                      schedule.subjectIdWithUnassignedTime[subject.subject] :
                       subject.hours
                     }
                   </TableCell>
