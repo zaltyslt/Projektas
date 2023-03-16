@@ -29,7 +29,10 @@ export function Schedule() {
       ${schedule.teacher ? schedule.teacher.lName : ""} ${schedule.teacher ? schedule.teacher.fName : "nepasirinktas"}
       <br />
       Klasė: 
-      ${schedule.classroom ? schedule.classroom.classroomName : "Klasė nepasirinkta"}
+      ${schedule.classroom ? schedule.classroom.classroomName : "nepasirinkta"}
+      <br />
+      Nuotolinė pamoka:
+      ${schedule.online === true ? "taip" : "ne"}
       <br />
       Laikas: 
       ${schedule.lessonStart} - ${schedule.lessonEnd}`,
