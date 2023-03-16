@@ -165,6 +165,7 @@ export function ShiftList() {
               <TableRow>
                 <TableCell style={{ width: "500px" }} >Pamainos pavadinimas</TableCell>
                 <TableCell>Pamainos laikas</TableCell>
+                
               </TableRow>
             </TableHead>
 
@@ -181,7 +182,6 @@ export function ShiftList() {
                     <Link to={"/view-shift/" + shift.id}>{shift.name}</Link>
                   </TableCell>
                   <TableCell>{shift.shiftStartingTime + "-" + shift.shiftEndingTime}</TableCell>
-                  <TableCell></TableCell>
                 </TableRow>
               ))}
 
@@ -234,7 +234,7 @@ export function ShiftList() {
                 <TableRow>
                   <TableCell style={{ width: "500px" }}>Pamainos pavadinimas</TableCell>
                   <TableCell style={{ width: "500px" }} >Pamainos laikas</TableCell>
-                  <TableCell ></TableCell>
+                  <TableCell></TableCell>
                 </TableRow>
               </TableHead>
 
@@ -250,7 +250,7 @@ export function ShiftList() {
                   <TableRow key={shift.id}>
                     <TableCell component="th" scope="row">{shift.name}</TableCell>
                     <TableCell component="th" scope="row">{shift.shiftTime}</TableCell>
-                    <TableCell align="center" className="activity">
+                    <TableCell style={{ width: "80px" }}>
                       <Button
                         variant="contained"
                         onClick={() => activateShift(shift.id)}
