@@ -171,7 +171,6 @@ export function CreateSchedule() {
   };
 
   const clear = () => {
-    fetchGroups();
     setGroup("");
     setSchoolYear("");
     setSemester("");

@@ -110,8 +110,9 @@ public class PlannerService {
         int days = hours/interval;
         int leftHours = hours % interval;
         boolean created = false;
+        int looper = 0;
 
-        for (int i = 1; i <= days; i++) {
+        while(looper < days) {
             DayOfWeek dayOfWeek = date.getDayOfWeek();
             if (dayOfWeek == DayOfWeek.SATURDAY) {
                 date = date.plusDays(2);
@@ -125,12 +126,16 @@ public class PlannerService {
                 date = date.plusDays(1);
                 created = true;
                 existingSchedule.addWorkDay(workDay);
+                looper++;
             }
         }
 
         if (leftHours != 0) {
+            while (date.getDayOfWeek() == DayOfWeek.SATURDAY || date.getDayOfWeek() == DayOfWeek.SUNDAY) {
+                date = date.plusDays(1);
+            }
             String lastLesson = LessonTime.getLessonTimeByInt(plannerDto.getStartIntEnum() + leftHours - 1).getLessonEnd();
-            WorkDay lastWorkDay = new WorkDay(date, existingSubject, existingTeacher, existingSchedule, existingClassroom, getLessonEndString(plannerDto), lastLesson, plannerDto.getOnline());
+            WorkDay lastWorkDay = new WorkDay(date, existingSubject, existingTeacher, existingSchedule, existingClassroom, getLessonStartString(plannerDto), lastLesson, plannerDto.getOnline());
             workDayRepository.save(lastWorkDay);
             created = true;
             existingSchedule.addWorkDay(lastWorkDay);
