@@ -32,8 +32,10 @@ export function UpdateProgram() {
   const [subjectHoursList, setsubjectHoursList] = useState([])
   const [subjectNameError, setSubjectNameError] = useState(false);
   const [errorHours, setErrorHours] = useState(false);
+  const [errorHoursNumber, setErrorHoursNumber] = useState(false);
   const [errorLengthName, setErrorLengthName] = useState(false);
   const [errorLengthDesc, setErrorLengthDesc] = useState(false);
+  
 
   const handleCNameeChange = (event) => {
     setProgramName(event.target.value);
@@ -78,10 +80,14 @@ export function UpdateProgram() {
 
   const checkHours = () => {
     setErrorHours(false);
+    setErrorHoursNumber(false);
     let hasErrors = false;
     subjectHoursList.forEach(({ hours }) => {
       if (!invalidNumbers.test(hours)) {
         setErrorHours(true);
+        hasErrors = true;
+      } else if (Number(hours) > 1000) {
+        setErrorHoursNumber(true);
         hasErrors = true;
       }
     });
@@ -318,8 +324,11 @@ export function UpdateProgram() {
                         <TextField
                           fullWidth
                           required
-                          error={errorHours}
-                          helperText={errorHours && "Leidžiami tik skaičių simboliai."}
+                          error={errorHours || errorHoursNumber}
+                          helperText={
+                            errorHours ? "Leidžiami tik skaičių simboliai." 
+                            : errorHoursNumber ? "Dalykas negali viršyti 1000 valandų."
+                            : ""}
                           variant="outlined"
                           id="hours"
                           name='hours'

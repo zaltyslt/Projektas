@@ -36,6 +36,7 @@ export function CreateProgram(props) {
   const [subjectName, setSubjectName] = useState("");
   const [subjectNameError, setSubjectNameError] = useState(false);
   const [errorHours, setErrorHours] = useState(false);
+  const [errorHoursNumber, setErrorHoursNumber] = useState(false);
   const [errorLengthName, setErrorLengthName] = useState(false);
   const [errorLengthDesc, setErrorLengthDesc] = useState(false);
 
@@ -83,16 +84,20 @@ export function CreateProgram(props) {
 
   const checkHours = () => {
     setErrorHours(false);
+    setErrorHoursNumber(false);
     let hasErrors = false;
     subjectHoursList.forEach(({ hours }) => {
       if (!invalidNumbers.test(hours)) {
         setErrorHours(true);
         hasErrors = true;
+      } else if (Number(hours) > 1000) {
+        setErrorHoursNumber(true);
+        hasErrors = true;
       }
     });
     return hasErrors;
   };
-
+  
   const createProgram = () => {
     setError("");
     setSuccess("");
@@ -111,6 +116,10 @@ export function CreateProgram(props) {
       setErrorEmptyName(true);
       setErrorEmptyDesc(true);
       setErrorHours(true);
+    } else if (programName === "") {
+      setErrorEmptyName(true);
+    } else if (description === "") {
+      setErrorEmptyDesc(true);
     } else if (
       programName.split("").some((char) => invalidSymbols.includes(char))
     ) {
@@ -293,10 +302,11 @@ export function CreateProgram(props) {
                         <TextField
                           fullWidth
                           required
-                          error={errorHours}
+                          error={errorHours || errorHoursNumber}
                           helperText={
-                            errorHours && "Leidžiami tik skaičių simboliai."
-                          }
+                            errorHours ? "Leidžiami tik skaičių simboliai." 
+                            : errorHoursNumber ? "Dalykas negali viršyti 1000 valandų."
+                            : ""}
                           variant="outlined"
                           id="hours"
                           name="hours"
