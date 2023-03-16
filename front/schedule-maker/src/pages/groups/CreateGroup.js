@@ -41,21 +41,18 @@ export function CreateGroup() {
   const [isPostUsed, setIsPostUsed] = useState(false);
   const [groupErrors, setGroupErrors] = useState();
 
-  useEffect(() => fetchPrograms, []);
 
-  useEffect(() => fetchShifts, []);
-
-  const fetchPrograms = () => {
-    fetch("api/v1/programs")
+  useEffect(() => {
+    fetch(`api/v1/programs`)
       .then((response) => response.json())
       .then(setPrograms);
-  };
+  }, []);
 
-  const fetchShifts = () => {
-    fetch("api/v1/shift/get-active")
+  useEffect(() => {
+    fetch(`api/v1/shift/get-active`)
       .then((response) => response.json())
       .then(setShifts);
-  };
+  }, []);
 
   const validation = () => {
     if (program === "") {
@@ -86,22 +83,22 @@ export function CreateGroup() {
         shift,
       }),
     })
-    .then(response => response.json())
-    .then(data => {
+      .then(response => response.json())
+      .then(data => {
         handleAfterPost(data);
-  })
-};
+      })
+  };
 
-const handleAfterPost = ((data) => {
+  const handleAfterPost = ((data) => {
     if (data.valid) {
-        setSuccessfulPost(true);
+      setSuccessfulPost(true);
     }
     else {
-        setGroupErrors(data)
-        setSuccessfulPost(false);
+      setGroupErrors(data)
+      setSuccessfulPost(false);
     }
     setIsPostUsed(true);
-})
+  })
 
   const clear = () => {
     setName("");
@@ -124,7 +121,7 @@ const handleAfterPost = ((data) => {
   const setNameAndCheck = (name) => {
     setName(name);
 
-    (name.length === 0) ? setNameError(true) :  setNameError(false);
+    (name.length === 0) ? setNameError(true) : setNameError(false);
 
     (name.length > textLength) ? setIsNameTooLong(true) : setIsNameTooLong(false);
 
@@ -135,7 +132,7 @@ const handleAfterPost = ((data) => {
   const setSchoolYearAndCheck = (year) => {
     setSchoolYear(year);
 
-    (year.length === 0) ? setYearError(true) :  setYearError(false);
+    (year.length === 0) ? setYearError(true) : setYearError(false);
 
     (year.length > textLength) ? setIsYearTooLong(true) : setIsYearTooLong(false);
 
@@ -146,7 +143,7 @@ const handleAfterPost = ((data) => {
   const setStudentAmountAndCheck = (studentAmount) => {
     setStudentAmount(studentAmount);
 
-    (studentAmount.length === 0) ? setStudentAmountError(true) :  setStudentAmountError(false);
+    (studentAmount.length === 0) ? setStudentAmountError(true) : setStudentAmountError(false);
 
     (studentAmount.length > textLength) ? setIsStudentAmountTooLong(true) : setIsStudentAmountTooLong(false);
 
@@ -169,10 +166,10 @@ const handleAfterPost = ((data) => {
                   nameError
                     ? "Grupės pavadinimas yra privalomas"
                     : nameNotValid
-                    ? "Laukas turi negalimų simbolių. "
-                    : isNameTooLong
-                    ? "Pavadinimas negali būti ilgesnis nei 200 simbolių"
-                    : null
+                      ? "Laukas turi negalimų simbolių. "
+                      : isNameTooLong
+                        ? "Pavadinimas negali būti ilgesnis nei 200 simbolių"
+                        : null
                 }
                 variant="outlined"
                 label="Grupės pavadinimas"
@@ -189,14 +186,14 @@ const handleAfterPost = ((data) => {
                 required
                 error={yearError || yearNotValid || isYearTooLong}
                 helperText={
-                    yearError
-                      ? "Privaloma nurodyti mokslo metus."
-                      : yearNotValid
+                  yearError
+                    ? "Privaloma nurodyti mokslo metus."
+                    : yearNotValid
                       ? "Laukas turi susidėti iš skaičių bei - ir / simbolių. "
                       : isYearTooLong
-                      ? "Metai negali būti ilgesni nei 200 simbolių"
-                      : null
-                  }
+                        ? "Metai negali būti ilgesni nei 200 simbolių"
+                        : null
+                }
                 variant="outlined"
                 label="Mokslo metai"
                 id="schoolYear"
@@ -213,12 +210,12 @@ const handleAfterPost = ((data) => {
                 error={studentAmountError || studentAmountNotValid || isStudentAmountTooLong}
                 helperText={
                   studentAmountError ?
-                   "Privaloma nurodyti studentų kiekį."
-                   : studentAmountNotValid
-                   ? "Laukas turi susidėti iš skaičių."
-                   : isStudentAmountTooLong
-                   ? "Studentų kiekio laukas negali būti ilgesnis nei 200 skaičių"
-                   : null
+                    "Privaloma nurodyti studentų kiekį."
+                    : studentAmountNotValid
+                      ? "Laukas turi susidėti iš skaičių."
+                      : isStudentAmountTooLong
+                        ? "Studentų kiekio laukas negali būti ilgesnis nei 200 skaičių"
+                        : null
                 }
                 variant="outlined"
                 label="Studentų kiekis"
@@ -293,34 +290,34 @@ const handleAfterPost = ((data) => {
           </Grid>
 
           <Grid item sm={10}>
-                {isPostUsed ? (
-                    successfulPost ? (
-                        <Alert severity="success"> Grupė sėkmingai pridėta.</Alert>
-                        ) : 
-                        (
-                        <Grid>
-                            <Alert severity="warning">Nepavyko pridėti grupės.</Alert>
-                            {
-                                (groupErrors.passedValidation ?
-                                    (groupErrors.databaseErrors).map((databaseError, index) => (
-                                        <Alert key={index} severity="warning">
-                                        {databaseError}
-                                        </Alert>
-                                    )) 
-                                    :
-                                    Object.keys(groupErrors.validationErrors).map(key => (
-                                    <Alert key={key} severity="warning"> {groupErrors.validationErrors[key]} {key} laukelyje.
-                                    </Alert>
-                                    ))
-                                )
-                            }
-                        </Grid>
-                        )
-                    ) : 
-                    (
-                    <div></div>
-                    )}
-          </Grid>         
+            {isPostUsed ? (
+              successfulPost ? (
+                <Alert severity="success"> Grupė sėkmingai pridėta.</Alert>
+              ) :
+                (
+                  <Grid>
+                    <Alert severity="warning">Nepavyko pridėti grupės.</Alert>
+                    {
+                      (groupErrors.passedValidation ?
+                        (groupErrors.databaseErrors).map((databaseError, index) => (
+                          <Alert key={index} severity="warning">
+                            {databaseError}
+                          </Alert>
+                        ))
+                        :
+                        Object.keys(groupErrors.validationErrors).map(key => (
+                          <Alert key={key} severity="warning"> {groupErrors.validationErrors[key]} {key} laukelyje.
+                          </Alert>
+                        ))
+                      )
+                    }
+                  </Grid>
+                )
+            ) :
+              (
+                <div></div>
+              )}
+          </Grid>
         </form>
       </Container>
     </div>
