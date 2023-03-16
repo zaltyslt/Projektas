@@ -28,10 +28,6 @@ export function ScheduleView() {
       });
   }, []);
 
-  const asd = (value) => {
-    
-  }
-
   return (
     <div>
       <Container>
@@ -82,8 +78,6 @@ export function ScheduleView() {
                     >
                       <Button variant="contained">Planuoti</Button>
                     </Link>
-                    <Button variant="contained" onClick={asd(subject)}>{subject.subject}</Button>
-
                   </TableCell>
                 </TableRow>
               ))}

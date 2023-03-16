@@ -60,6 +60,7 @@ export function RoomList() {
   
   const filteredClassrooms = classrooms.filter((classroom) => {
     if (building === "All") {
+      
       return (
         String(classroom.classroomName)
           .toLowerCase()
