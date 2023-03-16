@@ -14,6 +14,7 @@ import lt.techin.schedule.teachers.Teacher;
 import lt.techin.schedule.teachers.TeacherRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
@@ -108,24 +109,33 @@ public class PlannerService {
         int interval = plannerDto.getEndIntEnum() - plannerDto.getStartIntEnum() + 1;
         int days = hours/interval;
         int leftHours = hours % interval;
-        int created = 0;
+        boolean created = false;
 
         for (int i = 1; i <= days; i++) {
-            WorkDay workDay = new WorkDay(date, existingSubject, existingTeacher, existingSchedule, existingClassroom, getLessonStartString(plannerDto), getLessonEndString(plannerDto), plannerDto.getOnline());
-            workDayRepository.save(workDay);
-            date = date.plusDays(1);
-            created++;
-            existingSchedule.addWorkDay(workDay);
+            DayOfWeek dayOfWeek = date.getDayOfWeek();
+            if (dayOfWeek == DayOfWeek.SATURDAY) {
+                date = date.plusDays(2);
+            }
+            else if (dayOfWeek == DayOfWeek.SUNDAY) {
+                date = date.plusDays(1);
+            }
+            else {
+                WorkDay workDay = new WorkDay(date, existingSubject, existingTeacher, existingSchedule, existingClassroom, getLessonStartString(plannerDto), getLessonEndString(plannerDto), plannerDto.getOnline());
+                workDayRepository.save(workDay);
+                date = date.plusDays(1);
+                created = true;
+                existingSchedule.addWorkDay(workDay);
+            }
         }
 
         if (leftHours != 0) {
             String lastLesson = LessonTime.getLessonTimeByInt(plannerDto.getStartIntEnum() + leftHours - 1).getLessonEnd();
             WorkDay lastWorkDay = new WorkDay(date, existingSubject, existingTeacher, existingSchedule, existingClassroom, getLessonEndString(plannerDto), lastLesson, plannerDto.getOnline());
             workDayRepository.save(lastWorkDay);
-            created++;
+            created = true;
             existingSchedule.addWorkDay(lastWorkDay);
         }
-        return created >= 1;
+        return created;
     }
 
     public List<WorkDay> getWorkDays(Long scheduleId) {

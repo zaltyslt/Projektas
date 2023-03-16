@@ -18,6 +18,7 @@ export function ScheduleView() {
   const [subjects, setSubjects] = useState([]);
   const params = useParams();
 
+
   useEffect(() => {
     fetch(`api/v1/schedules/schedule/${params.id}`)
       .then((response) => response.json())
@@ -26,6 +27,10 @@ export function ScheduleView() {
         setSubjects(data.groups.program.subjectHoursList);
       });
   }, []);
+
+  const asd = (value) => {
+    
+  }
 
   return (
     <div>
@@ -60,7 +65,13 @@ export function ScheduleView() {
                 <TableRow key={subject.id}>
                   <TableCell>{subject.subjectName}</TableCell>
                   <TableCell align="center">{subject.hours}</TableCell>
-                  <TableCell align="center">?</TableCell>
+                  <TableCell align="center">
+                    {
+                      (subject.id in schedule.subjectIdWithUnassignedTime) ?
+                      schedule.subjectIdWithUnassignedTime[subject.id] :
+                      subject.hours
+                    }
+                  </TableCell>
                   <TableCell align="center" className="activity">
                     <Link
                       to={`/schedules/add-lesson/${subject.subject}`}
@@ -71,6 +82,8 @@ export function ScheduleView() {
                     >
                       <Button variant="contained">Planuoti</Button>
                     </Link>
+                    <Button variant="contained" onClick={asd(subject)}>{subject.subject}</Button>
+
                   </TableCell>
                 </TableRow>
               ))}
