@@ -43,7 +43,7 @@ export function EditModule() {
   }, []);
 
   const deleteModule = async (id) => {
-    await fetch("/api/v1/modules/delete/" + id, {
+    await fetch("api/v1/modules/delete/" + id, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
@@ -58,47 +58,47 @@ export function EditModule() {
   }
 
   const editModule = async () => {
-      await fetch(`/api/v1/modules/update/${params.id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          number,
-          name,
-        }),
-      })
+    await fetch(`api/v1/modules/update/${params.id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        number,
+        name,
+      }),
+    })
       .then(response => response.json())
       .then(result => {
         applyResult(result);
-    });
+      });
   };
 
   useEffect(() => {
     (number.length === 0) ? setIsNumberEmpty(true) : setIsNumberEmpty(false);
-   
+
     const isValid = number.split('').some(char => badSymbols.includes(char));
     (isValid) ? setIsValidNumber(false) : setIsValidNumber(true);
-  
+
     (number.length > moduleNumberLength) ? setIsNumberTooLong(true) : setIsNumberTooLong(false);
-  },[number])
+  }, [number])
 
   useEffect(() => {
     (name.length === 0) ? setIsNameEmpty(true) : setIsNameEmpty(false);
-   
+
     const isValid = name.split('').some(char => badSymbols.includes(char));
     (isValid) ? setIsValidName(false) : setIsValidName(true);
-  
+
     (name.length > moduleNameLength) ? setIsNameTooLong(true) : setIsNameTooLong(false);
-  },[name])
+  }, [name])
 
   const applyResult = (data) => {
     if (data.valid) {
       setSuccessfulPost(true);
     }
     else {
-        setModuleErrors(data)
-        setSuccessfulPost(false);
+      setModuleErrors(data)
+      setSuccessfulPost(false);
     }
     setIsPostUsed(true);
   };
@@ -117,10 +117,10 @@ export function EditModule() {
               required
               error={!isValidNumber || isNumberEmpty || isNumberTooLong}
               helperText={
-                !isValidNumber ? "Modulio kodas turi neleidžiamų simbolių." : 
-                isNumberEmpty ? "Modulio kodas negali būti tuščias" :
-                isNumberTooLong ? `Modulio kodas negali būti ilgesnis nei ${moduleNumberLength} simbolių` 
-                : null
+                !isValidNumber ? "Modulio kodas turi neleidžiamų simbolių." :
+                  isNumberEmpty ? "Modulio kodas negali būti tuščias" :
+                    isNumberTooLong ? `Modulio kodas negali būti ilgesnis nei ${moduleNumberLength} simbolių`
+                      : null
               }
               label="Modulio kodas"
               id="number"
@@ -137,10 +137,10 @@ export function EditModule() {
               required
               error={!isValidName || isNameEmpty || isNameTooLong}
               helperText={
-                !isValidName ? "Modulio pavadinimas turi neleidžiamų simbolių." : 
-                isNameEmpty ? "Modulio pavadinimas negali būti tuščias" :
-                isNameTooLong ? `Modulio pavadinimas negali būti ilgesnis nei ${moduleNameLength} simbolių` 
-                : null
+                !isValidName ? "Modulio pavadinimas turi neleidžiamų simbolių." :
+                  isNameEmpty ? "Modulio pavadinimas negali būti tuščias" :
+                    isNameTooLong ? `Modulio pavadinimas negali būti ilgesnis nei ${moduleNameLength} simbolių`
+                      : null
               }
               label="Modulio pavadinimas"
               id="name"
@@ -172,34 +172,34 @@ export function EditModule() {
           </Grid>
 
           <Grid item sm={10}>
-                {isPostUsed ? (
-                    successfulPost ? (
-                        <Alert severity="success"> Modulis sėkmingai pakeistas.</Alert>
-                        ) : 
-                        (
-                        <Grid>
-                            <Alert severity="warning">Nepavyko pakeisti modulio.</Alert>
-                            {
-                                (moduleErrors.passedValidation ?
-                                    (moduleErrors.databaseErrors).map((databaseError, index) => (
-                                        <Alert key={index} severity="warning">
-                                        {databaseError}
-                                        </Alert>
-                                    )) 
-                                    :
-                                    Object.keys(moduleErrors.validationErrors).map(key => (
-                                    <Alert key={key} severity="warning"> {moduleErrors.validationErrors[key]} {key} laukelyje.
-                                    </Alert>
-                                    ))
-                                )
-                            }
-                        </Grid>
-                        )
-                    ) : 
-                    (
-                    <div></div>
-                    )}
-            </Grid>
+            {isPostUsed ? (
+              successfulPost ? (
+                <Alert severity="success"> Modulis sėkmingai pakeistas.</Alert>
+              ) :
+                (
+                  <Grid>
+                    <Alert severity="warning">Nepavyko pakeisti modulio.</Alert>
+                    {
+                      (moduleErrors.passedValidation ?
+                        (moduleErrors.databaseErrors).map((databaseError, index) => (
+                          <Alert key={index} severity="warning">
+                            {databaseError}
+                          </Alert>
+                        ))
+                        :
+                        Object.keys(moduleErrors.validationErrors).map(key => (
+                          <Alert key={key} severity="warning"> {moduleErrors.validationErrors[key]} {key} laukelyje.
+                          </Alert>
+                        ))
+                      )
+                    }
+                  </Grid>
+                )
+            ) :
+              (
+                <div></div>
+              )}
+          </Grid>
         </Grid>
       </form>
     </Container>

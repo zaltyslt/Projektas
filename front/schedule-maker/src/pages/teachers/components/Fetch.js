@@ -61,7 +61,7 @@ export async function postDataTo(teacher, address, type) {
 export async function switchActive(id) {
  
     const response = await fetch(
-      `/api/v1/teachers/active?tid=${id}&active=false`,
+      `api/v1/teachers/active?tid=${id}&active=false`,
       {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
