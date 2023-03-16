@@ -112,64 +112,32 @@ public class GroupControllerTests {
 
     @Test
     void testAddSGroup() throws Exception {
-        SubjectHours subjectHours = new SubjectHours();
-        subjectHours.setId(1L);
-        subjectHours.setSubjectName("Subject name");
-        subjectHours.setSubject(1L);
-        subjectHours.setDeleted(true);
-        subjectHours.setHours(10);
-        subjectHours.setCreatedDate(LocalDateTime.now());
-        subjectHours.setModifiedDate(LocalDateTime.now());
-
-        Program program = new Program();
-        program.setId(1L);
-        program.setProgramName("Program");
-        program.setDescription("Description");
-        program.setSubjectHoursList(List.of(subjectHours));
-        program.setActive(true);
-        program.setCreatedDate(LocalDateTime.now());
-        program.setModifiedDate(LocalDateTime.now());
-
-        Shift shiftToAdd = new Shift("Shift", "8:00", "16:00", true, 1, 8);
-        shiftToAdd.setId(1L);
-
-        Group groupToAdd = new Group(1L, "Group1", "2018", 15, false, program,
-                shiftToAdd, LocalDateTime.now(), LocalDateTime.now());
-
+        Group groupToAdd = new Group(1L, "Group1", "2018", 15, false, new Program(),
+                new Shift());
         GroupDto groupDto = GroupMapper.groupToDto(groupToAdd);
 
         String response = "";
         when(groupService.addUniqueGroup(groupDto)).thenReturn(response);
 
-        ObjectMapper objectMapper = new ObjectMapper()
-                .registerModule(new JavaTimeModule());
-
         mockMvc.perform(post("/api/v1/group/add-group")
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
-                        .content(objectMapper.writeValueAsString(groupDto)))
+                        .content(new ObjectMapper().writeValueAsString(groupDto)))
                 .andExpect(status().isOk())
                 .andExpect(content().json("{}"));
     }
 
     @Test
     public void testModifyGroup() throws Exception {
-        Program program = new Program();
-        program.setProgramName("Program");
-        program.setDescription("Description");
-        program.setActive(true);
-
-        Group groupToAdd = new Group(1L, "Group1", "2018", 15, false, program,
-                new Shift("Shift", "8:00", "16:00", true, 1, 8)
-                , LocalDateTime.now(), LocalDateTime.now());
+        Group groupToAdd = new Group(1L, "Group1", "2018", 15, false, new Program(),
+                new Shift());
 
         GroupDto groupDto = GroupMapper.groupToDto(groupToAdd);
         when(groupService.modifyExistingGroup(1L, groupDto)).thenReturn("");
 
         mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/group/modify-group/1")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"id\": 1, \"name\": \"Group1\",\"schoolYear\": \"2018\",\"studentAmount\": \"16:00\",\"isActive\": false}"))
+                        .content(new ObjectMapper().writeValueAsString(groupDto)))
                 .andExpect(status().isOk())
                 .andExpect(content().json("{}"));
     }
-
 }

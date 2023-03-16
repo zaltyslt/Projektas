@@ -74,7 +74,7 @@ public class GroupController {
         else {
             String addResponse = groupService.addUniqueGroup(groupToAddDto);
             validationDto.setPassedValidation(true);
-            if(addResponse.isEmpty()) {
+            if(addResponse == null || addResponse.isEmpty()) {
                 validationDto.setValid(true);
             } else {
                 validationDto.setValid(false);
@@ -100,7 +100,7 @@ public class GroupController {
         } else {
             String modifyResponse = groupService.modifyExistingGroup(groupID, groupToChangeDto);
             validationDto.setPassedValidation(true);
-            if (modifyResponse.isEmpty()) {
+            if (modifyResponse == null || modifyResponse.isEmpty()) {
                 validationDto.setValid(true);
             } else {
                 validationDto.setValid(false);
