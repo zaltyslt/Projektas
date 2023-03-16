@@ -18,7 +18,6 @@ export function ScheduleView() {
   const [subjects, setSubjects] = useState([]);
   const params = useParams();
 
-
   useEffect(() => {
     fetch(`api/v1/schedules/schedule/${params.id}`)
       .then((response) => response.json())

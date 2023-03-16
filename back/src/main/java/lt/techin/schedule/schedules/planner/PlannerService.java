@@ -111,8 +111,9 @@ public class PlannerService {
         int leftHours = hours % interval;
         boolean created = false;
         int looper = 0;
+        
+        while(looper < days) {
 
-        while (looper < days) {
             DayOfWeek dayOfWeek = date.getDayOfWeek();
             if (dayOfWeek == DayOfWeek.SATURDAY) {
                 date = date.plusDays(2);
