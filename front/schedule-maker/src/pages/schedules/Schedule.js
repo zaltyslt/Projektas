@@ -62,21 +62,4 @@ export function Schedule() {
       </div>
     </div>
   );
-  // return (
-  //   <div className="maincontainer">
-  //     <div id="container">
-  //       <FullCalendar
-  //         locales={allLocales}
-  //         locale={"lt"}
-  //         plugins={[dayGridPlugin, interactionPlugin, listPlugin]}
-  //         initialView="dayGridMonth"
-  //         contentHeight="700px"
-  //         events={events}
-  //         weekends={false}
-  //         eventContent={renderEventContent}
-  //       />
-  //     </div>
-  //   </div>
-  // );
-  
 }
