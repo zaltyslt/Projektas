@@ -40,7 +40,7 @@ public class ScheduleMapper {
         return schedule;
     }
 
-    public  static ScheduleCreateDto toScheduleCreateDto(Schedule schedule) {
+    public static ScheduleCreateDto toScheduleCreateDto(Schedule schedule) {
         var scheduleCreateDto = new ScheduleCreateDto();
         scheduleCreateDto.setSemester(schedule.getSemester());
         scheduleCreateDto.setSchoolYear(schedule.getSchoolYear());

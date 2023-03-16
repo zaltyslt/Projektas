@@ -13,7 +13,7 @@ public class ProgramMapper {
         return programDto;
     }
 
-    public static Program toProgram(ProgramDto programDto){
+    public static Program toProgram(ProgramDto programDto) {
         var program = new Program();
         program.setId(programDto.getId());
         program.setProgramName(programDto.getProgramName());

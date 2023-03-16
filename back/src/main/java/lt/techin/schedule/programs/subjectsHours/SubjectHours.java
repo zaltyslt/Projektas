@@ -17,9 +17,7 @@ public class SubjectHours {
     @NotNull
     private String subjectName;
     private Long subject;
-
     private Boolean deleted;
-
     private int hours;
     @CreatedDate
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
