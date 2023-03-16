@@ -370,7 +370,7 @@ export function AddLesson() {
                 <Button variant="contained" onClick={validation}>
                   Suplanuoti
                 </Button>
-                <Link to={`/schedules/${scheduleId}`}>
+                <Link to={`/planning/${scheduleId}`}>
                   <Button variant="contained">Atšaukti</Button>
                 </Link>
               </Stack>
