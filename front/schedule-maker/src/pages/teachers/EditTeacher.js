@@ -16,7 +16,7 @@ export function EditTeacher() {
     else if (typeof teacher === "object") {
       result =  await postDataTo(
         teacher,
-        "/api/v1/teachers/update?tid=" + teacher.id,
+        "api/v1/teachers/update?tid=" + teacher.id,
         "PUT"
       );
     }

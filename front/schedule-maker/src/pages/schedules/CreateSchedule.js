@@ -44,13 +44,11 @@ export function CreateSchedule() {
 
   const badSymbols = "!@#$%^&*_+={}<>|~`\\'";
 
-  useEffect(() => fetchGroups, []);
-
-  const fetchGroups = () => {
-    fetch("api/v1/group/get-active/small")
+  useEffect(() => {
+    fetch(`api/v1/group/get-active/small`)
       .then((response) => response.json())
       .then(setGroups);
-  };
+  }, []);
 
   const validateSemester = (value) => {
     setSemester(value);
@@ -64,7 +62,7 @@ export function CreateSchedule() {
     setSchoolYear(value);
     value.length === 0 ? setSchoolYearEmpty(true) : setSchoolYearEmpty(false);
 
-    const isValid =  /^[0-9\/-]+$/.test(value);
+    const isValid = /^[0-9\/-]+$/.test(value);
     isValid ? setSchoolYearValid(false) : setSchoolYearValid(true);
   };
 
@@ -130,7 +128,7 @@ export function CreateSchedule() {
       setErrorMessageUntil("Diena iki negali būti vėliau už dieną nuo.");
       setDateUntilEmpty(true);
       isValid = false;
-    } 
+    }
 
     if (dateFrom !== "" && dateUntil !== "" && dateFrom.$d.toISOString().split('T')[0] === dateUntil.$d.toISOString().split('T')[0]) {
       setErrorMessageUntil("Pradžios ir pabaigos data negali būti ta pati diena.");
@@ -145,7 +143,7 @@ export function CreateSchedule() {
   };
 
   const createSchedule = () => {
-    fetch(`/api/v1/schedules/create-schedule?groupId=${group.id}`, {
+    fetch(`api/v1/schedules/create-schedule?groupId=${group.id}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -229,10 +227,10 @@ export function CreateSchedule() {
                   schoolYearValid
                     ? "Laukas gali susidėti iš skaičių bei - ar / simbolių."
                     : schoolYearEmpty
-                    ? "Mokslo metai yra privalomi."
-                    : errorLengthYear
-                    ? "Mokslo metai negali būti ilgesnis nei 200 simbolių."
-                    : ""
+                      ? "Mokslo metai yra privalomi."
+                      : errorLengthYear
+                        ? "Mokslo metai negali būti ilgesnis nei 200 simbolių."
+                        : ""
                 }
                 value={schoolYear}
                 onChange={(e) => {
@@ -260,10 +258,10 @@ export function CreateSchedule() {
                   !semesterValid
                     ? "Pavadinimas turi neleidžiamų simbolių."
                     : semesterEmpty
-                    ? "Pavadinimas yra privalomas."
-                    : errorLengthName
-                    ? "Pavadinimas negali būti ilgesnis nei 200 simbolių."
-                    : ""
+                      ? "Pavadinimas yra privalomas."
+                      : errorLengthName
+                        ? "Pavadinimas negali būti ilgesnis nei 200 simbolių."
+                        : ""
                 }
                 value={semester}
                 onChange={(e) => {
