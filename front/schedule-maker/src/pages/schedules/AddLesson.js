@@ -15,7 +15,6 @@ import {
 import { Container } from "@mui/system";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import { Link, useLocation, useParams } from "react-router-dom";
 import { lessons } from "../../helpers/constants";
@@ -42,6 +41,7 @@ export function AddLesson() {
   const [shiftStartEmpty, setShiftStartEmpty] = useState(false);
   const [shiftEndEmpty, setShiftEndEmpty] = useState(false);
   const [isValidShiftTime, setIsValidShiftTime] = useState(true);
+  const [shiftTooLong, setShiftTooLong] = useState(false);
 
   const params = useParams();
   const data = useLocation();
@@ -67,7 +67,6 @@ export function AddLesson() {
     }
   }, [lessonStartingTime, lessonEndTime]);
 
-
   useEffect(() => {
     fetch(
       `api/v1/teachers/subject?subjectId=${params.id}&shiftId=${shiftId}`,
@@ -78,15 +77,13 @@ export function AddLesson() {
   }, []);
 
   const clear = () => {
-    fetchTeachers();
     setSelectedClassRoom("");
     setSelectedTeacher("");
     setPlannedHours("");
-    setLessonStartingTime("");
-    setLessonEndTime("");
+    setLessonStartingTime("1");
+    setLessonEndTime("1");
     setDateFrom("");
-    setTeacherEmpty(false);
-    setClassRoomEmpty(false);
+    setShiftTooLong(false);
   };
 
   const createLesson = () => {
@@ -125,7 +122,7 @@ export function AddLesson() {
 
   const handleCheck = (event) => {
     setOnline(event.target.checked);
-  }
+  };
 
   const validateHours = (value) => {
     setPlannedHours(value);
@@ -171,6 +168,11 @@ export function AddLesson() {
       isValid = false;
     }
 
+    if (lessonEndTime - lessonStartingTime > 8) {
+      setShiftTooLong(true);
+      isValid = false;
+    }
+
     if (isValid) {
       createLesson();
     }
@@ -187,7 +189,7 @@ export function AddLesson() {
               <FormControl fullWidth>
                 <InputLabel id="teacher-label">Mokytojas</InputLabel>
                 <Select
-                  label="Moktyojas"
+                  label="Mokytojas"
                   labelId="teacher-label"
                   id="classroom"
                   value={selectedTeacher}
@@ -195,6 +197,9 @@ export function AddLesson() {
                     setSelectedTeacher(e.target.value);
                   }}
                 >
+                  {teachers.length === 0 && (<MenuItem>
+                    Nurodytai pamainai ir dalykui tinkamo mokytojo nerasta
+                  </MenuItem>)}
                   {teachers.map((teacher) => (
                     <MenuItem key={teacher.id} value={teacher}>
                       {teacher.fName} {teacher.lName}
@@ -330,7 +335,7 @@ export function AddLesson() {
               </InputLabel>
               <Select
                 fullWidth
-                error={!isValidShiftTime || shiftEndEmpty}
+                error={!isValidShiftTime || shiftEndEmpty || shiftTooLong}
                 variant="outlined"
                 label="Pamokų pabaiga"
                 id="lesson-end"
@@ -351,6 +356,11 @@ export function AddLesson() {
               {shiftEndEmpty && (
                 <FormHelperText error>
                   Privaloma pasirinkti pamoką.
+                </FormHelperText>
+              )}
+              {shiftTooLong && (
+                <FormHelperText error>
+                  Negali būti daugiau 8 pamokų per dieną.
                 </FormHelperText>
               )}
             </Grid>
