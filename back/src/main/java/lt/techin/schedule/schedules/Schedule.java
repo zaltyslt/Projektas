@@ -2,11 +2,9 @@ package lt.techin.schedule.schedules;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import io.swagger.v3.oas.models.links.Link;
 import jakarta.persistence.*;
 import lt.techin.schedule.group.Group;
 import lt.techin.schedule.schedules.planner.WorkDay;
-import nonapi.io.github.classgraph.json.JSONUtils;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
@@ -22,7 +20,7 @@ public class Schedule {
 
     @ManyToOne
     @JoinColumn(name = "group_id")
-    private Group group;
+    private Group groups;
 
     @OneToMany
 //    @JoinColumn(name = "workday_id")
@@ -79,12 +77,12 @@ public class Schedule {
         this.id = id;
     }
 
-    public Group getGroup() {
-        return group;
+    public Group getGroups() {
+        return groups;
     }
 
-    public void setGroup(Group group) {
-        this.group = group;
+    public void setGroups(Group groups) {
+        this.groups = groups;
     }
 
     public String getSchoolYear() {
@@ -174,5 +172,9 @@ public class Schedule {
 
     public void deleteUnassignedTimeWithSubjectId(Long subjectID) {
         subjectIdWithUnassignedTime.remove(subjectID);
+    }
+
+    public void addUnassignedTimeWithSubjectId(Long subjectID, Integer time) {
+        subjectIdWithUnassignedTime.put(subjectID, time);
     }
 }

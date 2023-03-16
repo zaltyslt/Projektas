@@ -48,10 +48,10 @@ public class ScheduleService {
     public Schedule createSchedule(Schedule schedule, Long groupId) {
         var existingGroup = groupRepository.findById(groupId).orElseThrow(() ->
                 new ValidationException("Nurodyta grupė nerasta", "Group", "Does not exist", groupId.toString()));
-        schedule.setGroup(existingGroup);
-        
+        schedule.setGroups(existingGroup);
+
         var existing = scheduleRepository.findAll();
-        existing = existing.stream().filter(s -> s.getGroup().getName().equalsIgnoreCase(existingGroup.getName()))
+        existing = existing.stream().filter(s -> s.getGroups().getName().equalsIgnoreCase(existingGroup.getName()))
                 .filter(s -> s.getDateFrom().equals(schedule.getDateFrom()))
                 .filter(s -> s.getDateUntil().equals(schedule.getDateUntil()))
                 .collect(Collectors.toList());

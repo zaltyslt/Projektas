@@ -10,7 +10,7 @@ import java.util.Set;
 
 public class ScheduleDto {
     private Long id;
-    private Group group;
+    private Group groups;
     private String schoolYear;
     private String semester;
 
@@ -35,12 +35,12 @@ public class ScheduleDto {
         this.id = id;
     }
 
-    public Group getGroup() {
-        return group;
+    public Group getGroups() {
+        return groups;
     }
 
-    public void setGroup(Group group) {
-        this.group = group;
+    public void setGroups(Group groups) {
+        this.groups = groups;
     }
 
     public String getSchoolYear() {

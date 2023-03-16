@@ -3,6 +3,7 @@ package lt.techin.schedule.schedules.planner;
 import lt.techin.schedule.classrooms.Classroom;
 import lt.techin.schedule.classrooms.ClassroomRepository;
 import lt.techin.schedule.exceptions.ValidationException;
+import lt.techin.schedule.programs.Program;
 import lt.techin.schedule.programs.subjectsHours.SubjectHours;
 import lt.techin.schedule.schedules.Schedule;
 import lt.techin.schedule.schedules.ScheduleRepository;
@@ -15,6 +16,8 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 @Service
 public class PlannerService {
@@ -66,24 +69,38 @@ public class PlannerService {
 
         int hours;
         Integer unassignedHours = existingSchedule.getUnassignedTimeWithSubjectId(subjectId);
-        List<SubjectHours> subjectHours = existingSchedule.getGroup().getProgram().getSubjectHoursList();
-        SubjectHours subjectHour = subjectHours.stream().filter(sh -> sh.getSubject().equals(subjectId)).findAny().orElse(null);
+        Program program = existingSchedule.getGroups().getProgram();
+        SubjectHours subjectHour = program.getSubjectHoursList().stream().filter(sh -> sh.getSubject().equals(subjectId)).findAny().orElseThrow(() -> new ValidationException("Pasirinktas dalykas neegzistuoja programoje", "Program", "Does not exist", program.toString()));
 
+        int plannerAssignedHours = plannerDto.getAssignedHours();
+
+        //In a case where Map already has a value of that particular subjectId
         if (unassignedHours != null) {
-            if (plannerDto.getAssignedHours() > unassignedHours) {
-                hours = unassignedHours;
+            if (unassignedHours == 0) {
+                throw new ValidationException("Dalykas pasirinktoje programoje nebeturi nepanaudotų valandų", "Program", "Unassigned hours value is 0", existingSchedule.getSubjectIdWithUnassignedTime().toString());
             }
+            //Checks so that passed value wouldn't exceed maximum hours subject has
+            if (plannerAssignedHours > unassignedHours) {
+                hours = unassignedHours;
+                existingSchedule.replaceUnassignedTime(subjectId, 0);
+            }
+            //Places new assigned hours amount
             else {
-                hours = plannerDto.getAssignedHours();
+                hours = plannerAssignedHours;
+                existingSchedule.replaceUnassignedTime(subjectId, unassignedHours - hours);
             }
         }
+        //In a case where Map doesn't have a value of that particular subjectId
         else {
-            assert subjectHour != null;
-            if (plannerDto.getAssignedHours() > subjectHour.getHours()) {
+            //Checks so that passed value wouldn't exceed maximum hours subject has
+            if (plannerAssignedHours > subjectHour.getHours()) {
                 hours = subjectHour.getHours();
+                existingSchedule.addUnassignedTimeWithSubjectId(subjectId, 0);
             }
+            //Places new assigned hours amount
             else {
-                hours = plannerDto.getAssignedHours();
+                hours = plannerAssignedHours;
+                existingSchedule.addUnassignedTimeWithSubjectId(subjectId, subjectHour.getHours() - hours);
             }
         }
 
@@ -108,7 +125,6 @@ public class PlannerService {
             created++;
             existingSchedule.addWorkDay(lastWorkDay);
         }
-
         return created >= 1;
     }
 
