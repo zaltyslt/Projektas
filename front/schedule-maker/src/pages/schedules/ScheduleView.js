@@ -18,6 +18,7 @@ export function ScheduleView() {
   const [subjects, setSubjects] = useState([]);
   const params = useParams();
 
+
   useEffect(() => {
     fetch(`api/v1/schedules/schedule/${params.id}`)
       .then((response) => response.json())
@@ -60,7 +61,13 @@ export function ScheduleView() {
                 <TableRow key={subject.id}>
                   <TableCell>{subject.subjectName}</TableCell>
                   <TableCell align="center">{subject.hours}</TableCell>
-                  <TableCell align="center">?</TableCell>
+                  <TableCell align="center">
+                    {
+                      (subject.id in schedule.subjectIdWithUnassignedTime) ?
+                      schedule.subjectIdWithUnassignedTime[subject.id] :
+                      subject.hours
+                    }
+                  </TableCell>
                   <TableCell align="center" className="activity">
                     <Link
                       to={`/schedules/add-lesson/${subject.subject}`}
