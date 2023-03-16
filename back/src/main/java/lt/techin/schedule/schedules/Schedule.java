@@ -10,7 +10,8 @@ import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 @Entity
 public class Schedule {
@@ -23,7 +24,6 @@ public class Schedule {
     private Group groups;
 
     @OneToMany
-//    @JoinColumn(name = "workday_id")
     @JsonBackReference
     private Set<WorkDay> workingDays;
 

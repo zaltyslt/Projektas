@@ -64,8 +64,6 @@ export function AddLesson() {
       });
   }, []);
 
-  useEffect(() => fetchTeachers, []);
-
   useEffect(() => {
     if (parseInt(lessonStartingTime) > parseInt(lessonEndTime)) {
       setIsValidShiftTime(false);
@@ -74,14 +72,15 @@ export function AddLesson() {
     }
   }, [lessonStartingTime, lessonEndTime]);
 
-  const fetchTeachers = () => {
+
+  useEffect(() => {
     fetch(
       `api/v1/teachers/subject?subjectId=${params.id}&shiftId=${shiftId}`,
       {}
     )
       .then((response) => response.json())
       .then(setTeachers);
-  };
+  }, []);
 
   const clear = () => {
     fetchTeachers();
