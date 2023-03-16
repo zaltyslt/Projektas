@@ -99,6 +99,8 @@ export function SubjectList() {
         }
       });
       setFilteredSubjects(filtered);
+      setPage(0);
+      setPageInDeleted(0);
     }
   };
 

@@ -2,7 +2,6 @@ import {
   Button,
   Grid,
   Paper,
-  Stack,
   Table,
   TableBody,
   TableCell,
@@ -31,63 +30,59 @@ export function ScheduleView() {
   return (
     <div>
       <Container>
-        <Grid container rowSpacing={2}>
-          <Grid item lg={12}>
-            <h3>{schedule.groups && schedule.groups.name}</h3>
-            <h5>
-              {schedule.schoolYear} m. {schedule.semester}
-            </h5>
-            <h6>{schedule.groups && schedule.groups.shift.name}</h6>
-          </Grid>
-          <Grid item lg={12}>
-            <TableContainer component={Paper}>
-              <Table aria-label="custom pagination table">
-                <TableHead>
-                  <TableRow>
-                    <TableCell colSpan={12}>
-                      Programa:{" "}
-                      {schedule.groups && schedule.groups.program.programName}
-                    </TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell>Dalykas</TableCell>
-                    <TableCell align="center">Trukmė (val.)</TableCell>
-                    <TableCell align="center">Nesuplanuota (val.)</TableCell>
-                    <TableCell align="center" className="activity">
-                      Veiksmai
-                    </TableCell>
-                  </TableRow>
-                </TableHead>
+        <h3>{schedule.groups && schedule.groups.name}</h3>
+        <h5>
+          {schedule.schoolYear} m. {schedule.semester}
+        </h5>
+        <h6>{schedule.groups && schedule.groups.shift.name}</h6>
 
-                <TableBody>
-                  {subjects.map((subject) => (
-                    <TableRow key={subject.id}>
-                      <TableCell>{subject.subjectName}</TableCell>
-                      <TableCell align="center">{subject.hours}</TableCell>
-                      <TableCell align="center">?</TableCell>
-                      <TableCell align="center" className="activity">
-                        <Link
-                          to={`/schedules/add-lesson/${subject.subject}`}
-                          state={{
-                            schedule: { schedule },
-                            subject: { subject },
-                          }}
-                        >
-                          <Button variant="contained">Planuoti</Button>
-                        </Link>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
-          </Grid>
-          <Grid item>
-            <Link to="/">
-              <Button variant="contained">Grįžti</Button>
-            </Link>
-          </Grid>
-        </Grid>
+        <TableContainer component={Paper}>
+          <Table aria-label="custom pagination table">
+            <TableHead>
+              <TableRow>
+                <TableCell colSpan={12}>
+                  Programa:{" "}
+                  {schedule.groups && schedule.groups.program.programName}
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>Dalykas</TableCell>
+                <TableCell align="center">Trukmė (val.)</TableCell>
+                <TableCell align="center">Nesuplanuota (val.)</TableCell>
+                <TableCell align="center" className="activity">
+                  Veiksmai
+                </TableCell>
+              </TableRow>
+            </TableHead>
+
+            <TableBody>
+              {subjects.map((subject) => (
+                <TableRow key={subject.id}>
+                  <TableCell>{subject.subjectName}</TableCell>
+                  <TableCell align="center">{subject.hours}</TableCell>
+                  <TableCell align="center">
+                    {
+                      (subject.id in schedule.subjectIdWithUnassignedTime) ?
+                      schedule.subjectIdWithUnassignedTime[subject.id] :
+                      subject.hours
+                    }
+                  </TableCell>
+                  <TableCell align="center" className="activity">
+                    <Link
+                      to={`/schedules/add-lesson/${subject.subject}`}
+                      state={{
+                        schedule: {schedule},
+                        subject: {subject}
+                      }}
+                    >
+                      <Button variant="contained">Planuoti</Button>
+                    </Link>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
       </Container>
     </div>
   );

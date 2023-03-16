@@ -24,7 +24,7 @@ public class PlannerController {
 
     @PutMapping("/plan-schedule/{scheduleId}")
     public ResponseEntity<Boolean> planSchedule(@PathVariable Long scheduleId, @RequestParam Long subjectId, @RequestBody PlannerDto plannerDto) {
-        var createdDay = plannerService.addSubjectPlanToSchedule(scheduleId, subjectId, plannerDto);
+        Boolean createdDay = plannerService.addSubjectPlanToSchedule(scheduleId, subjectId, plannerDto);
         logger.log(Level.INFO, "The lessons for schedule {0} were created", scheduleId);
         return ok(createdDay);
     }
