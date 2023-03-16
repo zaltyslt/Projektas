@@ -16,7 +16,7 @@ export function ViewTeacher() {
   let navigate = useNavigate();
 
   const getTeacherData = async () => {
-    fetch(`/api/v1/teachers/view?tid=${params.id}`)
+    fetch(`api/v1/teachers/view?tid=${params.id}`)
       .then((response) => response.json())
       .then((data) => {
         setTeacher(data);

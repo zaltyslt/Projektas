@@ -52,14 +52,20 @@ export function EditGroup() {
 
   const listUrl = useHref("/groups");
 
-  useEffect(() => fetchGroup, []);
+  useEffect(() => {
+    fetch(`api/v1/programs`)
+      .then((response) => response.json())
+      .then(setPrograms);
+  }, []);
 
-  useEffect(() => fetchPrograms, []);
+  useEffect(() => {
+    fetch(`api/v1/shift/get-active`)
+      .then((response) => response.json())
+      .then(setShifts);
+  }, []);
 
-  useEffect(() => fetchShifts, []);
-
-  const fetchGroup = async () => {
-    await fetch("api/v1/group/view-group/" + params.id)
+  useEffect(() => {
+    fetch("api/v1/group/view-group/" + params.id)
       .then((response) => response.json())
       .then((data) => {
         setGroup(data);
@@ -69,19 +75,7 @@ export function EditGroup() {
         setProgram(data.program);
         setShift(data.shift);
       });
-  };
-
-  const fetchPrograms = () => {
-    fetch("api/v1/programs")
-      .then((response) => response.json())
-      .then(setPrograms);
-  };
-
-  const fetchShifts = () => {
-    fetch("api/v1/shift/get-active")
-      .then((response) => response.json())
-      .then(setShifts);
-  };
+  }, []);
 
   const validation = () => {
     if (program === "") {
@@ -111,31 +105,31 @@ export function EditGroup() {
         program,
         shift,
       }),
-    }) 
-    .then(response => response.json())
-    .then(data => {
+    })
+      .then(response => response.json())
+      .then(data => {
         handleAfterPost(data);
-  })
-};
+      })
+  };
 
   const handleAfterPost = ((data) => {
     if (data.valid) {
-        setSuccessfulPost(true);
+      setSuccessfulPost(true);
     }
     else {
-        setGroupErrors(data)
-        setSuccessfulPost(false);
+      setGroupErrors(data)
+      setSuccessfulPost(false);
     }
     setIsPostUsed(true);
   })
 
   const deleteGroup = (id) => {
-    fetch("/api/v1/group/deactivate-group/" + id, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }).then(() => (window.location = listUrl));
+    fetch("api/v1/group/deactivate-group/" + id, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }).then(() => (window.location = listUrl));
   }
 
   const badSymbols = "!@#$%^&*_+={}<>|~`\\'";
@@ -144,7 +138,7 @@ export function EditGroup() {
   const setNameAndCheck = (name) => {
     setName(name);
 
-    (name.length === 0) ? setNameError(true) :  setNameError(false);
+    (name.length === 0) ? setNameError(true) : setNameError(false);
 
     (name.length > textLength) ? setIsNameTooLong(true) : setIsNameTooLong(false);
 
@@ -155,7 +149,7 @@ export function EditGroup() {
   const setSchoolYearAndCheck = (year) => {
     setSchoolYear(year);
 
-    (year.length === 0) ? setYearError(true) :  setYearError(false);
+    (year.length === 0) ? setYearError(true) : setYearError(false);
 
     (year.length > textLength) ? setIsYearTooLong(true) : setIsYearTooLong(false);
 
@@ -166,7 +160,7 @@ export function EditGroup() {
   const setStudentAmountAndCheck = (studentAmount) => {
     setStudentAmount(studentAmount);
 
-    (studentAmount.length === 0) ? setStudentAmountError(true) :  setStudentAmountError(false);
+    (studentAmount.length === 0) ? setStudentAmountError(true) : setStudentAmountError(false);
 
     (studentAmount.length > textLength) ? setIsStudentAmountTooLong(true) : setIsStudentAmountTooLong(false);
 
@@ -195,10 +189,10 @@ export function EditGroup() {
                   nameError
                     ? "Grupės pavadinimas yra privalomas"
                     : nameNotValid
-                    ? "Laukas turi negalimų simbolių. "
-                    : isNameTooLong
-                    ? "Pavadinimas negali būti ilgesnis nei 200 simbolių"
-                    : null
+                      ? "Laukas turi negalimų simbolių. "
+                      : isNameTooLong
+                        ? "Pavadinimas negali būti ilgesnis nei 200 simbolių"
+                        : null
                 }
                 variant="outlined"
                 label="Grupės pavadinimas"
@@ -218,10 +212,10 @@ export function EditGroup() {
                   yearError
                     ? "Privaloma nurodyti mokslo metus."
                     : yearNotValid
-                    ? "Laukas turi negalimų simbolių. "
-                    : isYearTooLong
-                    ? "Metai negali būti ilgesni nei 200 simbolių"
-                    : null
+                      ? "Laukas turi negalimų simbolių. "
+                      : isYearTooLong
+                        ? "Metai negali būti ilgesni nei 200 simbolių"
+                        : null
                 }
                 variant="outlined"
                 label="Mokslo metai"
@@ -239,12 +233,12 @@ export function EditGroup() {
                 error={studentAmountError || studentAmountNotValid || isStudentAmountTooLong}
                 helperText={
                   studentAmountError
-                  ? "Privaloma nurodyti studentų kiekį."
-                  : studentAmountNotValid
-                  ? "Laukas turi susidėti iš skaičių."
-                  : isStudentAmountTooLong
-                  ? "Studentų kiekio laukas negali būti ilgesnis nei 200 skaičių"
-                  : null
+                    ? "Privaloma nurodyti studentų kiekį."
+                    : studentAmountNotValid
+                      ? "Laukas turi susidėti iš skaičių."
+                      : isStudentAmountTooLong
+                        ? "Studentų kiekio laukas negali būti ilgesnis nei 200 skaičių"
+                        : null
                 }
                 variant="outlined"
                 label="Studentų kiekis"
@@ -256,20 +250,18 @@ export function EditGroup() {
             </Grid>
 
             <Grid item sm={10}>
-              <FormControl fullWidth required error={programError}>
-                <InputLabel id="program-label">
-                  {programError
-                    ? "Privaloma pasirinkti programą. "
-                    : "Programos pavadinimas"}
-                </InputLabel>
+              <FormControl fullWidth>
+                <InputLabel id="program-label">Programa</InputLabel>
                 <Select
-                  label="Programos pavadinimas"
                   labelId="program-label"
-                  id="program"
+                  id="program-select"
                   value={program.id || ''}
+                  label="Programa"
                   onChange={(e) => {
-                    setProgram(e.target.value);
+                    const selectedPrograms = programs.find((s) => s.id === e.target.value);
+                    setProgram(selectedPrograms || {});
                   }}
+                  error={programError}
                 >
                   {programs.map((program) => (
                     <MenuItem key={program.id} value={program.id}>
@@ -277,6 +269,7 @@ export function EditGroup() {
                     </MenuItem>
                   ))}
                 </Select>
+                {programError && <Alert severity="error">Reikia pasirinkti programą</Alert>}
               </FormControl>
             </Grid>
 
@@ -321,34 +314,34 @@ export function EditGroup() {
             </Grid>
 
             <Grid item sm={10}>
-                {isPostUsed ? (
-                    successfulPost ? (
-                        <Alert severity="success"> Grupė sėkmingai pakeista.</Alert>
-                        ) : 
-                        (
-                        <Grid>
-                            <Alert severity="warning">Nepavyko pakeisti grupės.</Alert>
-                            {
-                                (groupErrors.passedValidation ?
-                                    (groupErrors.databaseErrors).map((databaseError, index) => (
-                                        <Alert key={index} severity="warning">
-                                        {databaseError}
-                                        </Alert>
-                                    )) 
-                                    :
-                                    Object.keys(groupErrors.validationErrors).map(key => (
-                                    <Alert key={key} severity="warning"> {groupErrors.validationErrors[key]} {key} laukelyje.
-                                    </Alert>
-                                    ))
-                                )
-                            }
-                        </Grid>
+              {isPostUsed ? (
+                successfulPost ? (
+                  <Alert severity="success"> Grupė sėkmingai pakeista.</Alert>
+                ) :
+                  (
+                    <Grid>
+                      <Alert severity="warning">Nepavyko pakeisti grupės.</Alert>
+                      {
+                        (groupErrors.passedValidation ?
+                          (groupErrors.databaseErrors).map((databaseError, index) => (
+                            <Alert key={index} severity="warning">
+                              {databaseError}
+                            </Alert>
+                          ))
+                          :
+                          Object.keys(groupErrors.validationErrors).map(key => (
+                            <Alert key={key} severity="warning"> {groupErrors.validationErrors[key]} {key} laukelyje.
+                            </Alert>
+                          ))
                         )
-                    ) : 
-                    (
-                    <div></div>
-                    )}
-          </Grid>    
+                      }
+                    </Grid>
+                  )
+              ) :
+                (
+                  <div></div>
+                )}
+            </Grid>
           </Grid>
         </form>
       </Container>

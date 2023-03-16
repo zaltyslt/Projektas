@@ -11,7 +11,7 @@
     <groupId>lt.techin</groupId>
     <artifactId>Schedule</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <packaging>war</packaging>
+    <packaging>jar</packaging>
     <name>Schedule</name>
     <description>Schedule maker</description>
 

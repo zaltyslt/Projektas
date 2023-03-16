@@ -56,32 +56,32 @@ export function AddShift() {
   var endIntEnum;
 
   const createShift = (() => {
-      if (isValidName && !isNameEmpty && !isNameTooLong) {
-          startIntEnum = shiftStartingTime;
-          endIntEnum = shiftEndingTime;
-          createShiftPostRequest();
-      }
+    if (isValidName && !isNameEmpty && !isNameTooLong) {
+      startIntEnum = shiftStartingTime;
+      endIntEnum = shiftEndingTime;
+      createShiftPostRequest();
+    }
   })
 
-  const createShiftPostRequest = async () =>  {
-      await fetch(
-          'api/v1/shift/add-shift', {
-              method: 'POST',
-              headers: {
-                  'Content-Type': 'application/json'
-              },
-              body: JSON.stringify({
-                  name,
-                  startIntEnum,
-                  endIntEnum,
-                  isActive
-              })
-          }
-      ) 
+  const createShiftPostRequest = async () => {
+    await fetch(
+      'api/v1/shift/add-shift', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        name,
+        startIntEnum,
+        endIntEnum,
+        isActive
+      })
+    }
+    )
       .then(response => response.json())
       .then(data => {
-          handleAfterPost(data);
-    })
+        handleAfterPost(data);
+      })
   };
 
   const handleAfterPost = (data) => {
@@ -109,10 +109,10 @@ export function AddShift() {
                   !isValidName
                     ? "Pavadinimas turi neleidžiamų simbolių."
                     : isNameEmpty
-                    ? "Pavadinimas negali būti tuščias"
-                    : isNameTooLong
-                    ? "Pavadinimas negali būti ilgesnis nei 50 simbolių"
-                    : null
+                      ? "Pavadinimas negali būti tuščias"
+                      : isNameTooLong
+                        ? "Pavadinimas negali būti ilgesnis nei 50 simbolių"
+                        : null
                 }
                 variant="outlined"
                 label="Pamainos pavadinimas"
@@ -196,16 +196,16 @@ export function AddShift() {
                   <Alert severity="warning">Nepavyko pridėti pamainos.</Alert>
                   {shiftErrors.passedValidation
                     ? shiftErrors.databaseErrors.map((databaseError, index) => (
-                        <Alert key={index} severity="warning">
-                          {databaseError}
-                        </Alert>
-                      ))
+                      <Alert key={index} severity="warning">
+                        {databaseError}
+                      </Alert>
+                    ))
                     : Object.keys(shiftErrors.validationErrors).map((key) => (
-                        <Alert key={key} severity="warning">
-                          {" "}
-                          {shiftErrors.validationErrors[key]} {key} laukelyje.
-                        </Alert>
-                      ))}
+                      <Alert key={key} severity="warning">
+                        {" "}
+                        {shiftErrors.validationErrors[key]} {key} laukelyje.
+                      </Alert>
+                    ))}
                 </Grid>
               )
             ) : (
