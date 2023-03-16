@@ -11,5 +11,4 @@ public interface ClassroomRepository extends JpaRepository<Classroom, Long> {
             (String classroomName, Pageable pageable);
 
     Object findByClassroomNameAndBuilding(String classroomName, BuildingType akademija);
-
 }

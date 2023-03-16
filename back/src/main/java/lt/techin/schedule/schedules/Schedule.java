@@ -5,13 +5,13 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lt.techin.schedule.group.Group;
 import lt.techin.schedule.schedules.planner.WorkDay;
-import nonapi.io.github.classgraph.json.JSONUtils;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 @Entity
 public class Schedule {
@@ -24,7 +24,6 @@ public class Schedule {
     private Group groups;
 
     @OneToMany
-//    @JoinColumn(name = "workday_id")
     @JsonBackReference
     private Set<WorkDay> workingDays;
 

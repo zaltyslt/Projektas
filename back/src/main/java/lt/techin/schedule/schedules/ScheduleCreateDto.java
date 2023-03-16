@@ -60,7 +60,10 @@ public class ScheduleCreateDto {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ScheduleCreateDto scheduleCreateDto = (ScheduleCreateDto) o;
-        return Objects.equals(schoolYear, scheduleCreateDto.schoolYear) && Objects.equals(semester, scheduleCreateDto.semester) && Objects.equals(dateFrom, scheduleCreateDto.dateFrom) && Objects.equals(dateUntil, scheduleCreateDto.dateUntil);
+        return Objects.equals(schoolYear, scheduleCreateDto.schoolYear)
+                && Objects.equals(semester, scheduleCreateDto.semester)
+                && Objects.equals(dateFrom, scheduleCreateDto.dateFrom)
+                && Objects.equals(dateUntil, scheduleCreateDto.dateUntil);
     }
 
     @Override

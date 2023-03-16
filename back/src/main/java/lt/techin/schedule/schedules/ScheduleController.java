@@ -26,7 +26,6 @@ public class ScheduleController {
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE})
     public List<ScheduleDto> getScheduleList() {
         logger.info("Get All Schedule List");
-        System.out.println();
         return scheduleService.getAll().stream().map(ScheduleMapper::toScheduleDto).toList();
     }
 
@@ -34,17 +33,17 @@ public class ScheduleController {
     public ResponseEntity<ScheduleDto> getScheduleById(@PathVariable Long id) {
         var schedule = scheduleService.findById(id);
         if (schedule == null) {
-            logger.info("Get All Schedule List");
+            logger.info("Get Schedule By Id not found");
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        logger.info("Get All Schedule List");
+        logger.info("Get Schedule By Id Success");
         return ok(toScheduleDto(scheduleService.findById(id)));
     }
 
     @PostMapping(value = "/create-schedule", consumes = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<ScheduleDto> create(@RequestParam Long groupId, @RequestBody ScheduleCreateDto scheduleCreateDto) {
         var createdSchedule = scheduleService.createSchedule(toScheduleFromCreateDto(scheduleCreateDto), groupId);
-        logger.info("Get All Schedule List");
+        logger.info("The schedule was created, successfully");
         return ok(toScheduleDto(createdSchedule));
     }
 
