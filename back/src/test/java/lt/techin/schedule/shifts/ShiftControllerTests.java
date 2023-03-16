@@ -1,9 +1,14 @@
 package lt.techin.schedule.shifts;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lt.techin.schedule.shift.*;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -32,6 +37,7 @@ public class ShiftControllerTests {
 
     @Autowired
     private MockMvc mockMvc;
+
 
     @Test
     public void testGetActiveShifts() throws Exception {
@@ -88,21 +94,12 @@ public class ShiftControllerTests {
         Shift shiftToAdd = new Shift("New Shift", "8:00", "16:00", true, 1, 8);
         ShiftDto shiftDto = ShiftMapper.shiftToDto(shiftToAdd);
 
-        System.out.println(shiftDto);
-
         String response = "";
         when(shiftService.addUniqueShift(shiftDto)).thenReturn(response);
 
         mockMvc.perform(post("/api/v1/shift/add-shift")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\n" +
-                                "    \"name\": \"New Shift\",\n" +
-                                "    \"shiftStartingTime\": \"8:00\",\n" +
-                                "    \"shiftEndingTime\": \"16:00\",\n" +
-                                "    \"isActive\": true,\n" +
-                                "    \"startIntEnum\": 1,\n" +
-                                "    \"endIntEnum\": 8\n" +
-                                "}"))
+                        .content(new ObjectMapper().writeValueAsString(shiftDto)))
                 .andExpect(status().isOk())
                 .andExpect(content().json("{}"));
     }
@@ -115,7 +112,7 @@ public class ShiftControllerTests {
 
         mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/shift/modify-shift/1")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"id\": 1, \"name\": \"Updated Shift\",\"shiftStartingTime\": \"8:00\",\"shiftEndingTime\": \"16:00\",\"startIntEnum\": 1, \"endIntEnum\": 8,\"isActive\": true}"))
+                        .content(new ObjectMapper().writeValueAsString(shiftToChange)))
                 .andExpect(status().isOk())
                 .andExpect(content().json("{}"));
     }

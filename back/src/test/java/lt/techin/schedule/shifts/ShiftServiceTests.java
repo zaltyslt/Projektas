@@ -6,7 +6,9 @@ import lt.techin.schedule.shift.ShiftRepository;
 import lt.techin.schedule.shift.ShiftService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.Arrays;
@@ -17,16 +19,23 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-@SpringBootTest
 public class ShiftServiceTests {
-    private ShiftService shiftService;
 
     @Mock
     private ShiftRepository shiftDatabase;
 
+    @InjectMocks
+    private ShiftService shiftService;
+
+
     @BeforeEach
     public void setUp() {
-        shiftService = new ShiftService(shiftDatabase);
+        MockitoAnnotations.openMocks(this);
+    }
+
+    @Test
+    public void randomTest() {
+
     }
 
     @Test

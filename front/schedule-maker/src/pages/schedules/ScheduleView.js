@@ -63,8 +63,8 @@ export function ScheduleView() {
                   <TableCell align="center">{subject.hours}</TableCell>
                   <TableCell align="center">
                     {
-                      (subject.id in schedule.subjectIdWithUnassignedTime) ?
-                      schedule.subjectIdWithUnassignedTime[subject.id] :
+                      (subject.subject in schedule.subjectIdWithUnassignedTime) ?
+                      schedule.subjectIdWithUnassignedTime[subject.subject] :
                       subject.hours
                     }
                   </TableCell>
