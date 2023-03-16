@@ -10,11 +10,11 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class ObjectMapperConfig {
 
-//    @Bean
-//    public Jackson2ObjectMapperBuilderCustomizer jsonCustomizer() {
-//        return builder -> builder.postConfigurer(objectMapper -> {
-//            objectMapper.coercionConfigFor(LogicalType.POJO)
-//                    .setCoercion(CoercionInputShape.EmptyString, CoercionAction.AsNull);
-//        });
-//    }
+    @Bean
+    public Jackson2ObjectMapperBuilderCustomizer jsonCustomizer() {
+        return builder -> builder.postConfigurer(objectMapper -> {
+            objectMapper.coercionConfigFor(LogicalType.POJO)
+                    .setCoercion(CoercionInputShape.EmptyString, CoercionAction.AsNull);
+        });
+    }
 }
