@@ -25,10 +25,13 @@ export function Schedule() {
   const events = schedule.map(schedule => ({
     title: `${schedule.subject.name}
       <br />
-      ${schedule.teacher.lName} ${schedule.teacher.fName}
+      Mokytojas: 
+      ${schedule.teacher ? schedule.teacher.lName : ""} ${schedule.teacher ? schedule.teacher.fName : "nepasirinktas"}
       <br />
-      ${schedule.classroom.classroomName}
+      Klasė: 
+      ${schedule.classroom ? schedule.classroom.classroomName : "Klasė nepasirinkta"}
       <br />
+      Laikas: 
       ${schedule.lessonStart} - ${schedule.lessonEnd}`,
     start: schedule.date,
     allDay: true,

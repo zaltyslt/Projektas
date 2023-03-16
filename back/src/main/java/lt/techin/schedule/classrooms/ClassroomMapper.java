@@ -28,18 +28,24 @@ public class ClassroomMapper {
     public static Classroom toClassroomFromSmallDto(ClassroomSmallDto classroomSmallDto) {
         var classroom = new Classroom();
 
-        classroom.setId(classroomSmallDto.getId());
-        classroom.setClassroomName(classroomSmallDto.getClassroomName());
-
-        return classroom;
+        if (classroomSmallDto != null) {
+            classroom.setId(classroomSmallDto.getId());
+            classroom.setClassroomName(classroomSmallDto.getClassroomName());
+            return classroom;
+        } else {
+            return null;
+        }
     }
 
     public static ClassroomSmallDto toClassroomSmallDto(Classroom classroom) {
         var classroomSmallDto = new ClassroomSmallDto();
 
-        classroomSmallDto.setId(classroom.getId());
-        classroomSmallDto.setClassroomName(classroom.getClassroomName());
-
-        return classroomSmallDto;
+        if(classroom != null) {
+            classroomSmallDto.setId(classroom.getId());
+            classroomSmallDto.setClassroomName(classroom.getClassroomName());
+            return classroomSmallDto;
+        } else {
+            return null;
+        }
     }
 }
