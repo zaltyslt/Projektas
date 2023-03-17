@@ -1,6 +1,5 @@
 package lt.techin.schedule.teachers;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lt.techin.schedule.exceptions.TeacherException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -35,28 +34,6 @@ public class TeacherControllerAction {
         } else {
             throw new TeacherException(HttpStatus.EXPECTATION_FAILED, "Nepakanka duomenų!");
         }
-
-    }
-
-    @PostMapping(value = "/create/test", consumes = {MediaType.APPLICATION_JSON_VALUE})
-    //public String testData(@RequestBody String payLoad) {
-    public String testData(@RequestBody String payLoad) {
-        var aa = payLoad;
-        ObjectMapper objectMapper = new ObjectMapper();
-        Object jsonObject = new Object();
-        Exception ee;
-        try {
-            jsonObject = objectMapper.readValue(payLoad, TeacherDto.class);
-            var res = objectMapper.writeValueAsString(jsonObject);
-        } catch (
-                Exception e) {
-
-        }
-
-//       return !payLoad.isEmpty()
-        return payLoad != null
-                ? "OK"
-                : "Not OK";
     }
 
     @PutMapping("/update")
@@ -65,7 +42,7 @@ public class TeacherControllerAction {
     }
 
     @PatchMapping("/active")
-    public ResponseEntity<Void> updateTeacherDetails(@RequestParam("tid") Long teacherId, @RequestParam("active") boolean status) {
+    public ResponseEntity<Void> changeState(@RequestParam("tid") Long teacherId, @RequestParam("active") boolean status) {
         return status
                 ? teacherServiceDo.switchOn(teacherId)
                 : teacherServiceDo.switchOff(teacherId);
