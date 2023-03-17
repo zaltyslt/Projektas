@@ -6,6 +6,8 @@ import listPlugin from "@fullcalendar/list";
 import allLocales from "@fullcalendar/core/locales-all";
 import FullCalendar from "@fullcalendar/react";
 import { Link, useParams } from "react-router-dom";
+import { Stack } from "@mui/system";
+import { Button, Grid } from "@mui/material";
 
 export function Schedule() {
   const [weekendsVisible, setWeekendsVisible] = useState(true);
@@ -13,20 +15,21 @@ export function Schedule() {
   const params = useParams();
 
   useEffect(() => {
-      fetch(`api/v1/schedules/${params.id}/lessons`)
-        .then(response => response.json())
-        .then(data => setSchedule(data))
-        .catch(error => console.error(error));
-  }, [params.id]
-  );
+    fetch(`api/v1/schedules/${params.id}/lessons`)
+      .then((response) => response.json())
+      .then((data) => setSchedule(data))
+      .catch((error) => console.error(error));
+  }, [params.id]);
 
-  console.log(schedule)
+  console.log(schedule);
 
-  const events = schedule.map(schedule => ({
+  const events = schedule.map((schedule) => ({
     title: `${schedule.subject.name}
       <br />
       Mokytojas: 
-      ${schedule.teacher ? schedule.teacher.lName : ""} ${schedule.teacher ? schedule.teacher.fName : "nepasirinktas"}
+      ${schedule.teacher ? schedule.teacher.lName : ""} ${
+      schedule.teacher ? schedule.teacher.fName : "nepasirinktas"
+    }
       <br />
       Klasė: 
       ${schedule.classroom ? schedule.classroom.classroomName : "nepasirinkta"}
@@ -39,7 +42,7 @@ export function Schedule() {
     start: schedule.date,
     allDay: true,
   }));
-  
+
   const renderEventContent = (eventInfo) => (
     <>
       <b>{eventInfo.timeText}</b>
@@ -59,13 +62,24 @@ export function Schedule() {
           headerToolbar={{
             left: "prev,next today",
             center: "title",
-            right: "dayGridMonth,dayGridWeek,dayGridDay"
+            right: "dayGridMonth,dayGridWeek,dayGridDay",
           }}
           events={events}
           weekends={false}
           eventContent={renderEventContent}
         />
       </div>
+
+      <Grid item sm={10}>
+        <Stack direction="row" spacing={2}>
+          <Link to="/">
+            <Button variant="contained">Grįžti</Button>
+          </Link>
+          <Link to={"/planning/" + params.id}>
+            <Button variant="contained">Planavimas</Button>
+          </Link>
+        </Stack>
+      </Grid>
     </div>
   );
 }
