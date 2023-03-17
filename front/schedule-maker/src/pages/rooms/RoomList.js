@@ -228,7 +228,6 @@ export function RoomList() {
                       </Link>
                     </TableCell>
                     <TableCell>{classroom.building}</TableCell>
-                    <TableCell></TableCell>
                   </TableRow>
                 ))}
             </TableBody>

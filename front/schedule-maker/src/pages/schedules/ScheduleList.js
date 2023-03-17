@@ -128,7 +128,7 @@ export function ScheduleList() {
             <h3>Tvarkaraščių sąrašas</h3>
           </Grid>
           <Grid item sm={2}>
-            <Stack direction="row" justifyContent="flex-end">
+            <Stack direction="row" justifyContent="flex-end" marginBottom={4} >
               <Link to="/create-schedule">
                 <Button variant="contained">Pridėti naują</Button>
               </Link>
@@ -171,9 +171,9 @@ export function ScheduleList() {
           <Table aria-label="custom pagination table">
             <TableHead>
               <TableRow>
-                <TableCell>Grupės pavadinimas</TableCell>
-                <TableCell>Tvarkaraštis</TableCell>
-                <TableCell className="action" align="center"></TableCell>
+                <TableCell style={{ width: "550px" }}>Grupės pavadinimas</TableCell>
+                <TableCell style={{ width: "550px" }}>Tvarkaraštis</TableCell>
+                <TableCell style={{ width: "100px" }}></TableCell>
               </TableRow>
             </TableHead>
 
