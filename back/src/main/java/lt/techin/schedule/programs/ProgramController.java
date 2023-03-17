@@ -100,7 +100,7 @@ public class ProgramController {
 
     @PatchMapping(value = "/update-hours-program/{programId}", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Map<String, String>> getProgramHours(@RequestBody ProgramDto subjectHoursDto,
-                                                      @PathVariable Long programId) {
+                                                               @PathVariable Long programId) {
         if (subjectHoursDto.getSubjectHoursList().isEmpty()) {
             logger.info("getSubjectHoursList is empty");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -121,7 +121,7 @@ public class ProgramController {
             return ResponseEntity.status(HttpStatus.CREATED)
                     .body(Map.of("message", (ProgramMapper.toProgramDto(program)).toString()));
         } else {
-            logger.info("getSubjectHoursList is empty");
+            logger.info("subject is empty");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(Map.of("message", "Prašome pridėti dalyką"));
         }
@@ -130,6 +130,7 @@ public class ProgramController {
     @DeleteMapping(value = "/delete-hours-id/{subjHourId}")
     public ResponseEntity<String> deleteSubjectHourbyId(@PathVariable Long subjHourId) {
         var deleted = subjectHoursService.deleteById(subjHourId);
+        logger.log(Level.INFO, "The subject hours were deleted: {0} ", subjHourId);
         return deleted ? ResponseEntity.accepted().build() : ResponseEntity.notFound().build();
     }
 }

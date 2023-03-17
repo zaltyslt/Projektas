@@ -27,7 +27,7 @@ public class SubjectHoursService {
         return subjectHoursRepository.saveAll(subjectHours);
     }
 
-    public boolean deleteById(Long id){
+    public boolean deleteById(Long id) {
         SubjectHours byId = subjectHoursRepository.findById(id).orElse(null);
         if (byId != null) {
             subjectHoursRepository.deleteById(byId.getId());
@@ -40,13 +40,11 @@ public class SubjectHoursService {
     public List<SubjectHours> updateAll(List<SubjectHours> subjectHoursList) {
         List<SubjectHours> updatedList = new ArrayList<>();
         for (SubjectHours subjecthour : subjectHoursList) {
-
             if (subjecthour.getId() == null) {
                 var createdHours = subjectHoursRepository.save(subjecthour);
                 updatedList.add(createdHours);
             } else {
                 var toNewSubject = subjectHoursRepository.findById(subjecthour.getId()).orElse(null);
-
                 if (toNewSubject != null) {
                     toNewSubject.setHours(subjecthour.getHours());
                     toNewSubject.setSubject(subjecthour.getSubject());

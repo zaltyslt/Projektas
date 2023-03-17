@@ -3,6 +3,7 @@ package lt.techin.schedule.programs.subjectsHours;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import lt.techin.schedule.subject.Subject;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
@@ -16,9 +17,7 @@ public class SubjectHours {
     @NotNull
     private String subjectName;
     private Long subject;
-
     private Boolean deleted;
-
     private int hours;
     @CreatedDate
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
@@ -26,6 +25,9 @@ public class SubjectHours {
     @LastModifiedDate
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime modifiedDate;
+
+    public SubjectHours(long l, Subject subject, int i) {
+    }
 
     @PrePersist
     public void prePersist() {

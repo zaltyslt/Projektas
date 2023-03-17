@@ -93,6 +93,8 @@ export function ModuleList() {
         const moduleName = module.name.toLowerCase();
         return moduleName.includes(event.toLowerCase());
       });
+      setPage(0);
+      setPageInDeleted(0);
       setFilteredModules(filtered);
     }
   };

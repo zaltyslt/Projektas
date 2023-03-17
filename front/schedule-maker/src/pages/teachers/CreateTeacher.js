@@ -8,7 +8,7 @@ export function CreateTeacher() {
       
         const data = await postDataTo(
           teacher,
-          "/api/v1/teachers/create",
+          "api/v1/teachers/create",
           "POST"
           );
       

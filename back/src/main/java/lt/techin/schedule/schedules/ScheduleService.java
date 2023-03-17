@@ -2,15 +2,11 @@ package lt.techin.schedule.schedules;
 
 import lt.techin.schedule.exceptions.ValidationException;
 import lt.techin.schedule.group.GroupRepository;
-import lt.techin.schedule.schedules.planner.PlannerDto;
-import lt.techin.schedule.schedules.planner.WorkDay;
 import lt.techin.schedule.schedules.planner.WorkDayRepository;
-import lt.techin.schedule.shift.LessonTime;
 import lt.techin.schedule.subject.SubjectRepository;
 import lt.techin.schedule.teachers.TeacherRepository;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -37,6 +33,11 @@ public class ScheduleService {
     }
 
     public List<Schedule> getAll() {
+        var schedule = scheduleRepository.findAll();
+        for (Schedule schedule1 : schedule) {
+            System.out.println(schedule1.getDateFrom().getDayOfWeek());
+
+        }
         return scheduleRepository.findAll();
     }
 
@@ -81,5 +82,4 @@ public class ScheduleService {
         }
         return null;
     }
-
 }

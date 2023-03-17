@@ -16,7 +16,6 @@ public class Classroom {
     private Long id;
     @Column(name = "classroomName")
     @Size(min = 1, max = 200)
-
     private String classroomName;
     @Size(min = 1, max = 2000)
     private String description;
@@ -28,6 +27,9 @@ public class Classroom {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime modifiedDate;
     private boolean active = true;
+
+    public Classroom(long l, String s, String s1, BuildingType akademija, boolean b) {
+    }
 
     @PrePersist
     public void prePersist() {

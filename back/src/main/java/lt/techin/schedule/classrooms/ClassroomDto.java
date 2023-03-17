@@ -9,7 +9,6 @@ import java.util.Objects;
 public class ClassroomDto {
     private Long id;
     private String classroomName;
-    @TextValid(textMaximumLength = 1000)
     private String description;
     private BuildingType building;
     private boolean active = true;

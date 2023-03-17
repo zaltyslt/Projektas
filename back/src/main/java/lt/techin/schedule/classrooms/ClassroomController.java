@@ -31,6 +31,7 @@ public class ClassroomController {
 
     @GetMapping(value = "/active", produces = {MediaType.APPLICATION_JSON_VALUE})
     public List<ClassroomDto> getActiveClassRooms() {
+        logger.info("Active classrooms");
         return classroomService.getActive().stream().map(ClassroomMapper::toClassroomDto).toList();
     }
 

@@ -50,7 +50,7 @@ export function ScheduleList() {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
-      }
+      },
     }).then(fetchSchedules);
   };
 
@@ -59,19 +59,29 @@ export function ScheduleList() {
   }, []);
 
   const filteredSchedules = schedules.filter((schedule) => {
-    const groupMatches = String(schedule.groups.name).toLowerCase().includes(filter.toLowerCase());
+    const groupMatches = String(schedule.groups.name)
+      .toLowerCase()
+      .includes(filter.toLowerCase());
     const isActive = schedule.active === true;
-    const isWithinDateRange = date ? (new Date(schedule.dateFrom) <= date && new Date(schedule.dateUntil) >= date) : true;
+    const isWithinDateRange = date
+      ? new Date(schedule.dateFrom) <= date &&
+        new Date(schedule.dateUntil) >= date
+      : true;
     return groupMatches && isActive && isWithinDateRange;
   });
-  
+
   const filteredDisabledSchedules = schedules.filter((schedule) => {
-    const groupMatches = String(schedule.groups.name).toLowerCase().includes(filter.toLowerCase());
+    const groupMatches = String(schedule.groups.name)
+      .toLowerCase()
+      .includes(filter.toLowerCase());
     const isActive = schedule.active === false;
-    const isWithinDateRange = date ? (new Date(schedule.dateFrom) <= date && new Date(schedule.dateUntil) >= date) : true;
+    const isWithinDateRange = date
+      ? new Date(schedule.dateFrom) <= date &&
+        new Date(schedule.dateUntil) >= date
+      : true;
     return groupMatches && isActive && isWithinDateRange;
   });
-  
+
   const indexOfLastSchedule = currentPage * schedulesPerPage;
   const indexOfFirstSchedule = indexOfLastSchedule - schedulesPerPage;
   const currentSchedules = filteredSchedules.slice(
@@ -103,19 +113,6 @@ export function ScheduleList() {
   ) {
     pageNumbers2.push(i);
   }
-
-  const handlePageChange = (
-    event: React.MouseEvent<HTMLButtonElement> | null,
-    newPage: number
-  ) => {
-    setCurrentPage(newPage);
-  };
-  const handleRowsPerPageChange = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setSchedulesPerPage(Number(event.target.value));
-    setCurrentPage(1);
-  };
 
   const handleChange = (newValue) => {
     setDate(newValue);
@@ -151,9 +148,9 @@ export function ScheduleList() {
               ></TextField>
             </Grid>
             <Grid item sm={4}>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DatePicker
-                fullWidth
+                  fullWidth
                   className="DatePicker"
                   variant="outlined"
                   label="Date"
@@ -174,7 +171,7 @@ export function ScheduleList() {
               <TableRow>
                 <TableCell>Grupės pavadinimas</TableCell>
                 <TableCell>Tvarkaraštis</TableCell>
-                <TableCell className="empty-activity"></TableCell>
+                <TableCell className="action" align="center"></TableCell>
               </TableRow>
             </TableHead>
 
@@ -188,22 +185,27 @@ export function ScheduleList() {
                   <TableRow key={schedule.id}>
                     <TableCell component="th" scope="row">
                       {schedule.groups ? (
-                      !schedule.groups.isActive ? (
-                        <span className="Deleted">
-                          {schedule.groups.name}
-                        </span>
+                        !schedule.groups.isActive ? (
+                          <span className="Deleted">
+                            {schedule.groups.name}
+                          </span>
+                        ) : (
+                          schedule.groups.name
+                        )
                       ) : (
-                        schedule.groups.name
-                      )
-                    ) : (
-                      <span>Nenurodytas</span>
-                    )}
+                        <span>Nenurodytas</span>
+                      )}
                     </TableCell>
                     <TableCell>
                       <Link to={`/schedules/${schedule.id}`}>
                         {schedule.schoolYear} m. {schedule.semester}
-                      </Link></TableCell>
-                    <TableCell></TableCell>
+                      </Link>
+                    </TableCell>
+                    <TableCell className="action" align="center">
+                      <Link to={`/planning/${schedule.id}`}>
+                        <Button variant="contained">Planuoti</Button>
+                      </Link>
+                    </TableCell>
                   </TableRow>
                 ))}
             </TableBody>
@@ -211,7 +213,11 @@ export function ScheduleList() {
               <TableRow>
                 <TablePagination
                   labelRowsPerPage="Rodyti po"
-                  rowsPerPageOptions={[10, 20, { label: "Visi", value: filteredSchedules.length }]}
+                  rowsPerPageOptions={[
+                    10,
+                    20,
+                    { label: "Visi", value: filteredSchedules.length },
+                  ]}
                   labelDisplayedRows={({ from, to, count }) =>
                     `${from}-${to} iš ${count}`
                   }
@@ -238,7 +244,7 @@ export function ScheduleList() {
           />
         </FormGroup>
 
-        {isChecked &&
+        {isChecked && (
           <TableContainer component={Paper}>
             <Table aria-label="custom pagination table">
               <TableHead>
@@ -259,11 +265,15 @@ export function ScheduleList() {
                         {schedule.groups.name}
                       </TableCell>
                       <TableCell>
-                        <Button variant="contained"
-                          data-value='true'
+                        <Button
+                          variant="contained"
+                          data-value="true"
                           value={schedule}
-                          onClick={(e) => { enableSchedule(e, schedule); }}
-                        >Atstatyti
+                          onClick={(e) => {
+                            enableSchedule(e, schedule);
+                          }}
+                        >
+                          Atstatyti
                         </Button>
                       </TableCell>
                     </TableRow>
@@ -273,10 +283,19 @@ export function ScheduleList() {
                 <TableRow>
                   <TablePagination
                     labelRowsPerPage="Rodyti po"
-                    rowsPerPageOptions={[10, 20, { label: "Visi", value: filteredDisabledSchedules.length }]}
-                    labelDisplayedRows={({ from, to, count }) => `${from}-${to} iš ${count}`}
+                    rowsPerPageOptions={[
+                      10,
+                      20,
+                      {
+                        label: "Visi",
+                        value: filteredDisabledSchedules.length,
+                      },
+                    ]}
+                    labelDisplayedRows={({ from, to, count }) =>
+                      `${from}-${to} iš ${count}`
+                    }
                     count={filteredDisabledSchedules.length}
-                    page={currentPage2 -schedulesPerPage2}
+                    page={currentPage2 - schedulesPerPage2}
                     onPageChange={(_, page) => setCurrentPage2(page + 1)}
                     onRowsPerPageChange={(e) =>
                       setSchedulesPerPage2(parseInt(e.target.value))
@@ -286,8 +305,8 @@ export function ScheduleList() {
               </TableFooter>
             </Table>
           </TableContainer>
-        }
+        )}
       </Container>
     </div>
-  )
+  );
 }
