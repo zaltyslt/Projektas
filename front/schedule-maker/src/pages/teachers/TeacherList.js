@@ -45,7 +45,7 @@ export function TeacherList() {
   }, []);
 
   const fetchTeachers = async () => {
-    fetch("/api/v1/teachers?active=true")
+    fetch("api/v1/teachers?active=true")
       .then((response) => response.json())
       .then((data) => {
         setTeachers(data);
@@ -57,7 +57,7 @@ export function TeacherList() {
   };
 
   const fetchDeletedTeachers = async () => {
-    fetch("/api/v1/teachers?active=false")
+    fetch("api/v1/teachers?active=false")
       .then((response) => response.json())
       .then((data ) => {setDeletedTeachers(data);
       return data})
@@ -140,7 +140,7 @@ export function TeacherList() {
 
   //////////
   const restoreTeacher = async (teacher) => {
-    await fetch(`/api/v1/teachers/active?tid=${teacher.id}&active=true`, {
+    await fetch(`api/v1/teachers/active?tid=${teacher.id}&active=true`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",

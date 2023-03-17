@@ -151,7 +151,7 @@
         </repository>
     </repositories>
     <build>
-        <finalName>Schedule-maker</finalName>
+        <finalName>schedule-maker</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>

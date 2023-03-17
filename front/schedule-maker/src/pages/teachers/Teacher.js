@@ -177,7 +177,7 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
         setSubjects(data);
         setFreeSubjects(data);
       } else {
-        console.log("data");
+        //console.log("data");
         setSubjects([]);
         setFreeSubjects([]);
         setErrorMessage("Nepavyko parsiųsti duomenų iš serverio. (Subject)");
@@ -243,11 +243,13 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
   const createTeacher = () => {
     async function teacherModifier(teacher) {
       const fetchResult = await onSave(teacher);
-      // console.log("fetchResult");
+      console.log("fetchResult");
       // console.log(await fetchResult.json());
+      if(fetchResult.ok){console.log("OK");}else{console.log("notOK");}
       applyResult(await fetchResult.json());
     }
-
+    
+    console.log("modify")
     teacherModifier(teacher);
   };
 
@@ -353,9 +355,9 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
   //   console.log("c "+chosenSubjects);
   // }
 
-  function showCurrent(){
-    console.log(currentTacherName);
-  }
+  // function showCurrent(){
+  //   console.log(currentTacherName);
+  // }
 
   return (
     <Container style={{ maxWidth: "75rem" }}>
@@ -597,7 +599,8 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
                   label="Dalyko pavadinimas"
                   labelId="subject-label"
                   id="subject"
-                  value={subject || ""} //not dangerous for life
+                  // value={freeSubjects[0] || ""} //not dangerous for life
+                  value={""} //not dangerous for life
                   defaultOpen={true}
                   onChange={(e) => {
                     handleAddChosen(e.target.value);
@@ -695,9 +698,9 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
               <Button variant="contained" onClick={() => navigate("/teachers")}>
                 Grįžti
               </Button>
-              <Button variant="contained" onClick={showCurrent}>
+              {/* <Button variant="contained" onClick={showCurrent}>
                 Show
-              </Button>
+              </Button> */}
             </Stack>
           </Grid>
         </Grid>

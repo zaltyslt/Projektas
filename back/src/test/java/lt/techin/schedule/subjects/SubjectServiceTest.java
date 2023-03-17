@@ -147,7 +147,6 @@ public class SubjectServiceTest {
         assertEquals(existingModule, result.getModule());
         assertEquals(false, result.getDeleted());
         assertEquals(classroomSet, result.getClassRooms());
-
     }
 
 
