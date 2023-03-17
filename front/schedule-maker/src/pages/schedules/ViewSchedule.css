@@ -20,6 +20,7 @@
   }
 
   .fc-event {
-    border: none !important;
+    border-color: white;
+    border-width: 8px;
   }
   
