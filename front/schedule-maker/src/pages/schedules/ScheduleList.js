@@ -65,7 +65,7 @@ export function ScheduleList() {
     const isActive = schedule.active === true;
     const isWithinDateRange = date
       ? new Date(schedule.dateFrom) <= date &&
-        new Date(schedule.dateUntil) >= date
+      new Date(schedule.dateUntil) >= date
       : true;
     return groupMatches && isActive && isWithinDateRange;
   });
@@ -77,7 +77,7 @@ export function ScheduleList() {
     const isActive = schedule.active === false;
     const isWithinDateRange = date
       ? new Date(schedule.dateFrom) <= date &&
-        new Date(schedule.dateUntil) >= date
+      new Date(schedule.dateUntil) >= date
       : true;
     return groupMatches && isActive && isWithinDateRange;
   });
@@ -117,6 +117,8 @@ export function ScheduleList() {
   const handleChange = (newValue) => {
     setDate(newValue);
   };
+
+  
 
   return (
     <div>
@@ -190,12 +192,15 @@ export function ScheduleList() {
                             {schedule.groups.name}
                           </span>
                         ) : (
-                          schedule.groups.name
+                          <span>
+                            {schedule.groups.name}   {schedule.groups.shift.name}
+                          </span>
                         )
                       ) : (
                         <span>Nenurodytas</span>
                       )}
                     </TableCell>
+
                     <TableCell>
                       <Link to={`/schedules/${schedule.id}`}>
                         {schedule.schoolYear} m. {schedule.semester}
@@ -208,6 +213,7 @@ export function ScheduleList() {
                     </TableCell>
                   </TableRow>
                 ))}
+
             </TableBody>
             <TableFooter>
               <TableRow>
