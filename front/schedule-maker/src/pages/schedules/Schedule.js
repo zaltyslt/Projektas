@@ -7,6 +7,8 @@ import allLocales from "@fullcalendar/core/locales-all";
 import FullCalendar from "@fullcalendar/react";
 import { Link, useParams } from "react-router-dom";
 import "./ViewSchedule.css";
+import { Stack } from "@mui/system";
+import { Button, Grid } from "@mui/material";
 
 export function Schedule() {
   const [weekendsVisible, setWeekendsVisible] = useState(true);
@@ -84,6 +86,17 @@ export function Schedule() {
           )}
         />
       </div>
+
+      <Grid item sm={10}>
+        <Stack direction="row" spacing={2}>
+          <Link to="/">
+            <Button variant="contained">Grįžti</Button>
+          </Link>
+          <Link to={"/planning/" + params.id}>
+            <Button variant="contained">Planavimas</Button>
+          </Link>
+        </Stack>
+      </Grid>
     </div>
   );
 }
