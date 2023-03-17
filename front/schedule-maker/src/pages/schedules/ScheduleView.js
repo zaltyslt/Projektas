@@ -60,7 +60,13 @@ export function ScheduleView() {
                 <TableRow key={subject.id}>
                   <TableCell>{subject.subjectName}</TableCell>
                   <TableCell align="center">{subject.hours}</TableCell>
-                  <TableCell align="center">?</TableCell>
+                  <TableCell align="center">
+                    {
+                      (subject.subject in schedule.subjectIdWithUnassignedTime) ?
+                      schedule.subjectIdWithUnassignedTime[subject.subject] :
+                      subject.hours
+                    }
+                  </TableCell>
                   <TableCell align="center" className="activity">
                     <Link
                       to={`/schedules/add-lesson/${subject.subject}`}

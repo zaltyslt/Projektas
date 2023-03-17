@@ -13,6 +13,7 @@ public class ScheduleMapper {
         scheduleDto.setCreatedDate(schedule.getCreatedDate());
         scheduleDto.setModifiedDate(schedule.getModifiedDate());
         scheduleDto.setWorkingDays(schedule.getWorkingDays());
+        scheduleDto.setSubjectIdWithUnassignedTime(schedule.getSubjectIdWithUnassignedTime());
         return scheduleDto;
     }
 
@@ -28,6 +29,7 @@ public class ScheduleMapper {
         schedule.setCreatedDate(scheduleDto.getCreatedDate());
         schedule.setModifiedDate(scheduleDto.getModifiedDate());
         schedule.setWorkingDays(scheduleDto.getWorkingDays());
+        schedule.setSubjectIdWithUnassignedTime(scheduleDto.getSubjectIdWithUnassignedTime());
         return schedule;
     }
 

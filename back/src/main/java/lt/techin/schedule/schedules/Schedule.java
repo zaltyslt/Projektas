@@ -10,7 +10,9 @@ import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.LinkedHashSet;
+import java.util.Map;
 import java.util.Set;
 
 @Entity
@@ -38,6 +40,12 @@ public class Schedule {
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate dateUntil;
 
+    @ElementCollection
+    @CollectionTable(name = "subject_unassigned_time", joinColumns = @JoinColumn(name = "schedule_id"))
+    @MapKeyColumn(name = "subject_id")
+    @Column(name = "unassigned_time")
+    private Map<Long, Integer> subjectIdWithUnassignedTime;
+
     private boolean active = true;
     @CreatedDate
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
@@ -59,6 +67,7 @@ public class Schedule {
     }
 
     public Schedule() {
+        subjectIdWithUnassignedTime = new HashMap<>();
         workingDays = new LinkedHashSet<>();
     }
 
@@ -144,9 +153,30 @@ public class Schedule {
     }
 
     public void addWorkDay (WorkDay workDay) {
-        if (workingDays == null) {
-            workingDays = new LinkedHashSet<>();
-        }
         workingDays.add(workDay);
+    }
+
+    public Map<Long, Integer> getSubjectIdWithUnassignedTime() {
+        return subjectIdWithUnassignedTime;
+    }
+
+    public void setSubjectIdWithUnassignedTime(Map<Long, Integer> subjectIdWithUnassignedTime) {
+        this.subjectIdWithUnassignedTime = subjectIdWithUnassignedTime;
+    }
+
+    public Integer getUnassignedTimeWithSubjectId(Long subjectID) {
+        return subjectIdWithUnassignedTime.get(subjectID);
+    }
+
+    public Integer replaceUnassignedTime(Long subjectID, Integer newTime) {
+        return subjectIdWithUnassignedTime.replace(subjectID, newTime);
+    }
+
+    public void deleteUnassignedTimeWithSubjectId(Long subjectID) {
+        subjectIdWithUnassignedTime.remove(subjectID);
+    }
+
+    public void addUnassignedTimeWithSubjectId(Long subjectID, Integer time) {
+        subjectIdWithUnassignedTime.put(subjectID, time);
     }
 }

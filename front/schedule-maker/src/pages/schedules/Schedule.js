@@ -22,12 +22,18 @@ export function Schedule() {
 
   console.log(schedule);
 
-  const events = schedule.map((schedule) => ({
-    title: `
-    ${schedule.lessonStart} - ${schedule.lessonEnd} <br />
-    ${schedule.subject.name} <br />
-    ${schedule.teacher.lName} ${schedule.teacher.fName} <br />
-    ${schedule.classroom.classroomName} 
+  const events = schedule.map(schedule => ({
+    title: `<b>${schedule.subject.name}</b>
+      <br />
+      ${schedule.lessonStart} - ${schedule.lessonEnd}
+      <br /> 
+      ${schedule.teacher ? schedule.teacher.lName : ""} ${schedule.teacher ? schedule.teacher.fName : "nepasirinktas"}
+      <br />
+      ${schedule.classroom ? schedule.classroom.classroomName : "nepasirinkta"}
+      <br />
+      Nuotolinė pamoka:
+      ${schedule.online === true ? "taip" : "ne"}
+      <br />
       `,
     start: schedule.date,
     allDay: true,
@@ -36,7 +42,7 @@ export function Schedule() {
   const renderEventContent = (eventInfo) => (
     <>
       <b>{eventInfo.timeText}</b>
-      <div style={{ paddingLeft: "10px", fontSize: '20px', fontFamily: 'Arial, sans-serif', backgroundColor: "lightsteelblue", color: "black" }} dangerouslySetInnerHTML={{ __html: eventInfo.event.title }} />
+      <div style={{fontSize: '16px', padding: '10px', fontFamily: 'Arial, sans-serif', backgroundColor: "#dcedf7", color: "black" }} dangerouslySetInnerHTML={{ __html: eventInfo.event.title }} />
     </>
   );
 

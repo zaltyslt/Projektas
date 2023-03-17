@@ -130,6 +130,7 @@ export function ShiftList() {
       setCurrentActiveShifts(shiftsTemp);
     }
     setCurrentPageActive(0);
+    setCurrentPageInactive(0);
   };
 
   return (

@@ -5,7 +5,9 @@ import lt.techin.schedule.schedules.planner.WorkDay;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.LinkedHashSet;
+import java.util.Map;
 import java.util.Set;
 
 public class ScheduleDto {
@@ -23,7 +25,10 @@ public class ScheduleDto {
 
     private Set<WorkDay> workingDays;
 
+    private Map<Long, Integer> subjectIdWithUnassignedTime;
+
     public ScheduleDto() {
+        subjectIdWithUnassignedTime = new HashMap<>();
         workingDays = new LinkedHashSet<>();
     }
 
@@ -105,5 +110,13 @@ public class ScheduleDto {
 
     public void setWorkingDays(Set<WorkDay> workingDays) {
         this.workingDays = workingDays;
+    }
+
+    public Map<Long, Integer> getSubjectIdWithUnassignedTime() {
+        return subjectIdWithUnassignedTime;
+    }
+
+    public void setSubjectIdWithUnassignedTime(Map<Long, Integer> subjectIdWithUnassignedTime) {
+        this.subjectIdWithUnassignedTime = subjectIdWithUnassignedTime;
     }
 }
