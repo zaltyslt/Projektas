@@ -243,7 +243,6 @@ export function UpdateProgram() {
                   }
                   setProgramName(input);
                 }}
-              // onChange={(e) => setProgramName(e.target.value)}
               ></TextField>
             </Grid>
             <Grid item sm={6}>
