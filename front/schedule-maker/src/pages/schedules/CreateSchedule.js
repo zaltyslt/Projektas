@@ -103,6 +103,10 @@ export function CreateSchedule() {
       isValid = false;
     }
 
+    if(schoolYearValid) {
+      isValid = false;
+    }
+
     if (semester === "" || semester === "undefined") {
       setSemesterEmpty(true);
       isValid = false;
