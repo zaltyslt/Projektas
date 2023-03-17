@@ -146,6 +146,15 @@ export function RoomList() {
     setCurrentPage(1);
   };
 
+  useEffect(() => {
+    setCurrentPage(1); // reset to first page
+  }, [filter, building]);
+
+  useEffect(() => {
+    setCurrentPage2(1); // reset to first page
+  }, [filter, building]);
+  
+
   return (
     <div>
       <Container maxWidth="lg">
@@ -227,7 +236,7 @@ export function RoomList() {
               <TableRow>
                 <TablePagination
                   labelRowsPerPage="Rodyti po"
-                  rowsPerPageOptions={[10, 20, { label: "Visi", value: -1 }]}
+                  rowsPerPageOptions={[10, 20, { label: "Visi", value: filteredClassrooms.length }]}
                   labelDisplayedRows={({ from, to, count }) =>
                     `${from}-${to} iš ${count}`
                   }
@@ -293,7 +302,7 @@ export function RoomList() {
                 <TableRow>
                   <TablePagination
                      labelRowsPerPage="Rodyti po"
-                     rowsPerPageOptions={[10, 20, { label: "Visi", value: -1 }]}
+                     rowsPerPageOptions={[10, 20, { label: "Visi", value: filteredDisabledClassrooms.length }]}
                      labelDisplayedRows={({ from, to, count }) => `${from}-${to} iš ${count}`}
                      colSpan={3}
                      count={filteredDisabledClassrooms.length}

@@ -116,6 +116,14 @@ export function ProgramList() {
     setCurrentPage(1);
   };
 
+  useEffect(() => {
+    setCurrentPage(1); // reset to first page
+  }, [filter]);
+
+  useEffect(() => {
+    setCurrentPage2(1); // reset to first page
+  }, [filter]);
+
   return (
     <div>
       <Container maxWidth="lg">
@@ -177,7 +185,7 @@ export function ProgramList() {
                   rowsPerPageOptions={[
                     10,
                     20,
-                    { label: "Visi", value: -1},
+                    { label: "Visi", value: filteredPrograms.length},
                   ]}
                   colSpan={2}
                   count={filteredPrograms.length}
@@ -243,7 +251,7 @@ export function ProgramList() {
                     rowsPerPageOptions={[
                       10,
                       20,
-                      { label: "Visi", value: -1 },
+                      { label: "Visi", value: filteredDisabledPrograms.length },
                     ]}
                     labelDisplayedRows={({ from, to, count }) =>
                       `${from}-${to} iš ${count}`
