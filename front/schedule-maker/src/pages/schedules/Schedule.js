@@ -22,8 +22,6 @@ export function Schedule() {
       .catch((error) => console.error(error));
   }, [params.id]);
 
-  console.log(schedule);
-
   const events = schedule.map(schedule => ({
     title: `<b>${schedule.subject.name}</b>
       <br />
@@ -31,11 +29,7 @@ export function Schedule() {
       <br /> 
       ${schedule.teacher ? schedule.teacher.lName : ""} ${schedule.teacher ? schedule.teacher.fName : "nepasirinktas"}
       <br />
-      ${schedule.classroom ? schedule.classroom.classroomName : "nepasirinkta"}
-      <br />
-      Nuotolinė pamoka:
-      ${schedule.online === true ? "taip" : "ne"}
-      <br />
+      ${schedule.online ? "Nuotolinė pamoka" : schedule.classroom.classroomName}<br />
       `,
     start: schedule.date,
     allDay: true,
@@ -48,6 +42,8 @@ export function Schedule() {
     </>
   );
 
+  
+
   // const renderEventContent = (eventInfo) => (
   //   <>
   //     <b>{eventInfo.timeText}</b>
@@ -57,7 +53,7 @@ export function Schedule() {
 
   return (
     <div className="maincontainer">
-      <div id="container">
+      <div id="container"  style={{ marginBottom: "20px" }}>
         <FullCalendar
           locales={allLocales}
           locale={"lt"}
