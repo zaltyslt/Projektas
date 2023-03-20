@@ -19,8 +19,8 @@ import java.util.stream.Collectors;
 
 @Service
 public class TeacherServiceDo {
-    TeacherRepository teacherRepository;
-    ContactService contactService;
+    private final TeacherRepository teacherRepository;
+    private final ContactService contactService;
     private final ShiftRepository shiftRepository;
     private final SubjectRepository subjectRepository;
 
@@ -34,7 +34,7 @@ public class TeacherServiceDo {
     }
 
     public ResponseEntity<TeacherDto> createTeacher(TeacherDto teacherDto) {
-       Teacher newTeacher = TeacherMapper.teacherFromDto(teacherDto);
+        Teacher newTeacher = TeacherMapper.teacherFromDto(teacherDto);
 
         newTeacher.setId(null);
 
@@ -55,7 +55,7 @@ public class TeacherServiceDo {
         List<Contact> contactsToSave = ContactMapper.contactFromDto2(contactsDto);
         newTeacher.setContacts(contactsToSave);
 
-        if (teacherDto.getSubjectsList()!=null && !teacherDto.getSubjectsList().isEmpty()) {
+        if (teacherDto.getSubjectsList() != null && !teacherDto.getSubjectsList().isEmpty()) {
             Set<Subject> subjectsFromDto = TeacherSubjectMapper.subjectsFromDtos(teacherDto.getSubjectsList());
 
             Set<Subject> foundSubjects = subjectsFromDto.stream()
@@ -65,8 +65,8 @@ public class TeacherServiceDo {
             if (!foundSubjects.isEmpty()) {
                 newTeacher.setSubjects(foundSubjects);
             }
-        } else{newTeacher.setSubjects(new HashSet<>());
-
+        } else {
+            newTeacher.setSubjects(new HashSet<>());
         }
 
         if (teacherDto.getSelectedShift() != null) {
@@ -75,17 +75,16 @@ public class TeacherServiceDo {
                 newTeacher.setShift(shift.get());
             }
         }
-        try{
-        newTeacher = teacherRepository.save(newTeacher);
-        }catch(Exception e){
-            throw new TeacherException(HttpStatus.NOT_ACCEPTABLE,e.getMessage());
 
-
+        try {
+            newTeacher = teacherRepository.save(newTeacher);
+        } catch (Exception e) {
+            throw new TeacherException(HttpStatus.NOT_ACCEPTABLE, e.getMessage());
         }
         return ResponseEntity.ok(TeacherMapper.teacherToDto(newTeacher));
-
-
     }
+
+
 
     public ResponseEntity<TeacherDto> updateTeacher(Long teacherId, TeacherDto teacherDto) {
         Teacher presentTeacher = teacherRepository.findById(teacherId)
@@ -97,11 +96,12 @@ public class TeacherServiceDo {
 
         isNotDuplicate(newTeacher);
 
-        contactService.updateContacts (newTeacher);
+        contactService.updateContacts(newTeacher);
         newTeacher = teacherRepository.save(newTeacher);
 
         return ResponseEntity.ok(TeacherMapper.teacherToDto(newTeacher));
     }
+
 
     public ResponseEntity<Void> switchOff(Long id) {
         var result = teacherRepository.findById(id);

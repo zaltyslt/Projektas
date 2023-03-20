@@ -95,7 +95,7 @@ class TeacherControllerViewTest {
         // perform the GET request to the controller with the "active=true" param
         ResponseEntity<Set<TeacherSubjectsDto>> response = teacherController.getActiveTeacherSubjectsDto();
         // verify that the response contains the expected teachers
-        assertEquals(ResponseEntity.notFound().build(), response);
+        assertEquals(ResponseEntity.ok(set1), response);
 
 
     }
