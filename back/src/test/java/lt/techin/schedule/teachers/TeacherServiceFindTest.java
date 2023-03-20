@@ -11,12 +11,13 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.ApplicationContext;
 
 import java.time.LocalDateTime;
 import java.util.*;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
+
 @SpringBootTest
 class TeacherServiceFindTest {
 
@@ -58,6 +59,11 @@ class TeacherServiceFindTest {
 
         teachers.addAll(Arrays.asList(teacher1, teacher2, teacher3, teacher4));
     }
+    @Test
+    void contextLoads(ApplicationContext context) {
+        assertNotNull(context);
+    }
+
 
     @Test
     void getAllTeachersTest() {

@@ -9,6 +9,7 @@ import lt.techin.schedule.teachers.contacts.ContactService;
 import lt.techin.schedule.teachers.contacts.ContactType;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -18,6 +19,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.*;
 
@@ -27,9 +29,9 @@ import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 
 
-//@RunWith(SpringRunner.class)
+
+@RunWith(SpringRunner.class)
 @SpringBootTest
-//@AutoConfigureMockMvc
 class TeacherServiceDoTest {
     @Mock
     private TeacherRepository teacherRepository;
