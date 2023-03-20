@@ -60,5 +60,13 @@ public class ScheduleController {
         logger.log(Level.INFO, "The schedule was enabled: {0} ", scheduleId);
         return toScheduleDto(enableSchedule);
     }
+
+    @DeleteMapping("/delete-schedule/{scheduleId}")
+    public ResponseEntity<Boolean> deleteSchedule(@PathVariable Long scheduleId) {
+//        var enableSchedule = scheduleService.enable(scheduleId);
+        var idd = scheduleId;
+        logger.log(Level.INFO, "The schedule was deleted: {0} ", scheduleId);
+        return ResponseEntity.ok(true);
+    }
 }
 
