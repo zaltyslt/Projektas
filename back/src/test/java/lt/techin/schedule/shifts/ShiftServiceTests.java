@@ -9,14 +9,12 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public class ShiftServiceTests {
@@ -27,15 +25,9 @@ public class ShiftServiceTests {
     @InjectMocks
     private ShiftService shiftService;
 
-
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
-    }
-
-    @Test
-    public void randomTest() {
-
     }
 
     @Test
@@ -83,12 +75,10 @@ public class ShiftServiceTests {
     @Test
     public void testGetShiftByID() {
         Shift shift1 = new Shift("Shift 8", "8:00", "16:00", true, 1, 8);
-        Shift shift2 = new Shift("Shift 9", "9:00", "17:00", true, 2, 9);
 
         shift1.setId(100L);
-        shift2.setId(200L);
 
-        when(shiftDatabase.findAll()).thenReturn(Arrays.asList(shift1, shift2));
+        when(shiftDatabase.findById(100L)).thenReturn(Optional.of(shift1));
 
         Shift foundShift = shiftService.getShiftByID(100L);
         assertEquals(shift1, foundShift);

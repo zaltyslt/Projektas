@@ -1,22 +1,17 @@
 package lt.techin.schedule.shifts;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lt.techin.schedule.ScheduleApplication;
 import lt.techin.schedule.shift.*;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.List;
 
@@ -32,13 +27,10 @@ public class ShiftControllerTests {
     @MockBean
     ShiftService shiftService;
 
-    @InjectMocks
-    public ShiftController shiftController;
-
     @Autowired
     private MockMvc mockMvc;
-
-
+    
+    
     @Test
     public void testGetActiveShifts() throws Exception {
         Shift shift1 = new Shift("Shift 1", "8:00", "16:00", true, 1, 8);
@@ -66,8 +58,6 @@ public class ShiftControllerTests {
 
         List<Shift> expectedShifts = List.of(shift1, shift2);
         when(shiftService.getInactiveShifts()).thenReturn(expectedShifts);
-
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/shift/get-inactive")).andDo(print());
 
         mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/shift/get-inactive"))
                 .andExpect(status().isOk())

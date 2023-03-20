@@ -1,17 +1,11 @@
 package lt.techin.schedule.groups;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lt.techin.schedule.group.*;
 import lt.techin.schedule.programs.Program;
-import lt.techin.schedule.programs.subjectsHours.SubjectHours;
 import lt.techin.schedule.shift.Shift;
-import lt.techin.schedule.shift.ShiftDto;
-import lt.techin.schedule.shift.ShiftMapper;
-import lt.techin.schedule.subject.Subject;
 import lt.techin.schedule.subject.SubjectRepository;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -23,7 +17,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -36,11 +30,9 @@ public class GroupControllerTests {
     @MockBean
     GroupService groupService;
 
-    @InjectMocks
-    public GroupController groupController;
-
     @Autowired
     private MockMvc mockMvc;
+
     @Autowired
     private SubjectRepository subjectRepository;
 
@@ -68,6 +60,7 @@ public class GroupControllerTests {
                         "{\"id\":1,\"name\":\"Group1\",\"schoolYear\":\"2018\",\"studentAmount\":15,\"isActive\":true}," +
                         "{\"id\":2,\"name\":\"Group2\",\"schoolYear\":\"2020\",\"studentAmount\":10,\"isActive\":true}" +
                         "]"));
+        verify(groupService, times(1)).getActiveGroups();
     }
 
     @Test

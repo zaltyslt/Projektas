@@ -2,7 +2,6 @@ package lt.techin.schedule.module;
 
 import jakarta.validation.Valid;
 import lt.techin.schedule.validators.ValidationDto;
-import org.springframework.data.domain.Page;
 import org.springframework.http.*;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
@@ -57,7 +56,7 @@ public class ModuleController {
         } else {
             String modifyResponse = moduleService.create(toModule(moduleDto));
             validationDto.setPassedValidation(true);
-            if (modifyResponse.isEmpty()) {
+            if (modifyResponse == null || modifyResponse.isEmpty()) {
                 validationDto.setValid(true);
             } else {
                 validationDto.setValid(false);
@@ -82,7 +81,7 @@ public class ModuleController {
         } else {
             String modifyResponse = moduleService.updateModule(moduleId, toModule(moduleDto));
             validationDto.setPassedValidation(true);
-            if (modifyResponse.isEmpty()) {
+            if (modifyResponse == null || modifyResponse.isEmpty()) {
                 validationDto.setValid(true);
             } else {
                 validationDto.setValid(false);

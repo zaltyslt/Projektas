@@ -6,6 +6,7 @@ public class ModuleMapper {
         var moduleDto = new ModuleDto();
         moduleDto.setNumber(module.getNumber());
         moduleDto.setName(module.getName());
+
         return moduleDto;
     }
 
