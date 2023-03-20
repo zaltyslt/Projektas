@@ -64,9 +64,11 @@ public class ScheduleController {
     @DeleteMapping("/delete-schedule/{scheduleId}")
     public ResponseEntity<Boolean> deleteSchedule(@PathVariable Long scheduleId) {
 //        var enableSchedule = scheduleService.enable(scheduleId);
-        var idd = scheduleId;
+        boolean result = scheduleService.deleteSchedule(scheduleId);
         logger.log(Level.INFO, "The schedule was deleted: {0} ", scheduleId);
-        return ResponseEntity.ok(true);
+        return result
+                ? ResponseEntity.ok(true)
+                : ResponseEntity.badRequest().body(false);
     }
 }
 
