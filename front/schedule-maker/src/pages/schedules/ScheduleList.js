@@ -65,7 +65,7 @@ export function ScheduleList() {
     const isActive = schedule.active === true;
     const isWithinDateRange = date
       ? new Date(schedule.dateFrom) <= date &&
-        new Date(schedule.dateUntil) >= date
+      new Date(schedule.dateUntil) >= date
       : true;
     return groupMatches && isActive && isWithinDateRange;
   });
@@ -77,7 +77,7 @@ export function ScheduleList() {
     const isActive = schedule.active === false;
     const isWithinDateRange = date
       ? new Date(schedule.dateFrom) <= date &&
-        new Date(schedule.dateUntil) >= date
+      new Date(schedule.dateUntil) >= date
       : true;
     return groupMatches && isActive && isWithinDateRange;
   });
@@ -118,6 +118,8 @@ export function ScheduleList() {
     setDate(newValue);
   };
 
+  
+
   return (
     <div>
       <Container maxWidth="lg">
@@ -126,7 +128,7 @@ export function ScheduleList() {
             <h3>Tvarkaraščių sąrašas</h3>
           </Grid>
           <Grid item sm={2}>
-            <Stack direction="row" justifyContent="flex-end">
+            <Stack direction="row" justifyContent="flex-end" marginBottom={4} >
               <Link to="/create-schedule">
                 <Button variant="contained">Pridėti naują</Button>
               </Link>
@@ -169,9 +171,9 @@ export function ScheduleList() {
           <Table aria-label="custom pagination table">
             <TableHead>
               <TableRow>
-                <TableCell>Grupės pavadinimas</TableCell>
-                <TableCell>Tvarkaraštis</TableCell>
-                <TableCell className="action" align="center"></TableCell>
+                <TableCell style={{ width: "550px" }}>Grupės pavadinimas</TableCell>
+                <TableCell style={{ width: "550px" }}>Tvarkaraštis</TableCell>
+                <TableCell style={{ width: "100px" }}></TableCell>
               </TableRow>
             </TableHead>
 
@@ -190,12 +192,15 @@ export function ScheduleList() {
                             {schedule.groups.name}
                           </span>
                         ) : (
-                          schedule.groups.name
+                          <span>
+                            {schedule.groups.name}   {schedule.groups.shift.name}
+                          </span>
                         )
                       ) : (
                         <span>Nenurodytas</span>
                       )}
                     </TableCell>
+
                     <TableCell>
                       <Link to={`/schedules/${schedule.id}`}>
                         {schedule.schoolYear} m. {schedule.semester}
@@ -208,6 +213,7 @@ export function ScheduleList() {
                     </TableCell>
                   </TableRow>
                 ))}
+
             </TableBody>
             <TableFooter>
               <TableRow>

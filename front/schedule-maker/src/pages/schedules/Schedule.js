@@ -6,6 +6,9 @@ import listPlugin from "@fullcalendar/list";
 import allLocales from "@fullcalendar/core/locales-all";
 import FullCalendar from "@fullcalendar/react";
 import { Link, useParams } from "react-router-dom";
+import "./ViewSchedule.css";
+import { Stack } from "@mui/system";
+import { Button, Grid } from "@mui/material";
 
 export function Schedule() {
   const [weekendsVisible, setWeekendsVisible] = useState(true);
@@ -13,43 +16,44 @@ export function Schedule() {
   const params = useParams();
 
   useEffect(() => {
-      fetch(`api/v1/schedules/${params.id}/lessons`)
-        .then(response => response.json())
-        .then(data => setSchedule(data))
-        .catch(error => console.error(error));
-  }, [params.id]
-  );
-
-  console.log(schedule)
+    fetch(`api/v1/schedules/${params.id}/lessons`)
+      .then((response) => response.json())
+      .then((data) => setSchedule(data))
+      .catch((error) => console.error(error));
+  }, [params.id]);
 
   const events = schedule.map(schedule => ({
-    title: `${schedule.subject.name}
+    title: `<b>${schedule.subject.name}</b>
       <br />
-      Mokytojas: 
+      ${schedule.lessonStart} - ${schedule.lessonEnd}
+      <br /> 
       ${schedule.teacher ? schedule.teacher.lName : ""} ${schedule.teacher ? schedule.teacher.fName : "nepasirinktas"}
       <br />
-      Klasė: 
-      ${schedule.classroom ? schedule.classroom.classroomName : "nepasirinkta"}
-      <br />
-      Nuotolinė pamoka:
-      ${schedule.online === true ? "taip" : "ne"}
-      <br />
-      Laikas: 
-      ${schedule.lessonStart} - ${schedule.lessonEnd}`,
+      ${schedule.online ? "Nuotolinė pamoka" : schedule.classroom.classroomName}<br />
+      `,
     start: schedule.date,
     allDay: true,
   }));
-  
+
   const renderEventContent = (eventInfo) => (
     <>
       <b>{eventInfo.timeText}</b>
-      <div dangerouslySetInnerHTML={{ __html: eventInfo.event.title }} />
+      <div style={{fontSize: '16px', padding: '10px', fontFamily: 'Arial, sans-serif', backgroundColor: "#dcedf7", color: "black" }} dangerouslySetInnerHTML={{ __html: eventInfo.event.title }} />
     </>
   );
 
+  
+
+  // const renderEventContent = (eventInfo) => (
+  //   <>
+  //     <b>{eventInfo.timeText}</b>
+  //     <div dangerouslySetInnerHTML={{ __html: eventInfo.event.title }} />
+  //   </>
+  // );
+
   return (
     <div className="maincontainer">
-      <div id="container">
+      <div id="container"  style={{ marginBottom: "20px" }}>
         <FullCalendar
           locales={allLocales}
           locale={"lt"}
@@ -59,13 +63,36 @@ export function Schedule() {
           headerToolbar={{
             left: "prev,next today",
             center: "title",
-            right: "dayGridMonth,dayGridWeek,dayGridDay"
+            right: "dayGridMonth,dayGridWeek,dayGridDay",
           }}
           events={events}
           weekends={false}
           eventContent={renderEventContent}
+          dayHeaderFormat={{
+            weekday: "long", // or 'short'
+          }}
+          dayHeaderClassNames="fc-day-header-black"
+          dayHeaderContent={(args) => (
+            <div className="fc-day-header">{args.text}</div>
+          )}
+          dayCellContent={(args) => (
+            <div className="fc-day-number">
+              {args.dayNumberText}
+            </div>
+          )}
         />
       </div>
+
+      <Grid item sm={10}>
+        <Stack direction="row" spacing={2}>
+          <Link to="/">
+            <Button variant="contained">Grįžti</Button>
+          </Link>
+          <Link to={"/planning/" + params.id}>
+            <Button variant="contained">Planavimas</Button>
+          </Link>
+        </Stack>
+      </Grid>
     </div>
   );
 }

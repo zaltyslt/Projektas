@@ -47,11 +47,14 @@ export function AddLesson() {
   const data = useLocation();
   const scheduleId = data.state.schedule.schedule.id;
   const hours = data.state.subject.subject.hours;
-  const unplannedHours = 
-    (data.state.subject.subject.id in data.state.schedule.schedule.subjectIdWithUnassignedTime) ?
-    data.state.schedule.schedule.subjectIdWithUnassignedTime[data.state.subject.subject.id] :
-    data.state.subject.subject.hours; 
-    
+  const unplannedHours =
+    data.state.subject.subject.id in
+    data.state.schedule.schedule.subjectIdWithUnassignedTime
+      ? data.state.schedule.schedule.subjectIdWithUnassignedTime[
+          data.state.subject.subject.id
+        ]
+      : data.state.subject.subject.hours;
+
   const shiftId = data.state.schedule.schedule.groups.shift.id;
   const shift = data.state.schedule.schedule.groups.shift.name;
 
@@ -202,9 +205,11 @@ export function AddLesson() {
                     setSelectedTeacher(e.target.value);
                   }}
                 >
-                  {teachers.length === 0 && (<MenuItem>
-                    Nurodytai pamainai ir dalykui tinkamo mokytojo nerasta
-                  </MenuItem>)}
+                  {teachers.length === 0 && (
+                    <MenuItem>
+                      Nurodytai pamainai ir dalykui tinkamo mokytojo nerasta
+                    </MenuItem>
+                  )}
                   {teachers.map((teacher) => (
                     <MenuItem key={teacher.id} value={teacher}>
                       {teacher.fName} {teacher.lName}
@@ -377,6 +382,9 @@ export function AddLesson() {
                 </Button>
                 <Link to={`/planning/${scheduleId}`}>
                   <Button variant="contained">Atšaukti</Button>
+                </Link>
+                <Link to={"/schedules/" + scheduleId}>
+                  <Button variant="contained">Tvarkaraštis</Button>
                 </Link>
               </Stack>
             </Grid>
