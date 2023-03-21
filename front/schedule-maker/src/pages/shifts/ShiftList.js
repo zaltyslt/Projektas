@@ -143,7 +143,7 @@ export function ShiftList() {
           <Grid item sm={2}>
             <Stack direction="row" justifyContent="flex-end">
               <Link to="/add-shift">
-                <Button variant="contained">Pridėti naują</Button>
+                <Button id="create-new-shift" variant="contained">Pridėti naują</Button>
               </Link>
             </Stack>
           </Grid>

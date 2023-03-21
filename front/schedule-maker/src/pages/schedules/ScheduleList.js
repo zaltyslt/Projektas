@@ -130,7 +130,7 @@ export function ScheduleList() {
           <Grid item sm={2}>
             <Stack direction="row" justifyContent="flex-end" marginBottom={4} >
               <Link to="/create-schedule">
-                <Button variant="contained">Pridėti naują</Button>
+                <Button id="create-new-schedule" variant="contained">Pridėti naują</Button>
               </Link>
             </Stack>
           </Grid>

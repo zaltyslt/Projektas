@@ -238,7 +238,7 @@ export function GroupList() {
           <Grid item sm={2}>
             <Link to="/groups/create">
               <Stack direction="row" justifyContent="flex-end">
-                <Button variant="contained">Pridėti naują</Button>
+                <Button id="create-new-group" variant="contained">Pridėti naują</Button>
               </Stack>
             </Link>
           </Grid>
