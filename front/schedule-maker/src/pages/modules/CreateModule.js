@@ -83,32 +83,12 @@ const validation = () => {
     });
   };
 
-  // const setNumberOnChange = (number) => {
-  //   setNumber(number);
-  //   (number.length === 0) ? setIsNumberEmpty(true) : setIsNumberEmpty(false);
-   
-  //   const isValid = number.split('').some(char => badSymbols.includes(char));
-  //   (isValid) ? setIsValidNumber(false) : setIsValidNumber(true);
- 
-  //   (number.length > moduleNumberLength) ? setIsNumberTooLong(true) : setIsNumberTooLong(false);
-  // }
-
-  // const setNameOnChange = (name) => {
-  //   setName(name);
-  //   (name.length === 0) ? setIsNameEmpty(true) : setIsNameEmpty(false);
-   
-  //   const isValid = name.split('').some(char => badSymbols.includes(char));
-  //   (isValid) ? setIsValidName(false) : setIsValidName(true);
-  
-  //   (name.length > moduleNameLength) ? setIsNameTooLong(true) : setIsNameTooLong(false);
-  // }
-
   return (
     <Container>
       <h3 className="create-header">Pridėti naują modulį</h3>
       <form> 
         <Grid container rowSpacing={2}>
-          <Grid item sm={10}>
+          <Grid item sm={8}>
             <TextField
               fullWidth
               required
@@ -128,7 +108,7 @@ const validation = () => {
             ></TextField>
           </Grid>
 
-          <Grid item sm={10}>
+          <Grid item sm={8}>
             <TextField
               fullWidth
               required
@@ -148,7 +128,7 @@ const validation = () => {
             ></TextField>
           </Grid>
 
-          <Grid item sm={10}>
+          <Grid item sm={8} marginTop={2}>
             <Stack direction="row" spacing={2}>
               <Button variant="contained" onClick={validation}>
                 Išsaugoti
@@ -159,7 +139,7 @@ const validation = () => {
               </Link>
             </Stack>
           </Grid>
-          <Grid item sm={10}>
+          <Grid item sm={8}>
             {error && <Alert severity="warning">{error}</Alert>}
             {createMessage && <Alert severity="success">{createMessage}</Alert>}
           </Grid>

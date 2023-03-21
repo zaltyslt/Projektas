@@ -47,10 +47,10 @@ export function ScheduleList() {
   const [currentPage2, setCurrentPage2] = useState(1);
   const [schedulesPerPage, setSchedulesPerPage] = useState(10);
   const [schedulesPerPage2, setSchedulesPerPage2] = useState(10);
-  
+
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
   const paginate2 = (pageNumber2) => setCurrentPage2(pageNumber2);
-  
+
   const [isChecked, setChecked] = useState(false);
   const [date, setDate] = useState("");
   const [open, setOpen] = useState(false);
@@ -129,18 +129,6 @@ export function ScheduleList() {
     return groupMatches && isActive && isWithinDateRange;
   });
 
-  // const filteredDisabledSchedules = schedules.filter((schedule) => {
-  //   const groupMatches = String(schedule.groups.name)
-  //     .toLowerCase()
-  //     .includes(filter.toLowerCase());
-  //   const isActive = schedule.active === false;
-  //   const isWithinDateRange = date
-  //     ? new Date(schedule.dateFrom) <= date &&
-  //     new Date(schedule.dateUntil) >= date
-  //     : true;
-  //   return groupMatches && isActive && isWithinDateRange;
-  // });
-
   const indexOfLastSchedule = currentPage * schedulesPerPage;
   const indexOfFirstSchedule = indexOfLastSchedule - schedulesPerPage;
   const currentSchedules = filteredSchedules.slice(
@@ -209,7 +197,7 @@ export function ScheduleList() {
           <Grid item sm={2}>
             <Stack direction="row" justifyContent="flex-end" marginBottom={4}>
               <Link to="/create-schedule">
-                <Button variant="contained" >Pridėti naują</Button>
+                <Button id="create-new-schedule" variant="contained" >Pridėti naują</Button>
               </Link>
             </Stack>
           </Grid>
@@ -249,8 +237,6 @@ export function ScheduleList() {
                   value={date}
                   onChange={handleChange}
                   TextFieldComponent={TextField}
-                
-                
                 ></DatePicker>
               </LocalizationProvider>
             </Grid>

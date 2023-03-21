@@ -1,17 +1,17 @@
 package lt.techin.schedule.shifts;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import lt.techin.schedule.ScheduleApplication;
 import lt.techin.schedule.shift.*;
-import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.List;
 
@@ -27,12 +27,10 @@ public class ShiftControllerTests {
     @MockBean
     ShiftService shiftService;
 
-    @InjectMocks
-    public ShiftController shiftController;
-
     @Autowired
     private MockMvc mockMvc;
-
+    
+    
     @Test
     public void testGetActiveShifts() throws Exception {
         Shift shift1 = new Shift("Shift 1", "8:00", "16:00", true, 1, 8);
@@ -61,8 +59,6 @@ public class ShiftControllerTests {
         List<Shift> expectedShifts = List.of(shift1, shift2);
         when(shiftService.getInactiveShifts()).thenReturn(expectedShifts);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/shift/get-inactive")).andDo(print());
-
         mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/shift/get-inactive"))
                 .andExpect(status().isOk())
                 .andExpect(content().json("[" +
@@ -88,21 +84,12 @@ public class ShiftControllerTests {
         Shift shiftToAdd = new Shift("New Shift", "8:00", "16:00", true, 1, 8);
         ShiftDto shiftDto = ShiftMapper.shiftToDto(shiftToAdd);
 
-        System.out.println(shiftDto);
-
         String response = "";
         when(shiftService.addUniqueShift(shiftDto)).thenReturn(response);
 
         mockMvc.perform(post("/api/v1/shift/add-shift")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\n" +
-                                "    \"name\": \"New Shift\",\n" +
-                                "    \"shiftStartingTime\": \"8:00\",\n" +
-                                "    \"shiftEndingTime\": \"16:00\",\n" +
-                                "    \"isActive\": true,\n" +
-                                "    \"startIntEnum\": 1,\n" +
-                                "    \"endIntEnum\": 8\n" +
-                                "}"))
+                        .content(new ObjectMapper().writeValueAsString(shiftDto)))
                 .andExpect(status().isOk())
                 .andExpect(content().json("{}"));
     }
@@ -115,7 +102,7 @@ public class ShiftControllerTests {
 
         mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/shift/modify-shift/1")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"id\": 1, \"name\": \"Updated Shift\",\"shiftStartingTime\": \"8:00\",\"shiftEndingTime\": \"16:00\",\"startIntEnum\": 1, \"endIntEnum\": 8,\"isActive\": true}"))
+                        .content(new ObjectMapper().writeValueAsString(shiftToChange)))
                 .andExpect(status().isOk())
                 .andExpect(content().json("{}"));
     }

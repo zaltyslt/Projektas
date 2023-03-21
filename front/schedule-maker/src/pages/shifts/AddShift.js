@@ -56,6 +56,10 @@ export function AddShift() {
   var endIntEnum;
 
   const createShift = (() => {
+    if (name === "") {
+      setIsNameEmpty(true);
+      return;
+    }
     if (isValidName && !isNameEmpty && !isNameTooLong) {
       startIntEnum = shiftStartingTime;
       endIntEnum = shiftEndingTime;
@@ -99,8 +103,8 @@ export function AddShift() {
       <Container>
         <h3 className="create-header"> Pridėti naują pamainą </h3>
         <form>
-          <Grid container id="grid-input">
-            <Grid item sm={10}>
+          <Grid container rowSpacing={2}>
+            <Grid item sm={8}>
               <TextField
                 fullWidth
                 required
@@ -124,8 +128,8 @@ export function AddShift() {
             </Grid>
           </Grid>
 
-          <Grid container rowSpacing={2}>
-            <Grid item sm={2} id="grid-selector">
+          <Grid container rowSpacing={2} marginTop={1}>
+            <Grid item sm={3.75} id="grid-selector">
               <h5>Pamainos pradžia:</h5>
               <Select
                 fullWidth
@@ -150,7 +154,7 @@ export function AddShift() {
               )}
             </Grid>
 
-            <Grid item sm={2} id="grid-selector">
+            <Grid item sm={3.75} id="grid-selector">
               <h5>Pamainos pabaiga:</h5>
               <Select
                 fullWidth
@@ -176,8 +180,8 @@ export function AddShift() {
             </Grid>
           </Grid>
 
-          <Grid item sm={2}>
-            <Stack direction="row" spacing={2}>
+          <Grid item sm={2} marginTop={1}>
+            <Stack direction="row" spacing={2} >
               <Button variant="contained" onClick={createShift}>
                 Išsaugoti
               </Button>
@@ -187,10 +191,10 @@ export function AddShift() {
             </Stack>
           </Grid>
 
-          <Grid item sm={10}>
+          <Grid item sm={8}>
             {isPostUsed ? (
               successfulPost ? (
-                <Alert severity="success"> Pamaina sėkmingai pridėta.</Alert>
+                <Alert severity="success" > Pamaina sėkmingai pridėta.</Alert>
               ) : (
                 <Grid>
                   <Alert severity="warning">Nepavyko pridėti pamainos.</Alert>

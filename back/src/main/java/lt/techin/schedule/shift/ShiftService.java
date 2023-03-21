@@ -56,7 +56,7 @@ public class ShiftService {
     }
 
     public Shift getShiftByID(Long shiftID) {
-        return shiftDatabase.findAll().stream().filter(s -> Objects.equals(s.getId(), shiftID)).findAny().orElse(null);
+        return shiftDatabase.findById(shiftID).orElse(null);
     }
 
     public String modifyExistingShift(Long shiftID, ShiftDto shiftDto) {

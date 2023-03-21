@@ -113,6 +113,7 @@ public class PlannerService {
         int looper = 0;
 
         while(looper < days) {
+
             DayOfWeek dayOfWeek = date.getDayOfWeek();
             if (dayOfWeek == DayOfWeek.SATURDAY) {
                 date = date.plusDays(2);
