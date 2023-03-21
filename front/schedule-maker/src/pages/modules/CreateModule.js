@@ -83,26 +83,6 @@ const validation = () => {
     });
   };
 
-  // const setNumberOnChange = (number) => {
-  //   setNumber(number);
-  //   (number.length === 0) ? setIsNumberEmpty(true) : setIsNumberEmpty(false);
-   
-  //   const isValid = number.split('').some(char => badSymbols.includes(char));
-  //   (isValid) ? setIsValidNumber(false) : setIsValidNumber(true);
- 
-  //   (number.length > moduleNumberLength) ? setIsNumberTooLong(true) : setIsNumberTooLong(false);
-  // }
-
-  // const setNameOnChange = (name) => {
-  //   setName(name);
-  //   (name.length === 0) ? setIsNameEmpty(true) : setIsNameEmpty(false);
-   
-  //   const isValid = name.split('').some(char => badSymbols.includes(char));
-  //   (isValid) ? setIsValidName(false) : setIsValidName(true);
-  
-  //   (name.length > moduleNameLength) ? setIsNameTooLong(true) : setIsNameTooLong(false);
-  // }
-
   return (
     <Container>
       <h3 className="create-header">Pridėti naują modulį</h3>

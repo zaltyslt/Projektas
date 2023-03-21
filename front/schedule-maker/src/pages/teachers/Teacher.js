@@ -362,7 +362,7 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
   return (
     <Container>
       <form>
-        <h3 className="create-teacher-header">
+        <h3 className="create-header">
           {mode === "update" ? "Redagavimas" : "Pridėti naują mokytoją"}
         </h3>
         {mode === "update" && (
@@ -376,10 +376,10 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
           container          
           rowSpacing={2}
         >
-          <Grid item sm={8}>
+          {/* <Grid item sm={8}>
             {errorMessage && <Alert severity="warning">{errorMessage}</Alert>}
             {createMessage && <Alert severity="success">{createMessage}</Alert>}
-          </Grid>
+          </Grid> */}
           <Grid item sm={8} >
             <TextField
               error={errorFname.error}
@@ -666,10 +666,7 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
               </Alert>
             )}
           </Grid>
-          <Grid item sm={8}>
-            {errorMessage && <Alert severity="warning">{errorMessage}</Alert>}
-            {createMessage && <Alert severity="success">{createMessage}</Alert>}
-          </Grid>
+          
           <Grid item sm={8}>
             <Stack direction="row" spacing={2}>
               <Button variant="contained" onClick={preCreateCheck}>
@@ -688,6 +685,10 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
                 Show
               </Button> */}
             </Stack>
+          </Grid>
+          <Grid item sm={8}>
+            {errorMessage && <Alert severity="warning">{errorMessage}</Alert>}
+            {createMessage && <Alert severity="success">{createMessage}</Alert>}
           </Grid>
         </Grid>
       </form>

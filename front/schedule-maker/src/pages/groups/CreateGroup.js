@@ -289,7 +289,7 @@ export function CreateGroup() {
             </Grid>
           </Grid>
 
-          <Grid item sm={8}>
+          <Grid item sm={4}>
             {isPostUsed ? (
               successfulPost ? (
                 <Alert severity="success"> Grupė sėkmingai pridėta.</Alert>
