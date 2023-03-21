@@ -5,9 +5,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import static lt.techin.schedule.schedules.planner.WorkDayMapper.toWorkDayDto;
 import static org.springframework.http.ResponseEntity.ok;
 
 @RestController
@@ -32,5 +34,11 @@ public class PlannerController {
     @GetMapping("/{scheduleId}/lessons")
     public List<WorkDayDto> getWorkDays(@PathVariable Long scheduleId) {
         return plannerService.getWorkDays(scheduleId).stream().map(WorkDayMapper::toWorkDayDto).toList();
+    }
+
+    @GetMapping("/lesson/{workDayId}")
+    public ResponseEntity<WorkDayDto> getWorkDay(@PathVariable Long workDayId) {
+        Optional<WorkDay> workDay = plannerService.getWorkDay(workDayId);
+        return workDay.map(day -> ok(toWorkDayDto(day))).orElseGet(()-> ResponseEntity.notFound().build());
     }
 }

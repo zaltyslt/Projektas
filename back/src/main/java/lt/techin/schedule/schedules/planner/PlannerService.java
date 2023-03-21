@@ -147,4 +147,8 @@ public class PlannerService {
     public List<WorkDay> getWorkDays(Long scheduleId) {
         return workDayRepository.findWorkDaysByScheduleId(scheduleId);
     }
+
+    public Optional<WorkDay> getWorkDay(Long workDayId) {
+        return workDayRepository.findById(workDayId);
+    }
 }
