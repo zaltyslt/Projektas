@@ -19,7 +19,13 @@ TableCell {
 }
 
 .create-header {
-    line-height: 5rem;
+    margin-top: 50px;
+    margin-bottom: 30px;
+}
+
+.create-teacher-header{
+    margin-top: 50px;
+    margin-bottom: 14px;
 }
 
 .edit-header{
