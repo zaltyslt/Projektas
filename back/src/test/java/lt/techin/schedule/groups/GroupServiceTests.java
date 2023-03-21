@@ -8,7 +8,9 @@ import lt.techin.schedule.programs.Program;
 import lt.techin.schedule.shift.Shift;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDateTime;
@@ -19,9 +21,9 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
-@SpringBootTest
 public class GroupServiceTests {
 
+    @InjectMocks
     private GroupService groupService;
 
     @Mock
@@ -29,7 +31,7 @@ public class GroupServiceTests {
 
     @BeforeEach
     public void setUp() {
-        groupService = new GroupService(groupRepository);
+        MockitoAnnotations.openMocks(this);
     }
 
     @Test

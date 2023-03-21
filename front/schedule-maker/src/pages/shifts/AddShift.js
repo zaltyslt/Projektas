@@ -56,6 +56,10 @@ export function AddShift() {
   var endIntEnum;
 
   const createShift = (() => {
+    if (name === "") {
+      setIsNameEmpty(true);
+      return;
+    }
     if (isValidName && !isNameEmpty && !isNameTooLong) {
       startIntEnum = shiftStartingTime;
       endIntEnum = shiftEndingTime;

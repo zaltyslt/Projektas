@@ -1,16 +1,8 @@
 package lt.techin.schedule.module;
 
-import jakarta.annotation.PostConstruct;
 import jakarta.persistence.EntityManager;
-import lt.techin.schedule.shift.Shift;
-import org.hibernate.Filter;
-import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -79,12 +71,6 @@ public class ModuleService {
         module.setDeleted(false);
         return moduleRepository.save(module);
     }
-
-//    public Module delete(Long moduleId) {
-//        var existingSubject = moduleRepository.findById(moduleId).orElseThrow();
-//        existingSubject.setDeleted(true);
-//        return moduleRepository.save(existingSubject);
-//    }
 
     public boolean deleteById(Long id) {
         try {

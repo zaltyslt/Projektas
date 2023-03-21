@@ -2,10 +2,6 @@ package lt.techin.schedule.module;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
-import org.hibernate.annotations.Filter;
-import org.hibernate.annotations.FilterDef;
-import org.hibernate.annotations.ParamDef;
-import org.hibernate.annotations.SQLDelete;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
@@ -45,6 +41,13 @@ public class Module {
     }
 
     public Module() {
+    }
+
+    public Module(Long id, String number, String name, boolean deleted) {
+        this.id = id;
+        this.number = number;
+        this.name = name;
+        this.deleted = deleted;
     }
 
     public Module(Long id, String number, String name, LocalDateTime createdDate, LocalDateTime modifiedDate, boolean deleted) {
