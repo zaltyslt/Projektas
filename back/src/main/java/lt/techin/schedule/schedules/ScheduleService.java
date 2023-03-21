@@ -91,9 +91,12 @@ public class ScheduleService {
                 scheduleRepository.delete(scheduleToDelete.get());
                 return true;
             } catch (Exception e) {
+                //send cause message
+                return false;
             }
         }
-        return false;
+//        String message, String field, String error, String rejectedValue) {
+        throw new ValidationException("Toks tvarkaraštis neegzistuoja","id","not found",id.toString());
 
     }
 

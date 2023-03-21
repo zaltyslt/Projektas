@@ -1,13 +1,13 @@
 package lt.techin.schedule.schedules;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import static lt.techin.schedule.schedules.ScheduleMapper.toScheduleDto;
 import static lt.techin.schedule.schedules.ScheduleMapper.toScheduleFromCreateDto;
@@ -16,7 +16,7 @@ import static org.springframework.http.ResponseEntity.ok;
 @RestController
 @RequestMapping("/api/v1/schedules")
 public class ScheduleController {
-    Logger logger = Logger.getLogger(ScheduleController.class.getName());
+    Logger logger = LoggerFactory.getLogger(ScheduleController.class);
     private final ScheduleService scheduleService;
 
     public ScheduleController(ScheduleService scheduleService) {
@@ -50,25 +50,25 @@ public class ScheduleController {
     @PatchMapping("/disable-schedule/{scheduleId}")
     public ScheduleDto disableSchedule(@PathVariable Long scheduleId) {
         var disableSchedule = scheduleService.disable(scheduleId);
-        logger.log(Level.INFO, "The schedule was disabled: {0} ", scheduleId);
+        logger.info("The schedule was disabled: {} ", scheduleId);
         return toScheduleDto(disableSchedule);
     }
 
     @PatchMapping("/enable-schedule/{scheduleId}")
     public ScheduleDto enableSchedule(@PathVariable Long scheduleId) {
         var enableSchedule = scheduleService.enable(scheduleId);
-        logger.log(Level.INFO, "The schedule was enabled: {0} ", scheduleId);
+        logger.info("The schedule was enabled: {}", scheduleId);
         return toScheduleDto(enableSchedule);
     }
 
     @DeleteMapping("/delete-schedule/{scheduleId}")
-    public ResponseEntity<Boolean> deleteSchedule(@PathVariable Long scheduleId) {
-//        var enableSchedule = scheduleService.enable(scheduleId);
+    public ResponseEntity<Void> deleteSchedule(@PathVariable Long scheduleId) {
         boolean result = scheduleService.deleteSchedule(scheduleId);
-        logger.log(Level.INFO, "The schedule was deleted: {0} ", scheduleId);
+
+        logger.info("The schedule id {} was deleted: {}", scheduleId, result);
         return result
-                ? ResponseEntity.ok(true)
-                : ResponseEntity.badRequest().body(false);
+                ? ResponseEntity.ok().build()
+                : ResponseEntity.badRequest().build();
     }
 }
 

@@ -40,13 +40,17 @@ const Transition = forwardRef(function Transition(props, ref) {
 });
 export function ScheduleList() {
   const [schedules, setSchedules] = useState([]);
+  // const [filteredSchedules, setFilteredSchedules] = useState([]);
+
   const [filter, setFilter] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [currentPage2, setCurrentPage2] = useState(1);
   const [schedulesPerPage, setSchedulesPerPage] = useState(10);
   const [schedulesPerPage2, setSchedulesPerPage2] = useState(10);
+  
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
   const paginate2 = (pageNumber2) => setCurrentPage2(pageNumber2);
+  
   const [isChecked, setChecked] = useState(false);
   const [date, setDate] = useState("");
   const [open, setOpen] = useState(false);
@@ -89,8 +93,9 @@ export function ScheduleList() {
 
   const fetchSchedules = () => {
     fetch("api/v1/schedules")
-      .then((responce) => responce.json())
-      .then((jsonResponce) => setSchedules(jsonResponce));
+      .then((response) => response.json())
+      .then((jsonResponse) => {
+        setSchedules(jsonResponse);});
   };
 
   // const deleteSchedule = () => {
