@@ -74,31 +74,43 @@ export function CreateSubject() {
       .split("")
       .some((char) => badSymbols.includes(char));
 
-    if (
-      name === "" &&
-      description === "" &&
-      module === "" &&
-      classRooms.length === 0
-    ) {
-      setNameError(true);
-      setDescriptionError(true);
-      setModuleError(true);
-      setClassRoomError(true);
-    } else if (name === "") {
-      setNameError(true);
-    } else if (notValidName) {
+    if (name === "" || description === "" || module === "" || classRooms.length === 0) {
+      if (name === "") {
+        setNameError(true);
+      }
+      else {
+        setNameError(false);
+      }
+      if (description === "") {
+        setDescriptionError(true);
+      }
+      else {
+        setDescriptionError(false);
+      }
+      if (module === "") {
+        setModuleError(true);
+      }
+      else {
+        setModuleError(false);
+      }
+      if (classRooms.length === 0) {
+        setClassRoomError(true);
+      }
+      else {
+        setClassRoomError(false);
+      }
+      return;
+    }
+    
+    if(notValidName) {
       setNameError(false);
       setNameNotValid(true);
-    } else if (description === "") {
-      setDescriptionError(true);
-    } else if (notValiDescription) {
+    } 
+    else if (notValiDescription) {
       setDescriptionError(false);
       setDescriptionNotValid(true);
-    } else if (module === "") {
-      setModuleError(true);
-    } else if (classRooms.length === 0) {
-      setClassRoomError(true);
-    } else {
+    } 
+    else {
       createSubject();
     }
   };
@@ -163,7 +175,7 @@ export function CreateSubject() {
               fullWidth
               required
               multiline
-              // error={descriptionError || descriptionNotValid}
+              error={descriptionError || descriptionNotValid}
               helperText={
                 descriptionError
                   ? "Dalyko aprašas yra privalomas. "

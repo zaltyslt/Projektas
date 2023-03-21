@@ -55,14 +55,40 @@ export function CreateGroup() {
   }, []);
 
   const validation = () => {
-    if (program === "") {
-      setProgramError(true);
+    if (name === "" || schoolYear === "" || studentAmount === "" || program === "" || shift === "") {
+      if (name === "") {
+        setNameError(true);
+      }
+      else {
+        setNameError(false);
+      }
+      if (schoolYear === "") {
+        setYearError(true);
+      }
+      else {
+        setYearError(false);
+      }
+      if (studentAmount === "") {
+        setStudentAmountError(true);
+      }
+      else {
+        setStudentAmountError(false);
+      }
+      if (program === "") {
+        setProgramError(true);
+      }
+      else {
+        setProgramError(false);
+      }
+      if (shift === "") {
+        setShiftError(true);
+      }
+      else {
+        setShiftError(false);
+      }
       return;
     }
-    if (shift === "") {
-      setShiftError(true);
-      return;
-    }
+ 
     if (nameError || nameNotValid || isNameTooLong || yearError || yearNotValid || isYearTooLong || studentAmountError || studentAmountNotValid || isStudentAmountTooLong) {
       return;
     }
@@ -100,20 +126,6 @@ export function CreateGroup() {
     setIsPostUsed(true);
   })
 
-  const clear = () => {
-    setName("");
-    setSchoolYear("");
-    setStudentAmount("");
-    fetchPrograms();
-    fetchShifts();
-    setNameError(false);
-    setYearError(false);
-    setStudentAmountError(false);
-    setProgramError(false);
-    setShiftError(false);
-    setNameNotValid(false);
-    setYearNotValid(false);
-  };
 
   const badSymbols = "!@#$%^&*_+={}<>|~`\\'";
   const textLength = 200;
