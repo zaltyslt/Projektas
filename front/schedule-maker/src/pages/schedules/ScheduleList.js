@@ -44,15 +44,15 @@ export function ScheduleList() {
 
   const [filter, setFilter] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [currentPage2, setCurrentPage2] = useState(1);
+  // const [currentPage2, setCurrentPage2] = useState(1);
   const [schedulesPerPage, setSchedulesPerPage] = useState(10);
-  const [schedulesPerPage2, setSchedulesPerPage2] = useState(10);
+  // const [schedulesPerPage2, setSchedulesPerPage2] = useState(10);
 
-  const paginate = (pageNumber) => setCurrentPage(pageNumber);
-  const paginate2 = (pageNumber2) => setCurrentPage2(pageNumber2);
+  // const paginate = (pageNumber) => setCurrentPage(pageNumber);
+  // const paginate2 = (pageNumber2) => setCurrentPage2(pageNumber2);
 
-  const [isChecked, setChecked] = useState(false);
-  const [date, setDate] = useState("");
+  // const [isChecked, setChecked] = useState(false);
+  const [date, setDate] = useState(null);
   const [open, setOpen] = useState(false);
   const [idToDelete, setidToDelete] = useState("");
   const [createMessage, setCreateMessage] = useState("");
@@ -78,10 +78,8 @@ export function ScheduleList() {
       .then((response) => {
         clearMessages();
         if (response.ok) {
-          console.log("Response is OK.");
           setCreateMessage("Tvarkaraštis ištrintas.");
         } else {
-          console.log("Response is NOT OK.");
           setErrorMessage(`Tvarkaraščio ištrinti nepavyko.`);
         }
       })
@@ -95,7 +93,8 @@ export function ScheduleList() {
     fetch("api/v1/schedules")
       .then((response) => response.json())
       .then((jsonResponse) => {
-        setSchedules(jsonResponse);});
+        setSchedules(jsonResponse);
+      });
   };
 
   // const deleteSchedule = () => {
@@ -112,7 +111,6 @@ export function ScheduleList() {
   }, []);
 
   const clearMessages = () => {
-    console.log("Clear messages.");
     setCreateMessage("");
     setErrorMessage("");
   };
@@ -121,12 +119,28 @@ export function ScheduleList() {
     const groupMatches = String(schedule.groups.name)
       .toLowerCase()
       .includes(filter.toLowerCase());
-    const isActive = schedule.active === true;
+
+    const shiftMaches = String(schedule.groups.shift.name)
+      .toLowerCase()
+      .includes(filter.toLowerCase());
+
+    const schoolYearMatches = String(schedule.schoolYear)
+      .toLowerCase()
+      .includes(filter.toLowerCase());
+
+    const semesterMatches = String(schedule.semester)
+      .toLowerCase()
+      .includes(filter.toLowerCase());
+
     const isWithinDateRange = date
       ? new Date(schedule.dateFrom) <= date &&
         new Date(schedule.dateUntil) >= date
       : true;
-    return groupMatches && isActive && isWithinDateRange;
+     
+    return (
+      (groupMatches || shiftMaches || schoolYearMatches || semesterMatches) &&
+      (isWithinDateRange )
+    );
   });
 
   const indexOfLastSchedule = currentPage * schedulesPerPage;
@@ -162,9 +176,13 @@ export function ScheduleList() {
   // }
 
   const handleChange = (newValue) => {
-    setDate(newValue);
+ 
+    isNaN(newValue) ? setDate(null) : setDate(newValue);
+   
     clearMessages();
   };
+
+ 
 
   return (
     <div>
@@ -197,8 +215,11 @@ export function ScheduleList() {
           <Grid item sm={2}>
             <Stack direction="row" justifyContent="flex-end" marginBottom={4}>
               <Link to="/create-schedule">
-                <Button id="create-new-schedule" variant="contained" >Pridėti naują</Button>
+                <Button id="create-new-schedule" variant="contained">
+                  Pridėti naują
+                </Button>
               </Link>
+             
             </Stack>
           </Grid>
         </Grid>
@@ -224,17 +245,18 @@ export function ScheduleList() {
                 onFocus={clearMessages}
               ></TextField>
             </Grid>
+
             <Grid item sm={4}>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DatePicker
                   fullWidth
                   className="DatePicker"
                   variant="outlined"
-                  label="Date"
+                  label="Data"
                   format="YYYY/MM/DD"
                   id="date-form"
                   name="date-form"
-                  value={date}
+                  value={date || ''}
                   onChange={handleChange}
                   TextFieldComponent={TextField}
                 ></DatePicker>
