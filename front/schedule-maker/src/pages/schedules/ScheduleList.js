@@ -1,6 +1,7 @@
-import { useEffect, useState, React } from "react";
+import { useEffect, useState, React, forwardRef } from "react";
 import { Link } from "react-router-dom";
 import {
+  Alert,
   Button,
   Checkbox,
   FormControlLabel,
@@ -21,42 +22,100 @@ import {
   Select,
   MenuItem,
 } from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
 import { Container } from "@mui/system";
 import { SelectChangeEvent } from "@mui/material/Select";
 import Stack from "@mui/material/Stack";
-import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+import Slide from "@mui/material/Slide";
+import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 
+const Transition = forwardRef(function Transition(props, ref) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
 export function ScheduleList() {
   const [schedules, setSchedules] = useState([]);
+  // const [filteredSchedules, setFilteredSchedules] = useState([]);
+
   const [filter, setFilter] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [currentPage2, setCurrentPage2] = useState(1);
   const [schedulesPerPage, setSchedulesPerPage] = useState(10);
   const [schedulesPerPage2, setSchedulesPerPage2] = useState(10);
+
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
   const paginate2 = (pageNumber2) => setCurrentPage2(pageNumber2);
+
   const [isChecked, setChecked] = useState(false);
   const [date, setDate] = useState("");
+  const [open, setOpen] = useState(false);
+  const [idToDelete, setidToDelete] = useState("");
+  const [createMessage, setCreateMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
-  const fetchSchedules = () => {
-    fetch("api/v1/schedules")
-      .then((responce) => responce.json())
-      .then((jsonResponce) => setSchedules(jsonResponce));
+  const handleClickOpen = (subjectId) => {
+    setidToDelete(subjectId);
+    setOpen(true);
   };
 
-  const enableSchedule = (event, schedule) => {
-    fetch(`api/v1/schedules/enable-schedule/${schedule.id}`, {
-      method: "PATCH",
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleDelete = () => {
+    console.log(idToDelete);
+    fetch(`api/v1/schedules/delete-schedule/${idToDelete}`, {
+      method: "Delete",
       headers: {
         "Content-Type": "application/json",
       },
-    }).then(fetchSchedules);
+    })
+      .then((response) => {
+        clearMessages();
+        if (response.ok) {
+          console.log("Response is OK.");
+          setCreateMessage("Tvarkaraštis ištrintas.");
+        } else {
+          console.log("Response is NOT OK.");
+          setErrorMessage(`Tvarkaraščio ištrinti nepavyko.`);
+        }
+      })
+
+      .then(fetchSchedules);
+    setidToDelete("");
+    setOpen(false);
   };
+
+  const fetchSchedules = () => {
+    fetch("api/v1/schedules")
+      .then((response) => response.json())
+      .then((jsonResponse) => {
+        setSchedules(jsonResponse);});
+  };
+
+  // const deleteSchedule = () => {
+  //   fetch(`api/v1/schedules/enable-schedule/${schedule.id}`, {
+  //     method: "PATCH",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //   }).then(fetchSchedules);
+  // };
 
   useEffect(() => {
     fetchSchedules();
   }, []);
+
+  const clearMessages = () => {
+    console.log("Clear messages.");
+    setCreateMessage("");
+    setErrorMessage("");
+  };
 
   const filteredSchedules = schedules.filter((schedule) => {
     const groupMatches = String(schedule.groups.name)
@@ -65,19 +124,7 @@ export function ScheduleList() {
     const isActive = schedule.active === true;
     const isWithinDateRange = date
       ? new Date(schedule.dateFrom) <= date &&
-      new Date(schedule.dateUntil) >= date
-      : true;
-    return groupMatches && isActive && isWithinDateRange;
-  });
-
-  const filteredDisabledSchedules = schedules.filter((schedule) => {
-    const groupMatches = String(schedule.groups.name)
-      .toLowerCase()
-      .includes(filter.toLowerCase());
-    const isActive = schedule.active === false;
-    const isWithinDateRange = date
-      ? new Date(schedule.dateFrom) <= date &&
-      new Date(schedule.dateUntil) >= date
+        new Date(schedule.dateUntil) >= date
       : true;
     return groupMatches && isActive && isWithinDateRange;
   });
@@ -98,39 +145,59 @@ export function ScheduleList() {
     pageNumbers.push(i);
   }
 
-  const indexOfLastSchedule2 = currentPage2 * schedulesPerPage2;
-  const indexOfFirstSchedule2 = indexOfLastSchedule2 - schedulesPerPage2;
-  const currentSchedule2 = filteredDisabledSchedules.slice(
-    indexOfFirstSchedule2,
-    indexOfLastSchedule2
-  );
+  // const indexOfLastSchedule2 = currentPage2 * schedulesPerPage2;
+  // const indexOfFirstSchedule2 = indexOfLastSchedule2 - schedulesPerPage2;
+  // const currentSchedule2 = filteredDisabledSchedules.slice(
+  //   indexOfFirstSchedule2,
+  //   indexOfLastSchedule2
+  // );
 
-  const pageNumbers2 = [];
-  for (
-    let i = 1;
-    i <= Math.ceil(filteredDisabledSchedules.length / schedulesPerPage2);
-    i++
-  ) {
-    pageNumbers2.push(i);
-  }
+  // const pageNumbers2 = [];
+  // for (
+  //   let i = 1;
+  //   i <= Math.ceil(filteredDisabledSchedules.length / schedulesPerPage2);
+  //   i++
+  // ) {
+  //   pageNumbers2.push(i);
+  // }
 
   const handleChange = (newValue) => {
     setDate(newValue);
+    clearMessages();
   };
-
-  
 
   return (
     <div>
       <Container maxWidth="lg">
+        <Dialog
+          open={open}
+          TransitionComponent={Transition}
+          keepMounted
+          onClose={handleClose}
+          aria-describedby="alert-dialog-slide-description"
+        >
+          <DialogTitle>{"Ar tikrai norite ištrinti tvarkaraštį?"}</DialogTitle>
+          <DialogContent>
+            <DialogContentText id="alert-dialog-slide-description">
+              Ištrynus tvarkaraštį {idToDelete}, visi su juo susieti resursai
+              bus atlaisvinti, o duomenys pašalinti negrįžtamai.
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose}>Atšaukti</Button>
+            <Button onClick={handleDelete}>Ištrinti</Button>
+          </DialogActions>
+        </Dialog>
+
         <Grid container rowSpacing={3}>
           <Grid item sm={10}>
             <h3>Tvarkaraščių sąrašas</h3>
           </Grid>
+
           <Grid item sm={2}>
-            <Stack direction="row" justifyContent="flex-end" marginBottom={4} >
+            <Stack direction="row" justifyContent="flex-end" marginBottom={4}>
               <Link to="/create-schedule">
-                <Button id="create-new-schedule" variant="contained">Pridėti naują</Button>
+                <Button id="create-new-schedule" variant="contained" >Pridėti naują</Button>
               </Link>
             </Stack>
           </Grid>
@@ -138,6 +205,13 @@ export function ScheduleList() {
 
         <Grid item sm={12}>
           <Grid container spacing={2}>
+            <Grid item sm={8}>
+              {errorMessage && <Alert severity="warning">{errorMessage}</Alert>}
+              {createMessage && (
+                <Alert severity="success">{createMessage}</Alert>
+              )}
+            </Grid>
+
             <Grid item sm={8}>
               <TextField
                 fullWidth
@@ -147,6 +221,7 @@ export function ScheduleList() {
                 id="search-form"
                 value={filter}
                 onChange={(e) => setFilter(e.target.value)}
+                onFocus={clearMessages}
               ></TextField>
             </Grid>
             <Grid item sm={4}>
@@ -161,6 +236,7 @@ export function ScheduleList() {
                   name="date-form"
                   value={date}
                   onChange={handleChange}
+                  TextFieldComponent={TextField}
                 ></DatePicker>
               </LocalizationProvider>
             </Grid>
@@ -171,7 +247,9 @@ export function ScheduleList() {
           <Table aria-label="custom pagination table">
             <TableHead>
               <TableRow>
-                <TableCell style={{ width: "550px" }}>Grupės pavadinimas</TableCell>
+                <TableCell style={{ width: "550px" }}>
+                  Grupės pavadinimas
+                </TableCell>
                 <TableCell style={{ width: "550px" }}>Tvarkaraštis</TableCell>
                 <TableCell style={{ width: "100px" }}></TableCell>
               </TableRow>
@@ -193,7 +271,7 @@ export function ScheduleList() {
                           </span>
                         ) : (
                           <span>
-                            {schedule.groups.name}   {schedule.groups.shift.name}
+                            {schedule.groups.name} {schedule.groups.shift.name}
                           </span>
                         )
                       ) : (
@@ -206,6 +284,15 @@ export function ScheduleList() {
                         {schedule.schoolYear} m. {schedule.semester}
                       </Link>
                     </TableCell>
+                    <TableCell>
+                      <Button
+                        variant="outlined"
+                        startIcon={<DeleteIcon />}
+                        onClick={() => handleClickOpen(schedule.id)}
+                      >
+                        Ištrinti
+                      </Button>
+                    </TableCell>
                     <TableCell className="action" align="center">
                       <Link to={`/planning/${schedule.id}`}>
                         <Button variant="contained">Planuoti</Button>
@@ -213,7 +300,6 @@ export function ScheduleList() {
                     </TableCell>
                   </TableRow>
                 ))}
-
             </TableBody>
             <TableFooter>
               <TableRow>
@@ -240,7 +326,7 @@ export function ScheduleList() {
           </Table>
         </TableContainer>
 
-        <FormGroup>
+        {/* <FormGroup>
           <FormControlLabel
             control={<Checkbox />}
             label="Ištrinti tvarkaraščiai"
@@ -248,9 +334,9 @@ export function ScheduleList() {
               e.target.checked ? setChecked(true) : setChecked(false)
             }
           />
-        </FormGroup>
+        </FormGroup> */}
 
-        {isChecked && (
+        {/* {isChecked && (
           <TableContainer component={Paper}>
             <Table aria-label="custom pagination table">
               <TableHead>
@@ -311,7 +397,7 @@ export function ScheduleList() {
               </TableFooter>
             </Table>
           </TableContainer>
-        )}
+        )} */}
       </Container>
     </div>
   );

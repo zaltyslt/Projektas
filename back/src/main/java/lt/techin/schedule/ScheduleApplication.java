@@ -22,7 +22,7 @@ public class ScheduleApplication extends SpringBootServletInitializer {
 		SpringApplication.run(ScheduleApplication.class, args);
 	}
 
-	@EventListener
+//	@EventListener
 	public void handleContextRefresh(ContextRefreshedEvent event) {
 		ApplicationContext applicationContext = event.getApplicationContext();
 		RequestMappingHandlerMapping requestMappingHandlerMapping = applicationContext
