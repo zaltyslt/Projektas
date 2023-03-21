@@ -336,7 +336,7 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
 
   return (
     <Container>
-      <form>
+     <form>
         <h3 className="create-header">
           {mode === "update" ? "Redagavimas" : "Pridėti naują mokytoją"}
         </h3>
@@ -347,12 +347,14 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
             <p>Paskutinį kartą redaguota: {teacher && teacher.dateModified}</p>
           </Grid>
         )}
-        <Grid container rowSpacing={2} ></Grid>
-          <Grid item sm={8}>
-            {errorMessage && <Alert severity="warning">{errorMessage}</Alert>}
-            {createMessage && <Alert severity="success">{createMessage}</Alert>}
-          </Grid> 
-          <Grid item sm={8} >
+        
+        <Grid container rowSpacing={2} >
+            <Grid item sm={8}>
+              {errorMessage && <Alert severity="warning">{errorMessage}</Alert>}
+              {createMessage && <Alert severity="success">{createMessage}</Alert>}
+            </Grid> 
+          
+            <Grid item sm={8} >
             <TextField
               error={errorFname.error}
               helperText={errorFname.text}
@@ -374,10 +376,10 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
                 // setTeacher(e.target.value);
               }}
             ></TextField>
-          </Grid>
+            </Grid>
 
 
-          <Grid item sm={8}>
+            <Grid item sm={8}>
             <TextField
               error={errorLname.error}
               helperText={errorLname.text}
@@ -398,9 +400,9 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
                 // setLName(e.target.value);
               }}
             ></TextField>
-          </Grid>
+            </Grid>
 
-          <Grid item sm={8}>
+            <Grid item sm={8}>
             <TextField
               error={errorPhoneNumber.error}
               helperText={errorPhoneNumber.text}
@@ -422,9 +424,9 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
                 });
               }}
             ></TextField>
-          </Grid>
+             </Grid>
 
-          <Grid item sm={8}>
+             <Grid item sm={8}>
             <TextField
               error={errorDirectMail.error}
               helperText={errorDirectMail.text}
@@ -446,11 +448,11 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
                 });
               }}
             ></TextField>
-          </Grid>
-          <Grid item sm={6}></Grid>
+            </Grid>
+            
 
-          <Grid item sm={6}>
-          <Grid item sm={8}>
+           
+            <Grid item sm={8}>
             <TextField
               error={errorTeamsName.error}
               helperText={errorTeamsName.text}
@@ -658,15 +660,12 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
               <Button variant="contained" onClick={() => navigate("/teachers")}>
                 Grįžti
               </Button>
-              {/* <Button variant="contained" onClick={showCurrent}>
-                Show
-              </Button> */}
-            </Stack>
+                 </Stack>
           </Grid>
           {/* <Grid item sm={8}>
             {errorMessage && <Alert severity="warning">{errorMessage}</Alert>}
             {createMessage && <Alert severity="success">{createMessage}</Alert>}
-          </Grid> */}
+           </Grid> */}
         </Grid>
       </form>
     </Container>
