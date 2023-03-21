@@ -134,7 +134,7 @@ export function ProgramList() {
           <Grid item sm={2}>
             <Stack direction="row" justifyContent="flex-end">
               <Link to="/create-program">
-                <Button variant="contained">Pridėti naują</Button>
+                <Button id="create-new-program" variant="contained">Pridėti naują</Button>
               </Link>
             </Stack>
           </Grid>

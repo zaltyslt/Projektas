@@ -360,10 +360,10 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
   // }
 
   return (
-    <Container style={{ maxWidth: "75rem" }}>
+    <Container>
       <form>
         <h3 className="create-header">
-          {mode === "update" ? "Redagavimas" : "Pridėti mokytoją"}
+          {mode === "update" ? "Redagavimas" : "Pridėti naują mokytoją"}
         </h3>
         {mode === "update" && (
           <Grid>
@@ -373,18 +373,14 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
           </Grid>
         )}
         <Grid
-          container
-          direction="row"
-          justifyContent="space-between"
-          alignItems="left"
-          rowSpacing={3}
+          container          
+          rowSpacing={2}
         >
-          <Grid item sm={6}>
+          {/* <Grid item sm={8}>
             {errorMessage && <Alert severity="warning">{errorMessage}</Alert>}
             {createMessage && <Alert severity="success">{createMessage}</Alert>}
-          </Grid>
-          <Grid item sm={6}></Grid>
-          <Grid item sm={6}>
+          </Grid> */}
+          <Grid item sm={8} >
             <TextField
               error={errorFname.error}
               helperText={errorFname.text}
@@ -407,11 +403,10 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
               }}
             ></TextField>
           </Grid>
-          <Grid item sm={6}></Grid>
 
           {/* //33370 */}
 
-          <Grid item sm={6}>
+          <Grid item sm={8}>
             <TextField
               error={errorLname.error}
               helperText={errorLname.text}
@@ -433,9 +428,8 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
               }}
             ></TextField>
           </Grid>
-          <Grid item sm={6}></Grid>
 
-          <Grid item sm={6}>
+          <Grid item sm={8}>
             <TextField
               error={errorPhoneNumber.error}
               helperText={errorPhoneNumber.text}
@@ -458,9 +452,8 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
               }}
             ></TextField>
           </Grid>
-          <Grid item sm={6}></Grid>
 
-          <Grid item sm={6}>
+          <Grid item sm={8}>
             <TextField
               error={errorDirectMail.error}
               helperText={errorDirectMail.text}
@@ -483,8 +476,7 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
               }}
             ></TextField>
           </Grid>
-          <Grid item sm={6}></Grid>
-          <Grid item sm={6}>
+          <Grid item sm={8}>
             <TextField
               error={errorTeamsName.error}
               helperText={errorTeamsName.text}
@@ -505,8 +497,7 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
               }}
             ></TextField>
           </Grid>
-          <Grid item sm={6}></Grid>
-          <Grid item sm={6}>
+          <Grid item sm={8}>
             <TextField
               error={errorTeamsMail.error}
               helperText={errorTeamsMail.text}
@@ -529,8 +520,7 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
               }
             ></TextField>
           </Grid>
-          <Grid item sm={6}></Grid>
-          <Grid item sm={6}>
+          <Grid item sm={8}>
             <TextField
               error={errorHours.error}
               helperText={errorHours.text}
@@ -554,8 +544,7 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
               }}
             ></TextField>
           </Grid>
-          <Grid item sm={6}></Grid>
-          <Grid item sm={6}>
+          <Grid item sm={8}>
             <FormControl
               required
               fullWidth
@@ -589,10 +578,8 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
             </FormControl>
           </Grid>
 
-          <Grid item sm={6}></Grid>
-
           {showSubjSelect && (
-            <Grid item sm={6}>
+            <Grid item sm={8}>
               <FormControl fullWidth>
                 <InputLabel id="subjects-label">Dalykai</InputLabel>
                 <Select
@@ -623,9 +610,9 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
               </FormControl>
             </Grid>
           )}
-          {showSubjSelect && <Grid item sm={6}></Grid>}
+          {showSubjSelect && <Grid item sm={8}></Grid>}
 
-          <Grid item sm={6}>
+          <Grid item sm={8}>
             <TableContainer component={Paper} style={{ width: "100%" }}>
               {/* {true && (
                   <Typography color="error">
@@ -679,12 +666,8 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
               </Alert>
             )}
           </Grid>
-          <Grid item sm={6}></Grid>
-          <Grid item sm={6}>
-            {errorMessage && <Alert severity="warning">{errorMessage}</Alert>}
-            {createMessage && <Alert severity="success">{createMessage}</Alert>}
-          </Grid>
-          <Grid item sm={12}>
+          
+          <Grid item sm={8}>
             <Stack direction="row" spacing={2}>
               <Button variant="contained" onClick={preCreateCheck}>
                 {mode === "update" ? "Išsaugoti" : "Išsaugoti"}
@@ -703,8 +686,13 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
               </Button> */}
             </Stack>
           </Grid>
+          <Grid item sm={8}>
+            {errorMessage && <Alert severity="warning">{errorMessage}</Alert>}
+            {createMessage && <Alert severity="success">{createMessage}</Alert>}
+          </Grid>
         </Grid>
       </form>
     </Container>
   );
 }
+

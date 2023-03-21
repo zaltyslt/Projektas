@@ -112,7 +112,7 @@ export function CreateRoom(props) {
       <h3 className="create-header">Pridėti naują klasę</h3>
       <form>
         <Grid container rowSpacing={2}>
-          <Grid item sm={10}>
+          <Grid item sm={8}>
             <FormControl fullWidth required error={errorBuilding}>
               <InputLabel id="building-label">
                 {errorBuilding
@@ -132,7 +132,7 @@ export function CreateRoom(props) {
               </Select>
             </FormControl>
           </Grid>
-          <Grid item sm={10}>
+          <Grid item sm={8}>
             <TextField
               fullWidth
               required
@@ -162,7 +162,7 @@ export function CreateRoom(props) {
               // onChange={(e) => setClassroomName(e.target.value)}
             />
           </Grid>
-          <Grid item sm={10}>
+          <Grid item sm={8}>
             <TextField
               fullWidth
               multiline
@@ -193,7 +193,7 @@ export function CreateRoom(props) {
               // onChange={(e) => setDescription(e.target.value)}
             ></TextField>
           </Grid>
-          <Grid item sm={10}>
+          <Grid item sm={8} marginTop={2}>
             <Stack direction="row" spacing={2}>
               <Button variant="contained" onClick={createClassroom}>
                 Išsaugoti
@@ -203,7 +203,7 @@ export function CreateRoom(props) {
               </Button>
             </Stack>
           </Grid>
-          <Grid item sm={10}>
+          <Grid item sm={8}>
             {error && <Alert severity="warning">{error}</Alert>}
             {success && <Alert severity="success">{success}</Alert>}
           </Grid>

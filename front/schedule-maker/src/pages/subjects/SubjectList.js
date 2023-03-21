@@ -125,7 +125,7 @@ export function SubjectList() {
           <Grid item sm={2}>
             <Link to="/subjects/create">
               <Stack direction="row" justifyContent="flex-end">
-                <Button variant="contained">Pridėti naują</Button>
+                <Button id="create-new-subject" variant="contained">Pridėti naują</Button>
               </Stack>
             </Link>
           </Grid>
