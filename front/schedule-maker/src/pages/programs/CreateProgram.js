@@ -97,7 +97,7 @@ export function CreateProgram(props) {
     });
     return hasErrors;
   };
-  
+
   const createProgram = () => {
     setError("");
     setSuccess("");
@@ -162,13 +162,13 @@ export function CreateProgram(props) {
   };
 
   const handleFormChange = (event, index) => {
-    console.log(event.target.value)
+    console.log(event.target.value);
     let data = [...subjectHoursList];
 
-    if (event.target.name == 'subjectName') {
+    if (event.target.name == "subjectName") {
       data[index][event.target.name] = event.target.value.name;
-      data[index]['deleted'] = event.target.value.deleted;
-      data[index]['subject'] = event.target.value.id;
+      data[index]["deleted"] = event.target.value.deleted;
+      data[index]["subject"] = event.target.value.id;
     } else {
       data[index][event.target.name] = event.target.value;
     }
@@ -206,12 +206,15 @@ export function CreateProgram(props) {
                 fullWidth
                 required
                 error={errorEmptyName || errorSymbolsName || errorLengthName}
-                helperText={errorEmptyName ? "Programos pavadinimas yra privalomas."
-                  : errorSymbolsName
+                helperText={
+                  errorEmptyName
+                    ? "Programos pavadinimas yra privalomas."
+                    : errorSymbolsName
                     ? "Programos pavadinimas turi neleidžiamų simbolių."
                     : errorLengthName
                     ? "Programos pavadinimas negali būti ilgesnis nei 200 simbolių"
-                    : ""}
+                    : ""
+                }
                 variant="outlined"
                 id="programName"
                 label="Programos pavadinimas"
@@ -238,10 +241,11 @@ export function CreateProgram(props) {
                   errorEmptyDesc
                     ? "Programos aprašas yra privalomas."
                     : errorSymbolsDesc
-                      ? "Programos aprašas turi neleidžiamų simbolių."
-                      : errorLengthDesc
-                      ? "Programos aprašas negali būti ilgesnis nei 2000 simbolių"
-                      : ""}
+                    ? "Programos aprašas turi neleidžiamų simbolių."
+                    : errorLengthDesc
+                    ? "Programos aprašas negali būti ilgesnis nei 2000 simbolių"
+                    : ""
+                }
                 variant="outlined"
                 label="Programos aprašas"
                 id="description"
@@ -290,8 +294,11 @@ export function CreateProgram(props) {
                             label="subjectName"
                             onChange={(event) => handleFormChange(event, index)}
                           >
-                            {subjects.map(currentOption => (
-                              <MenuItem key={currentOption.id} value={currentOption}>
+                            {subjects.map((currentOption) => (
+                              <MenuItem
+                                key={currentOption.id}
+                                value={currentOption}
+                              >
                                 {currentOption.name}
                               </MenuItem>
                             ))}
@@ -304,9 +311,12 @@ export function CreateProgram(props) {
                           required
                           error={errorHours || errorHoursNumber}
                           helperText={
-                            errorHours ? "Leidžiami tik skaičių simboliai." 
-                            : errorHoursNumber ? "Dalykas negali viršyti 1000 valandų."
-                            : ""}
+                            errorHours
+                              ? "Leidžiami tik skaičių simboliai."
+                              : errorHoursNumber
+                              ? "Dalykas negali viršyti 1000 valandų."
+                              : ""
+                          }
                           variant="outlined"
                           id="hours"
                           name="hours"
@@ -336,7 +346,7 @@ export function CreateProgram(props) {
                 })}
               </Grid>
             </Grid>
-            <Grid item sm={11}>
+            <Grid item sm={8}>
               {error && <Alert severity="warning">{error}</Alert>}
               {success && <Alert severity="success">{success}</Alert>}
               <Stack direction="row" spacing={2}>
@@ -344,7 +354,7 @@ export function CreateProgram(props) {
                   Pridėtį dalyką
                 </Button>
                 <Button variant="contained" onClick={createProgram}>
-                 Išsaugoti
+                  Išsaugoti
                 </Button>
                 <Button variant="contained" onClick={() => navigate(-1)}>
                   Grįžti

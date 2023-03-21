@@ -149,12 +149,13 @@ export function EditSubject() {
 
   return (
     <Container>
-      <h1>Redagavimas</h1>
+      <h1 className="edit-header">Redagavimas</h1>
       <h3>{subject.name}</h3>
-      <span id="modified-date">Paskutinį kartą redaguota: {subject.modifiedDate}</span>
-      <form>
+      <span id="modified-date">
+        Paskutinį kartą redaguota: {subject.modifiedDate}
+      </span>
         <Grid container rowSpacing={2}>
-          <Grid item sm={10}>
+          <Grid item sm={8}>
             <TextField
               fullWidth
               required
@@ -174,7 +175,7 @@ export function EditSubject() {
             ></TextField>
           </Grid>
 
-          <Grid item sm={10}>
+          <Grid item sm={8}>
             <TextField
               fullWidth
               multiline
@@ -195,7 +196,7 @@ export function EditSubject() {
             ></TextField>
           </Grid>
 
-          <Grid item sm={10}>
+          <Grid item sm={8}>
             <FormControl fullWidth required error={moduleError}>
               <InputLabel id="module-label">
                 {moduleError
@@ -218,7 +219,7 @@ export function EditSubject() {
             </FormControl>
           </Grid>
 
-          <Grid item sm={10}>
+          <Grid item sm={8}>
             <FormControl fullWidth required error={classRoomError}>
               <InputLabel id="room-label">
                 {classRoomError
@@ -242,12 +243,12 @@ export function EditSubject() {
             </FormControl>
           </Grid>
 
-          <Grid item sm={10}>
+          <Grid item sm={8}>
             {error && <Alert severity="warning">{error}</Alert>}
             {createMessage && <Alert severity="success">{createMessage}</Alert>}
           </Grid>
 
-          <Grid item sm={10}>
+          <Grid item sm={8}>
             <Stack direction="row" spacing={2}>
               <Button variant="contained" onClick={validation}>
                 Išsaugoti
@@ -266,7 +267,6 @@ export function EditSubject() {
             </Stack>
           </Grid>
         </Grid>
-      </form>
     </Container>
   );
 }
