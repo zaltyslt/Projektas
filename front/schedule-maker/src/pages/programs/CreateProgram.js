@@ -200,8 +200,8 @@ export function CreateProgram(props) {
       <Container>
         <h3 className="create-header">Pridėti naują programą</h3>
         <form>
-          <Grid container id="grid-input">
-            <Grid item sm={12} id="grid-selector">
+          <Grid container rowSpacing={2}>
+            <Grid item sm={8}>
               <TextField
                 fullWidth
                 required
@@ -228,7 +228,7 @@ export function CreateProgram(props) {
                 // onChange={(e) => setProgramName(e.target.value)}
               ></TextField>
             </Grid>
-            <Grid item sm={12} id="grid-selector">
+            <Grid item sm={8}>
               <TextField
                 fullWidth
                 multiline
@@ -258,7 +258,7 @@ export function CreateProgram(props) {
                 // onChange={(e) => setDescription(e.target.value)}
               ></TextField>
             </Grid>
-            <Grid item sm={11}>
+            <Grid item sm={8}>
               <Grid container direction="row" justifyContent="space-between">
                 {subjectHoursList.map((form, index) => {
                   return (
@@ -270,7 +270,7 @@ export function CreateProgram(props) {
                       columnSpacing={{ xs: 1, sm: 1, md: 1 }}
                       key={index}
                     >
-                      <Grid item xs={5}>
+                      <Grid item xs={6}>
                         <FormControl
                           fullWidth
                           required
@@ -317,7 +317,7 @@ export function CreateProgram(props) {
                       </Grid>
                       <Grid
                         item
-                        xs={3}
+                        xs={2}
                         container
                         justifyContent="end"
                         justifyItems={"center"}

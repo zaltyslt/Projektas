@@ -160,7 +160,7 @@ export function TeacherList() {
           <Grid item sm={2}>
             <Stack direction="row" justifyContent="flex-end">
               <Link to="/teachers/create">
-                <Button variant="contained">Pridėti naują</Button>
+                <Button id="create-new-teacher" variant="contained">Pridėti naują</Button>
               </Link>
             </Stack>
           </Grid>

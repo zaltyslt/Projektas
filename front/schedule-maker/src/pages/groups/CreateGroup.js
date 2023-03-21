@@ -166,10 +166,10 @@ export function CreateGroup() {
   return (
     <div>
       <Container>
-        <h3>Pridėti naują grupę</h3>
+        <h3 className="create-header">Pridėti naują grupę</h3>
         <form>
           <Grid container rowSpacing={2}>
-            <Grid item sm={10}>
+            <Grid item sm={8}>
               <TextField
                 fullWidth
                 required
@@ -192,7 +192,7 @@ export function CreateGroup() {
               ></TextField>
             </Grid>
 
-            <Grid item sm={10}>
+            <Grid item sm={8}>
               <TextField
                 fullWidth
                 required
@@ -215,7 +215,7 @@ export function CreateGroup() {
               ></TextField>
             </Grid>
 
-            <Grid item sm={10}>
+            <Grid item sm={8}>
               <TextField
                 fullWidth
                 required
@@ -238,7 +238,7 @@ export function CreateGroup() {
               ></TextField>
             </Grid>
 
-            <Grid item sm={10}>
+            <Grid item sm={8}>
               <FormControl fullWidth required error={programError}>
                 <InputLabel id="program-label">
                   {programError
@@ -263,7 +263,7 @@ export function CreateGroup() {
               </FormControl>
             </Grid>
 
-            <Grid item sm={10}>
+            <Grid item sm={8}>
               <FormControl fullWidth required error={shiftError}>
                 <InputLabel id="shift-label">
                   {shiftError
@@ -288,7 +288,7 @@ export function CreateGroup() {
               </FormControl>
             </Grid>
 
-            <Grid item sm={10}>
+            <Grid item sm={8} marginTop={2}>
               <Stack direction="row" spacing={2}>
                 <Button variant="contained" onClick={validation}>
                   Išsaugoti
@@ -301,7 +301,7 @@ export function CreateGroup() {
             </Grid>
           </Grid>
 
-          <Grid item sm={10}>
+          <Grid item sm={4}>
             {isPostUsed ? (
               successfulPost ? (
                 <Alert severity="success"> Grupė sėkmingai pridėta.</Alert>
