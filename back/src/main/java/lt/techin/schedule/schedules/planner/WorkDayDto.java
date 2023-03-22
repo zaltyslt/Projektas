@@ -1,6 +1,7 @@
 package lt.techin.schedule.schedules.planner;
 
 import lt.techin.schedule.classrooms.ClassroomSmallDto;
+import lt.techin.schedule.schedules.ScheduleEntityDto;
 import lt.techin.schedule.subject.SubjectSmallDto;
 import lt.techin.schedule.teachers.TeacherEntityDto;
 
@@ -25,10 +26,12 @@ public class WorkDayDto {
 
     private ClassroomSmallDto classroom;
 
+    private ScheduleEntityDto schedule;
+
     public WorkDayDto() {
     }
 
-    public WorkDayDto(Long id, LocalDate date, String lessonStart, String lessonEnd, Boolean online, TeacherEntityDto teacher, SubjectSmallDto subject, ClassroomSmallDto classroom) {
+    public WorkDayDto(Long id, LocalDate date, String lessonStart, String lessonEnd, Boolean online, TeacherEntityDto teacher, SubjectSmallDto subject, ClassroomSmallDto classroom, ScheduleEntityDto schedule) {
         this.id = id;
         this.date = date;
         this.lessonStart = lessonStart;
@@ -37,6 +40,7 @@ public class WorkDayDto {
         this.teacher = teacher;
         this.subject = subject;
         this.classroom = classroom;
+        this.schedule = schedule;
     }
 
     public Long getId() {
@@ -103,17 +107,25 @@ public class WorkDayDto {
         this.classroom = classroom;
     }
 
+    public ScheduleEntityDto getSchedule() {
+        return schedule;
+    }
+
+    public void setSchedule(ScheduleEntityDto schedule) {
+        this.schedule = schedule;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         WorkDayDto that = (WorkDayDto) o;
-        return Objects.equals(id, that.id) && Objects.equals(date, that.date) && Objects.equals(lessonStart, that.lessonStart) && Objects.equals(lessonEnd, that.lessonEnd) && Objects.equals(online, that.online) && Objects.equals(teacher, that.teacher) && Objects.equals(subject, that.subject) && Objects.equals(classroom, that.classroom);
+        return Objects.equals(id, that.id) && Objects.equals(date, that.date) && Objects.equals(lessonStart, that.lessonStart) && Objects.equals(lessonEnd, that.lessonEnd) && Objects.equals(online, that.online) && Objects.equals(teacher, that.teacher) && Objects.equals(subject, that.subject) && Objects.equals(classroom, that.classroom) && Objects.equals(schedule, that.schedule);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, date, lessonStart, lessonEnd, online, teacher, subject, classroom);
+        return Objects.hash(id, date, lessonStart, lessonEnd, online, teacher, subject, classroom, schedule);
     }
 
     @Override
@@ -121,12 +133,13 @@ public class WorkDayDto {
         return "WorkDayDto{" +
                 "id=" + id +
                 ", date=" + date +
-                ", lessonStart=" + lessonStart +
-                ", lessonEnd=" + lessonEnd +
+                ", lessonStart='" + lessonStart + '\'' +
+                ", lessonEnd='" + lessonEnd + '\'' +
                 ", online=" + online +
                 ", teacher=" + teacher +
                 ", subject=" + subject +
                 ", classroom=" + classroom +
+                ", schedule=" + schedule +
                 '}';
     }
 }

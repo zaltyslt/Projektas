@@ -18,11 +18,14 @@ export function EditLesson() {
   const [selectedTeacher, setSelectedTeacher] = useState("");
   const [teachers, setTeachers] = useState([]);
   const [subject, setSubject] = useState({});
+  const [schedule, setSchedule] = useState({});
   const [classRooms, setClassRooms] = useState([]);
   const [selectedClassRoom, setSelectedClassRoom] = useState("");
   const [online, setOnline] = useState(false);
 
   const params = useParams();
+  const location = useLocation();
+  console.log(location);
 
   useEffect(() => {
     fetch(`api/v1/schedules/lesson/${params.id}`)
@@ -30,6 +33,7 @@ export function EditLesson() {
       .then((data) => {
         setWorkDay(data);
         setSubject(data.subject);
+        setSchedule(data.schedule);
       });
   }, []);
 
@@ -117,7 +121,7 @@ export function EditLesson() {
             <Grid item sm={10}>
               <Stack direction="row" spacing={2}>
                 <Button variant="contained">Išsaugoti</Button>
-                <Link>
+                <Link to={`/schedules/${schedule.id}`}>
                   <Button variant="contained">Atšaukti</Button>
                 </Link>
                 <Button variant="contained">Ištrinti</Button>
