@@ -12,12 +12,13 @@ import {
 } from "@mui/material";
 import { Container } from "@mui/system";
 import { useEffect, useState } from "react";
-import { Link, useLocation, useParams } from "react-router-dom";
+import { Link, useParams, useHref } from "react-router-dom";
+import { lessonsWithTime } from "../../helpers/constants";
 
 export function EditLesson() {
   const [workDay, setWorkDay] = useState({
     online: false,
-    teacher: {}, 
+    teacher: {},
     classroom: {},
   });
   const [selectedTeacher, setSelectedTeacher] = useState("");
@@ -28,11 +29,12 @@ export function EditLesson() {
   const [classRoom, setClassRoom] = useState("");
   const [selectedClassRoom, setSelectedClassRoom] = useState("");
   const [online, setOnline] = useState(false);
-  
+
   const [error, setError] = useState("");
   const [createMessage, setCreateMessage] = useState("");
 
   const params = useParams();
+  const calendarUrl = useHref(`/schedules/${schedule.id}`);
 
   useEffect(() => {
     fetch(`api/v1/schedules/lesson/${params.id}`)
@@ -64,7 +66,7 @@ export function EditLesson() {
     setClassRoom(value);
     let classroom = {
       id: value.id,
-      classroomName: value.classroomName
+      classroomName: value.classroomName,
     };
     setSelectedClassRoom(classroom);
   };
@@ -76,8 +78,8 @@ export function EditLesson() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        online, 
-        teacher: selectedTeacher, 
+        online,
+        teacher: selectedTeacher,
         classroom: selectedClassRoom,
       }),
     }).then((response) => {
@@ -95,13 +97,32 @@ export function EditLesson() {
     });
   };
 
-  const deleteLesson = () => {
+  const deleteLesson = (start, end) => {
     fetch(`api/v1/schedules/delete-lesson/${params.id}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
-      }
-    })
+      },
+      body: JSON.stringify({
+        startIntEnum: start,
+        endIntEnum: end,
+      }),
+    }).then(() => (window.location = calendarUrl));
+  };
+
+  const handleDelete = () => {
+    const startLessons = lessonsWithTime.filter(
+      (value) => value.label === workDay.lessonStart
+    );
+    const firstLesson = startLessons[0];
+    const startint = firstLesson.value;
+
+    const endLesson = lessonsWithTime.filter(
+      (value) => value.label === workDay.lessonEnd
+    );
+    const lastLesson = endLesson[0];
+    const endInt = lastLesson.value;
+    deleteLesson(startint, endInt);
   };
 
   return (
@@ -170,9 +191,11 @@ export function EditLesson() {
             </Grid>
 
             <Grid item sm={10}>
-            {error && <Alert severity="warning">{error}</Alert>}
-            {createMessage && <Alert severity="success">{createMessage}</Alert>}
-          </Grid>
+              {error && <Alert severity="warning">{error}</Alert>}
+              {createMessage && (
+                <Alert severity="success">{createMessage}</Alert>
+              )}
+            </Grid>
 
             <Grid item sm={10}>
               <Stack direction="row" spacing={2}>
@@ -182,7 +205,9 @@ export function EditLesson() {
                 <Link to={`/schedules/${schedule.id}`}>
                   <Button variant="contained">Atšaukti</Button>
                 </Link>
-                <Button variant="contained" onClick={deleteLesson}>Ištrinti</Button>
+                <Button variant="contained" onClick={handleDelete}>
+                  Ištrinti
+                </Button>
               </Stack>
             </Grid>
           </Grid>

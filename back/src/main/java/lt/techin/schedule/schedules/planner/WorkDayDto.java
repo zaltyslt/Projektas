@@ -18,6 +18,10 @@ public class WorkDayDto {
 
     private String lessonEnd;
 
+    private int startIntEnum;
+
+    private int endIntEnum;
+
     private Boolean online;
 
     private TeacherEntityDto teacher;
@@ -42,6 +46,8 @@ public class WorkDayDto {
         this.classroom = classroom;
         this.schedule = schedule;
     }
+
+
 
     public Long getId() {
         return id;
