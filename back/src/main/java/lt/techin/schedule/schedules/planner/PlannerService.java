@@ -20,6 +20,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import static lt.techin.schedule.classrooms.ClassroomMapper.toClassroomFromSmallDto;
+import static lt.techin.schedule.schedules.ScheduleMapper.toScheduleFromEntity;
+import static lt.techin.schedule.teachers.TeacherMapper.toTeacherFromEntityDto;
+
 @Service
 public class PlannerService {
 
@@ -150,5 +154,14 @@ public class PlannerService {
 
     public Optional<WorkDay> getWorkDay(Long workDayId) {
         return workDayRepository.findById(workDayId);
+    }
+
+    public WorkDay updateWorkDay(Long workDayId, WorkDayDto workDayDto) {
+        WorkDay existingWorkDay = workDayRepository.findById(workDayId).orElseThrow();
+        existingWorkDay.setTeacher(toTeacherFromEntityDto(workDayDto.getTeacher()));
+        existingWorkDay.setClassroom(toClassroomFromSmallDto(workDayDto.getClassroom()));
+        existingWorkDay.setOnline(workDayDto.getOnline());
+
+        return workDayRepository.save(existingWorkDay);
     }
 }

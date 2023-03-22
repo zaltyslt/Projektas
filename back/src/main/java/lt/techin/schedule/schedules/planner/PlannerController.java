@@ -41,4 +41,11 @@ public class PlannerController {
         Optional<WorkDay> workDay = plannerService.getWorkDay(workDayId);
         return workDay.map(day -> ok(toWorkDayDto(day))).orElseGet(()-> ResponseEntity.notFound().build());
     }
+
+    @PatchMapping("/edit-lesson/{workDayId}")
+    public ResponseEntity<WorkDayDto> updateWorkDay(@PathVariable Long workDayId, @RequestBody WorkDayDto workDayDto) {
+       WorkDay updatedWorkDay = plannerService.updateWorkDay(workDayId, workDayDto);
+       WorkDayDto updatedWorkDayDto = toWorkDayDto(updatedWorkDay);
+       return ok(updatedWorkDayDto);
+    }
 }

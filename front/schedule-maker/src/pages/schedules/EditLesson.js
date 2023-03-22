@@ -1,4 +1,5 @@
 import {
+  Alert,
   Button,
   Checkbox,
   FormControl,
@@ -14,18 +15,24 @@ import { useEffect, useState } from "react";
 import { Link, useLocation, useParams } from "react-router-dom";
 
 export function EditLesson() {
-  const [workDay, setWorkDay] = useState({});
+  const [workDay, setWorkDay] = useState({
+    online: false,
+    teacher: {}, 
+    classroom: {},
+  });
   const [selectedTeacher, setSelectedTeacher] = useState("");
   const [teachers, setTeachers] = useState([]);
   const [subject, setSubject] = useState({});
   const [schedule, setSchedule] = useState({});
   const [classRooms, setClassRooms] = useState([]);
+  const [classRoom, setClassRoom] = useState("");
   const [selectedClassRoom, setSelectedClassRoom] = useState("");
   const [online, setOnline] = useState(false);
+  
+  const [error, setError] = useState("");
+  const [createMessage, setCreateMessage] = useState("");
 
   const params = useParams();
-  const location = useLocation();
-  console.log(location);
 
   useEffect(() => {
     fetch(`api/v1/schedules/lesson/${params.id}`)
@@ -51,6 +58,41 @@ export function EditLesson() {
 
   const handleCheck = (event) => {
     setOnline(event.target.checked);
+  };
+
+  const handleRoomSelect = (value) => {
+    setClassRoom(value);
+    let classroom = {
+      id: value.id,
+      classroomName: value.classroomName
+    };
+    setSelectedClassRoom(classroom);
+  };
+
+  const updateLesson = () => {
+    fetch(`api/v1/schedules/edit-lesson/${params.id}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        online, 
+        teacher: selectedTeacher, 
+        classroom: selectedClassRoom,
+      }),
+    }).then((response) => {
+      let success = response.ok;
+
+      response.json().then((response) => {
+        if (!success) {
+          setCreateMessage("");
+          setError(response.message);
+        } else {
+          setCreateMessage("Sėkmingai atnaujinta. ");
+          setError("");
+        }
+      });
+    });
   };
 
   return (
@@ -97,9 +139,9 @@ export function EditLesson() {
                   label="Klasės pavadinimas"
                   labelId="classroom-label"
                   id="classroom"
-                  value={selectedClassRoom}
+                  value={classRoom}
                   onChange={(e) => {
-                    setSelectedClassRoom(e.target.value);
+                    handleRoomSelect(e.target.value);
                   }}
                 >
                   {classRooms.map((classroom) => (
@@ -119,8 +161,15 @@ export function EditLesson() {
             </Grid>
 
             <Grid item sm={10}>
+            {error && <Alert severity="warning">{error}</Alert>}
+            {createMessage && <Alert severity="success">{createMessage}</Alert>}
+          </Grid>
+
+            <Grid item sm={10}>
               <Stack direction="row" spacing={2}>
-                <Button variant="contained">Išsaugoti</Button>
+                <Button variant="contained" onClick={updateLesson}>
+                  Išsaugoti
+                </Button>
                 <Link to={`/schedules/${schedule.id}`}>
                   <Button variant="contained">Atšaukti</Button>
                 </Link>
