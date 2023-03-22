@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import { Container } from "@mui/system";
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 
 export function EditLesson() {
   const [workDay, setWorkDay] = useState({});
@@ -22,8 +22,10 @@ export function EditLesson() {
   const [selectedClassRoom, setSelectedClassRoom] = useState("");
   const [online, setOnline] = useState(false);
 
+  const params = useParams();
+
   useEffect(() => {
-    fetch(`api/v1/schedules/lesson/1`)
+    fetch(`api/v1/schedules/lesson/${params.id}`)
       .then((response) => response.json())
       .then((data) => {
         setWorkDay(data);
@@ -35,13 +37,13 @@ export function EditLesson() {
     fetch("api/v1/teachers/" + subject.id)
       .then((response) => response.json())
       .then(setTeachers);
-  }, []);
+  }, [subject]);
 
   useEffect(() => {
     fetch("api/v1/subjects/" + subject.id)
       .then((response) => response.json())
       .then((data) => setClassRooms(data.classRooms));
-  }, []);
+  }, [subject]);
 
   const handleCheck = (event) => {
     setOnline(event.target.checked);
@@ -115,7 +117,9 @@ export function EditLesson() {
             <Grid item sm={10}>
               <Stack direction="row" spacing={2}>
                 <Button variant="contained">Išsaugoti</Button>
-                <Button variant="contained">Atšaukti</Button>
+                <Link>
+                  <Button variant="contained">Atšaukti</Button>
+                </Link>
                 <Button variant="contained">Ištrinti</Button>
               </Stack>
             </Grid>

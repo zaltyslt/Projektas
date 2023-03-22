@@ -92,7 +92,7 @@ function App() {
           ></Route>
           <Route path="/planning/:id" element={<ScheduleView />}></Route>
           <Route path="/schedules/:id" element={<Schedule />}></Route>
-          <Route path="/schedules/:id/edit-lesson/:id" element={<EditLesson />}></Route>
+          <Route path="/schedules/edit-lesson/:id" element={<EditLesson />}></Route>
         </Routes>
       </HashRouter>
     </div>

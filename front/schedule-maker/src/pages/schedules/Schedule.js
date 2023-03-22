@@ -22,6 +22,10 @@ export function Schedule() {
       .catch((error) => console.error(error));
   }, [params.id]);
 
+  const handleClick = (id) => {
+    console.log(id);
+  }
+
   const events = schedule.map(schedule => ({
     title: `<b>${schedule.subject.name}</b>
       <br />
@@ -33,6 +37,7 @@ export function Schedule() {
       `,
     start: schedule.date,
     allDay: true,
+    url: `http://localhost:3000/schedule-maker#/schedules/edit-lesson/${schedule.id}`,
   }));
 
   const renderEventContent = (eventInfo) => (
@@ -41,8 +46,6 @@ export function Schedule() {
       <div style={{fontSize: '16px', padding: '10px', fontFamily: 'Arial, sans-serif', backgroundColor: "#dcedf7", color: "black" }} dangerouslySetInnerHTML={{ __html: eventInfo.event.title }} />
     </>
   );
-
-  
 
   // const renderEventContent = (eventInfo) => (
   //   <>
