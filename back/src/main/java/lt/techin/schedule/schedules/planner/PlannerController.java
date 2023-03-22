@@ -24,9 +24,16 @@ public class PlannerController {
 
     @PutMapping("/plan-schedule/{scheduleId}")
     public ResponseEntity<Boolean> planSchedule(@PathVariable Long scheduleId, @RequestParam Long subjectId, @RequestBody PlannerDto plannerDto) {
-        Boolean createdDay = plannerService.addSubjectPlanToSchedule(scheduleId, subjectId, plannerDto);
-        logger.log(Level.INFO, "The lessons for schedule {0} were created", scheduleId);
-        return ok(createdDay);
+        String createdString = plannerService.addSubjectPlanToSchedule(scheduleId, subjectId, plannerDto);
+        if (createdString.isEmpty()) {
+            logger.log(Level.INFO, "Creating lessons plan for a schedule " + scheduleId + " was successful", scheduleId);
+            return ok(true);
+        }
+        else {
+            logger.log(Level.INFO, "Creating lessons plan for a schedule " + scheduleId + " was unsuccessful", scheduleId);
+            return ok(false);
+        }
+
     }
 
     @GetMapping("/{scheduleId}/lessons")

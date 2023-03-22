@@ -38,6 +38,8 @@ public class WorkDay {
 
     private String lessonEnd;
 
+    private Float lessonStartFloat;
+
     private Boolean online;
 
     public Schedule getSchedule() {
@@ -51,7 +53,7 @@ public class WorkDay {
     public WorkDay() {
     }
 
-    public WorkDay(LocalDate date, Subject subject, Teacher teacher, Schedule schedule, Classroom classroom, String lessonStart, String lessonEnd, Boolean online) {
+    public WorkDay(LocalDate date, Subject subject, Teacher teacher, Schedule schedule, Classroom classroom, String lessonStart, String lessonEnd, Float lessonStartFloat, Boolean online) {
         this.date = date;
         this.subject = subject;
         this.teacher = teacher;
@@ -59,6 +61,7 @@ public class WorkDay {
         this.classroom = classroom;
         this.lessonStart = lessonStart;
         this.lessonEnd = lessonEnd;
+        this.lessonStartFloat = lessonStartFloat;
         this.online = online;
     }
 
@@ -126,15 +129,23 @@ public class WorkDay {
         this.classroom = classroom;
     }
 
+    public Float getLessonStartFloat() {
+        return lessonStartFloat;
+    }
+
+    public void setLessonStartFloat(Float lessonStartFloat) {
+        this.lessonStartFloat = lessonStartFloat;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof WorkDay workDay)) return false;
-        return date.equals(workDay.date);
+        return Objects.equals(id, workDay.id) && Objects.equals(date, workDay.date) && Objects.equals(subject, workDay.subject) && Objects.equals(teacher, workDay.teacher) && Objects.equals(schedule, workDay.schedule) && Objects.equals(classroom, workDay.classroom) && Objects.equals(lessonStart, workDay.lessonStart) && Objects.equals(lessonEnd, workDay.lessonEnd) && Objects.equals(online, workDay.online);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(date);
+        return Objects.hash(id, date, subject, teacher, schedule, classroom, lessonStart, lessonEnd, online);
     }
 }
