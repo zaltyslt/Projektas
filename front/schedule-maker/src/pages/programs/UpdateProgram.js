@@ -218,8 +218,8 @@ export function UpdateProgram() {
           Paskutinį kartą redaguota: {program.modifiedDate}
         </span>
         <form>
-          <Grid container rowSpacing={1}>
-            <Grid item sm={6} id="grid-selector">
+          <Grid container rowSpacing={2}>
+            <Grid item sm={8}>
               <TextField
                 fullWidth
                 required
@@ -245,7 +245,7 @@ export function UpdateProgram() {
                 }}
               ></TextField>
             </Grid>
-            <Grid item sm={6}>
+            <Grid item sm={8}>
               <TextField
                 fullWidth
                 multiline
@@ -275,26 +275,12 @@ export function UpdateProgram() {
               // onChange={(e) => setDescription(e.target.value)}
               ></TextField>
             </Grid>
-            <Grid item sm={10}>
-              {" "}
-              <legend>{params.programName}</legend>
-              {error && (
-                <Alert severity="warning">
-                  {error}
-                </Alert>
-              )}
-              {success && (
-                <Alert severity="success">
-                  {success}
-                </Alert>
-              )}
-            </Grid>
-            <Grid item sm={12} >
+            <Grid item sm={8} >
               <Grid container direction="row" justifyContent="space-between">
                 {subjectHoursList.map((form, index) => {
                   return (
-                    <Grid container spacing={{ xs: 2, md: 3 }} rowSpacing={{ xs: 5, sm: 5, md: 5 }} columnSpacing={{ xs: 1, sm: 1, md: 1 }} key={index}>
-                      <Grid item xs={3}>
+                    <Grid container spacing={{ xs: 2, md: 3 }} rowSpacing={{ xs: 3, sm: 3, md: 3 }} columnSpacing={{ xs: 1, sm: 1, md: 1 }} key={index}>
+                      <Grid item xs={6}>
                         <FormControl fullWidth required error={subjectNameError}>
                           <InputLabel id="subject-label">
                             {subjectNameError
@@ -319,7 +305,7 @@ export function UpdateProgram() {
                           </Select>
                         </FormControl>
                       </Grid>
-                      <Grid item xs={2}>
+                      <Grid item xs={4}>
                         <TextField
                           fullWidth
                           required
@@ -336,7 +322,12 @@ export function UpdateProgram() {
                           value={form.hours}
                         />
                       </Grid>
-                      <Grid item xs={2} marginTop={1}>
+                      <Grid item xs={2}
+                        container
+                        justifyContent="end"
+                        justifyItems={"center"}
+                        alignContent={"center"}
+                        paddingRight={0.5}>
                         <Button variant="contained" onClick={() => removeFields(index)}>Ištrinti</Button>
                       </Grid>
                     </Grid>
@@ -344,7 +335,21 @@ export function UpdateProgram() {
                 })}
               </Grid>
             </Grid>
-            <Grid item sm={12}>
+            <Grid item sm={8}>
+              {" "}
+              <legend>{params.programName}</legend>
+              {error && (
+                <Alert severity="warning">
+                  {error}
+                </Alert>
+              )}
+              {success && (
+                <Alert severity="success">
+                  {success}
+                </Alert>
+              )}
+            </Grid>
+            <Grid item sm={8}>
               <Stack direction="row" spacing={2} marginTop={1}>
                 <Button variant="contained" onClick={addFields}>Pridėtį dalyką</Button>
                 <Button variant="contained" onClick={updateProgram}>

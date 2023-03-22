@@ -34,8 +34,8 @@ export function ViewTeacher() {
   return (
     <div>
       <Container maxWidth="lg">
-        <Grid container rowSpacing={4}>
-          <Grid item sm={10}>
+        <Grid container rowSpacing={3}>
+          <Grid item sm={10} marginTop={4}>
             <header>
               <h1>{teacher.fName + " " + teacher.lName}</h1>
              

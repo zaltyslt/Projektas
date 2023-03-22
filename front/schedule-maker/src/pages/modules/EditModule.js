@@ -109,8 +109,8 @@ export function EditModule() {
       <h3>{module.name}</h3>
       <span id="modified-date">Paskutinį kartą redaguota: {module.modifiedDate}</span>
       <form>
-        <Grid container rowSpacing={2}>
-          <Grid item sm={10}>
+        <Grid container rowSpacing={3}>
+          <Grid item sm={8}>
             <TextField
               fullWidth
               variant="outlined"
@@ -129,7 +129,7 @@ export function EditModule() {
             ></TextField>
           </Grid>
 
-          <Grid item sm={10}>
+          <Grid item sm={8}>
             <TextField
               fullWidth
               multiline
@@ -149,7 +149,7 @@ export function EditModule() {
             ></TextField>
           </Grid>
 
-          <Grid item sm={10}>
+          <Grid item sm={8}>
             <Stack direction="row" spacing={2}>
               <Button
                 variant="contained"
@@ -171,7 +171,7 @@ export function EditModule() {
             </Stack>
           </Grid>
 
-          <Grid item sm={10}>
+          <Grid item sm={8}>
             {isPostUsed ? (
               successfulPost ? (
                 <Alert severity="success"> Modulis sėkmingai pakeistas.</Alert>
