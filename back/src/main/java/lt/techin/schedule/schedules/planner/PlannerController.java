@@ -50,7 +50,9 @@ public class PlannerController {
     }
 
     @DeleteMapping("/delete-lesson/{workDayId}")
-    public boolean deleteWorkDay(@PathVariable Long workDayId) {
-        return plannerService.deleteWorkDay(workDayId);
+    public ResponseEntity<Boolean> deleteWorkDay(@PathVariable Long workDayId, @RequestBody WorkDayDto workDayDto) {
+        boolean result = plannerService.deleteWorkDay(workDayId, workDayDto);
+        logger.log(Level.INFO, "The work day id {0} was deleted.", workDayId);
+        return ok(result);
     }
 }

@@ -47,8 +47,6 @@ public class WorkDayDto {
         this.schedule = schedule;
     }
 
-
-
     public Long getId() {
         return id;
     }
@@ -119,6 +117,22 @@ public class WorkDayDto {
 
     public void setSchedule(ScheduleEntityDto schedule) {
         this.schedule = schedule;
+    }
+
+    public int getStartIntEnum() {
+        return startIntEnum;
+    }
+
+    public void setStartIntEnum(int startIntEnum) {
+        this.startIntEnum = startIntEnum;
+    }
+
+    public int getEndIntEnum() {
+        return endIntEnum;
+    }
+
+    public void setEndIntEnum(int endIntEnum) {
+        this.endIntEnum = endIntEnum;
     }
 
     @Override

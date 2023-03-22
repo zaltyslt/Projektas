@@ -28,7 +28,7 @@ export function Schedule() {
       <br />
       ${schedule.lessonStart} - ${schedule.lessonEnd}
       <br /> 
-      ${schedule.teacher ? schedule.teacher.lName : ""} ${schedule.teacher ? schedule.teacher.fName : "nepasirinktas"}
+      ${schedule.teacher ? schedule.teacher.lName : ""} ${schedule.teacher ? schedule.teacher.fName : "Mokytojas nepasirinktas"}
       <br />
       ${schedule.online ? "Nuotolinė pamoka" : schedule.classroom ? schedule.classroom.classroomName : ""}<br />
       `,
