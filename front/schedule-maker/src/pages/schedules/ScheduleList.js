@@ -136,10 +136,10 @@ export function ScheduleList() {
       ? new Date(schedule.dateFrom) <= date &&
         new Date(schedule.dateUntil) >= date
       : true;
-     
+
     return (
       (groupMatches || shiftMaches || schoolYearMatches || semesterMatches) &&
-      (isWithinDateRange )
+      isWithinDateRange
     );
   });
 
@@ -176,13 +176,10 @@ export function ScheduleList() {
   // }
 
   const handleChange = (newValue) => {
- 
     isNaN(newValue) ? setDate(null) : setDate(newValue);
-   
+
     clearMessages();
   };
-
- 
 
   return (
     <div>
@@ -219,7 +216,6 @@ export function ScheduleList() {
                   Pridėti naują
                 </Button>
               </Link>
-             
             </Stack>
           </Grid>
         </Grid>
@@ -256,7 +252,7 @@ export function ScheduleList() {
                   format="YYYY/MM/DD"
                   id="date-form"
                   name="date-form"
-                  value={date || ''}
+                  value={date || ""}
                   onChange={handleChange}
                   TextFieldComponent={TextField}
                 ></DatePicker>
@@ -308,6 +304,7 @@ export function ScheduleList() {
                     </TableCell>
                     <TableCell>
                       <Button
+                        id="delete-button-list-schedule"
                         variant="outlined"
                         startIcon={<DeleteIcon />}
                         onClick={() => handleClickOpen(schedule.id)}
@@ -317,7 +314,12 @@ export function ScheduleList() {
                     </TableCell>
                     <TableCell className="action" align="center">
                       <Link to={`/planning/${schedule.id}`}>
-                        <Button variant="contained">Planuoti</Button>
+                        <Button
+                          id="plan-button-list-schedule"
+                          variant="contained"
+                        >
+                          Planuoti
+                        </Button>
                       </Link>
                     </TableCell>
                   </TableRow>

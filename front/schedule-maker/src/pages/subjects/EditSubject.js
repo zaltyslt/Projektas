@@ -154,119 +154,126 @@ export function EditSubject() {
       <span id="modified-date">
         Paskutinį kartą redaguota: {subject.modifiedDate}
       </span>
-        <Grid container rowSpacing={2}>
-          <Grid item sm={8}>
-            <TextField
-              fullWidth
-              required
-              variant="outlined"
-              label="Dalyko pavadinimas"
-              error={nameError || nameNotValid}
-              helperText={
-                nameError
-                  ? "Dalyko pavadinimas yra privalomas"
-                  : nameNotValid
-                  ? "Laukas turi negalimų simbolių. "
-                  : ""
-              }
-              id="name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-            ></TextField>
-          </Grid>
-
-          <Grid item sm={8}>
-            <TextField
-              fullWidth
-              multiline
-              required
-              variant="outlined"
-              error={descriptionError || descriptionNotValid}
-              helperText={
-                descriptionError
-                  ? "Dalyko aprašas yra privalomas. "
-                  : descriptionNotValid
-                  ? "Laukas turi negalimų simbolių. "
-                  : ""
-              }
-              label="Dalyko aprašas"
-              id="description"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-            ></TextField>
-          </Grid>
-
-          <Grid item sm={8}>
-            <FormControl fullWidth required error={moduleError}>
-              <InputLabel id="module-label">
-                {moduleError
-                  ? "Privaloma pasirinkti modulį. "
-                  : "Modulio pavadinimas"}
-              </InputLabel>
-              <Select
-                label="Modulio pavadinimas"
-                labelId="module-label"
-                id="module"
-                value={module}
-                onChange={(e) => setModule(e.target.value)}
-              >
-                {modules.map((module) => (
-                  <MenuItem key={module.id} value={module}>
-                    {module.name}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-          </Grid>
-
-          <Grid item sm={8}>
-            <FormControl fullWidth required error={classRoomError}>
-              <InputLabel id="room-label">
-                {classRoomError
-                  ? "Privaloma pasirinkti nors vieną klasę. "
-                  : "Klasės"}
-              </InputLabel>
-              <Select
-                multiple
-                labelId="room-label"
-                id="room"
-                value={classRooms}
-                onChange={handleRoomInput}
-                input={<OutlinedInput label="Klasės" />}
-              >
-                {rooms.map((room) => (
-                  <MenuItem key={room.id} value={room}>
-                    {room.classroomName}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-          </Grid>
-
-          <Grid item sm={8}>
-            {error && <Alert severity="warning">{error}</Alert>}
-            {createMessage && <Alert severity="success">{createMessage}</Alert>}
-          </Grid>
-
-          <Grid item sm={8}>
-            <Stack direction="row" spacing={2}>
-              <Button variant="contained" onClick={validation}>
-                Išsaugoti
-              </Button>
-
-              <Button
-                variant="contained"
-                onClick={() => deleteSubject(subject.id)}
-              >
-                Ištrinti
-              </Button>
-
-              <Link to="/subjects">
-                <Button variant="contained">Grįžti</Button>
-              </Link>
-            </Stack>
-          </Grid>
+      <Grid container rowSpacing={2}>
+        <Grid item sm={8}>
+          <TextField
+            fullWidth
+            required
+            variant="outlined"
+            label="Dalyko pavadinimas"
+            error={nameError || nameNotValid}
+            helperText={
+              nameError
+                ? "Dalyko pavadinimas yra privalomas"
+                : nameNotValid
+                ? "Laukas turi negalimų simbolių. "
+                : ""
+            }
+            id="name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          ></TextField>
         </Grid>
+
+        <Grid item sm={8}>
+          <TextField
+            fullWidth
+            multiline
+            required
+            variant="outlined"
+            error={descriptionError || descriptionNotValid}
+            helperText={
+              descriptionError
+                ? "Dalyko aprašas yra privalomas. "
+                : descriptionNotValid
+                ? "Laukas turi negalimų simbolių. "
+                : ""
+            }
+            label="Dalyko aprašas"
+            id="description"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+          ></TextField>
+        </Grid>
+
+        <Grid item sm={8}>
+          <FormControl fullWidth required error={moduleError}>
+            <InputLabel id="module-label">
+              {moduleError
+                ? "Privaloma pasirinkti modulį. "
+                : "Modulio pavadinimas"}
+            </InputLabel>
+            <Select
+              label="Modulio pavadinimas"
+              labelId="module-label"
+              id="module"
+              value={module}
+              onChange={(e) => setModule(e.target.value)}
+            >
+              {modules.map((module) => (
+                <MenuItem key={module.id} value={module}>
+                  {module.name}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </Grid>
+
+        <Grid item sm={8}>
+          <FormControl fullWidth required error={classRoomError}>
+            <InputLabel id="room-label">
+              {classRoomError
+                ? "Privaloma pasirinkti nors vieną klasę. "
+                : "Klasės"}
+            </InputLabel>
+            <Select
+              multiple
+              labelId="room-label"
+              id="room"
+              value={classRooms}
+              onChange={handleRoomInput}
+              input={<OutlinedInput label="Klasės" />}
+            >
+              {rooms.map((room) => (
+                <MenuItem key={room.id} value={room}>
+                  {room.classroomName}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </Grid>
+
+        <Grid item sm={8}>
+          {error && <Alert severity="warning">{error}</Alert>}
+          {createMessage && <Alert severity="success">{createMessage}</Alert>}
+        </Grid>
+
+        <Grid item sm={8}>
+          <Stack direction="row" spacing={2}>
+            <Button
+              id="save-button-edit-subject"
+              variant="contained"
+              onClick={validation}
+            >
+              Išsaugoti
+            </Button>
+
+            <Button
+              id="delete-button-edit-subject"
+              variant="contained"
+              onClick={() => deleteSubject(subject.id)}
+            >
+              Ištrinti
+            </Button>
+
+            <Link to="/subjects">
+              <Button id="back-button-edit-subject" variant="contained">
+                Grįžti
+              </Button>
+            </Link>
+          </Stack>
+        </Grid>
+      </Grid>
     </Container>
   );
 }
