@@ -3,9 +3,6 @@ import { Link } from "react-router-dom";
 import {
   Alert,
   Button,
-  Checkbox,
-  FormControlLabel,
-  FormGroup,
   Grid,
   Paper,
   Table,
@@ -17,10 +14,6 @@ import {
   TablePagination,
   TableRow,
   TextField,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { Container } from "@mui/system";
@@ -68,7 +61,6 @@ export function ScheduleList() {
   };
 
   const handleDelete = () => {
-    console.log(idToDelete);
     fetch(`api/v1/schedules/delete-schedule/${idToDelete}`, {
       method: "Delete",
       headers: {

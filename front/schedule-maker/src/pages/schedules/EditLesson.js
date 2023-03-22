@@ -2,16 +2,20 @@ import {
   Alert,
   Button,
   Checkbox,
+  Dialog,
+  DialogActions,
+  DialogTitle,
   FormControl,
   FormControlLabel,
   Grid,
   InputLabel,
   MenuItem,
   Select,
+  Slide,
   Stack,
 } from "@mui/material";
 import { Container } from "@mui/system";
-import { useEffect, useState } from "react";
+import { useEffect, useState, forwardRef } from "react";
 import { Link, useParams, useHref } from "react-router-dom";
 import { lessonsWithTime } from "../../helpers/constants";
 
@@ -32,9 +36,13 @@ export function EditLesson() {
 
   const [error, setError] = useState("");
   const [createMessage, setCreateMessage] = useState("");
+  const [openPrompt, setOpenPrompt] = useState(false);
 
   const params = useParams();
   const calendarUrl = useHref(`/schedules/${schedule.id}`);
+  const Transition = forwardRef(function Transition(props, ref) {
+    return <Slide direction="up" ref={ref} {...props} />;
+  });
 
   useEffect(() => {
     fetch(`api/v1/schedules/lesson/${params.id}`)
@@ -43,20 +51,22 @@ export function EditLesson() {
         setWorkDay(data);
         setSubject(data.subject);
         setSchedule(data.schedule);
+        fetchTeachers(data.subject.id);
+        fetchSubjects(data.subject.id);
       });
   }, []);
 
-  useEffect(() => {
-    fetch("api/v1/teachers/" + subject.id)
+  const fetchTeachers = (id) => {
+    fetch("api/v1/teachers/" + id)
       .then((response) => response.json())
       .then(setTeachers);
-  }, [subject]);
+  };
 
-  useEffect(() => {
-    fetch("api/v1/subjects/" + subject.id)
+  const fetchSubjects = (id) => {
+    fetch("api/v1/subjects/" + id)
       .then((response) => response.json())
       .then((data) => setClassRooms(data.classRooms));
-  }, [subject]);
+  };
 
   const handleCheck = (event) => {
     setOnline(event.target.checked);
@@ -125,9 +135,30 @@ export function EditLesson() {
     deleteLesson(startint, endInt);
   };
 
+  const handlePrompt = () => {
+    setOpenPrompt(true);
+  };
+
+  const handleClose = () => {
+    setOpenPrompt(false);
+  };
+
   return (
     <div>
       <Container>
+        <Dialog
+          open={openPrompt}
+          TransitionComponent={Transition}
+          keepMounted
+          onClose={handleClose}
+          aria-describedby="alert-dialog-slide-description"
+        >
+          <DialogTitle> Ar tikrai norite ištrinti pasirinktą pamoką visam laikui?</DialogTitle>
+          <DialogActions>
+            <Button onClick={handleDelete}>Ištrinti</Button>
+            <Button onClick={handleClose}>Atšaukti</Button>
+          </DialogActions>
+        </Dialog>
         <h1>Redagavimas</h1>
         <h3>{subject.name}</h3>
         <h5>Data: {workDay.date}</h5>
@@ -205,7 +236,7 @@ export function EditLesson() {
                 <Link to={`/schedules/${schedule.id}`}>
                   <Button variant="contained">Atšaukti</Button>
                 </Link>
-                <Button variant="contained" onClick={handleDelete}>
+                <Button variant="contained" onClick={handlePrompt}>
                   Ištrinti
                 </Button>
               </Stack>
