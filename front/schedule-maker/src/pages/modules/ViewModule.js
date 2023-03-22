@@ -66,43 +66,56 @@ export function ViewModule() {
           <Grid item sm={2}>
             <Link to="/subjects/create">
               <Stack direction="row" justifyContent="flex-end">
-                <Button variant="contained">Pridėti naują</Button>
+                <Button id="add-subject-button-view-module" variant="contained">
+                  Pridėti naują
+                </Button>
               </Stack>
             </Link>
           </Grid>
           <Grid item sm={12}>
-            <TableContainer component = {Paper}>
+            <TableContainer component={Paper}>
               <Table aria-label="custom pagination table">
-              <TableHead>
-                <TableRow>
-                  <TableCell>Dalyko pavadinimas</TableCell>
-                  <TableCell className="activity"/>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {subjects.map((subject) => (
-                <TableRow key={subject.id}>
-                  <TableCell component="th" scope="row">{subject.name}</TableCell>
-                  <TableCell align="center" className="activity">
-                    <Link to={"/subjects/edit/" + subject.id}>
-                    <Button  variant="contained">Redaguoti</Button>
-                    </Link>      
-                  </TableCell>
-                </TableRow>
-              ))}
-              </TableBody>
-            </Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Dalyko pavadinimas</TableCell>
+                    <TableCell className="activity" />
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {subjects.map((subject) => (
+                    <TableRow key={subject.id}>
+                      <TableCell component="th" scope="row">
+                        {subject.name}
+                      </TableCell>
+                      <TableCell align="center" className="activity">
+                        <Link to={"/subjects/edit/" + subject.id}>
+                          <Button
+                            id="edit-subject-button-view-module"
+                            variant="contained"
+                          >
+                            Redaguoti
+                          </Button>
+                        </Link>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
             </TableContainer>
           </Grid>
 
           <Grid item sm={12} marginTop={2}>
             <Stack direction="row" spacing={2}>
               <Link to={"/modules/edit/" + module.id}>
-                <Button variant="contained">Redaguoti</Button>
+                <Button id="edit-button-view-module" variant="contained">
+                  Redaguoti
+                </Button>
               </Link>
 
               <Link to="/modules">
-                <Button variant="contained">Grįžti</Button>
+                <Button id="back-button-view-module" variant="contained">
+                  Grįžti
+                </Button>
               </Link>
             </Stack>
           </Grid>
