@@ -8,6 +8,7 @@ import lt.techin.schedule.teachers.TeacherRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static lt.techin.schedule.schedules.ScheduleMapper.toScheduleCreateDto;
@@ -82,4 +83,19 @@ public class ScheduleService {
         }
         return null;
     }
+
+    public boolean deleteSchedule(Long id) {
+        Optional<Schedule> scheduleToDelete = scheduleRepository.findById(id);
+        if (scheduleToDelete.isPresent()) {
+            try {
+             scheduleRepository.delete(scheduleToDelete.get());
+                return true;
+            } catch (Exception e) {
+              return false;
+            }
+        }
+        throw new ValidationException("Toks tvarkaraštis neegzistuoja","id","not found",id.toString());
+
+    }
+
 }
