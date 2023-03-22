@@ -48,4 +48,9 @@ public class PlannerController {
        WorkDayDto updatedWorkDayDto = toWorkDayDto(updatedWorkDay);
        return ok(updatedWorkDayDto);
     }
+
+    @DeleteMapping("/delete-lesson/{workDayId}")
+    public boolean deleteWorkDay(@PathVariable Long workDayId) {
+        return plannerService.deleteWorkDay(workDayId);
+    }
 }

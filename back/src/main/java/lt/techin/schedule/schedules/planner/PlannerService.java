@@ -164,4 +164,21 @@ public class PlannerService {
 
         return workDayRepository.save(existingWorkDay);
     }
+
+    public boolean deleteWorkDay(Long workDayId) {
+        WorkDay existingWorkDay = workDayRepository.findById(workDayId).orElseThrow(() -> new ValidationException("Nurodyta pamoka neegzistuoja", "WorkDay", "Does not exist", workDayId.toString()));
+        Schedule schedule = scheduleRepository.findById(existingWorkDay.getSchedule().getId()).orElseThrow(() -> new ValidationException("Nurodytas tvarkaraštis neegzistuoja", "Schedule", "Does not exist", existingWorkDay.getSchedule().getId().toString()));
+        Integer unassignedHours = schedule.getUnassignedTimeWithSubjectId(existingWorkDay.getSubject().getId());
+//        var start = Integer.parseInt(existingWorkDay.getLessonStart());
+//        var end = Integer.parseInt(existingWorkDay.getLessonEnd());
+//        int interval = end - start;
+
+        if (existingWorkDay != null) {
+            workDayRepository.deleteById(workDayId);
+//            schedule.replaceUnassignedTime(existingWorkDay.getSubject().getId(), unassignedHours + interval);
+            return true;
+        } else {
+            return false;
+        }
+    }
 }

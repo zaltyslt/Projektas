@@ -95,6 +95,15 @@ export function EditLesson() {
     });
   };
 
+  const deleteLesson = () => {
+    fetch(`api/v1/schedules/delete-lesson/${params.id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      }
+    })
+  };
+
   return (
     <div>
       <Container>
@@ -173,7 +182,7 @@ export function EditLesson() {
                 <Link to={`/schedules/${schedule.id}`}>
                   <Button variant="contained">Atšaukti</Button>
                 </Link>
-                <Button variant="contained">Ištrinti</Button>
+                <Button variant="contained" onClick={deleteLesson}>Ištrinti</Button>
               </Stack>
             </Grid>
           </Grid>

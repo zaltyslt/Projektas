@@ -30,7 +30,7 @@ export function Schedule() {
       <br /> 
       ${schedule.teacher ? schedule.teacher.lName : ""} ${schedule.teacher ? schedule.teacher.fName : "nepasirinktas"}
       <br />
-      ${schedule.online ? "Nuotolinė pamoka" : schedule.classroom.classroomName}<br />
+      ${schedule.online ? "Nuotolinė pamoka" : schedule.classroom ? schedule.classroom.classroomName : ""}<br />
       `,
     start: schedule.date,
     allDay: true,
