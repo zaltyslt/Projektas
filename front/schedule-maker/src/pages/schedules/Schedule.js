@@ -9,6 +9,7 @@ import { Link, useParams } from "react-router-dom";
 import "./ViewSchedule.css";
 import { Stack } from "@mui/system";
 import { Button, Grid } from "@mui/material";
+import adaptivePlugin from '@fullcalendar/adaptive'
 
 export function Schedule() {
   const [weekendsVisible, setWeekendsVisible] = useState(true);
@@ -38,26 +39,17 @@ export function Schedule() {
   const renderEventContent = (eventInfo) => (
     <>
       <b>{eventInfo.timeText}</b>
-      <div style={{fontSize: '16px', padding: '10px', fontFamily: 'Arial, sans-serif', backgroundColor: "#dcedf7", color: "black" }} dangerouslySetInnerHTML={{ __html: eventInfo.event.title }} />
+      <div style={{ fontSize: '16px', padding: '10px', fontFamily: 'Arial, sans-serif', backgroundColor: "#dcedf7", color: "black" }} dangerouslySetInnerHTML={{ __html: eventInfo.event.title }} />
     </>
   );
 
-  
-
-  // const renderEventContent = (eventInfo) => (
-  //   <>
-  //     <b>{eventInfo.timeText}</b>
-  //     <div dangerouslySetInnerHTML={{ __html: eventInfo.event.title }} />
-  //   </>
-  // );
-
   return (
     <div className="maincontainer">
-      <div id="container"  style={{ marginBottom: "20px" }}>
+      <div id="container" style={{ marginBottom: "20px" }}>
         <FullCalendar
           locales={allLocales}
           locale={"lt"}
-          plugins={[dayGridPlugin, interactionPlugin, listPlugin]}
+          plugins={[dayGridPlugin, interactionPlugin, listPlugin, adaptivePlugin]}
           initialView="dayGridMonth"
           contentHeight="700px"
           headerToolbar={{
@@ -69,7 +61,7 @@ export function Schedule() {
           weekends={false}
           eventContent={renderEventContent}
           dayHeaderFormat={{
-            weekday: "long", // or 'short'
+            weekday: "long",
           }}
           dayHeaderClassNames="fc-day-header-black"
           dayHeaderContent={(args) => (
@@ -83,7 +75,7 @@ export function Schedule() {
         />
       </div>
 
-      <Grid item sm={10}>
+      <Grid item sm={10} className="button-container">
         <Stack direction="row" spacing={2}>
           <Link to="/">
             <Button variant="contained">Grįžti</Button>
@@ -91,8 +83,9 @@ export function Schedule() {
           <Link to={"/planning/" + params.id}>
             <Button variant="contained">Planavimas</Button>
           </Link>
+          <Button variant="contained" onClick={() => window.print()}>Spausdinti kalendorių</Button>
         </Stack>
       </Grid>
     </div>
   );
-}
+}  

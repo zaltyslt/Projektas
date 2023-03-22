@@ -5,3 +5,37 @@
 .Deleted {
     color: rgba(255, 0, 0, 0.807);
 }
+
+@media print {
+  .button-container {
+    display: none;
+  }
+  .Navigation {
+    display: none;
+  }
+  html {
+    zoom: 50%;
+  }
+}
+
+@page {
+    /* margin: 2cm; */
+    size: A4 portrait;
+ }
+
+ .fc-day-grid-event {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    height: 100%;
+  }
+  
+  .fc-content {
+    display: flex;
+    justify-content: center;
+  }
+  
+  .fc-title {
+    margin-bottom: 5px;
+  }
+  
