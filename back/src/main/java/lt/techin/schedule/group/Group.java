@@ -46,6 +46,16 @@ public class Group {
 
     public Group() { }
 
+    public Group(Long id, String name, String schoolYear, int studentAmount, boolean isActive, Program program, Shift shift) {
+        this.id = id;
+        this.name = name;
+        this.schoolYear = schoolYear;
+        this.studentAmount = studentAmount;
+        this.isActive = isActive;
+        this.program = program;
+        this.shift = shift;
+    }
+
     public Group(Long id, String name, String schoolYear, int studentAmount, boolean isActive, Program program, Shift shift, LocalDateTime createdDate, LocalDateTime modifiedDate) {
         this.id = id;
         this.name = name;

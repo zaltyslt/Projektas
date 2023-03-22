@@ -7,7 +7,6 @@ import lt.techin.schedule.subject.Subject;
 import lt.techin.schedule.subject.SubjectController;
 import lt.techin.schedule.subject.SubjectDto;
 import lt.techin.schedule.subject.SubjectService;
-import org.json.JSONString;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +17,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
