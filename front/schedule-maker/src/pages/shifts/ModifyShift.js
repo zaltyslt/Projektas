@@ -162,7 +162,7 @@ export function ModifyShift() {
             </Grid>
 
             <Grid container rowSpacing={2} marginTop={1}>
-                <Grid item sm={3.67} id="grid-selector">
+                <Grid item sm={3.75} id="grid-selector">
                     <h5>Pamainos pradžia:</h5>
                     <Select
                     fullWidth
@@ -186,7 +186,7 @@ export function ModifyShift() {
                     )}
                 </Grid>
                 
-                <Grid item sm={3.67} id="grid-selector">
+                <Grid item sm={3.75} id="grid-selector">
                     <h5>Pamainos pabaiga:</h5>
                     <Select
                     fullWidth

@@ -275,20 +275,6 @@ export function UpdateProgram() {
               // onChange={(e) => setDescription(e.target.value)}
               ></TextField>
             </Grid>
-            <Grid item sm={8}>
-              {" "}
-              <legend>{params.programName}</legend>
-              {error && (
-                <Alert severity="warning">
-                  {error}
-                </Alert>
-              )}
-              {success && (
-                <Alert severity="success">
-                  {success}
-                </Alert>
-              )}
-            </Grid>
             <Grid item sm={8} >
               <Grid container direction="row" justifyContent="space-between">
                 {subjectHoursList.map((form, index) => {
@@ -348,6 +334,20 @@ export function UpdateProgram() {
                   )
                 })}
               </Grid>
+            </Grid>
+            <Grid item sm={8}>
+              {" "}
+              <legend>{params.programName}</legend>
+              {error && (
+                <Alert severity="warning">
+                  {error}
+                </Alert>
+              )}
+              {success && (
+                <Alert severity="success">
+                  {success}
+                </Alert>
+              )}
             </Grid>
             <Grid item sm={8}>
               <Stack direction="row" spacing={2} marginTop={1}>
