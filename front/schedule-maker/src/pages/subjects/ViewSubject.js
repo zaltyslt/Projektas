@@ -20,7 +20,7 @@ export function ViewSubject() {
     <div>
       <Container>
         <Grid container rowSpacing={4}>
-          <Grid item sm={10}>
+          <Grid item sm={10} marginTop={4}>
             <header>
               <h1>{subject.name}</h1>
               <span id="modified-date">

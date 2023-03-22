@@ -145,7 +145,7 @@ export function UpdateClassroom() {
         </span>
         <form>
           <Grid container rowSpacing={3}>
-            <Grid item sm={10}>
+            <Grid item sm={8}>
             <FormControl fullWidth required error={errorBuilding}>
               <InputLabel id="building-label">
                 {errorBuilding
@@ -165,7 +165,7 @@ export function UpdateClassroom() {
                 </Select>
               </FormControl>
             </Grid>
-            <Grid item sm={10}>
+            <Grid item sm={8}>
               <TextField
                 fullWidth
                 required
@@ -196,7 +196,7 @@ export function UpdateClassroom() {
 
               ></TextField>
             </Grid>
-            <Grid item sm={10}>
+            <Grid item sm={8}>
               <TextField
                 fullWidth
                 multiline

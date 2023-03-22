@@ -26,7 +26,7 @@ export function ViewRoom() {
     <div>
       <Container>
         <Grid container rowSpacing={4}>
-          <Grid item sm={10}>
+          <Grid item sm={10} marginTop={4}>
             <header>
               <h1>{classroom.classroomName}</h1>
               {/* <div>

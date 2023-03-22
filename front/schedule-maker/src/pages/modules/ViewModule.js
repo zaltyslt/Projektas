@@ -41,7 +41,7 @@ export function ViewModule() {
     <div>
       <Container>
         <Grid container rowSpacing={4}>
-          <Grid item sm={12}>
+          <Grid item sm={12} marginTop={4}>
             <header>
               <h1>{module.name}</h1>
               <span id="modified-date">
@@ -95,7 +95,7 @@ export function ViewModule() {
             </TableContainer>
           </Grid>
 
-          <Grid item sm={12}>
+          <Grid item sm={12} marginTop={2}>
             <Stack direction="row" spacing={2}>
               <Link to={"/modules/edit/" + module.id}>
                 <Button variant="contained">Redaguoti</Button>

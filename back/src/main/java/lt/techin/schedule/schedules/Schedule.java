@@ -25,7 +25,7 @@ public class Schedule {
     @JoinColumn(name = "group_id")
     private Group groups;
 
-    @OneToMany
+    @OneToMany(mappedBy = "schedule", cascade = CascadeType.ALL)
     @JsonBackReference
     private Set<WorkDay> workingDays;
 

@@ -34,8 +34,8 @@ export function ViewTeacher() {
   return (
     <div>
       <Container maxWidth="lg">
-        <Grid container rowSpacing={4}>
-          <Grid item sm={10}>
+        <Grid container rowSpacing={3}>
+          <Grid item sm={10} marginTop={4}>
             <header>
               <h1>{teacher.fName + " " + teacher.lName}</h1>
              
@@ -47,22 +47,22 @@ export function ViewTeacher() {
 
           <Grid item sm={12}>
             <h4>Kontaktinis telefonas</h4>
-            <p>{contacts.phoneNumber ? contacts.phoneNumber : "n"}</p>
+            <p>{contacts.phoneNumber ? contacts.phoneNumber : ""}</p>
           </Grid>
 
           <Grid item sm={12}>
             <h4>El. paštas</h4>
-            <p>{contacts.directEmail ? contacts.directEmail : "n"}</p>
+            <p>{contacts.directEmail ? contacts.directEmail : ""}</p>
           </Grid>
 
           <Grid item sm={12}>
             <h4>Teams vardas</h4>
-            <p>{contacts.teamsName ? contacts.teamsName : "n"}</p>
+            <p>{contacts.teamsName ? contacts.teamsName : ""}</p>
           </Grid>
 
           <Grid item sm={12}>
             <h4>Teams el. paštas</h4>
-            <p>{contacts.teamsEmail ? contacts.teamsEmail : "n"}</p>
+            <p>{contacts.teamsEmail ? contacts.teamsEmail : ""}</p>
           </Grid>
 
           <Grid item sm={12}>

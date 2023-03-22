@@ -38,7 +38,7 @@ export function ViewProgram() {
     <div>
       <Container>
         <Grid container rowSpacing={4}>
-          <Grid item sm={10}>
+          <Grid item sm={8} marginTop={4}>
             <header>
               <h1>{program.programName}</h1>
               {/* <div>
@@ -49,7 +49,7 @@ export function ViewProgram() {
               </div>
             </header>
           </Grid>
-          <Grid item sm={12}>
+          <Grid item sm={8}>
             <h4>Programos aprašas</h4>
             <p>{program.description}</p>
           </Grid>
@@ -87,8 +87,8 @@ export function ViewProgram() {
               </TableBody>
             </Table>
           </TableContainer>
-          <Grid item sm={12}>
-            <Stack direction="row" spacing={2}>
+          <Grid item sm={8}>
+            <Stack direction="row" spacing={2} marginTop={2}>
               <Link to={`/update-program/${program.id}`}>
                 <Button variant="contained">Redaguoti</Button>
               </Link>
