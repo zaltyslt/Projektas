@@ -1,6 +1,5 @@
 package lt.techin.schedule.schedules.planner;
 
-import java.io.Serializable;
 import java.util.Comparator;
 
 public class WorkDayDtoComparator implements Comparator<WorkDay> {

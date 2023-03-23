@@ -66,7 +66,7 @@ public class Schedule {
 
     public Schedule() {
         subjectIdWithUnassignedTime = new HashMap<>();
-        workingDays = new TreeSet<>(new WorkDayDtoComparator());
+        workingDays = new HashSet<>();
     }
 
     public Long getId() {
