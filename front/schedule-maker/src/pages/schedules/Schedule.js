@@ -58,7 +58,6 @@ export function Schedule() {
           fontSize: "16px",
           padding: "10px",
           fontFamily: "Arial, sans-serif",
-          // backgroundColor: "#dcedf7",
           color: "black",
         }}
         dangerouslySetInnerHTML={{ __html: eventInfo.event.title }}
