@@ -1,6 +1,6 @@
 import { Alert, Button, Grid, Stack, TextField } from "@mui/material";
 import { Container } from "@mui/system";
-import { useEffect, useState} from "react";
+import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -23,8 +23,41 @@ export function CreateHoliday() {
   const [createMessage, setCreateMessage] = useState("");
   const [error, setError] = useState("");
 
-
   const params = useParams();
+
+  const createHoliday = () => {
+    fetch(`/api/v1/schedules/${params.id}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name,
+        dateFrom,
+        dateUntil,
+      }),
+    }).then((response) => {
+      let success = response.ok;
+
+      response.json().then((response) => {
+        if (!success) {
+          setCreateMessage("");
+          setError(response.message);
+        } else {
+          setCreateMessage("Sėkmingai sukurta. ");
+          setError("");
+          clear();
+        }
+      });
+    });
+  };
+
+  const clear = () => {
+    setName("");
+    setDateFrom("");
+    setDateUntil("");
+    setError("");
+  }
 
   const validateName = (value) => {
     setName(value);
@@ -55,54 +88,55 @@ export function CreateHoliday() {
   };
 
   const validation = () => {
-        let isValid = true;
-        if (name === "" || name === "undefined") {
-          setNameEmpty(true);
-          isValid = false;
-        }
+    let isValid = true;
+    if (name === "" || name === "undefined") {
+      setNameEmpty(true);
+      isValid = false;
+    }
 
-        if (validName) {
-            isValid = false;
-          }
-    
-        if (dateFrom === "" || dateFrom === "undefined") {
-          setDateFromEmpty(true);
-          setErrorMessageFrom("Privaloma pasirinkti pradžios datą.");
-          isValid = false;
-        } else {
-          setDateFromEmpty(false);
-        }
-    
-        if (dateUntil === "" || dateUntil === "undefined") {
-          setDateUntilEmpty(true);
-          setErrorMessageUntil("Privaloma pasirinkti pabaigos datą.");
-          isValid = false;
-        } else {
-          setDateUntilEmpty(false);
-        }
-    
-        if (dateFrom !== "" && dateUntil !== "" && dateFrom.isAfter(dateUntil)) {
-          setErrorMessageUntil("Diena iki negali būti vėliau už dieną nuo.");
-          setDateUntilEmpty(true);
-          isValid = false;
-        }
-    
-        if (
-          dateFrom !== "" &&
-          dateUntil !== "" &&
-          dateFrom.$d.toISOString().split("T")[0] ===
-            dateUntil.$d.toISOString().split("T")[0]
-        ) {
-          setErrorMessageUntil(
-            "Pradžios ir pabaigos data negali būti ta pati diena."
-          );
-          setDateUntilEmpty(true);
-          isValid = false;
-        }
-    
-        if (isValid) {
-          setCreateMessage("");
-        }
+    if (validName) {
+      isValid = false;
+    }
+
+    if (dateFrom === "" || dateFrom === "undefined") {
+      setDateFromEmpty(true);
+      setErrorMessageFrom("Privaloma pasirinkti pradžios datą.");
+      isValid = false;
+    } else {
+      setDateFromEmpty(false);
+    }
+
+    if (dateUntil === "" || dateUntil === "undefined") {
+      setDateUntilEmpty(true);
+      setErrorMessageUntil("Privaloma pasirinkti pabaigos datą.");
+      isValid = false;
+    } else {
+      setDateUntilEmpty(false);
+    }
+
+    if (dateFrom !== "" && dateUntil !== "" && dateFrom.isAfter(dateUntil)) {
+      setErrorMessageUntil("Diena iki negali būti vėliau už dieną nuo.");
+      setDateUntilEmpty(true);
+      isValid = false;
+    }
+
+    if (
+      dateFrom !== "" &&
+      dateUntil !== "" &&
+      dateFrom.$d.toISOString().split("T")[0] ===
+        dateUntil.$d.toISOString().split("T")[0]
+    ) {
+      setErrorMessageUntil(
+        "Pradžios ir pabaigos data negali būti ta pati diena."
+      );
+      setDateUntilEmpty(true);
+      isValid = false;
+    }
+
+    if (isValid) {
+      setCreateMessage("");
+      createHoliday();
+    }
   };
 
   return (
@@ -118,15 +152,15 @@ export function CreateHoliday() {
               id="name"
               name="name"
               value={name}
-              onChange = {(e) => validateName(e.target.value)}
+              onChange={(e) => validateName(e.target.value)}
               error={nameEmpty || validName}
-                helperText={
-                    validName
-                    ? "Laukas turi negalimų simbolių."
-                    : nameEmpty
-                    ? "Pavadinimas yra privalomas."
-                    : ""
-                }
+              helperText={
+                validName
+                  ? "Laukas turi negalimų simbolių."
+                  : nameEmpty
+                  ? "Pavadinimas yra privalomas."
+                  : ""
+              }
             ></TextField>
           </Grid>
 
@@ -167,11 +201,9 @@ export function CreateHoliday() {
           </Grid>
 
           <Grid item sm={10}>
-              {error && <Alert severity="warning">{error}</Alert>}
-              {createMessage && (
-                <Alert severity="success">{createMessage}</Alert>
-              )}
-            </Grid>
+            {error && <Alert severity="warning">{error}</Alert>}
+            {createMessage && <Alert severity="success">{createMessage}</Alert>}
+          </Grid>
 
           <Grid item sm={10}>
             <Stack direction="row" spacing={2}>
