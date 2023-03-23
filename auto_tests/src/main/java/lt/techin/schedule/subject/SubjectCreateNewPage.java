@@ -1,10 +1,13 @@
 package lt.techin.schedule.subject;
 
 import lt.techin.schedule.AbstractPage;
+import lt.techin.schedule.utils.SelectOptionElement;
+import lt.techin.schedule.utils.WaitUtils;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import utils.WaitUtils;
+
+import java.util.List;
 
 public class SubjectCreateNewPage extends AbstractPage {
 
@@ -14,40 +17,66 @@ public class SubjectCreateNewPage extends AbstractPage {
     @FindBy(css = "#description")
     private WebElement inputSubjectDescription;
 
+    @FindBy(css = "#module")
+    private WebElement selectModule;
+
+    private SelectOptionElement selectModuleOptions;
+
+    @FindBy(css = "#room")
+    private WebElement selectRoom;
+
+    private SelectOptionElement selectRoomOptions;
+
     @FindBy(css = "#save-button-create-subject")
     private WebElement clickOnSaveButton;
+
     @FindBy(xpath = "back-button-create-subject")
     private WebElement clickOnBackButton;
+
     @FindBy(css = ".MuiAlert-message")
     private WebElement alertMessage;
-
-    @FindBy(css ="data-testid='sentinelStart")
-    private WebElement selectModule;
 
     public SubjectCreateNewPage(WebDriver driver) {
         super(driver);
     }
-    public void inputSubjectName(String subjectName) {
+
+    public void setSubjectName(String subjectName) {
         inputSubjectName.sendKeys(subjectName);
     }
-    public void inputSubjectDescription(String description) {
+
+    public void setSubjectDescription(String description) {
         inputSubjectDescription.sendKeys(description);
     }
+
     public void clickOnSaveButton() {
         clickOnSaveButton.click();
     }
+
     public void clickOnBackButton() {
         clickOnBackButton.click();
     }
+
     public WebElement getAlertMessage() {
         return WaitUtils.getVisibleWithWait(alertMessage, driver);
     }
 
-    public void selectModule() {
-        selectModule.isSelected();
+    public List<String> getSelectModuleOptions() {
+        selectModuleOptions = new SelectOptionElement(selectModule, driver);
+        return selectModuleOptions.getOptions();
     }
 
+    public void selectModuleOption(int optionIndex) {
+        selectModuleOptions.selectByIndex(optionIndex);
+    }
 
+    public List<String> getSelectRoomOptions() {
+        selectRoomOptions = new SelectOptionElement(selectRoom, driver);
+        return selectRoomOptions.getOptions();
+    }
+
+    public void selectRoomOptions(int... optionIndex) {
+        selectRoomOptions.selectByIndexes(optionIndex);
+    }
 
 }
 

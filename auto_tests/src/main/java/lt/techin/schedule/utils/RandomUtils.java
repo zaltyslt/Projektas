@@ -1,4 +1,4 @@
-package utils;
+package lt.techin.schedule.utils;
 
 import java.util.Random;
 

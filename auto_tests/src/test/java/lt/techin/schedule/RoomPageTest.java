@@ -7,11 +7,10 @@ import lt.techin.schedule.room.RoomViewPage;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import utils.RandomUtils;
-import utils.WaitUtils;
+import lt.techin.schedule.utils.RandomUtils;
+import lt.techin.schedule.utils.WaitUtils;
 
 import java.time.Duration;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;

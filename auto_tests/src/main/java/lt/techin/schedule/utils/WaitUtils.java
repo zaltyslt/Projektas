@@ -1,4 +1,4 @@
-package utils;
+package lt.techin.schedule.utils;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
@@ -8,6 +8,9 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
+import java.util.List;
+
+import static org.openqa.selenium.support.ui.ExpectedConditions.*;
 
 public class WaitUtils {
     public  static void waitForJs (WebDriver driver){
@@ -17,12 +20,17 @@ public class WaitUtils {
     }
     public static WebElement getVisibleWithWait(WebElement webElement, WebDriver driver) {
         return new WebDriverWait(driver, Duration.ofSeconds(2))
-                .until(ExpectedConditions.visibilityOf(webElement));
+                .until(visibilityOf(webElement));
+    }
+
+    public static List<WebElement> getVisibleElementsWithWait(By by, WebDriver driver) {
+        return new WebDriverWait(driver, Duration.ofSeconds(2))
+                .until(visibilityOfAllElementsLocatedBy(by));
     }
 
     public static WebElement getElementWithWait(By by, WebDriver driver) {
         return new WebDriverWait(driver, Duration.ofSeconds(2))
-                .until(ExpectedConditions.presenceOfElementLocated(by));
+                .until(presenceOfElementLocated(by));
     }
 
     public static void waitPageToLoad(WebDriver driver) {
