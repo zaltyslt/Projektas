@@ -54,10 +54,10 @@ public class PlannerService {
     */
     public String isValidDates(LocalDate startDatePlanner, LocalDate endDatePlanner, LocalDate startDateSchedule, LocalDate endDateSchedule) {
         if (startDatePlanner.isBefore(startDateSchedule) || startDatePlanner.isAfter(endDateSchedule)) {
-            return "Pateikta plano data neįeina į tvarkaraščio datos rėžį.";
+            return "Pateikta plano data neįeina į tvarkaraščio laikotarpį.";
         }
         if (endDatePlanner.isAfter(endDateSchedule)) {
-            return "Paskutinė suplanuota pamokų plano diena viršija tvarkaraščio trukmę. Paskutinė plano diena yra " + endDatePlanner +
+            return "Viršijamas nustatytas tvarkaraščio laikotarpis. Paskutinė plano diena yra " + endDatePlanner +
                     ", vėliausia leidžiama tvarkaraščio diena yra " + endDateSchedule + ".";
         }
         return "";
@@ -163,10 +163,15 @@ public class PlannerService {
         if (lastDayHours == 0) {
             for (LocalDate workableDate : workableDates) {
                 if (workDaySet.stream().noneMatch(wd -> wd.getDate().isEqual(workableDate))) {
-                    WorkDay workDay = new WorkDay(workableDate, existingSubject, existingTeacher, existingSchedule, existingClassroom, getLessonStartString(plannerDto),
-                            getLessonEndString(plannerDto),
-                            LessonTime.getLessonTimeByInt(plannerDto.getStartIntEnum()).getLessonStartFloat(),
-                            plannerDto.getOnline());
+                    WorkDay workDay = SetupWorkDayConflicts.SetupWorkDay(scheduleId,
+                        new WorkDay
+                                (
+                                    workableDate, existingSubject, existingTeacher, existingSchedule, existingClassroom, getLessonStartString(plannerDto),
+                                    getLessonEndString(plannerDto),
+                                    plannerDto.getStartIntEnum(), plannerDto.getEndIntEnum(),
+                                    plannerDto.getOnline()
+                                ),
+                        scheduleRepository);
                     workDayRepository.save(workDay);
                     existingSchedule.addWorkDay(workDay);
                 }
@@ -177,29 +182,35 @@ public class PlannerService {
             for (int i = 0; i < workableDates.size() - 1; i++) {
                 LocalDate workableDate = workableDates.get(i);
                 if (workDaySet.stream().noneMatch(wd -> wd.getDate().isEqual(workableDate))) {
-                    WorkDay workDay = new WorkDay(workableDate, existingSubject, existingTeacher, existingSchedule, existingClassroom, getLessonStartString(plannerDto),
-                            getLessonEndString(plannerDto),
-                            LessonTime.getLessonTimeByInt(plannerDto.getStartIntEnum()).getLessonStartFloat(),
-                            plannerDto.getOnline());
+                    WorkDay workDay = SetupWorkDayConflicts.SetupWorkDay(scheduleId,
+                        new WorkDay
+                                (
+                                    workableDate, existingSubject, existingTeacher, existingSchedule, existingClassroom, getLessonStartString(plannerDto),
+                                    getLessonEndString(plannerDto),
+                                    plannerDto.getStartIntEnum(), plannerDto.getEndIntEnum(),
+                                    plannerDto.getOnline()
+                                ),
+                        scheduleRepository);
                     workDayRepository.save(workDay);
                     existingSchedule.addWorkDay(workDay);
                 }
             }
             LocalDate lastWorkableDate = workableDates.get(workableDates.size() - 1);
             if (workDaySet.stream().noneMatch(wd -> wd.getDate().isEqual(lastWorkableDate))) {
-                WorkDay lastWorkDay = new WorkDay(lastWorkableDate, existingSubject, existingTeacher, existingSchedule, existingClassroom,
-                        getLessonStartString(plannerDto),
-                        //Gets end of lesson by amount of hours left
-                        LessonTime.getLessonTimeByInt(plannerDto.getStartIntEnum() + lastDayHours - 1).getLessonEnd(),
-                        LessonTime.getLessonTimeByInt(plannerDto.getStartIntEnum()).getLessonStartFloat(),
-                        plannerDto.getOnline());
-                workDayRepository.save(lastWorkDay);
-                existingSchedule.addWorkDay(lastWorkDay);
+                WorkDay workDay = SetupWorkDayConflicts.SetupWorkDay(scheduleId,
+                    new WorkDay
+                            (
+                                lastWorkableDate, existingSubject, existingTeacher, existingSchedule, existingClassroom, getLessonStartString(plannerDto),
+                                    //Gets end of lesson by the amount of hours left
+                                    LessonTime.getLessonTimeByInt(plannerDto.getStartIntEnum() + lastDayHours - 1).getLessonEnd(),
+                                    plannerDto.getStartIntEnum(), plannerDto.getStartIntEnum() + lastDayHours - 1,
+                                plannerDto.getOnline()
+                            ),
+                    scheduleRepository);
+                workDayRepository.save(workDay);
+                existingSchedule.addWorkDay(workDay);
             }
         }
-
-        LinkedHashSet<WorkDay> sortedWorkDays = existingSchedule.getWorkingDays().stream().sorted(new WorkDayDtoComparator()).collect(Collectors.toCollection(LinkedHashSet::new));
-
         return "";
     }
 

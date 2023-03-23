@@ -39,7 +39,9 @@ public class WorkDay {
 
     private String lessonEnd;
 
-    private Float lessonStartFloat;
+    private int lessonStartIntEnum;
+
+    private int lessonEndIntEnum;
 
     private Boolean online;
 
@@ -50,7 +52,6 @@ public class WorkDay {
     private boolean hasTeacherConflict;
 
     private boolean hasClassroomConflict;
-
 
     public Schedule getSchedule() {
         return schedule;
@@ -63,7 +64,7 @@ public class WorkDay {
     public WorkDay() {
     }
 
-    public WorkDay(LocalDate date, Subject subject, Teacher teacher, Schedule schedule, Classroom classroom, String lessonStart, String lessonEnd, Float lessonStartFloat, Boolean online) {
+    public WorkDay(LocalDate date, Subject subject, Teacher teacher, Schedule schedule, Classroom classroom, String lessonStart, String lessonEnd, int lessonStartIntEnum, int lessonEndIntEnum, Boolean online) {
         this.date = date;
         this.subject = subject;
         this.teacher = teacher;
@@ -71,7 +72,8 @@ public class WorkDay {
         this.classroom = classroom;
         this.lessonStart = lessonStart;
         this.lessonEnd = lessonEnd;
-        this.lessonStartFloat = lessonStartFloat;
+        this.lessonStartIntEnum = lessonStartIntEnum;
+        this.lessonEndIntEnum = lessonEndIntEnum;
         this.online = online;
     }
 
@@ -139,28 +141,36 @@ public class WorkDay {
         this.classroom = classroom;
     }
 
-    public Float getLessonStartFloat() {
-        return lessonStartFloat;
+    public int getLessonStartIntEnum() {
+        return lessonStartIntEnum;
     }
 
-    public void setLessonStartFloat(Float lessonStartFloat) {
-        this.lessonStartFloat = lessonStartFloat;
+    public void setLessonStartIntEnum(int lessonStartIntEnum) {
+        this.lessonStartIntEnum = lessonStartIntEnum;
     }
 
-    public Map<Long, String> getScheduleIdWithTeacherNameConflict() {
-        return scheduleIdWithTeacherNameConflict;
+    public int getLessonEndIntEnum() {
+        return lessonEndIntEnum;
+    }
+
+    public void setLessonEndIntEnum(int lessonEndIntEnum) {
+        this.lessonEndIntEnum = lessonEndIntEnum;
     }
 
     public void setScheduleIdWithTeacherNameConflict(Map<Long, String> scheduleIdWithTeacherNameConflict) {
         this.scheduleIdWithTeacherNameConflict = scheduleIdWithTeacherNameConflict;
     }
 
-    public Map<Long, String> getScheduleIdWithClassroomNameConflict() {
-        return scheduleIdWithClassroomNameConflict;
-    }
-
     public void setScheduleIdWithClassroomNameConflict(Map<Long, String> scheduleIdWithClassroomNameConflict) {
         this.scheduleIdWithClassroomNameConflict = scheduleIdWithClassroomNameConflict;
+    }
+
+    public Map<Long, String> getScheduleIdWithTeacherNameConflict() {
+        return scheduleIdWithTeacherNameConflict;
+    }
+
+    public Map<Long, String> getScheduleIdWithClassroomNameConflict() {
+        return scheduleIdWithClassroomNameConflict;
     }
 
     public boolean isHasTeacherConflict() {
@@ -177,6 +187,14 @@ public class WorkDay {
 
     public void setHasClassroomConflict(boolean hasClassroomConflict) {
         this.hasClassroomConflict = hasClassroomConflict;
+    }
+
+    public void addClassroomConflict(Long scheduleID, String classroomName) {
+        scheduleIdWithClassroomNameConflict.put(scheduleID, classroomName);
+    }
+
+    public void addTeacherConflict(Long scheduleID, String teacherName) {
+        scheduleIdWithTeacherNameConflict.put(scheduleID, teacherName);
     }
 
     @Override
