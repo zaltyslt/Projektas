@@ -26,7 +26,8 @@ export function CreateHoliday() {
   const params = useParams();
 
   const createHoliday = () => {
-    fetch(`/api/v1/schedules/${params.id}`, {
+    // fetch(`/api/v1/schedules/${params.id}`, {
+      fetch(`api/v1/schedules/holidays/create-holiday`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
