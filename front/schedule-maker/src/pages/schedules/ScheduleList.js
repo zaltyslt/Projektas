@@ -200,9 +200,8 @@ export function ScheduleList() {
           <Grid item sm={10}>
             <h3>Tvarkaraščių sąrašas</h3>
           </Grid>
-
           <Grid item sm={2}>
-            <Stack direction="row" justifyContent="flex-end" marginBottom={4}>
+            <Stack direction="row" justifyContent="flex-end" marginBottom={2}>
               <Link to="/create-schedule">
                 <Button id="create-new-schedule" variant="contained">
                   Pridėti naują
@@ -214,7 +213,7 @@ export function ScheduleList() {
 
         <Grid item sm={12}>
           <Grid container spacing={2}>
-            <Grid item sm={8}>
+            <Grid item sm={12}>
               {errorMessage && <Alert severity="warning">{errorMessage}</Alert>}
               {createMessage && (
                 <Alert severity="success">{createMessage}</Alert>
@@ -262,7 +261,8 @@ export function ScheduleList() {
                 </TableCell>
                 <TableCell style={{ width: "550px" }}>Tvarkaraštis</TableCell>
                 <TableCell style={{ width: "550px" }}>Laikotarpis</TableCell>
-                <TableCell style={{ width: "100px" }}></TableCell>
+                <TableCell></TableCell>
+                <TableCell></TableCell>
               </TableRow>
             </TableHead>
 
@@ -315,7 +315,7 @@ export function ScheduleList() {
                     <TableCell>
                       <Button
                         id="delete-button-list-schedule"
-                        variant="outlined"
+                        variant="contained"
                         startIcon={<DeleteIcon />}
                         onClick={() => handleClickOpen(schedule.id)}
                       >
