@@ -38,6 +38,7 @@ export function Schedule() {
       `,
     start: schedule.date,
     allDay: true,
+    url: `http://localhost:3000/schedule-maker#/schedules/edit-lesson/${schedule.id}`,
   }));
 
   const renderEventContent = (eventInfo) => (
