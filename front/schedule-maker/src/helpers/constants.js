@@ -45,3 +45,5 @@ export const lessonsWithTime = [
   { value: "14", label: "20:15" },
   { value: "14", label: "21:00" },
 ];
+
+export const BAD_SYMBOLS = "!@#$%^&*_+={}<>|~`\\'";
