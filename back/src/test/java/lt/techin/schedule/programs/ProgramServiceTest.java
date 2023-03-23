@@ -24,6 +24,7 @@ public class ProgramServiceTest {
     private SubjectHoursService subjectHoursService;
     @InjectMocks
     private ProgramService programService;
+
     private ProgramRepository verify(ProgramRepository programRepository, VerificationMode times) {
         return programRepository;
     }
@@ -36,7 +37,6 @@ public class ProgramServiceTest {
 
     @Test
     public void testGetAll() {
-        // Arrange
         List<Program> expectedPrograms = new ArrayList<>();
         Set<Group> group = new HashSet<>();
         List<SubjectHours> subjectHours = new ArrayList<>();
@@ -84,7 +84,6 @@ public class ProgramServiceTest {
         Program result = programService.createWithSubjectList(program);
         assertEquals(program, result);
         verify(programRepository, times(1)).findByProgramName(program.getProgramName());
-//        verify(subjectHoursService, times(1)).create(program.getSubjectHoursList());
         verify(programRepository, times(1)).save(program);
     }
 
@@ -105,8 +104,44 @@ public class ProgramServiceTest {
         Program result = programService.createWithSubjectList(program);
         assertNull(result);
         verify(programRepository, times(1)).findByProgramName(program.getProgramName());
-//        verify(subjectHoursService, never()).create(program.getSubjectHoursList());
         verify(programRepository, never()).save(program);
+    }
+
+    @Test
+    void testCreateWithSubjectList_shouldReturnNull_whenProgramNameIsNull() {
+        Program program = new Program();
+        program.setProgramName(null);
+        Program result = programService.createWithSubjectList(program);
+        assertNull(result);
+    }
+
+    @Test
+    void testCreateWithSubjectList_shouldReturnNull_whenProgramNameExists() {
+        Program program = new Program();
+        program.setProgramName("existing_program_name");
+        when(programRepository.findByProgramName("existing_program_name")).thenReturn(program);
+        Program result = programService.createWithSubjectList(program);
+        assertNull(result);
+        verify(programRepository, times(1)).findByProgramName("existing_program_name");
+    }
+
+    @Test
+    void testCreateWithSubjectList_shouldSaveProgram_whenProgramIsValid() {
+        Program program = new Program();
+        program.setProgramName("new_program_name");
+        when(programRepository.findByProgramName("new_program_name")).thenReturn(null);
+        List<SubjectHours> subjectHoursList = new ArrayList<>();
+        SubjectHours subjectHours = new SubjectHours();
+        subjectHours.setSubject(1L);
+        subjectHours.setHours(10);
+        subjectHoursList.add(subjectHours);
+        program.setSubjectHoursList(subjectHoursList);
+        when(subjectHoursService.create(subjectHoursList)).thenReturn(subjectHoursList);
+        when(programRepository.save(program)).thenReturn(program);
+        Program result = programService.createWithSubjectList(program);
+        assertEquals(program, result);
+        verify(programRepository, times(1)).findByProgramName("new_program_name");
+        verify(programRepository, times(1)).save(program);
     }
 
     @Test
@@ -182,6 +217,7 @@ public class ProgramServiceTest {
         verify(programRepository, times(1)).findById(id);
         verify(programRepository, never()).save(any());
     }
+
     @Test
     public void testFinById() {
         Long id = 1L;

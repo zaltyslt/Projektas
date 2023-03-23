@@ -25,10 +25,10 @@ import { Link } from "react-router-dom";
 export function TeacherList() {
   const [teachers, setTeachers] = useState([]);
   const [filteredTeachers, setFilteredTeachers] = useState([]);
-  
+
   const [deletedTeachers, setDeletedTeachers] = useState([]);
   const [deletedFiltered, setDeletedFiltered] = useState([]);
-  
+
   const [pageA, setPageA] = useState(0);
   const [pageP, setPageP] = useState(0);
 
@@ -59,8 +59,10 @@ export function TeacherList() {
   const fetchDeletedTeachers = async () => {
     fetch("api/v1/teachers?active=false")
       .then((response) => response.json())
-      .then((data ) => {setDeletedTeachers(data);
-      return data})
+      .then((data) => {
+        setDeletedTeachers(data);
+        return data;
+      })
       .then((data) => {
         setDeletedFiltered(data);
       });
@@ -90,7 +92,7 @@ export function TeacherList() {
   };
   //////////////////////
   const handleSearch = (event) => {
-      if (event.length === 0) {
+    if (event.length === 0) {
       setFilteredTeachers(teachers);
     } else {
       const filtered = teachers.filter((teacher) => {
@@ -106,11 +108,11 @@ export function TeacherList() {
           teacherLName.includes(event.toLowerCase()) ||
           shift.includes(event.toLowerCase()) ||
           moduleNamesArray.some((name) => name.includes(event.toLowerCase()))
-          );
-        });
-        
-        setFilteredTeachers(filtered);
-        setPageA(0);
+        );
+      });
+
+      setFilteredTeachers(filtered);
+      setPageA(0);
     }
     if (isChecked) {
       if (event.length === 0) {
@@ -128,10 +130,12 @@ export function TeacherList() {
             teacherFName.includes(event.toLowerCase()) ||
             teacherLName.includes(event.toLowerCase()) ||
             // shift.includes(event.toLowerCase()) ||
-            subjectsNamesArray.some((name) => name.includes(event.toLowerCase()))
+            subjectsNamesArray.some((name) =>
+              name.includes(event.toLowerCase())
+            )
           );
         });
-       
+
         setDeletedFiltered(deletedFiltered);
         setPageP(0);
       }
@@ -160,7 +164,9 @@ export function TeacherList() {
           <Grid item sm={2}>
             <Stack direction="row" justifyContent="flex-end">
               <Link to="/teachers/create">
-                <Button id="create-new-teacher" variant="contained">Pridėti naują</Button>
+                <Button id="create-new-teacher" variant="contained">
+                  Pridėti naują
+                </Button>
               </Link>
             </Stack>
           </Grid>
@@ -182,12 +188,8 @@ export function TeacherList() {
             <TableHead>
               <TableRow>
                 <TableCell style={{ width: "44%" }}>Vardas Pavardė</TableCell>
-                <TableCell style={{ width: "45%" }}>
-                  Dėstomi dalykai
-                </TableCell>
-                <TableCell >
-                  Pamaina
-                </TableCell>
+                <TableCell style={{ width: "45%" }}>Dėstomi dalykai</TableCell>
+                <TableCell>Pamaina</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -265,15 +267,11 @@ export function TeacherList() {
             <Table aria-label="custom pagination table">
               <TableHead>
                 <TableRow>
-                  <TableCell style={{ width: "45%" }}>
-                    Vardas Pavardė
-                  </TableCell>
+                  <TableCell style={{ width: "45%" }}>Vardas Pavardė</TableCell>
                   <TableCell style={{ width: "45%" }}>
                     Dėstomi dalykai
                   </TableCell>
-                  <TableCell align="center">
-                    Veiksmai
-                  </TableCell>
+                  <TableCell align="center">Veiksmai</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -307,6 +305,7 @@ export function TeacherList() {
                     </TableCell>
                     <TableCell align="center">
                       <Button
+                        id="restore-button-list-teacher"
                         variant="contained"
                         onClick={() => restoreTeacher(teacher)}
                       >

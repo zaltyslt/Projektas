@@ -116,10 +116,10 @@ public class ProgramController {
             }
             var hourlist = subjectHoursService.updateAll(subjectHoursDto.getSubjectHoursList());
             program.setSubjectHoursList(hourlist);
-            programService.update(program.getId(), program);
+            Program update = programService.update(program.getId(), ProgramMapper.toProgram(subjectHoursDto));
             logger.info("The program was updated, successfully");
             return ResponseEntity.status(HttpStatus.CREATED)
-                    .body(Map.of("message", (ProgramMapper.toProgramDto(program)).toString()));
+                    .body(Map.of("message", (ProgramMapper.toProgramDto(update)).toString()));
         } else {
             logger.info("subject is empty");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)

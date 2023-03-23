@@ -86,7 +86,17 @@ export function EditGroup() {
       setShiftError(true);
       return;
     }
-    if (nameError || nameNotValid || isNameTooLong || yearError || yearNotValid || isYearTooLong || studentAmountError || studentAmountNotValid || isStudentAmountTooLong) {
+    if (
+      nameError ||
+      nameNotValid ||
+      isNameTooLong ||
+      yearError ||
+      yearNotValid ||
+      isYearTooLong ||
+      studentAmountError ||
+      studentAmountNotValid ||
+      isStudentAmountTooLong
+    ) {
       return;
     }
     editGroup();
@@ -106,22 +116,21 @@ export function EditGroup() {
         shift,
       }),
     })
-      .then(response => response.json())
-      .then(data => {
+      .then((response) => response.json())
+      .then((data) => {
         handleAfterPost(data);
-      })
+      });
   };
 
-  const handleAfterPost = ((data) => {
+  const handleAfterPost = (data) => {
     if (data.valid) {
       setSuccessfulPost(true);
-    }
-    else {
-      setGroupErrors(data)
+    } else {
+      setGroupErrors(data);
       setSuccessfulPost(false);
     }
     setIsPostUsed(true);
-  })
+  };
 
   const deleteGroup = (id) => {
     fetch("api/v1/group/deactivate-group/" + id, {
@@ -130,7 +139,7 @@ export function EditGroup() {
         "Content-Type": "application/json",
       },
     }).then(() => (window.location = listUrl));
-  }
+  };
 
   const badSymbols = "!@#$%^&*_+={}<>|~`\\'";
   const textLength = 200;
@@ -138,36 +147,41 @@ export function EditGroup() {
   const setNameAndCheck = (name) => {
     setName(name);
 
-    (name.length === 0) ? setNameError(true) : setNameError(false);
+    name.length === 0 ? setNameError(true) : setNameError(false);
 
-    (name.length > textLength) ? setIsNameTooLong(true) : setIsNameTooLong(false);
+    name.length > textLength ? setIsNameTooLong(true) : setIsNameTooLong(false);
 
-    const isValid = name.split('').some(char => badSymbols.includes(char));
-    (!isValid) ? setNameNotValid(false) : setNameNotValid(true);
-  }
+    const isValid = name.split("").some((char) => badSymbols.includes(char));
+    !isValid ? setNameNotValid(false) : setNameNotValid(true);
+  };
 
   const setSchoolYearAndCheck = (year) => {
     setSchoolYear(year);
 
-    (year.length === 0) ? setYearError(true) : setYearError(false);
+    year.length === 0 ? setYearError(true) : setYearError(false);
 
-    (year.length > textLength) ? setIsYearTooLong(true) : setIsYearTooLong(false);
+    year.length > textLength ? setIsYearTooLong(true) : setIsYearTooLong(false);
 
     const isValidYearString = /^[0-9\/-]+$/.test(year);
-    (isValidYearString) ? setYearNotValid(false) : setYearNotValid(true);
-  }
+    isValidYearString ? setYearNotValid(false) : setYearNotValid(true);
+  };
 
   const setStudentAmountAndCheck = (studentAmount) => {
     setStudentAmount(studentAmount);
 
-    (studentAmount.length === 0) ? setStudentAmountError(true) : setStudentAmountError(false);
+    studentAmount.length === 0
+      ? setStudentAmountError(true)
+      : setStudentAmountError(false);
 
-    (studentAmount.length > textLength) ? setIsStudentAmountTooLong(true) : setIsStudentAmountTooLong(false);
+    studentAmount.length > textLength
+      ? setIsStudentAmountTooLong(true)
+      : setIsStudentAmountTooLong(false);
 
     const isDigitsOnly = /^[0-9]+$/.test(studentAmount);
-    (isDigitsOnly) ? setStudentAmountNotValid(false) : setStudentAmountNotValid(true);
-  }
-
+    isDigitsOnly
+      ? setStudentAmountNotValid(false)
+      : setStudentAmountNotValid(true);
+  };
 
   return (
     <div>
@@ -189,10 +203,10 @@ export function EditGroup() {
                   nameError
                     ? "Grupės pavadinimas yra privalomas"
                     : nameNotValid
-                      ? "Laukas turi negalimų simbolių. "
-                      : isNameTooLong
-                        ? "Pavadinimas negali būti ilgesnis nei 200 simbolių"
-                        : null
+                    ? "Laukas turi negalimų simbolių. "
+                    : isNameTooLong
+                    ? "Pavadinimas negali būti ilgesnis nei 200 simbolių"
+                    : null
                 }
                 variant="outlined"
                 label="Grupės pavadinimas"
@@ -212,10 +226,10 @@ export function EditGroup() {
                   yearError
                     ? "Privaloma nurodyti mokslo metus."
                     : yearNotValid
-                      ? "Laukas turi negalimų simbolių. "
-                      : isYearTooLong
-                        ? "Metai negali būti ilgesni nei 200 simbolių"
-                        : null
+                    ? "Laukas turi negalimų simbolių. "
+                    : isYearTooLong
+                    ? "Metai negali būti ilgesni nei 200 simbolių"
+                    : null
                 }
                 variant="outlined"
                 label="Mokslo metai"
@@ -230,15 +244,19 @@ export function EditGroup() {
               <TextField
                 fullWidth
                 required
-                error={studentAmountError || studentAmountNotValid || isStudentAmountTooLong}
+                error={
+                  studentAmountError ||
+                  studentAmountNotValid ||
+                  isStudentAmountTooLong
+                }
                 helperText={
                   studentAmountError
                     ? "Privaloma nurodyti studentų kiekį."
                     : studentAmountNotValid
-                      ? "Laukas turi susidėti iš skaičių."
-                      : isStudentAmountTooLong
-                        ? "Studentų kiekio laukas negali būti ilgesnis nei 200 skaičių"
-                        : null
+                    ? "Laukas turi susidėti iš skaičių."
+                    : isStudentAmountTooLong
+                    ? "Studentų kiekio laukas negali būti ilgesnis nei 200 skaičių"
+                    : null
                 }
                 variant="outlined"
                 label="Studentų kiekis"
@@ -255,10 +273,12 @@ export function EditGroup() {
                 <Select
                   labelId="program-label"
                   id="program-select"
-                  value={program.id || ''}
+                  value={program.id || ""}
                   label="Programa"
                   onChange={(e) => {
-                    const selectedPrograms = programs.find((s) => s.id === e.target.value);
+                    const selectedPrograms = programs.find(
+                      (s) => s.id === e.target.value
+                    );
                     setProgram(selectedPrograms || {});
                   }}
                   error={programError}
@@ -269,7 +289,9 @@ export function EditGroup() {
                     </MenuItem>
                   ))}
                 </Select>
-                {programError && <Alert severity="error">Reikia pasirinkti programą</Alert>}
+                {programError && (
+                  <Alert severity="error">Reikia pasirinkti programą</Alert>
+                )}
               </FormControl>
             </Grid>
 
@@ -284,9 +306,11 @@ export function EditGroup() {
                   label="Pamainos pavadinimas"
                   labelId="shift-label"
                   id="shift"
-                  value={shift.id || ''}
+                  value={shift.id || ""}
                   onChange={(e) => {
-                    const selectedShift = shifts.find((s) => s.id === e.target.value);
+                    const selectedShift = shifts.find(
+                      (s) => s.id === e.target.value
+                    );
                     setShift(selectedShift || {});
                   }}
                 >
@@ -301,14 +325,26 @@ export function EditGroup() {
 
             <Grid item sm={8}>
               <Stack direction="row" spacing={2}>
-                <Button variant="contained" onClick={validation}>
+                <Button
+                  id="save-button-edit-group"
+                  variant="contained"
+                  onClick={validation}
+                >
                   Išsaugoti
                 </Button>
 
-                <Button variant="contained" onClick={() => deleteGroup(group.id)}>Ištrinti</Button>
+                <Button
+                  id="delete-button-edit-group"
+                  variant="contained"
+                  onClick={() => deleteGroup(group.id)}
+                >
+                  Ištrinti
+                </Button>
 
                 <Link to="/groups">
-                  <Button variant="contained">Grįžti</Button>
+                  <Button id="back-button-edit-group" variant="contained">
+                    Grįžti
+                  </Button>
                 </Link>
               </Stack>
             </Grid>
@@ -317,30 +353,28 @@ export function EditGroup() {
               {isPostUsed ? (
                 successfulPost ? (
                   <Alert severity="success"> Grupė sėkmingai pakeista.</Alert>
-                ) :
-                  (
-                    <Grid>
-                      <Alert severity="warning">Nepavyko pakeisti grupės.</Alert>
-                      {
-                        (groupErrors.passedValidation ?
-                          (groupErrors.databaseErrors).map((databaseError, index) => (
+                ) : (
+                  <Grid>
+                    <Alert severity="warning">Nepavyko pakeisti grupės.</Alert>
+                    {groupErrors.passedValidation
+                      ? groupErrors.databaseErrors.map(
+                          (databaseError, index) => (
                             <Alert key={index} severity="warning">
                               {databaseError}
                             </Alert>
-                          ))
-                          :
-                          Object.keys(groupErrors.validationErrors).map(key => (
-                            <Alert key={key} severity="warning"> {groupErrors.validationErrors[key]} {key} laukelyje.
-                            </Alert>
-                          ))
+                          )
                         )
-                      }
-                    </Grid>
-                  )
-              ) :
-                (
-                  <div></div>
-                )}
+                      : Object.keys(groupErrors.validationErrors).map((key) => (
+                          <Alert key={key} severity="warning">
+                            {" "}
+                            {groupErrors.validationErrors[key]} {key} laukelyje.
+                          </Alert>
+                        ))}
+                  </Grid>
+                )
+              ) : (
+                <div></div>
+              )}
             </Grid>
           </Grid>
         </form>
