@@ -276,7 +276,7 @@ export function AddLesson() {
             </Grid>
 
             <Grid item sm={5}>
-              {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DatePicker
                   className="DatePicker"
                   label="Nuo"
@@ -290,23 +290,7 @@ export function AddLesson() {
                     },
                   }}
                 ></DatePicker>
-              </LocalizationProvider> */}
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-  <DateRangePicker
-    startText="Pradžios data"
-    endText="Pabaigos data"
-    value={selectedDates}
-    onChange={(newValue) => setSelectedDates(newValue)}
-    renderInput={(startProps, endProps) => (
-      <>
-        <TextField {...startProps} />
-        <Box sx={{ mx: 2 }}> - </Box>
-        <TextField {...endProps} />
-      </>
-    )}
-  />
-</LocalizationProvider>
-
+              </LocalizationProvider>
             </Grid>
 
             <Grid item sm={5}>

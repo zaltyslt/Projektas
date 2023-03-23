@@ -32,12 +32,17 @@ export function ScheduleView() {
     <div>
       <Container>
         <Grid container rowSpacing={2}>
-          <Grid item sm={12}>
+          <Grid item sm={10}>
             <h3>{schedule.groups && schedule.groups.name}</h3>
             <h5>
               {schedule.schoolYear} m. {schedule.semester}
             </h5>
             <h6>{schedule.groups && schedule.groups.shift.name}</h6>
+          </Grid>
+          <Grid item sm={2} marginTop={4}>
+            <Link to={"/schedules/holidays/" + schedule.id}>
+              <Button variant="contained">Planuoti atostogas</Button>
+            </Link>
           </Grid>
 
           <Grid item sm={12}>
