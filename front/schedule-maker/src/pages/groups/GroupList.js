@@ -238,9 +238,7 @@ export function GroupList() {
           <Grid item sm={2}>
             <Link to="/groups/create">
               <Stack direction="row" justifyContent="flex-end">
-                <Button id="create-new-group" variant="contained">
-                  Pridėti naują
-                </Button>
+                <Button id="create-new-group" variant="contained">Pridėti naują</Button>
               </Stack>
             </Link>
           </Grid>
@@ -356,7 +354,6 @@ export function GroupList() {
                     <TableCell>{group.studentAmount}</TableCell>
                     <TableCell className="activity">
                       <Button
-                        id="restore-button-list-group"
                         variant="contained"
                         onClick={() => handleRestore(group.id)}
                       >

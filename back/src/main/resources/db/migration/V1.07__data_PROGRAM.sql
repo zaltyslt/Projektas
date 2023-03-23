@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS PROGRAM
+create table PROGRAM
 (
     ID            BIGINT  not null auto_increment
         primary key,

@@ -3,6 +3,9 @@ import { Link } from "react-router-dom";
 import {
   Alert,
   Button,
+  Checkbox,
+  FormControlLabel,
+  FormGroup,
   Grid,
   Paper,
   Table,
@@ -14,6 +17,10 @@ import {
   TablePagination,
   TableRow,
   TextField,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { Container } from "@mui/system";
@@ -61,6 +68,7 @@ export function ScheduleList() {
   };
 
   const handleDelete = () => {
+    console.log(idToDelete);
     fetch(`api/v1/schedules/delete-schedule/${idToDelete}`, {
       method: "Delete",
       headers: {
@@ -126,12 +134,12 @@ export function ScheduleList() {
 
     const isWithinDateRange = date
       ? new Date(schedule.dateFrom) <= date &&
-      new Date(schedule.dateUntil) >= date
+        new Date(schedule.dateUntil) >= date
       : true;
-
+     
     return (
       (groupMatches || shiftMaches || schoolYearMatches || semesterMatches) &&
-      (isWithinDateRange)
+      (isWithinDateRange )
     );
   });
 
@@ -168,10 +176,13 @@ export function ScheduleList() {
   // }
 
   const handleChange = (newValue) => {
+ 
     isNaN(newValue) ? setDate(null) : setDate(newValue);
+   
     clearMessages();
   };
 
+ 
 
   return (
     <div>
@@ -208,6 +219,7 @@ export function ScheduleList() {
                   Pridėti naują
                 </Button>
               </Link>
+             
             </Stack>
           </Grid>
         </Grid>
@@ -244,7 +256,7 @@ export function ScheduleList() {
                   format="YYYY/MM/DD"
                   id="date-form"
                   name="date-form"
-                  value={date || ""}
+                  value={date || ''}
                   onChange={handleChange}
                   TextFieldComponent={TextField}
                 ></DatePicker>
@@ -261,7 +273,6 @@ export function ScheduleList() {
                   Grupės pavadinimas
                 </TableCell>
                 <TableCell style={{ width: "550px" }}>Tvarkaraštis</TableCell>
-                <TableCell style={{ width: "550px" }}>Laikotarpis</TableCell>
                 <TableCell style={{ width: "100px" }}></TableCell>
               </TableRow>
             </TableHead>
@@ -295,26 +306,8 @@ export function ScheduleList() {
                         {schedule.schoolYear} m. {schedule.semester}
                       </Link>
                     </TableCell>
-
-                    <TableCell component="th" scope="row">
-                      {schedule.groups ? (
-                        !schedule.groups.isActive ? (
-                          <span className="Deleted">
-                            {schedule.groups.name}
-                          </span>
-                        ) : (
-                          <span>
-                            {schedule.dateFrom} — {schedule.dateUntil}
-                          </span>
-                        )
-                      ) : (
-                        <span>Nenurodytas</span>
-                      )}
-                    </TableCell>
-
                     <TableCell>
                       <Button
-                        id="delete-button-list-schedule"
                         variant="outlined"
                         startIcon={<DeleteIcon />}
                         onClick={() => handleClickOpen(schedule.id)}
@@ -324,12 +317,7 @@ export function ScheduleList() {
                     </TableCell>
                     <TableCell className="action" align="center">
                       <Link to={`/planning/${schedule.id}`}>
-                        <Button
-                          id="plan-button-list-schedule"
-                          variant="contained"
-                        >
-                          Planuoti
-                        </Button>
+                        <Button variant="contained">Planuoti</Button>
                       </Link>
                     </TableCell>
                   </TableRow>

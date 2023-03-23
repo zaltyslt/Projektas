@@ -1,6 +1,5 @@
 package lt.techin.schedule.teachers;
 
-import jakarta.websocket.server.PathParam;
 import lt.techin.schedule.subject.SubjectService;
 import lt.techin.schedule.teachers.contacts.ContactService;
 import lt.techin.schedule.teachers.helpers.TeacherSubjectsDto;
@@ -55,13 +54,8 @@ public class TeacherControllerView {
 
     }
 
-    @GetMapping("/subject")
-    public List<TeacherEntityDto> getTeachersBySubjectFiltered(@RequestParam Long subjectId, @RequestParam Long shiftId) {
+    @GetMapping(value = "/subject")
+    public List<TeacherEntityDto> getTeachersBySubject(@RequestParam Long subjectId, @RequestParam Long shiftId) {
         return teacherFinder.findTeachersBySubjectsId(subjectId, shiftId).stream().map(TeacherMapper::toTeacherEntityDto).collect(Collectors.toList());
-    }
-
-    @GetMapping("/{subjectId}")
-    public List<TeacherEntityDto> getTeachersBySubject(@PathVariable Long subjectId) {
-        return teacherFinder.findTeachersBySubject(subjectId).stream().map(TeacherMapper::toTeacherEntityDto).collect(Collectors.toList());
     }
 }

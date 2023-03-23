@@ -14,9 +14,6 @@ public class SubjectHoursService {
     @Autowired
     private SubjectRepository subjectRepository;
 
-    public SubjectHoursService(SubjectHoursRepository subjectHoursRepository, SubjectRepository subjectRepository) {
-    }
-
 
     public List<SubjectHours> getAll() {
         return subjectHoursRepository.findAll();
@@ -51,7 +48,6 @@ public class SubjectHoursService {
                 if (toNewSubject != null) {
                     toNewSubject.setHours(subjecthour.getHours());
                     toNewSubject.setSubject(subjecthour.getSubject());
-                    toNewSubject.setSubjectName(subjecthour.getSubjectName());
                     updatedList.add(toNewSubject);
                 }
             }
@@ -59,6 +55,7 @@ public class SubjectHoursService {
         List<SubjectHours> newList = new ArrayList<>();
         if (!updatedList.isEmpty()) {
             newList = subjectHoursRepository.saveAll(updatedList);
+            System.out.println(newList);
         }
         return newList;
     }

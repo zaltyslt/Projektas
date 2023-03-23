@@ -120,9 +120,7 @@ export function ModuleList() {
           <Grid item sm={2}>
             <Stack direction="row" justifyContent="flex-end">
               <Link to="/modules/create">
-                <Button id="create-new-module" variant="contained">
-                  Pridėti naują
-                </Button>
+                <Button id="create-new-module" variant="contained">Pridėti naują</Button>
               </Link>
             </Stack>
           </Grid>
@@ -242,7 +240,6 @@ export function ModuleList() {
                     </TableCell>
                     <TableCell align="center" className="activity">
                       <Button
-                        id="restore-button-list-module"
                         variant="contained"
                         onClick={() => handleRestore(module.id)}
                       >

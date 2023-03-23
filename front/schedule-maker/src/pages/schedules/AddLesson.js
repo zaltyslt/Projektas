@@ -77,7 +77,8 @@ export function AddLesson() {
 
   useEffect(() => {
     fetch(
-      `api/v1/teachers/subject?subjectId=${params.id}&shiftId=${shiftId}`
+      `api/v1/teachers/subject?subjectId=${params.id}&shiftId=${shiftId}`,
+      {}
     )
       .then((response) => response.json())
       .then(setTeachers);
@@ -119,7 +120,7 @@ export function AddLesson() {
           setCreateMessage("");
           setError(response.message);
         } else {
-          setCreateMessage("Sėkmingai įdėta į tvarkaraštį. ");
+          setCreateMessage("Sėkmingai sukurta. ");
           setError("");
           clear();
         }
@@ -376,22 +377,14 @@ export function AddLesson() {
 
             <Grid item sm={10}>
               <Stack direction="row" spacing={2}>
-                <Button
-                  id="plan-button-add-lesson"
-                  variant="contained"
-                  onClick={validation}
-                >
+                <Button variant="contained" onClick={validation}>
                   Suplanuoti
                 </Button>
                 <Link to={`/planning/${scheduleId}`}>
-                  <Button id="cancel-button-add-lesson" variant="contained">
-                    Atšaukti
-                  </Button>
+                  <Button variant="contained">Atšaukti</Button>
                 </Link>
                 <Link to={"/schedules/" + scheduleId}>
-                  <Button id="schedule-button-add-lesson" variant="contained">
-                    Tvarkaraštis
-                  </Button>
+                  <Button variant="contained">Tvarkaraštis</Button>
                 </Link>
               </Stack>
             </Grid>

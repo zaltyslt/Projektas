@@ -80,12 +80,7 @@ export function ScheduleView() {
                             subject: { subject },
                           }}
                         >
-                          <Button
-                            id="plan-button-view-schedule"
-                            variant="contained"
-                          >
-                            Planuoti
-                          </Button>
+                          <Button variant="contained">Planuoti</Button>
                         </Link>
                       </TableCell>
                     </TableRow>
@@ -98,14 +93,10 @@ export function ScheduleView() {
           <Grid item sm={12}>
             <Stack direction="row" spacing={2}>
               <Link to="/">
-                <Button id="back-button-view-schedule" variant="contained">
-                  Grįžti
-                </Button>
+                <Button variant="contained">Grįžti</Button>
               </Link>
               <Link to={"/schedules/" + params.id}>
-                <Button id="schedule-button-view-schedule" variant="contained">
-                  Tvarkaraštis
-                </Button>
+                <Button variant="contained">Tvarkaraštis</Button>
               </Link>
             </Stack>
           </Grid>
