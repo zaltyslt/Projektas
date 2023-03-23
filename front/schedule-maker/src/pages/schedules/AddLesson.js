@@ -20,6 +20,9 @@ import { Link, useLocation, useParams } from "react-router-dom";
 import { lessons } from "../../helpers/constants";
 import { dateToUtc } from "../../helpers/helpers";
 
+import { DateRangePicker } from "@mui/lab";
+
+
 export function AddLesson() {
   const [subject, setSubject] = useState({});
   const [classRooms, setClassRooms] = useState([]);
@@ -42,6 +45,8 @@ export function AddLesson() {
   const [shiftEndEmpty, setShiftEndEmpty] = useState(false);
   const [isValidShiftTime, setIsValidShiftTime] = useState(true);
   const [shiftTooLong, setShiftTooLong] = useState(false);
+  
+  const [selectedDates, setSelectedDates] = useState([]);
 
   const params = useParams();
   const data = useLocation();
@@ -271,7 +276,7 @@ export function AddLesson() {
             </Grid>
 
             <Grid item sm={5}>
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
+              {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DatePicker
                   className="DatePicker"
                   label="Nuo"
@@ -285,7 +290,23 @@ export function AddLesson() {
                     },
                   }}
                 ></DatePicker>
-              </LocalizationProvider>
+              </LocalizationProvider> */}
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+  <DateRangePicker
+    startText="Pradžios data"
+    endText="Pabaigos data"
+    value={selectedDates}
+    onChange={(newValue) => setSelectedDates(newValue)}
+    renderInput={(startProps, endProps) => (
+      <>
+        <TextField {...startProps} />
+        <Box sx={{ mx: 2 }}> - </Box>
+        <TextField {...endProps} />
+      </>
+    )}
+  />
+</LocalizationProvider>
+
             </Grid>
 
             <Grid item sm={5}>
