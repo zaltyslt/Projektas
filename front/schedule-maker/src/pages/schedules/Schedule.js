@@ -17,7 +17,7 @@ export function Schedule() {
   const [schedule, setSchedule] = useState([]);
   const params = useParams();
 
-  const colors = ['#F44336', '#E91E63', '#9C27B0', '#673AB7', '#3F51B5', '#2196F3', '#03A9F4', '#00BCD4', '#009688', '#4CAF50', '#8BC34A', '#CDDC39', '#FFEB3B', '#FFC107', '#FF9800', '#FF5722', '#795548', '#9E9E9E', '#607D8B'];
+  const colors = ['#f5c5c4', '#f5ddc4', '#f5f3c4', '#daf5c4', '#c4f5d8', '#c4f5f2', '#c4d3f5', '#d8c4f5', '#f5c4e3'];
 
   useEffect(() => {
     fetch(`api/v1/schedules/${params.id}/lessons`)
@@ -46,7 +46,7 @@ export function Schedule() {
       allDay: true,
       url: `http://localhost:3000/schedule-maker#/schedules/edit-lesson/${schedule.id}`,
       // Set the event color to the random color
-      color: color,
+      backgroundColor: color,
     };
   });
 
@@ -58,7 +58,7 @@ export function Schedule() {
           fontSize: "16px",
           padding: "10px",
           fontFamily: "Arial, sans-serif",
-          backgroundColor: "#dcedf7",
+          // backgroundColor: "#dcedf7",
           color: "black",
         }}
         dangerouslySetInnerHTML={{ __html: eventInfo.event.title }}
