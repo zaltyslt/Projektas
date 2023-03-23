@@ -20,7 +20,6 @@ export function EditModule() {
   const [isPostUsed, setIsPostUsed] = useState(false);
   const [moduleErrors, setModuleErrors] = useState();
 
-
   const listUrl = useHref("/modules");
 
   const params = useParams({
@@ -52,10 +51,17 @@ export function EditModule() {
   };
 
   const handleEditModule = () => {
-    if (isValidNumber && isValidName && !isNumberEmpty && !isNameEmpty && !isNumberTooLong && !isNameTooLong) {
+    if (
+      isValidNumber &&
+      isValidName &&
+      !isNumberEmpty &&
+      !isNameEmpty &&
+      !isNumberTooLong &&
+      !isNameTooLong
+    ) {
       editModule();
     }
-  }
+  };
 
   const editModule = async () => {
     await fetch(`api/v1/modules/update/${params.id}`, {
@@ -68,36 +74,39 @@ export function EditModule() {
         name,
       }),
     })
-      .then(response => response.json())
-      .then(result => {
+      .then((response) => response.json())
+      .then((result) => {
         applyResult(result);
       });
   };
 
   useEffect(() => {
-    (number.length === 0) ? setIsNumberEmpty(true) : setIsNumberEmpty(false);
+    number.length === 0 ? setIsNumberEmpty(true) : setIsNumberEmpty(false);
 
-    const isValid = number.split('').some(char => badSymbols.includes(char));
-    (isValid) ? setIsValidNumber(false) : setIsValidNumber(true);
+    const isValid = number.split("").some((char) => badSymbols.includes(char));
+    isValid ? setIsValidNumber(false) : setIsValidNumber(true);
 
-    (number.length > moduleNumberLength) ? setIsNumberTooLong(true) : setIsNumberTooLong(false);
-  }, [number])
+    number.length > moduleNumberLength
+      ? setIsNumberTooLong(true)
+      : setIsNumberTooLong(false);
+  }, [number]);
 
   useEffect(() => {
-    (name.length === 0) ? setIsNameEmpty(true) : setIsNameEmpty(false);
+    name.length === 0 ? setIsNameEmpty(true) : setIsNameEmpty(false);
 
-    const isValid = name.split('').some(char => badSymbols.includes(char));
-    (isValid) ? setIsValidName(false) : setIsValidName(true);
+    const isValid = name.split("").some((char) => badSymbols.includes(char));
+    isValid ? setIsValidName(false) : setIsValidName(true);
 
-    (name.length > moduleNameLength) ? setIsNameTooLong(true) : setIsNameTooLong(false);
-  }, [name])
+    name.length > moduleNameLength
+      ? setIsNameTooLong(true)
+      : setIsNameTooLong(false);
+  }, [name]);
 
   const applyResult = (data) => {
     if (data.valid) {
       setSuccessfulPost(true);
-    }
-    else {
-      setModuleErrors(data)
+    } else {
+      setModuleErrors(data);
       setSuccessfulPost(false);
     }
     setIsPostUsed(true);
@@ -107,20 +116,25 @@ export function EditModule() {
     <Container>
       <h1 className="edit-header">Redagavimas</h1>
       <h3>{module.name}</h3>
-      <span id="modified-date">Paskutinį kartą redaguota: {module.modifiedDate}</span>
+      <span id="modified-date">
+        Paskutinį kartą redaguota: {module.modifiedDate}
+      </span>
       <form>
-        <Grid container rowSpacing={2}>
-          <Grid item sm={10}>
+        <Grid container rowSpacing={3}>
+          <Grid item sm={8}>
             <TextField
               fullWidth
               variant="outlined"
               required
               error={!isValidNumber || isNumberEmpty || isNumberTooLong}
               helperText={
-                !isValidNumber ? "Modulio kodas turi neleidžiamų simbolių." :
-                  isNumberEmpty ? "Modulio kodas negali būti tuščias" :
-                    isNumberTooLong ? `Modulio kodas negali būti ilgesnis nei ${moduleNumberLength} simbolių`
-                      : null
+                !isValidNumber
+                  ? "Modulio kodas turi neleidžiamų simbolių."
+                  : isNumberEmpty
+                  ? "Modulio kodas negali būti tuščias"
+                  : isNumberTooLong
+                  ? `Modulio kodas negali būti ilgesnis nei ${moduleNumberLength} simbolių`
+                  : null
               }
               label="Modulio kodas"
               id="number"
@@ -129,7 +143,7 @@ export function EditModule() {
             ></TextField>
           </Grid>
 
-          <Grid item sm={10}>
+          <Grid item sm={8}>
             <TextField
               fullWidth
               multiline
@@ -137,10 +151,13 @@ export function EditModule() {
               required
               error={!isValidName || isNameEmpty || isNameTooLong}
               helperText={
-                !isValidName ? "Modulio pavadinimas turi neleidžiamų simbolių." :
-                  isNameEmpty ? "Modulio pavadinimas negali būti tuščias" :
-                    isNameTooLong ? `Modulio pavadinimas negali būti ilgesnis nei ${moduleNameLength} simbolių`
-                      : null
+                !isValidName
+                  ? "Modulio pavadinimas turi neleidžiamų simbolių."
+                  : isNameEmpty
+                  ? "Modulio pavadinimas negali būti tuščias"
+                  : isNameTooLong
+                  ? `Modulio pavadinimas negali būti ilgesnis nei ${moduleNameLength} simbolių`
+                  : null
               }
               label="Modulio pavadinimas"
               id="name"
@@ -149,9 +166,10 @@ export function EditModule() {
             ></TextField>
           </Grid>
 
-          <Grid item sm={10}>
+          <Grid item sm={8}>
             <Stack direction="row" spacing={2}>
               <Button
+                id="save-button-edit-module"
                 variant="contained"
                 onClick={() => handleEditModule(module.id)}
               >
@@ -159,6 +177,7 @@ export function EditModule() {
               </Button>
 
               <Button
+                id="delete-button-edit-module"
                 variant="contained"
                 onClick={() => deleteModule(module.id)}
               >
@@ -166,39 +185,39 @@ export function EditModule() {
               </Button>
 
               <Link to="/modules">
-                <Button variant="contained">Grįžti</Button>
+                <Button id="back-button-edit-module" variant="contained">
+                  Grįžti
+                </Button>
               </Link>
             </Stack>
           </Grid>
 
-          <Grid item sm={10}>
+          <Grid item sm={8}>
             {isPostUsed ? (
               successfulPost ? (
                 <Alert severity="success"> Modulis sėkmingai pakeistas.</Alert>
-              ) :
-                (
-                  <Grid>
-                    <Alert severity="warning">Nepavyko pakeisti modulio.</Alert>
-                    {
-                      (moduleErrors.passedValidation ?
-                        (moduleErrors.databaseErrors).map((databaseError, index) => (
+              ) : (
+                <Grid>
+                  <Alert severity="warning">Nepavyko pakeisti modulio.</Alert>
+                  {moduleErrors.passedValidation
+                    ? moduleErrors.databaseErrors.map(
+                        (databaseError, index) => (
                           <Alert key={index} severity="warning">
                             {databaseError}
                           </Alert>
-                        ))
-                        :
-                        Object.keys(moduleErrors.validationErrors).map(key => (
-                          <Alert key={key} severity="warning"> {moduleErrors.validationErrors[key]} {key} laukelyje.
-                          </Alert>
-                        ))
+                        )
                       )
-                    }
-                  </Grid>
-                )
-            ) :
-              (
-                <div></div>
-              )}
+                    : Object.keys(moduleErrors.validationErrors).map((key) => (
+                        <Alert key={key} severity="warning">
+                          {" "}
+                          {moduleErrors.validationErrors[key]} {key} laukelyje.
+                        </Alert>
+                      ))}
+                </Grid>
+              )
+            ) : (
+              <div></div>
+            )}
           </Grid>
         </Grid>
       </form>

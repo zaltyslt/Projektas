@@ -41,7 +41,6 @@ export function CreateGroup() {
   const [isPostUsed, setIsPostUsed] = useState(false);
   const [groupErrors, setGroupErrors] = useState();
 
-
   useEffect(() => {
     fetch(`api/v1/programs`)
       .then((response) => response.json())
@@ -63,7 +62,17 @@ export function CreateGroup() {
       setShiftError(true);
       return;
     }
-    if (nameError || nameNotValid || isNameTooLong || yearError || yearNotValid || isYearTooLong || studentAmountError || studentAmountNotValid || isStudentAmountTooLong) {
+    if (
+      nameError ||
+      nameNotValid ||
+      isNameTooLong ||
+      yearError ||
+      yearNotValid ||
+      isYearTooLong ||
+      studentAmountError ||
+      studentAmountNotValid ||
+      isStudentAmountTooLong
+    ) {
       return;
     }
     createGroup();
@@ -83,22 +92,21 @@ export function CreateGroup() {
         shift,
       }),
     })
-      .then(response => response.json())
-      .then(data => {
+      .then((response) => response.json())
+      .then((data) => {
         handleAfterPost(data);
-      })
+      });
   };
 
-  const handleAfterPost = ((data) => {
+  const handleAfterPost = (data) => {
     if (data.valid) {
       setSuccessfulPost(true);
-    }
-    else {
-      setGroupErrors(data)
+    } else {
+      setGroupErrors(data);
       setSuccessfulPost(false);
     }
     setIsPostUsed(true);
-  })
+  };
 
   const clear = () => {
     setName("");
@@ -121,35 +129,41 @@ export function CreateGroup() {
   const setNameAndCheck = (name) => {
     setName(name);
 
-    (name.length === 0) ? setNameError(true) : setNameError(false);
+    name.length === 0 ? setNameError(true) : setNameError(false);
 
-    (name.length > textLength) ? setIsNameTooLong(true) : setIsNameTooLong(false);
+    name.length > textLength ? setIsNameTooLong(true) : setIsNameTooLong(false);
 
-    const isValid = name.split('').some(char => badSymbols.includes(char));
-    (!isValid) ? setNameNotValid(false) : setNameNotValid(true);
-  }
+    const isValid = name.split("").some((char) => badSymbols.includes(char));
+    !isValid ? setNameNotValid(false) : setNameNotValid(true);
+  };
 
   const setSchoolYearAndCheck = (year) => {
     setSchoolYear(year);
 
-    (year.length === 0) ? setYearError(true) : setYearError(false);
+    year.length === 0 ? setYearError(true) : setYearError(false);
 
-    (year.length > textLength) ? setIsYearTooLong(true) : setIsYearTooLong(false);
+    year.length > textLength ? setIsYearTooLong(true) : setIsYearTooLong(false);
 
     const isValidYearString = /^[0-9\/-]+$/.test(year);
-    (isValidYearString) ? setYearNotValid(false) : setYearNotValid(true);
-  }
+    isValidYearString ? setYearNotValid(false) : setYearNotValid(true);
+  };
 
   const setStudentAmountAndCheck = (studentAmount) => {
     setStudentAmount(studentAmount);
 
-    (studentAmount.length === 0) ? setStudentAmountError(true) : setStudentAmountError(false);
+    studentAmount.length === 0
+      ? setStudentAmountError(true)
+      : setStudentAmountError(false);
 
-    (studentAmount.length > textLength) ? setIsStudentAmountTooLong(true) : setIsStudentAmountTooLong(false);
+    studentAmount.length > textLength
+      ? setIsStudentAmountTooLong(true)
+      : setIsStudentAmountTooLong(false);
 
     const isDigitsOnly = /^[0-9]+$/.test(studentAmount);
-    (isDigitsOnly) ? setStudentAmountNotValid(false) : setStudentAmountNotValid(true);
-  }
+    isDigitsOnly
+      ? setStudentAmountNotValid(false)
+      : setStudentAmountNotValid(true);
+  };
 
   return (
     <div>
@@ -166,10 +180,10 @@ export function CreateGroup() {
                   nameError
                     ? "Grupės pavadinimas yra privalomas"
                     : nameNotValid
-                      ? "Laukas turi negalimų simbolių. "
-                      : isNameTooLong
-                        ? "Pavadinimas negali būti ilgesnis nei 200 simbolių"
-                        : null
+                    ? "Laukas turi negalimų simbolių. "
+                    : isNameTooLong
+                    ? "Pavadinimas negali būti ilgesnis nei 200 simbolių"
+                    : null
                 }
                 variant="outlined"
                 label="Grupės pavadinimas"
@@ -189,10 +203,10 @@ export function CreateGroup() {
                   yearError
                     ? "Privaloma nurodyti mokslo metus."
                     : yearNotValid
-                      ? "Laukas turi susidėti iš skaičių bei - ir / simbolių. "
-                      : isYearTooLong
-                        ? "Metai negali būti ilgesni nei 200 simbolių"
-                        : null
+                    ? "Laukas turi susidėti iš skaičių bei - ir / simbolių. "
+                    : isYearTooLong
+                    ? "Metai negali būti ilgesni nei 200 simbolių"
+                    : null
                 }
                 variant="outlined"
                 label="Mokslo metai"
@@ -207,15 +221,19 @@ export function CreateGroup() {
               <TextField
                 fullWidth
                 required
-                error={studentAmountError || studentAmountNotValid || isStudentAmountTooLong}
+                error={
+                  studentAmountError ||
+                  studentAmountNotValid ||
+                  isStudentAmountTooLong
+                }
                 helperText={
-                  studentAmountError ?
-                    "Privaloma nurodyti studentų kiekį."
+                  studentAmountError
+                    ? "Privaloma nurodyti studentų kiekį."
                     : studentAmountNotValid
-                      ? "Laukas turi susidėti iš skaičių."
-                      : isStudentAmountTooLong
-                        ? "Studentų kiekio laukas negali būti ilgesnis nei 200 skaičių"
-                        : null
+                    ? "Laukas turi susidėti iš skaičių."
+                    : isStudentAmountTooLong
+                    ? "Studentų kiekio laukas negali būti ilgesnis nei 200 skaičių"
+                    : null
                 }
                 variant="outlined"
                 label="Studentų kiekis"
@@ -278,12 +296,18 @@ export function CreateGroup() {
 
             <Grid item sm={8} marginTop={2}>
               <Stack direction="row" spacing={2}>
-                <Button variant="contained" onClick={validation}>
+                <Button
+                  id="save-button-create-group"
+                  variant="contained"
+                  onClick={validation}
+                >
                   Išsaugoti
                 </Button>
 
                 <Link to="/groups">
-                  <Button variant="contained">Grįžti</Button>
+                  <Button id="back-button-create-group" variant="contained">
+                    Grįžti
+                  </Button>
                 </Link>
               </Stack>
             </Grid>
@@ -293,30 +317,26 @@ export function CreateGroup() {
             {isPostUsed ? (
               successfulPost ? (
                 <Alert severity="success"> Grupė sėkmingai pridėta.</Alert>
-              ) :
-                (
-                  <Grid>
-                    <Alert severity="warning">Nepavyko pridėti grupės.</Alert>
-                    {
-                      (groupErrors.passedValidation ?
-                        (groupErrors.databaseErrors).map((databaseError, index) => (
-                          <Alert key={index} severity="warning">
-                            {databaseError}
-                          </Alert>
-                        ))
-                        :
-                        Object.keys(groupErrors.validationErrors).map(key => (
-                          <Alert key={key} severity="warning"> {groupErrors.validationErrors[key]} {key} laukelyje.
-                          </Alert>
-                        ))
-                      )
-                    }
-                  </Grid>
-                )
-            ) :
-              (
-                <div></div>
-              )}
+              ) : (
+                <Grid>
+                  <Alert severity="warning">Nepavyko pridėti grupės.</Alert>
+                  {groupErrors.passedValidation
+                    ? groupErrors.databaseErrors.map((databaseError, index) => (
+                        <Alert key={index} severity="warning">
+                          {databaseError}
+                        </Alert>
+                      ))
+                    : Object.keys(groupErrors.validationErrors).map((key) => (
+                        <Alert key={key} severity="warning">
+                          {" "}
+                          {groupErrors.validationErrors[key]} {key} laukelyje.
+                        </Alert>
+                      ))}
+                </Grid>
+              )
+            ) : (
+              <div></div>
+            )}
           </Grid>
         </form>
       </Container>

@@ -51,9 +51,7 @@ function App() {
           {/* CLASSROOMS PATHAI */}
           <Route path="/rooms" element={<RoomList />}></Route>
           <Route path="/create-classroom" element={<CreateRoom />}></Route>
-          <Route
-            path="/classrooms/view-classroom/:id"
-            element={<ViewRoom />}
+          <Route path="/classrooms/view-classroom/:id" element={<ViewRoom />}
           ></Route>
           <Route path="/update-classroom/:id" element={<UpdateClassroom />} />
           {/* SHIFTS PATHAI */}

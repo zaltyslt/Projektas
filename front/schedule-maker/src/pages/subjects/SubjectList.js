@@ -59,13 +59,18 @@ export function SubjectList() {
 
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - subjects.length) : 0;
-  
+
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
 
   const emptyRowsInDeleted =
-    pageInDeleted > 0 ? Math.max(0, (1 + pageInDeleted) * rowsPerPageInDeleted - deletedSubjects.length) : 0;
+    pageInDeleted > 0
+      ? Math.max(
+          0,
+          (1 + pageInDeleted) * rowsPerPageInDeleted - deletedSubjects.length
+        )
+      : 0;
 
   const handleChangePageInDeleted = (event, newPage) => {
     setPageInDeleted(newPage);
@@ -125,7 +130,9 @@ export function SubjectList() {
           <Grid item sm={2}>
             <Link to="/subjects/create">
               <Stack direction="row" justifyContent="flex-end">
-                <Button id="create-new-subject" variant="contained">Pridėti naują</Button>
+                <Button id="create-new-subject" variant="contained">
+                  Pridėti naują
+                </Button>
               </Stack>
             </Link>
           </Grid>
@@ -146,8 +153,10 @@ export function SubjectList() {
           <Table aria-label="custom pagination table">
             <TableHead>
               <TableRow>
-                <TableCell style={{ width: "500px" }} >Dalyko pavadinimas</TableCell>
-                <TableCell >Modulio pavadinimas</TableCell>
+                <TableCell style={{ width: "500px" }}>
+                  Dalyko pavadinimas
+                </TableCell>
+                <TableCell>Modulio pavadinimas</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -167,9 +176,7 @@ export function SubjectList() {
                   <TableCell>
                     {subject.module ? (
                       subject.module.deleted ? (
-                        <span className="Deleted">
-                          {subject.module.name}
-                        </span>
+                        <span className="Deleted">{subject.module.name}</span>
                       ) : (
                         subject.module.name
                       )
@@ -226,16 +233,21 @@ export function SubjectList() {
             <Table aria-label="custom pagination table">
               <TableHead>
                 <TableRow>
-                  <TableCell style={{ width: "500px" }}>Dalyko pavadinimas</TableCell>
-                  <TableCell style={{ width: "500px" }}>Modulio pavadinimas</TableCell>
-                  <TableCell ></TableCell>
+                  <TableCell style={{ width: "500px" }}>
+                    Dalyko pavadinimas
+                  </TableCell>
+                  <TableCell style={{ width: "500px" }}>
+                    Modulio pavadinimas
+                  </TableCell>
+                  <TableCell></TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
                 {(rowsPerPageInDeleted > 0
                   ? deletedSubjects.slice(
                       pageInDeleted * rowsPerPageInDeleted,
-                      pageInDeleted * rowsPerPageInDeleted + rowsPerPageInDeleted
+                      pageInDeleted * rowsPerPageInDeleted +
+                        rowsPerPageInDeleted
                     )
                   : deletedSubjects
                 ).map((subject) => (
@@ -246,9 +258,7 @@ export function SubjectList() {
                     <TableCell>
                       {subject.module ? (
                         subject.module.deleted ? (
-                          <span className="Deleted">
-                            {subject.module.name}
-                          </span>
+                          <span className="Deleted">{subject.module.name}</span>
                         ) : (
                           subject.module.name
                         )
@@ -258,6 +268,7 @@ export function SubjectList() {
                     </TableCell>
                     <TableCell align="center" className="activity">
                       <Button
+                        id="restore-button-list-subject"
                         variant="contained"
                         onClick={() => handleRestore(subject.id)}
                       >
