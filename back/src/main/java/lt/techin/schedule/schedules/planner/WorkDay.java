@@ -7,6 +7,7 @@ import lt.techin.schedule.subject.Subject;
 import lt.techin.schedule.teachers.Teacher;
 
 import java.time.LocalDate;
+import java.util.Map;
 import java.util.Objects;
 
 @Entity
@@ -41,6 +42,15 @@ public class WorkDay {
     private Float lessonStartFloat;
 
     private Boolean online;
+
+    private Map<Long, String> scheduleIdWithTeacherNameConflict;
+
+    private Map<Long, String> scheduleIdWithClassroomNameConflict;
+
+    private boolean hasTeacherConflict;
+
+    private boolean hasClassroomConflict;
+
 
     public Schedule getSchedule() {
         return schedule;
@@ -135,6 +145,38 @@ public class WorkDay {
 
     public void setLessonStartFloat(Float lessonStartFloat) {
         this.lessonStartFloat = lessonStartFloat;
+    }
+
+    public Map<Long, String> getScheduleIdWithTeacherNameConflict() {
+        return scheduleIdWithTeacherNameConflict;
+    }
+
+    public void setScheduleIdWithTeacherNameConflict(Map<Long, String> scheduleIdWithTeacherNameConflict) {
+        this.scheduleIdWithTeacherNameConflict = scheduleIdWithTeacherNameConflict;
+    }
+
+    public Map<Long, String> getScheduleIdWithClassroomNameConflict() {
+        return scheduleIdWithClassroomNameConflict;
+    }
+
+    public void setScheduleIdWithClassroomNameConflict(Map<Long, String> scheduleIdWithClassroomNameConflict) {
+        this.scheduleIdWithClassroomNameConflict = scheduleIdWithClassroomNameConflict;
+    }
+
+    public boolean isHasTeacherConflict() {
+        return hasTeacherConflict;
+    }
+
+    public void setHasTeacherConflict(boolean hasTeacherConflict) {
+        this.hasTeacherConflict = hasTeacherConflict;
+    }
+
+    public boolean isHasClassroomConflict() {
+        return hasClassroomConflict;
+    }
+
+    public void setHasClassroomConflict(boolean hasClassroomConflict) {
+        this.hasClassroomConflict = hasClassroomConflict;
     }
 
     @Override
