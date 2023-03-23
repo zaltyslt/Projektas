@@ -19,8 +19,15 @@ public class RoomListPage extends AbstractPage {
     @FindBy(css = "tbody.MuiTableBody-root a")
     private List<WebElement> roomList;
 
-    @FindBy (xpath = "//*[@id='root']/div/div/div/div[3]/label/span[1]/input")
+    @FindBy (xpath= "//tbody//tr[td/button]")
+    private List<WebElement> removedRoomList;
+
+    @FindBy(css = "input.PrivateSwitchBase-input")
     private WebElement markCheckbox;
+
+    @FindBy(css = "#restore-button-list-room")
+    private WebElement clickRestoreButton;
+
 
     public RoomListPage(WebDriver driver) {
         super(driver);
@@ -29,6 +36,13 @@ public class RoomListPage extends AbstractPage {
     public List<String> getRooms() {
         WaitUtils.getElementWithWait(By.cssSelector("tbody.MuiTableBody-root a"), driver);
         return roomList.stream().map(el -> el.getText()).collect(Collectors.toList());
+    }
+
+    public List<String> getRemovedRooms() {
+        WaitUtils.getElementWithWait(By.xpath("//tbody//tr[td/button]"), driver);
+        return removedRoomList.stream()
+                .map(row -> row.findElement(By.cssSelector("th")))
+                .map(el -> el.getText()).collect(Collectors.toList());
     }
 
     public void selectCreateNewRoomButton() {
@@ -46,7 +60,23 @@ public class RoomListPage extends AbstractPage {
     public void selectRoom(int roomIndex) {
         roomList.get(roomIndex).click();
     }
-    public void markCheck () {
-        markCheckbox.isEnabled();
+
+    public void selectRemovedRoom (int removedRoomIndex) {
+        roomList.get(removedRoomIndex).click();
+    }
+
+    public void markCheckBox() {
+        if (!markCheckbox.isSelected()) {
+            markCheckbox.click();
+        }
+    }
+
+    public void clickRestoreButton() {
+
+        clickRestoreButton.click();
+    }
+
+    public void clickRestoreRemovedRoomButton(int roomIndex) {
+        removedRoomList.get(roomIndex).findElement(By.xpath("//button[text()=\"Atstatyti\"]")).click();
     }
 }

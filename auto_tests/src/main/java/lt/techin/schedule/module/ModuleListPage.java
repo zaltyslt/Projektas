@@ -6,7 +6,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 public class ModuleListPage extends AbstractPage {
-    @FindBy(xpath = "#create-new-module")
+    @FindBy(css = "#create-new-module")
     private WebElement selectCreatNewModuleButton;
 
     public ModuleListPage(WebDriver driver) {

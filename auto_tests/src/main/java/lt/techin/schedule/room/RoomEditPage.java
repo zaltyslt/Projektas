@@ -20,14 +20,16 @@ public class RoomEditPage extends AbstractPage {
     private WebElement saveButton;
 
     // cia kai sukurs ID mygtukui istrinti, lokatariu pakeisti
-    @FindBy(xpath = "//*/button[text()=\"Ištrinti\"]")
-    private WebElement deleteButton;
+
 
     @FindBy(xpath = "//*/button[text()=\"Grįžti\"]")
     private WebElement backButton;
 
     @FindBy(css = ".MuiAlert-message")
     private WebElement alertMessage;
+
+    @FindBy(css = "#delete-button-edit-room")
+    private WebElement deleteRoomButton;
 
     public RoomEditPage(WebDriver driver) {
         super(driver);
@@ -54,7 +56,7 @@ public class RoomEditPage extends AbstractPage {
     }
 
     public void clickDeleteButton() {
-        deleteButton.click();
+        deleteRoomButton.click();
     }
 
     public WebElement getAlertMessage() {
@@ -65,4 +67,7 @@ public class RoomEditPage extends AbstractPage {
         backButton.click();
     }
 
-}
+
+
+    }
+

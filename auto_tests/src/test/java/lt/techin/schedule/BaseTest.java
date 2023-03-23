@@ -20,8 +20,8 @@ public class BaseTest {
         driver.get("http://localhost:3000/schedule-maker#/");
     }
 
-    @AfterEach
-    public void quit() {
-        driver.quit();
-    }
+//    @AfterEach
+//    public void quit() {
+//        driver.quit();
+//    }
 }
