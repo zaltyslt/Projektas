@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 @Service
@@ -113,59 +114,92 @@ public class PlannerService {
             existingClassroom = classroomRepository.findById(plannerDto.getClassroom().getId()).orElseThrow(()-> new ValidationException("Pasirinkta klasė neegzistuoja", "Classroom", "Does not exist", plannerDto.getClassroom().getId().toString()));
         }
 
-        Integer unassignedHours = existingSchedule.getUnassignedTimeWithSubjectId(subjectId);
         Program program = existingSchedule.getGroups().getProgram();
         SubjectHours subjectHour = program.getSubjectHoursList().stream().filter(sh -> sh.getSubject().equals(subjectId)).findAny().orElseThrow(() ->
                 new ValidationException("Pasirinktas dalykas neegzistuoja programoje", "Program", "Does not exist", program.toString()));
+
+        Integer unassignedHours = existingSchedule.getUnassignedTimeWithSubjectId(subjectId);
         int plannerAssignedHours = plannerDto.getAssignedHours();
 
+        //Setting values of unassigned hours in scheduler entity
         int hours = SetupAndValidateUnassignedHoursMap(existingSchedule, unassignedHours, plannerAssignedHours, subjectId, subjectHour);
 
-        LocalDate date = plannerDto.getDateFrom();
         int interval = plannerDto.getEndIntEnum() - plannerDto.getStartIntEnum() + 1;
-        int days = hours/interval;
+        int workDaysRequired;
+        int lastDayHours;
 
-        LocalDate lastDate = date.plusDays(days);
+        if (hours % interval != 0) {
+            workDaysRequired = hours / interval + 1;
+            lastDayHours = hours % interval;
+        }
+        else {
+            workDaysRequired = hours / interval;
+            lastDayHours = 0;
+        }
 
-        int leftHours = hours % interval;
-        int looper = 0;
+        List<LocalDate> workableDates = new ArrayList<>();
+        LocalDate date = plannerDto.getDateFrom();
+        //Finding every workday
+        for (int i = 0; i < workDaysRequired; i++) {
+            while (date.getDayOfWeek() == DayOfWeek.SATURDAY || date.getDayOfWeek() == DayOfWeek.SUNDAY) {
+                date = date.plusDays(1);
+            }
+            workableDates.add(date);
+            date = date.plusDays(1);
+        }
 
+        //Getting last lesson date of the planner
+        LocalDate lastDate = workableDates.get(workableDates.size() - 1);
+
+        //Validating whether planned lessons are viable for this schedule
         String isDateValid = isValidDates(plannerDto.getDateFrom(), lastDate, existingSchedule.getDateFrom(), existingSchedule.getDateUntil());
         if (!isDateValid.isEmpty()) {
             return isDateValid;
         }
 
-        while(looper < days) {
+        Set<WorkDay> workDaySet = existingSchedule.getWorkingDays();
 
-            DayOfWeek dayOfWeek = date.getDayOfWeek();
-            if (dayOfWeek == DayOfWeek.SATURDAY) {
-                date = date.plusDays(2);
+        //Iterating through workdays if all workdays has same amount of lesson hours
+        if (lastDayHours == 0) {
+            for (LocalDate workableDate : workableDates) {
+                if (workDaySet.stream().noneMatch(wd -> wd.getDate().isEqual(workableDate))) {
+                    WorkDay workDay = new WorkDay(workableDate, existingSubject, existingTeacher, existingSchedule, existingClassroom, getLessonStartString(plannerDto),
+                            getLessonEndString(plannerDto),
+                            LessonTime.getLessonTimeByInt(plannerDto.getStartIntEnum()).getLessonStartFloat(),
+                            plannerDto.getOnline());
+                    workDayRepository.save(workDay);
+                    existingSchedule.addWorkDay(workDay);
+                }
             }
-            else if (dayOfWeek == DayOfWeek.SUNDAY) {
-                date = date.plusDays(1);
+        }
+        //In a case where there is an uneven amount of hours and the last day has a different amount
+        else {
+            for (int i = 0; i < workableDates.size() - 1; i++) {
+                LocalDate workableDate = workableDates.get(i);
+                if (workDaySet.stream().noneMatch(wd -> wd.getDate().isEqual(workableDate))) {
+                    WorkDay workDay = new WorkDay(workableDate, existingSubject, existingTeacher, existingSchedule, existingClassroom, getLessonStartString(plannerDto),
+                            getLessonEndString(plannerDto),
+                            LessonTime.getLessonTimeByInt(plannerDto.getStartIntEnum()).getLessonStartFloat(),
+                            plannerDto.getOnline());
+                    workDayRepository.save(workDay);
+                    existingSchedule.addWorkDay(workDay);
+                }
             }
-            else {
-                WorkDay workDay = new WorkDay(date, existingSubject, existingTeacher, existingSchedule, existingClassroom, getLessonStartString(plannerDto), getLessonEndString(plannerDto),
-                        LessonTime.getLessonTimeByInt(plannerDto.getStartIntEnum()).getLessonStartFloat(), plannerDto.getOnline());
-                workDayRepository.save(workDay);
-                date = date.plusDays(1);
-                existingSchedule.addWorkDay(workDay);
-                looper++;
+            LocalDate lastWorkableDate = workableDates.get(workableDates.size() - 1);
+            if (workDaySet.stream().noneMatch(wd -> wd.getDate().isEqual(lastWorkableDate))) {
+                WorkDay lastWorkDay = new WorkDay(lastWorkableDate, existingSubject, existingTeacher, existingSchedule, existingClassroom,
+                        getLessonStartString(plannerDto),
+                        //Gets end of lesson by amount of hours left
+                        LessonTime.getLessonTimeByInt(plannerDto.getStartIntEnum() + lastDayHours - 1).getLessonEnd(),
+                        LessonTime.getLessonTimeByInt(plannerDto.getStartIntEnum()).getLessonStartFloat(),
+                        plannerDto.getOnline());
+                workDayRepository.save(lastWorkDay);
+                existingSchedule.addWorkDay(lastWorkDay);
             }
         }
 
-        LinkedHashSet<WorkDay> workDays = existingSchedule.getWorkingDays().stream().sorted(new WorkDayDtoComparator()).collect(Collectors.toCollection(LinkedHashSet::new));
+        LinkedHashSet<WorkDay> sortedWorkDays = existingSchedule.getWorkingDays().stream().sorted(new WorkDayDtoComparator()).collect(Collectors.toCollection(LinkedHashSet::new));
 
-        if (leftHours != 0) {
-            while (date.getDayOfWeek() == DayOfWeek.SATURDAY || date.getDayOfWeek() == DayOfWeek.SUNDAY) {
-                date = date.plusDays(1);
-            }
-            String lastLesson = LessonTime.getLessonTimeByInt(plannerDto.getStartIntEnum() + leftHours - 1).getLessonEnd();
-            WorkDay lastWorkDay = new WorkDay(date, existingSubject, existingTeacher, existingSchedule, existingClassroom, getLessonStartString(plannerDto), lastLesson,
-                    LessonTime.getLessonTimeByInt(plannerDto.getStartIntEnum()).getLessonStartFloat(), plannerDto.getOnline());
-            workDayRepository.save(lastWorkDay);
-            existingSchedule.addWorkDay(lastWorkDay);
-        }
         return "";
     }
 

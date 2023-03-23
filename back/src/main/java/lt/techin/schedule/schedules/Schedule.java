@@ -5,15 +5,13 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lt.techin.schedule.group.Group;
 import lt.techin.schedule.schedules.planner.WorkDay;
+import lt.techin.schedule.schedules.planner.WorkDayDtoComparator;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.LinkedHashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 public class Schedule {
@@ -68,7 +66,7 @@ public class Schedule {
 
     public Schedule() {
         subjectIdWithUnassignedTime = new HashMap<>();
-        workingDays = new LinkedHashSet<>();
+        workingDays = new TreeSet<>(new WorkDayDtoComparator());
     }
 
     public Long getId() {
