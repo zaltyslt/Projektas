@@ -126,12 +126,12 @@ export function ScheduleList() {
 
     const isWithinDateRange = date
       ? new Date(schedule.dateFrom) <= date &&
-        new Date(schedule.dateUntil) >= date
+      new Date(schedule.dateUntil) >= date
       : true;
 
     return (
       (groupMatches || shiftMaches || schoolYearMatches || semesterMatches) &&
-      isWithinDateRange
+      (isWithinDateRange)
     );
   });
 
@@ -169,9 +169,9 @@ export function ScheduleList() {
 
   const handleChange = (newValue) => {
     isNaN(newValue) ? setDate(null) : setDate(newValue);
-
     clearMessages();
   };
+
 
   return (
     <div>
@@ -261,6 +261,7 @@ export function ScheduleList() {
                   Grupės pavadinimas
                 </TableCell>
                 <TableCell style={{ width: "550px" }}>Tvarkaraštis</TableCell>
+                <TableCell style={{ width: "550px" }}>Laikotarpis</TableCell>
                 <TableCell style={{ width: "100px" }}></TableCell>
               </TableRow>
             </TableHead>
@@ -294,6 +295,23 @@ export function ScheduleList() {
                         {schedule.schoolYear} m. {schedule.semester}
                       </Link>
                     </TableCell>
+
+                    <TableCell component="th" scope="row">
+                      {schedule.groups ? (
+                        !schedule.groups.isActive ? (
+                          <span className="Deleted">
+                            {schedule.groups.name}
+                          </span>
+                        ) : (
+                          <span>
+                            {schedule.dateFrom} — {schedule.dateUntil}
+                          </span>
+                        )
+                      ) : (
+                        <span>Nenurodytas</span>
+                      )}
+                    </TableCell>
+
                     <TableCell>
                       <Button
                         id="delete-button-list-schedule"

@@ -29,6 +29,7 @@ public class SubjectHours {
     public SubjectHours(long l, Subject subject, int i) {
     }
 
+
     @PrePersist
     public void prePersist() {
         createdDate = LocalDateTime.now();
