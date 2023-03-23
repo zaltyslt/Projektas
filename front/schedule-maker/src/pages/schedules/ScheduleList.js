@@ -3,9 +3,6 @@ import { Link } from "react-router-dom";
 import {
   Alert,
   Button,
-  Checkbox,
-  FormControlLabel,
-  FormGroup,
   Grid,
   Paper,
   Table,
@@ -17,10 +14,6 @@ import {
   TablePagination,
   TableRow,
   TextField,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { Container } from "@mui/system";
@@ -68,7 +61,6 @@ export function ScheduleList() {
   };
 
   const handleDelete = () => {
-    console.log(idToDelete);
     fetch(`api/v1/schedules/delete-schedule/${idToDelete}`, {
       method: "Delete",
       headers: {
@@ -252,7 +244,7 @@ export function ScheduleList() {
                   format="YYYY/MM/DD"
                   id="date-form"
                   name="date-form"
-                  value={date || ''}
+                  value={date || ""}
                   onChange={handleChange}
                   TextFieldComponent={TextField}
                 ></DatePicker>
@@ -322,6 +314,7 @@ export function ScheduleList() {
 
                     <TableCell>
                       <Button
+                        id="delete-button-list-schedule"
                         variant="outlined"
                         startIcon={<DeleteIcon />}
                         onClick={() => handleClickOpen(schedule.id)}
@@ -331,7 +324,12 @@ export function ScheduleList() {
                     </TableCell>
                     <TableCell className="action" align="center">
                       <Link to={`/planning/${schedule.id}`}>
-                        <Button variant="contained">Planuoti</Button>
+                        <Button
+                          id="plan-button-list-schedule"
+                          variant="contained"
+                        >
+                          Planuoti
+                        </Button>
                       </Link>
                     </TableCell>
                   </TableRow>

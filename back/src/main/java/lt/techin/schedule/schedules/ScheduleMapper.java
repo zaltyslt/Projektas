@@ -50,4 +50,18 @@ public class ScheduleMapper {
         scheduleCreateDto.setDateUntil(schedule.getDateUntil());
         return scheduleCreateDto;
     }
+
+    public static ScheduleEntityDto toScheduleEntity(Schedule schedule) {
+        ScheduleEntityDto scheduleEntityDto = new ScheduleEntityDto();
+
+        scheduleEntityDto.setId(schedule.getId());
+        return scheduleEntityDto;
+    }
+
+    public static Schedule toScheduleFromEntity(ScheduleEntityDto scheduleEntityDto) {
+        Schedule schedule = new Schedule();
+
+        schedule.setId(scheduleEntityDto.getId());
+        return schedule;
+    }
 }

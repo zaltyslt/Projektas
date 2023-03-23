@@ -20,6 +20,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import static lt.techin.schedule.classrooms.ClassroomMapper.toClassroomFromSmallDto;
+import static lt.techin.schedule.schedules.ScheduleMapper.toScheduleFromEntity;
+import static lt.techin.schedule.teachers.TeacherMapper.toTeacherFromEntityDto;
+
 @Service
 public class PlannerService {
 
@@ -31,6 +35,8 @@ public class PlannerService {
 
     private final WorkDayRepository workDayRepository;
     private final ClassroomRepository classroomRepository;
+
+    private final int INTERVAL_CONSTANT = 1;
 
     public PlannerService(ScheduleRepository scheduleRepository, SubjectRepository subjectRepository, TeacherRepository teacherRepository, WorkDayRepository workDayRepository,
                           ClassroomRepository classroomRepository) {
@@ -106,7 +112,7 @@ public class PlannerService {
         }
 
         LocalDate date = plannerDto.getDateFrom();
-        int interval = plannerDto.getEndIntEnum() - plannerDto.getStartIntEnum() + 1;
+        int interval = plannerDto.getEndIntEnum() - plannerDto.getStartIntEnum() + INTERVAL_CONSTANT;
         int days = hours/interval;
         int leftHours = hours % interval;
         boolean created = false;
@@ -146,5 +152,36 @@ public class PlannerService {
 
     public List<WorkDay> getWorkDays(Long scheduleId) {
         return workDayRepository.findWorkDaysByScheduleId(scheduleId);
+    }
+
+    public Optional<WorkDay> getWorkDay(Long workDayId) {
+        return workDayRepository.findById(workDayId);
+    }
+
+    public WorkDay updateWorkDay(Long workDayId, WorkDayDto workDayDto) {
+        WorkDay existingWorkDay = workDayRepository.findById(workDayId).orElseThrow(() -> new ValidationException("Nurodyta darbo diena neegzistuoja", "WorkDay", "Does not exist", workDayId.toString()));
+        existingWorkDay.setTeacher(toTeacherFromEntityDto(workDayDto.getTeacher()));
+        existingWorkDay.setClassroom(toClassroomFromSmallDto(workDayDto.getClassroom()));
+        existingWorkDay.setOnline(workDayDto.getOnline());
+
+        return workDayRepository.save(existingWorkDay);
+    }
+
+    public boolean deleteWorkDay(Long workDayId, WorkDayDto workDayDto) {
+        WorkDay existingWorkDay = workDayRepository.findById(workDayId).orElseThrow(() -> new ValidationException("Nurodyta darbo diena neegzistuoja", "WorkDay", "Does not exist", workDayId.toString()));
+        Schedule schedule = scheduleRepository.findById(existingWorkDay.getSchedule().getId()).orElseThrow(() -> new ValidationException("Nurodytas tvarkaraštis neegzistuoja", "Schedule", "Does not exist", existingWorkDay.getSchedule().getId().toString()));
+        Integer unassignedHours = schedule.getUnassignedTimeWithSubjectId(existingWorkDay.getSubject().getId());
+        var start = workDayDto.getStartIntEnum();
+        var end = workDayDto.getEndIntEnum();
+        int interval = end - start + INTERVAL_CONSTANT;
+
+        if (existingWorkDay != null) {
+            workDayRepository.deleteById(workDayId);
+            schedule.replaceUnassignedTime(existingWorkDay.getSubject().getId(), unassignedHours + interval);
+            scheduleRepository.save(schedule);
+            return true;
+        } else {
+            return false;
+        }
     }
 }

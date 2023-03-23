@@ -55,7 +55,7 @@ export function AddShift() {
   var startIntEnum;
   var endIntEnum;
 
-  const createShift = (() => {
+  const createShift = () => {
     if (name === "") {
       setIsNameEmpty(true);
       return;
@@ -65,27 +65,25 @@ export function AddShift() {
       endIntEnum = shiftEndingTime;
       createShiftPostRequest();
     }
-  })
+  };
 
   const createShiftPostRequest = async () => {
-    await fetch(
-      'api/v1/shift/add-shift', {
-      method: 'POST',
+    await fetch("api/v1/shift/add-shift", {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json'
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
         name,
         startIntEnum,
         endIntEnum,
-        isActive
-      })
-    }
-    )
-      .then(response => response.json())
-      .then(data => {
+        isActive,
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
         handleAfterPost(data);
-      })
+      });
   };
 
   const handleAfterPost = (data) => {
@@ -113,10 +111,10 @@ export function AddShift() {
                   !isValidName
                     ? "Pavadinimas turi neleidžiamų simbolių."
                     : isNameEmpty
-                      ? "Pavadinimas negali būti tuščias"
-                      : isNameTooLong
-                        ? "Pavadinimas negali būti ilgesnis nei 50 simbolių"
-                        : null
+                    ? "Pavadinimas negali būti tuščias"
+                    : isNameTooLong
+                    ? "Pavadinimas negali būti ilgesnis nei 50 simbolių"
+                    : null
                 }
                 variant="outlined"
                 label="Pamainos pavadinimas"
@@ -181,12 +179,18 @@ export function AddShift() {
           </Grid>
 
           <Grid item sm={2} marginTop={1}>
-            <Stack direction="row" spacing={2} >
-              <Button variant="contained" onClick={createShift}>
+            <Stack direction="row" spacing={2}>
+              <Button
+                id="save-button-create-shift"
+                variant="contained"
+                onClick={createShift}
+              >
                 Išsaugoti
               </Button>
               <Link to="/shifts">
-                <Button variant="contained">Grįžti</Button>
+                <Button id="back-button-create-shift" variant="contained">
+                  Grįžti
+                </Button>
               </Link>
             </Stack>
           </Grid>
@@ -194,22 +198,22 @@ export function AddShift() {
           <Grid item sm={8}>
             {isPostUsed ? (
               successfulPost ? (
-                <Alert severity="success" > Pamaina sėkmingai pridėta.</Alert>
+                <Alert severity="success"> Pamaina sėkmingai pridėta.</Alert>
               ) : (
                 <Grid>
                   <Alert severity="warning">Nepavyko pridėti pamainos.</Alert>
                   {shiftErrors.passedValidation
                     ? shiftErrors.databaseErrors.map((databaseError, index) => (
-                      <Alert key={index} severity="warning">
-                        {databaseError}
-                      </Alert>
-                    ))
+                        <Alert key={index} severity="warning">
+                          {databaseError}
+                        </Alert>
+                      ))
                     : Object.keys(shiftErrors.validationErrors).map((key) => (
-                      <Alert key={key} severity="warning">
-                        {" "}
-                        {shiftErrors.validationErrors[key]} {key} laukelyje.
-                      </Alert>
-                    ))}
+                        <Alert key={key} severity="warning">
+                          {" "}
+                          {shiftErrors.validationErrors[key]} {key} laukelyje.
+                        </Alert>
+                      ))}
                 </Grid>
               )
             ) : (

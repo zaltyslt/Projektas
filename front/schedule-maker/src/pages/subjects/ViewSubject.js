@@ -20,7 +20,7 @@ export function ViewSubject() {
     <div>
       <Container>
         <Grid container rowSpacing={4}>
-          <Grid item sm={10}>
+          <Grid item sm={10} marginTop={4}>
             <header>
               <h1>{subject.name}</h1>
               <span id="modified-date">
@@ -65,11 +65,15 @@ export function ViewSubject() {
           <Grid item sm={12}>
             <Stack direction="row" spacing={2}>
               <Link to={"/subjects/edit/" + subject.id}>
-                <Button variant="contained">Redaguoti</Button>
+                <Button id="edit-button-view-subject" variant="contained">
+                  Redaguoti
+                </Button>
               </Link>
 
               <Link to="/subjects">
-                <Button variant="contained">Grįžti</Button>
+                <Button id="back-button-view-subject" variant="contained">
+                  Grįžti
+                </Button>
               </Link>
             </Stack>
           </Grid>

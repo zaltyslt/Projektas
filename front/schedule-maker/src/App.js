@@ -34,6 +34,7 @@ import { CreateSchedule } from "./pages/schedules/CreateSchedule";
 import { AddLesson } from "./pages/schedules/AddLesson";
 import { ScheduleView } from "./pages/schedules/ScheduleView";
 import { Schedule } from "./pages/schedules/Schedule";
+import { EditLesson } from "./pages/schedules/EditLesson";
 
 function App() {
   return (
@@ -50,9 +51,7 @@ function App() {
           {/* CLASSROOMS PATHAI */}
           <Route path="/rooms" element={<RoomList />}></Route>
           <Route path="/create-classroom" element={<CreateRoom />}></Route>
-          <Route
-            path="/classrooms/view-classroom/:id"
-            element={<ViewRoom />}
+          <Route path="/classrooms/view-classroom/:id" element={<ViewRoom />}
           ></Route>
           <Route path="/update-classroom/:id" element={<UpdateClassroom />} />
           {/* SHIFTS PATHAI */}
@@ -91,6 +90,7 @@ function App() {
           ></Route>
           <Route path="/planning/:id" element={<ScheduleView />}></Route>
           <Route path="/schedules/:id" element={<Schedule />}></Route>
+          <Route path="/schedules/edit-lesson/:id" element={<EditLesson />}></Route>
         </Routes>
       </HashRouter>
     </div>
