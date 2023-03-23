@@ -45,8 +45,6 @@ export function AddLesson() {
   const [shiftEndEmpty, setShiftEndEmpty] = useState(false);
   const [isValidShiftTime, setIsValidShiftTime] = useState(true);
   const [shiftTooLong, setShiftTooLong] = useState(false);
-  
-  const [selectedDates, setSelectedDates] = useState([]);
 
   const params = useParams();
   const data = useLocation();
