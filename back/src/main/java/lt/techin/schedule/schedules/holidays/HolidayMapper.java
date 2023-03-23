@@ -7,7 +7,7 @@ public class HolidayMapper {
     public static Holiday toHoliday(HolidayDto holidayDto) {
         var holiday = new Holiday();
         holiday.setId(holidayDto.getId());
-        holiday.setHolidayName(holidayDto.getHolidayName());
+        holiday.setHolidayName(holidayDto.getName());
         holiday.setDateFrom(holidayDto.getDateFrom());
         holiday.setDateUntil(holidayDto.getDateUntil());
         holiday.setGroup(toGroupEntityDto(holidayDto.getGroup()));
@@ -19,7 +19,7 @@ public class HolidayMapper {
     public static HolidayDto toHolidayDto(Holiday holiday) {
         var holidayDto = new HolidayDto();
         holidayDto.setId(holiday.getId());
-        holidayDto.setHolidayName(holiday.getHolidayName());
+        holidayDto.setName(holiday.getHolidayName());
         holidayDto.setDateFrom(holiday.getDateFrom());
         holidayDto.setDateUntil(holiday.getDateUntil());
         holidayDto.setGroup(toGroupEntityDto2(holiday.getGroup()));

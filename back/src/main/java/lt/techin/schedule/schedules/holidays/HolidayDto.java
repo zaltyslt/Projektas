@@ -11,7 +11,7 @@ public class HolidayDto {
 
     private Long id;
 
-    private String holidayName;
+    private String name;
 
     private GroupEntityDto group;
 
@@ -39,12 +39,12 @@ public class HolidayDto {
         this.id = id;
     }
 
-    public String getHolidayName() {
-        return holidayName;
+    public String getName() {
+        return name;
     }
 
-    public void setHolidayName(String holidayName) {
-        this.holidayName = holidayName;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public GroupEntityDto getGroup() {
@@ -60,6 +60,7 @@ public class HolidayDto {
     }
 
     public void setDateFrom(LocalDate dateFrom) {
+
         this.dateFrom = dateFrom;
     }
 
@@ -93,7 +94,7 @@ public class HolidayDto {
         if (o == null || getClass() != o.getClass()) return false;
         HolidayDto that = (HolidayDto) o;
         return Objects.equals(id, that.id)
-                && Objects.equals(holidayName, that.holidayName)
+                && Objects.equals(name, that.name)
                 && Objects.equals(group, that.group)
                 && Objects.equals(dateFrom, that.dateFrom)
                 && Objects.equals(dateUntil, that.dateUntil)
@@ -103,14 +104,14 @@ public class HolidayDto {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, holidayName, group, dateFrom, dateUntil, createdDate, modifiedDate);
+        return Objects.hash(id, name, group, dateFrom, dateUntil, createdDate, modifiedDate);
     }
 
     @Override
     public String toString() {
         return "HolidayDto{" +
                 "id=" + id +
-                ", holidayName='" + holidayName + '\'' +
+                ", holidayName='" + name + '\'' +
                 ", group=" + group +
                 ", dateFrom=" + dateFrom +
                 ", dateUntil=" + dateUntil +
