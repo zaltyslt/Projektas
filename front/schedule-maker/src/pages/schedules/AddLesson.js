@@ -119,7 +119,7 @@ export function AddLesson() {
           setCreateMessage("");
           setError(response.message);
         } else {
-          setCreateMessage("Sėkmingai sukurta. ");
+          setCreateMessage("Sėkmingai įdėta į tvarkaraštį. ");
           setError("");
           clear();
         }

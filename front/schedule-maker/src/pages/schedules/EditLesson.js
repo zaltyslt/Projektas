@@ -3,7 +3,7 @@ import {
   Button,
   Checkbox,
   Dialog,
-  DialogActions,
+  DialogActions, 
   DialogTitle,
   FormControl,
   FormControlLabel,
@@ -11,7 +11,6 @@ import {
   InputLabel,
   MenuItem,
   Select,
-  Slide,
   Stack,
 } from "@mui/material";
 import { Container } from "@mui/system";
@@ -40,9 +39,6 @@ export function EditLesson() {
 
   const params = useParams();
   const calendarUrl = useHref(`/schedules/${schedule.id}`);
-  const Transition = forwardRef(function Transition(props, ref) {
-    return <Slide direction="up" ref={ref} {...props} />;
-  });
 
   useEffect(() => {
     fetch(`api/v1/schedules/lesson/${params.id}`)
@@ -135,12 +131,12 @@ export function EditLesson() {
     deleteLesson(startint, endInt);
   };
 
-  const handlePrompt = () => {
-    setOpenPrompt(true);
-  };
-
   const handleClose = () => {
     setOpenPrompt(false);
+  };
+
+  const handlePrompt = () => {
+    setOpenPrompt(true);
   };
 
   return (
@@ -148,12 +144,13 @@ export function EditLesson() {
       <Container>
         <Dialog
           open={openPrompt}
-          TransitionComponent={Transition}
           keepMounted
           onClose={handleClose}
           aria-describedby="alert-dialog-slide-description"
         >
-          <DialogTitle> Ar tikrai norite ištrinti pasirinktą pamoką visam laikui?</DialogTitle>
+          <DialogTitle>
+            {"Ar tikrai norite ištrinti pasirinktą pamoką visam laikui?"}
+          </DialogTitle>
           <DialogActions>
             <Button onClick={handleDelete}>Ištrinti</Button>
             <Button onClick={handleClose}>Atšaukti</Button>
