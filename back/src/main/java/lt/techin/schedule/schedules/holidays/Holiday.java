@@ -18,6 +18,10 @@ public class Holiday {
 
     private String holidayName;
 
+    @ManyToOne
+    @JoinColumn(name = "group_id")
+    private Group group;
+
     @Column(name = "date_from", nullable = false)
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate dateFrom;
@@ -26,21 +30,27 @@ public class Holiday {
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate dateUntil;
 
-//    @ManyToOne
-//    @JoinColumn(name = "group_id")
-//    private Group group;
-
     @CreatedDate
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime createdDate;
     @LastModifiedDate
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime modifiedDate;
+
+    public Group getGroup() {
+        return group;
+    }
+
+    public void setGroup(Group group) {
+        this.group = group;
+    }
+
     @PrePersist
     public void prePersist() {
         createdDate = LocalDateTime.now();
         modifiedDate = LocalDateTime.now();
     }
+
     @PreUpdate
     public void preUpdate() {
         modifiedDate = LocalDateTime.now();
@@ -81,14 +91,6 @@ public class Holiday {
         this.dateUntil = dateUntil;
     }
 
-//    public Group getGroup() {
-//        return group;
-//    }
-//
-//    public void setGroup(Group group) {
-//        this.group = group;
-//    }
-
     public LocalDateTime getCreatedDate() {
         return createdDate;
     }
@@ -112,29 +114,15 @@ public class Holiday {
         Holiday holiday = (Holiday) o;
         return Objects.equals(id, holiday.id)
                 && Objects.equals(holidayName, holiday.holidayName)
+                && Objects.equals(group, holiday.group)
                 && Objects.equals(dateFrom, holiday.dateFrom)
                 && Objects.equals(dateUntil, holiday.dateUntil)
-//                && Objects.equals(group, holiday.group)
                 && Objects.equals(createdDate, holiday.createdDate)
                 && Objects.equals(modifiedDate, holiday.modifiedDate);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, holidayName, dateFrom, dateUntil, createdDate, modifiedDate);
-//        return Objects.hash(id, holidayName, dateFrom, dateUntil, group, createdDate, modifiedDate);
-    }
-
-    @Override
-    public String toString() {
-        return "Holiday{" +
-                "id=" + id +
-                ", holidayName='" + holidayName + '\'' +
-                ", dateFrom=" + dateFrom +
-                ", dateUntil=" + dateUntil +
-//                ", group=" + group +
-                ", createdDate=" + createdDate +
-                ", modifiedDate=" + modifiedDate +
-                '}';
+        return Objects.hash(id, holidayName, group, dateFrom, dateUntil, createdDate, modifiedDate);
     }
 }

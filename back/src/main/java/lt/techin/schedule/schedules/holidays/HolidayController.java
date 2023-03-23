@@ -30,6 +30,11 @@ public class HolidayController {
     @PostMapping(value = "/holidays/create-holiday", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Map<String, String>> createHoliday(@RequestBody HolidayDto holidayDto) {
         var createHoliday = holidayService.create(HolidayMapper.toHoliday(holidayDto));
+        if (createHoliday == null) {
+            logger.info("The holiday was NOT created successfully");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(null);
+        }
         logger.info("The holiday was created successfully");
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(Map.of("message", (HolidayMapper.toHolidayDto(createHoliday).toString())));

@@ -1,7 +1,7 @@
 package lt.techin.schedule.schedules.holidays;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import lt.techin.schedule.group.Group;
+import lt.techin.schedule.group.GroupEntityDto;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -13,13 +13,14 @@ public class HolidayDto {
 
     private String holidayName;
 
+    private GroupEntityDto group;
+
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate dateFrom;
 
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate dateUntil;
 
-//    private Group group;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime createdDate;
@@ -46,6 +47,14 @@ public class HolidayDto {
         this.holidayName = holidayName;
     }
 
+    public GroupEntityDto getGroup() {
+        return group;
+    }
+
+    public void setGroup(GroupEntityDto group) {
+        this.group = group;
+    }
+
     public LocalDate getDateFrom() {
         return dateFrom;
     }
@@ -61,14 +70,6 @@ public class HolidayDto {
     public void setDateUntil(LocalDate dateUntil) {
         this.dateUntil = dateUntil;
     }
-
-//    public Group getGroup() {
-//        return group;
-//    }
-//
-//    public void setGroup(Group group) {
-//        this.group = group;
-//    }
 
     public LocalDateTime getCreatedDate() {
         return createdDate;
@@ -93,17 +94,16 @@ public class HolidayDto {
         HolidayDto that = (HolidayDto) o;
         return Objects.equals(id, that.id)
                 && Objects.equals(holidayName, that.holidayName)
+                && Objects.equals(group, that.group)
                 && Objects.equals(dateFrom, that.dateFrom)
                 && Objects.equals(dateUntil, that.dateUntil)
-//                && Objects.equals(group, that.group)
                 && Objects.equals(createdDate, that.createdDate)
                 && Objects.equals(modifiedDate, that.modifiedDate);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, holidayName, dateFrom, dateUntil, createdDate, modifiedDate);
-//        return Objects.hash(id, holidayName, dateFrom, dateUntil, group, createdDate, modifiedDate);
+        return Objects.hash(id, holidayName, group, dateFrom, dateUntil, createdDate, modifiedDate);
     }
 
     @Override
@@ -111,9 +111,9 @@ public class HolidayDto {
         return "HolidayDto{" +
                 "id=" + id +
                 ", holidayName='" + holidayName + '\'' +
+                ", group=" + group +
                 ", dateFrom=" + dateFrom +
                 ", dateUntil=" + dateUntil +
-//                ", group=" + group +
                 ", createdDate=" + createdDate +
                 ", modifiedDate=" + modifiedDate +
                 '}';
