@@ -1,4 +1,4 @@
-create table SOME_THING
+CREATE TABLE IF NOT EXISTS SOME_THING
 (
     ID             BIGINT  auto_increment not null
         primary key,
