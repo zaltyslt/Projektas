@@ -30,7 +30,7 @@ public class SubjectCreateNewPage extends AbstractPage {
     @FindBy(css = "#save-button-create-subject")
     private WebElement clickOnSaveButton;
 
-    @FindBy(xpath = "back-button-create-subject")
+    @FindBy(css = "#back-button-create-subject")
     private WebElement clickOnBackButton;
 
     @FindBy(css = ".MuiAlert-message")

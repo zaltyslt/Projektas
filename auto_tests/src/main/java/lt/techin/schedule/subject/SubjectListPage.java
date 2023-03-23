@@ -14,6 +14,9 @@ public class SubjectListPage extends AbstractPage {
     @FindBy(css = "#create-new-subject")
     private WebElement selectCreateNewSubjectButton;
 
+    @FindBy(css = "#search-form")
+    private WebElement filterInputField;
+
     @FindBy(css = "tbody.MuiTableBody-root a")
     private List<WebElement> subjectList;
 
@@ -30,4 +33,7 @@ public class SubjectListPage extends AbstractPage {
     }
 
 
+    public void setFilterValue(String subjectName) {
+        filterInputField.sendKeys(subjectName);
+    }
 }

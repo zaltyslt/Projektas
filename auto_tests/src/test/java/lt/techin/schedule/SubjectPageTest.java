@@ -5,6 +5,7 @@ import lt.techin.schedule.subject.SubjectListPage;
 import org.junit.jupiter.api.Test;
 import lt.techin.schedule.utils.RandomUtils;
 import lt.techin.schedule.utils.WaitUtils;
+import org.openqa.selenium.WebElement;
 
 import java.util.List;
 
@@ -26,29 +27,27 @@ public class SubjectPageTest extends BaseTest {
         subjectListPage.selectCreateNewRoomButton();
 
         WaitUtils.waitPageToLoad(driver);
-        String subjectName = "Dalykas_" + RandomUtils.randomString(6);
+        String subjectName = "Dalykas" + RandomUtils.randomString(6);
         subjectCreateNewPage.setSubjectName(subjectName);
         subjectCreateNewPage.setSubjectDescription("Dalyko " + subjectName + " aprašymas");
 
         List<String> moduleOptions = subjectCreateNewPage.getSelectModuleOptions();
-        System.out.println("moduleOptions = " + moduleOptions);
         subjectCreateNewPage.selectModuleOption(0);
 
         List<String> roomOptions = subjectCreateNewPage.getSelectRoomOptions();
-        System.out.println("roomOptions = " + roomOptions);
         subjectCreateNewPage.selectRoomOptions(0);
 
-        //subjectCreateNewPage.clickOnSaveButton();
+        subjectCreateNewPage.clickOnSaveButton();
 
-//        roomCreateNewPage.clickOnSaveButton();
-//
-//        WebElement alertMessage =  roomCreateNewPage.getAlertMessage();
-//        assertTrue(alertMessage.isDisplayed(), "Alert not visible");
-//        assertEquals("Sėkmingai sukurta.", alertMessage.getText(), "Error while creating room");
-//        roomCreateNewPage.clickOnBackButton();
-//
-//        roomListPage.setFilterValue(roomName);
-//        assertTrue(roomListPage.getRooms().contains(roomName), "Room " + roomName + " not found!");
+        WebElement alertMessage =  subjectCreateNewPage.getAlertMessage();
+        assertTrue(alertMessage.isDisplayed(), "Alert not visible");
+        assertEquals("Sėkmingai sukurta.", alertMessage.getText(), "Error while creating room");
+        subjectCreateNewPage.clickOnBackButton();
+
+        WaitUtils.waitPageToLoad(driver);
+
+        subjectListPage.setFilterValue(subjectName);
+        assertTrue(subjectListPage.getSubjects().contains(subjectName), "Subject " + subjectName + " not found!");
     }
 
 
