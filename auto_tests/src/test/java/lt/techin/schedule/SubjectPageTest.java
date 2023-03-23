@@ -26,7 +26,7 @@ public class SubjectPageTest extends BaseTest {
         subjectListPage.selectCreateNewRoomButton();
 
         WaitUtils.waitPageToLoad(driver);
-        String subjectName = "Dalykas " + RandomUtils.randomString(6);
+        String subjectName = "Dalykas_" + RandomUtils.randomString(6);
         subjectCreateNewPage.setSubjectName(subjectName);
         subjectCreateNewPage.setSubjectDescription("Dalyko " + subjectName + " aprašymas");
 
