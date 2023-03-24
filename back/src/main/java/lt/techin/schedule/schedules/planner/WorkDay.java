@@ -73,6 +73,8 @@ public class WorkDay {
     public WorkDay() {
         scheduleIdWithTeacherNameConflict = new HashMap<>();
         scheduleIdWithClassroomNameConflict = new HashMap<>();
+        hasTeacherConflict = false;
+        hasClassroomConflict = false;
     }
 
     public WorkDay(LocalDate date, Subject subject, Teacher teacher, Schedule schedule, Classroom classroom, String lessonStart, String lessonEnd, int lessonStartIntEnum, int lessonEndIntEnum, Boolean online) {

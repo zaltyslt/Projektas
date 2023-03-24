@@ -18,13 +18,25 @@ public class SetupWorkDayConflicts {
                     if (CheckIfWorkdaysIntertwine(workDay, workDayDate, loopingWorkDay)) {
                         //Checks whether classrooms are the ones having conflict, sending values to original WorkDay
                         if (workDay.getClassroom().equals(loopingWorkDay.getClassroom())) {
+                            //Setting current WorkDay
                             workDay.setHasClassroomConflict(true);
                             workDay.addClassroomConflict(schedule.getId(), workDay.getClassroom().getClassroomName());
+                            //Setting WorkDay which has conflicts
+                            loopingWorkDay.setHasTeacherConflict(true);
+                            loopingWorkDay.addClassroomConflict(scheduleID, workDay.getClassroom().getClassroomName());
+                            //Need to rewrite WorkDay which has conflicts with current WorkDay
+                            workDayRepository.save(loopingWorkDay);
                         }
                         //Checks whether teachers are the ones having conflict, sending values to original WorkDay
                         if (workDay.getTeacher().equals(loopingWorkDay.getTeacher())) {
+                            //Setting current WorkDay
                             workDay.setHasTeacherConflict(true);
                             workDay.addTeacherConflict(schedule.getId(), workDay.getTeacher().getfName() + " " + workDay.getTeacher().getlName());
+                            //Setting WorkDay which has conflicts
+                            loopingWorkDay.setHasTeacherConflict(true);
+                            loopingWorkDay.addTeacherConflict(scheduleID, workDay.getTeacher().getfName() + " " + workDay.getTeacher().getlName());
+                            //Need to rewrite WorkDay which has conflicts with current WorkDay
+                            workDayRepository.save(loopingWorkDay);
                         }
                     }
                 }

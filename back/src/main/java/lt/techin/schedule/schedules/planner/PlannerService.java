@@ -36,6 +36,8 @@ public class PlannerService {
     private final WorkDayRepository workDayRepository;
     private final ClassroomRepository classroomRepository;
 
+    private final int INTERVAL_CONSTANT = 1;
+
     public PlannerService(ScheduleRepository scheduleRepository, SubjectRepository subjectRepository, TeacherRepository teacherRepository, WorkDayRepository workDayRepository,
                           ClassroomRepository classroomRepository) {
         this.scheduleRepository = scheduleRepository;
