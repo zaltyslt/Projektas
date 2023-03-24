@@ -18,7 +18,17 @@ export function Schedule() {
   const [holiday, setHoliday] = useState([]);
   const params = useParams();
 
-  const subjectColors = ['#f5c5c4', '#f5ddc4', '#f5f3c4', '#daf5c4', '#c4f5d8', '#c4f5f2', '#c4d3f5', '#d8c4f5', '#f5c4e3'];
+  const subjectColors = [
+    "#f5c5c4",
+    "#f5ddc4",
+    "#f5f3c4",
+    "#daf5c4",
+    "#c4f5d8",
+    "#c4f5f2",
+    "#c4d3f5",
+    "#d8c4f5",
+    "#f5c4e3",
+  ];
 
   useEffect(() => {
     fetch(`api/v1/schedules/${params.id}/lessons`)
@@ -47,7 +57,9 @@ export function Schedule() {
         }
           <br />
           ${
-            schedule.online ? "Nuotolinė pamoka" : schedule.classroom.classroomName
+            schedule.online
+              ? "Nuotolinė pamoka"
+              : schedule.classroom.classroomName
           }<br />
           `,
         start: schedule.date,
@@ -59,7 +71,11 @@ export function Schedule() {
     ...holiday.map((holiday) => ({
       title: `<b>${holiday.name}</b>`,
       start: holiday.dateFrom,
-      end: new Date(new Date(holiday.dateUntil).setDate(new Date(holiday.dateUntil).getDate() + 1)),
+      end: new Date(
+        new Date(holiday.dateUntil).setDate(
+          new Date(holiday.dateUntil).getDate() + 1
+        )
+      ),
       allDay: true,
       color: "#cccccc",
     })),
@@ -79,8 +95,6 @@ export function Schedule() {
       />
     </>
   );
-
-  
 
   return (
     <div className="maincontainer">
