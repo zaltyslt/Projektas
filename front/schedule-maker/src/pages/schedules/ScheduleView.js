@@ -1,6 +1,11 @@
 import {
   Alert,
   Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
   Grid,
   Paper,
   Stack,
@@ -19,8 +24,10 @@ export function ScheduleView() {
   const [schedule, setSchedule] = useState({});
   const [subjects, setSubjects] = useState([]);
   const [hours, setHours] = useState("");
+  const [subjectId, setSubjectId] = useState("");
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
+  const [open, setOpen] = useState(false);
 
   const params = useParams();
 
@@ -33,9 +40,9 @@ export function ScheduleView() {
       });
   }, []);
 
-  const handleRemove = (id, hours) => {
-    setHours(hours);
-    fetch(`api/v1/schedules/${params.id}/remove-lessons/${id}`, {
+  const handleRemove = () => {
+  
+    fetch(`api/v1/schedules/${params.id}/remove-lessons/${subjectId}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
@@ -48,9 +55,11 @@ export function ScheduleView() {
         if (!success) {
           setMessage("");
           setError(response.message);
+          setOpen(false);
         } else {
           setMessage("Dalykas sėkmingai išimtas iš tvarkaraščio");
           setError("");
+          setOpen(false);
           fetch(`api/v1/schedules/schedule/${params.id}`)
             .then((response) => response.json())
             .then((data) => {
@@ -62,9 +71,37 @@ export function ScheduleView() {
     });
   };
 
+  const handleOpen = (id, hours) => {
+    setOpen(true);
+    setHours(hours);
+    setSubjectId(id);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   return (
     <div>
       <Container>
+        <Dialog
+          open={open}
+          keepMounted
+          onClose={handleClose}
+          aria-describedby="alert-dialog-slide-description"
+        >
+          <DialogTitle>{"Ar tikrai norite ištrinti suplanuotas dalyko pamokas?"}</DialogTitle>
+          <DialogContent>
+            <DialogContentText id="alert-dialog-slide-description">
+              Visos suplanuotos pamokos bus ištrintos iš tvarkaraščio.
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose}>Atšaukti</Button>
+            <Button onClick={handleRemove}>Ištrinti</Button>
+          </DialogActions>
+        </Dialog>
+
         <Grid container rowSpacing={2}>
           <Grid item sm={10}>
             <h3>{schedule.groups && schedule.groups.name}</h3>
@@ -139,9 +176,7 @@ export function ScheduleView() {
                         <Button
                           id="remove-button-view-schedule"
                           variant="contained"
-                          onClick={() =>
-                            handleRemove(subject.id, subject.hours)
-                          }
+                          onClick={() => handleOpen(subject.id, subject.hours)}
                         >
                           Atšaukti
                         </Button>
