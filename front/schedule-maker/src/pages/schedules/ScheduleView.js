@@ -17,6 +17,7 @@ import { Link, useParams } from "react-router-dom";
 export function ScheduleView() {
   const [schedule, setSchedule] = useState({});
   const [subjects, setSubjects] = useState([]);
+  const [hours, setHours] = useState("");
   const params = useParams();
 
   useEffect(() => {
@@ -27,6 +28,19 @@ export function ScheduleView() {
         setSubjects(data.groups.program.subjectHoursList);
       });
   }, []);
+
+  const handleRemove = (id, hours) => {
+    setHours(hours);
+    fetch(`api/v1/schedules/${params.id}/remove-lessons/${id}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      }, 
+      body: JSON.stringify(
+        hours,
+      )
+    })
+  };
 
   return (
     <div>
@@ -59,9 +73,12 @@ export function ScheduleView() {
                     <TableCell>Dalykas</TableCell>
                     <TableCell align="center">Trukmė (val.)</TableCell>
                     <TableCell align="center">Nesuplanuota (val.)</TableCell>
-                    <TableCell align="center" className="activity">
+                    {/* <TableCell align="center" className="activity">
                       Veiksmai
                     </TableCell>
+                     */}
+                     <TableCell align="center" className="activity"></TableCell>
+                     <TableCell align="center" className="activity"></TableCell>
                   </TableRow>
                 </TableHead>
 
@@ -92,6 +109,15 @@ export function ScheduleView() {
                             Planuoti
                           </Button>
                         </Link>
+                      </TableCell>
+                      <TableCell align="center" className="activity">
+                        <Button
+                          id="remove-button-view-schedule"
+                          variant="contained"
+                          onClick={() => handleRemove(subject.id, subject.hours)}
+                        >
+                          Atšaukti
+                        </Button>
                       </TableCell>
                     </TableRow>
                   ))}
