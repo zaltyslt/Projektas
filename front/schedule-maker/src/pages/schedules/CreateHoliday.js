@@ -1,6 +1,6 @@
 import { Alert, Button, Grid, Stack, TextField } from "@mui/material";
 import { Container } from "@mui/system";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -33,8 +33,8 @@ export function CreateHoliday() {
       },
       body: JSON.stringify({
         name,
-        dateFrom,
-        dateUntil,
+        dateFrom: dateFrom.$d.toISOString().split("T")[0],
+        dateUntil: dateUntil.$d.toISOString().split("T")[0],
       }),
     }).then((response) => {
       let success = response.ok;
