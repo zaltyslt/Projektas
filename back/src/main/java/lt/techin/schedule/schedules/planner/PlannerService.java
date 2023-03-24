@@ -1,5 +1,6 @@
 package lt.techin.schedule.schedules.planner;
 
+import jakarta.transaction.Transactional;
 import lt.techin.schedule.classrooms.Classroom;
 import lt.techin.schedule.classrooms.ClassroomRepository;
 import lt.techin.schedule.exceptions.ValidationException;
@@ -167,6 +168,7 @@ public class PlannerService {
         return workDayRepository.save(existingWorkDay);
     }
 
+    @Transactional
     public boolean deleteWorkDay(Long workDayId, WorkDayDto workDayDto) {
         WorkDay existingWorkDay = workDayRepository.findById(workDayId).orElseThrow(() -> new ValidationException("Nurodyta darbo diena neegzistuoja", "WorkDay", "Does not exist", workDayId.toString()));
         Schedule schedule = scheduleRepository.findById(existingWorkDay.getSchedule().getId()).orElseThrow(() -> new ValidationException("Nurodytas tvarkaraštis neegzistuoja", "Schedule", "Does not exist", existingWorkDay.getSchedule().getId().toString()));
@@ -182,6 +184,19 @@ public class PlannerService {
             return true;
         } else {
             return false;
+        }
+    }
+
+    @Transactional
+    public boolean deleteLessonsBySubjectId(Long scheduleId, Long subjectId, int hours) {
+        Schedule existingSchedule = scheduleRepository.findById(scheduleId).orElseThrow(() -> new ValidationException("Nurodytas tvarkaraštis neegzistuoja", "Schedule", "Does not exist", scheduleId.toString()));
+        long deleted = workDayRepository.deleteBySubjectId(subjectId);
+
+        if(deleted > 0 ){
+            existingSchedule.replaceUnassignedTime(subjectId, hours);
+            return true;
+        } else {
+            throw new ValidationException("Dalykas neturi suplanuotų valandų.", "Subject", "Subject does not have planned hours in schedule", subjectId.toString());
         }
     }
 }

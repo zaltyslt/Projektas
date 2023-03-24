@@ -1,6 +1,6 @@
 import { Alert, Button, Grid, Stack, TextField } from "@mui/material";
 import { Container } from "@mui/system";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -26,16 +26,15 @@ export function CreateHoliday() {
   const params = useParams();
 
   const createHoliday = () => {
-    // fetch(`/api/v1/schedules/${params.id}`, {
-      fetch(`api/v1/schedules/holidays/create-holiday`, {
+      fetch(`api/v1/schedules/holidays/create-holiday/${params.id}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
         name,
-        dateFrom,
-        dateUntil,
+        dateFrom: dateFrom.$d.toISOString().split("T")[0],
+        dateUntil: dateUntil.$d.toISOString().split("T")[0],
       }),
     }).then((response) => {
       let success = response.ok;
@@ -80,6 +79,7 @@ export function CreateHoliday() {
 
   const validateDateUntil = (value) => {
     setDateUntil(dateToUtc(value));
+  
     if (value.length === 0) {
       setDateUntilEmpty(true);
     } else {
