@@ -49,6 +49,12 @@ public class PlannerController {
        return ok(updatedWorkDayDto);
     }
 
+    @PatchMapping("/{scheduleId}/remove-lessons/{subjectId}")
+    public ResponseEntity<Boolean> removeLessonsBySubjectId(@PathVariable Long scheduleId, @PathVariable Long subjectId, @RequestBody int hours) {
+        boolean result = plannerService.deleteLessonsBySubjectId(scheduleId, subjectId, hours);
+        return ok(result);
+    }
+
     @DeleteMapping("/delete-lesson/{workDayId}")
     public ResponseEntity<Boolean> deleteWorkDay(@PathVariable Long workDayId, @RequestBody WorkDayDto workDayDto) {
         boolean result = plannerService.deleteWorkDay(workDayId, workDayDto);
