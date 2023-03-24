@@ -52,7 +52,8 @@ export function Schedule() {
     ...holiday.map((holiday) => ({
       title: `<b>${holiday.name}</b>`,
       start: holiday.dateFrom,
-      end: holiday.dateUntil,
+      // end: holiday.dateUntil,
+      end: new Date(new Date(holiday.dateUntil).setDate(new Date(holiday.dateUntil).getDate() + 1)),
       allDay: true
     }))
   ];
@@ -63,6 +64,8 @@ export function Schedule() {
       <div style={{ fontSize: '16px', padding: '10px', fontFamily: 'Arial, sans-serif', backgroundColor: "#dcedf7", color: "black" }} dangerouslySetInnerHTML={{ __html: eventInfo.event.title }} />
     </>
   );
+
+  
 
   return (
     <div className="maincontainer">
