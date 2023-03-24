@@ -7,6 +7,7 @@ import lt.techin.schedule.subject.Subject;
 import lt.techin.schedule.teachers.Teacher;
 
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
@@ -45,9 +46,17 @@ public class WorkDay {
 
     private Boolean online;
 
-    private Map<Long, String> scheduleIdWithTeacherNameConflict;
-
+    @ElementCollection
+    @CollectionTable(name = "schedule_classroom_conflicts", joinColumns = @JoinColumn(name = "classroom_id"))
+    @MapKeyColumn(name = "schedule_id")
+    @Column(name = "classroom_name")
     private Map<Long, String> scheduleIdWithClassroomNameConflict;
+
+    @ElementCollection
+    @CollectionTable(name = "schedule_teacher_conflicts", joinColumns = @JoinColumn(name = "teacher_id"))
+    @MapKeyColumn(name = "schedule_id")
+    @Column(name = "teacher_name")
+    private Map<Long, String> scheduleIdWithTeacherNameConflict;
 
     private boolean hasTeacherConflict;
 
@@ -62,6 +71,8 @@ public class WorkDay {
     }
 
     public WorkDay() {
+        scheduleIdWithTeacherNameConflict = new HashMap<>();
+        scheduleIdWithClassroomNameConflict = new HashMap<>();
     }
 
     public WorkDay(LocalDate date, Subject subject, Teacher teacher, Schedule schedule, Classroom classroom, String lessonStart, String lessonEnd, int lessonStartIntEnum, int lessonEndIntEnum, Boolean online) {
@@ -75,6 +86,8 @@ public class WorkDay {
         this.lessonStartIntEnum = lessonStartIntEnum;
         this.lessonEndIntEnum = lessonEndIntEnum;
         this.online = online;
+        scheduleIdWithTeacherNameConflict = new HashMap<>();
+        scheduleIdWithClassroomNameConflict = new HashMap<>();
     }
 
     public Teacher getTeacher() {
