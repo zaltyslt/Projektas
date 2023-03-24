@@ -15,13 +15,11 @@ public class RoomEditPage extends AbstractPage {
     @FindBy(css = "#description")
     private WebElement description;
 
-    @FindBy(xpath = "//*/button[text()=\"Išsaugoti\"]")
+    @FindBy(css = "#save-button-edit-room")
     private WebElement saveButton;
 
-    // cia kai sukurs ID mygtukui istrinti, lokatariu pakeisti
 
-
-    @FindBy(xpath = "//*/button[text()=\"Grįžti\"]")
+    @FindBy(css = "#back-button-edit-room")
     private WebElement backButton;
 
     @FindBy(css = ".MuiAlert-message")

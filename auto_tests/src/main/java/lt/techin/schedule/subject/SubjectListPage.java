@@ -20,6 +20,11 @@ public class SubjectListPage extends AbstractPage {
     @FindBy(css = "tbody.MuiTableBody-root a")
     private List<WebElement> subjectList;
 
+    @FindBy(css = "input.PrivateSwitchBase-input")
+    private WebElement markCheckbox;
+    @FindBy (xpath= "//tbody//tr[td/button]")
+    private List<WebElement> removedSubjectList;
+
     public SubjectListPage(WebDriver driver) {
         super(driver);
     }
@@ -28,12 +33,36 @@ public class SubjectListPage extends AbstractPage {
         selectCreateNewSubjectButton.click();
     }
     public List<String> getSubjects() {
-        WaitUtils.getElementWithWait(By.cssSelector("tbody.MuiTableBody-root a"), driver);
+        WaitUtils.getElementWithWaitNotFail(By.cssSelector("tbody.MuiTableBody-root a"), driver);
         return subjectList.stream().map(el -> el.getText()).collect(Collectors.toList());
+    }
+    public List<String> getRemovedSubject() {
+        WaitUtils.getElementWithWait(By.xpath("//tbody//tr[td/button]"), driver);
+        return removedSubjectList.stream()
+                .map(row -> row.findElement(By.cssSelector("th")))
+                .map(el -> el.getText()).collect(Collectors.toList());
     }
 
 
     public void setFilterValue(String subjectName) {
         filterInputField.sendKeys(subjectName);
+    }
+    public WebElement getSubject(int subjectIndex) {
+        return subjectList.get(subjectIndex);
+    }
+
+    public void selectSubject(int subjectIndex) {
+        subjectList.get(subjectIndex).click();
+    }
+    public void markCheckBox() {
+        if (!markCheckbox.isSelected()) {
+            markCheckbox.click();
+        }
+    }
+    public void selectRemovedSubject (int removedSubjectIndex) {
+        subjectList.get(removedSubjectIndex).click();
+    }
+    public void clickRestoreRemovedRoomButton(int roomIndex) {
+        removedSubjectList.get(roomIndex).findElement(By.xpath("//button[text()=\"Atstatyti\"]")).click();
     }
 }

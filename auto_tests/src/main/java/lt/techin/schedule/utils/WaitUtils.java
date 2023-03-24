@@ -1,9 +1,6 @@
 package lt.techin.schedule.utils;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -42,6 +39,15 @@ public class WaitUtils {
             Thread.sleep(500);
         } catch (InterruptedException e) {
             e.printStackTrace();
+        }
+    }
+
+    public static WebElement getElementWithWaitNotFail(By by, WebDriver driver) {
+        try {
+            return new WebDriverWait(driver, Duration.ofMillis(500))
+                    .until(presenceOfElementLocated(by));
+        } catch (TimeoutException e) {
+            return null;
         }
     }
 }

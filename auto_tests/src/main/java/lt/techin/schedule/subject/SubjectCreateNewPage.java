@@ -11,6 +11,8 @@ import java.util.List;
 
 public class SubjectCreateNewPage extends AbstractPage {
 
+    private SelectOptionElement selectModuleOptions;
+    private SelectOptionElement selectRoomOptions;
     @FindBy(css = "#name")
     private WebElement inputSubjectName;
 
@@ -20,12 +22,10 @@ public class SubjectCreateNewPage extends AbstractPage {
     @FindBy(css = "#module")
     private WebElement selectModule;
 
-    private SelectOptionElement selectModuleOptions;
 
     @FindBy(css = "#room")
     private WebElement selectRoom;
 
-    private SelectOptionElement selectRoomOptions;
 
     @FindBy(css = "#save-button-create-subject")
     private WebElement clickOnSaveButton;
