@@ -1,5 +1,11 @@
 import {
+  Alert,
   Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
   Grid,
   Paper,
   Stack,
@@ -17,6 +23,12 @@ import { Link, useParams } from "react-router-dom";
 export function ScheduleView() {
   const [schedule, setSchedule] = useState({});
   const [subjects, setSubjects] = useState([]);
+  const [hours, setHours] = useState("");
+  const [subjectId, setSubjectId] = useState("");
+  const [error, setError] = useState("");
+  const [message, setMessage] = useState("");
+  const [open, setOpen] = useState(false);
+
   const params = useParams();
 
   useEffect(() => {
@@ -28,9 +40,68 @@ export function ScheduleView() {
       });
   }, []);
 
+  const handleRemove = () => {
+  
+    fetch(`api/v1/schedules/${params.id}/remove-lessons/${subjectId}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(hours),
+    }).then((response) => {
+      let success = response.ok;
+
+      response.json().then((response) => {
+        if (!success) {
+          setMessage("");
+          setError(response.message);
+          setOpen(false);
+        } else {
+          setMessage("Dalykas sėkmingai išimtas iš tvarkaraščio");
+          setError("");
+          setOpen(false);
+          fetch(`api/v1/schedules/schedule/${params.id}`)
+            .then((response) => response.json())
+            .then((data) => {
+              setSchedule(data);
+              setSubjects(data.groups.program.subjectHoursList);
+            });
+        }
+      });
+    });
+  };
+
+  const handleOpen = (id, hours) => {
+    setOpen(true);
+    setHours(hours);
+    setSubjectId(id);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   return (
     <div>
       <Container>
+        <Dialog
+          open={open}
+          keepMounted
+          onClose={handleClose}
+          aria-describedby="alert-dialog-slide-description"
+        >
+          <DialogTitle>{"Ar tikrai norite ištrinti suplanuotas dalyko pamokas?"}</DialogTitle>
+          <DialogContent>
+            <DialogContentText id="alert-dialog-slide-description">
+              Visos suplanuotos pamokos bus ištrintos iš tvarkaraščio.
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose}>Atšaukti</Button>
+            <Button onClick={handleRemove}>Ištrinti</Button>
+          </DialogActions>
+        </Dialog>
+
         <Grid container rowSpacing={2}>
           <Grid item sm={10}>
             <h3>{schedule.groups && schedule.groups.name}</h3>
@@ -43,6 +114,11 @@ export function ScheduleView() {
             <Link to={"/schedules/holidays/" + schedule.id}>
               <Button variant="contained">Planuoti atostogas</Button>
             </Link>
+          </Grid>
+
+          <Grid item sm={12}>
+            {error && <Alert severity="warning">{error}</Alert>}
+            {message && <Alert severity="success">{message}</Alert>}
           </Grid>
 
           <Grid item sm={12}>
@@ -59,9 +135,12 @@ export function ScheduleView() {
                     <TableCell>Dalykas</TableCell>
                     <TableCell align="center">Trukmė (val.)</TableCell>
                     <TableCell align="center">Nesuplanuota (val.)</TableCell>
-                    <TableCell align="center" className="activity">
+                    {/* <TableCell align="center" className="activity">
                       Veiksmai
                     </TableCell>
+                     */}
+                    <TableCell align="center" className="activity"></TableCell>
+                    <TableCell align="center" className="activity"></TableCell>
                   </TableRow>
                 </TableHead>
 
@@ -92,6 +171,15 @@ export function ScheduleView() {
                             Planuoti
                           </Button>
                         </Link>
+                      </TableCell>
+                      <TableCell align="center" className="activity">
+                        <Button
+                          id="remove-button-view-schedule"
+                          variant="contained"
+                          onClick={() => handleOpen(subject.id, subject.hours)}
+                        >
+                          Atšaukti
+                        </Button>
                       </TableCell>
                     </TableRow>
                   ))}

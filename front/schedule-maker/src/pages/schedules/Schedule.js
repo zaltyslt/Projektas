@@ -15,9 +15,10 @@ import { render } from "preact/compat";
 export function Schedule() {
   const [weekendsVisible, setWeekendsVisible] = useState(true);
   const [schedule, setSchedule] = useState([]);
+  const [holiday, setHoliday] = useState([]);
   const params = useParams();
 
-  const colors = ['#f5c5c4', '#f5ddc4', '#f5f3c4', '#daf5c4', '#c4f5d8', '#c4f5f2', '#c4d3f5', '#d8c4f5', '#f5c4e3'];
+  const subjectColors = ['#f5c5c4', '#f5ddc4', '#f5f3c4', '#daf5c4', '#c4f5d8', '#c4f5f2', '#c4d3f5', '#d8c4f5', '#f5c4e3'];
 
   useEffect(() => {
     fetch(`api/v1/schedules/${params.id}/lessons`)
@@ -26,29 +27,43 @@ export function Schedule() {
       .catch((error) => console.error(error));
   }, [params.id]);
 
-  const events = schedule.map((schedule) => {
-    const color = colors[schedule.subject.id % colors.length];
+  useEffect(() => {
+    fetch(`api/v1/schedules/holidays/${params.id}`)
+      .then((response) => response.json())
+      .then((data) => setHoliday(data))
+      .catch((error) => console.error(error));
+  }, [params.id]);
 
-    return {
-      title: `<b>${schedule.subject.name}</b>
-        <br />
-        ${schedule.lessonStart} - ${schedule.lessonEnd}
-        <br /> 
-        ${schedule.teacher ? schedule.teacher.lName : ""} ${
-        schedule.teacher ? schedule.teacher.fName : "nepasirinktas"
-      }
-        <br />
-        ${
-          schedule.online ? "Nuotolinė pamoka" : schedule.classroom.classroomName
-        }<br />
-        `,
-      start: schedule.date,
+  const events = [
+    ...schedule.map((schedule) => {
+      const color = subjectColors[schedule.subject.id];
+      return {
+        title: `<b>${schedule.subject.name}</b>
+          <br />
+          ${schedule.lessonStart} - ${schedule.lessonEnd}
+          <br /> 
+          ${schedule.teacher ? schedule.teacher.lName : ""} ${
+          schedule.teacher ? schedule.teacher.fName : "nepasirinktas"
+        }
+          <br />
+          ${
+            schedule.online ? "Nuotolinė pamoka" : schedule.classroom.classroomName
+          }<br />
+          `,
+        start: schedule.date,
+        allDay: true,
+        url: `http://localhost:3000/schedule-maker#/schedules/edit-lesson/${schedule.id}`,
+        color: color,
+      };
+    }),
+    ...holiday.map((holiday) => ({
+      title: `<b>${holiday.name}</b>`,
+      start: holiday.dateFrom,
+      end: new Date(new Date(holiday.dateUntil).setDate(new Date(holiday.dateUntil).getDate() + 1)),
       allDay: true,
-      url: `http://localhost:3000/schedule-maker#/schedules/edit-lesson/${schedule.id}`,
-      // Set the event color to the random color
-      backgroundColor: color,
-    };
-  });
+      color: "#cccccc",
+    })),
+  ];
 
   const renderEventContent = (eventInfo) => (
     <>
@@ -64,6 +79,8 @@ export function Schedule() {
       />
     </>
   );
+
+  
 
   return (
     <div className="maincontainer">

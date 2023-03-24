@@ -27,9 +27,15 @@ public class HolidayController {
         return holidayService.getAll().stream().map(HolidayMapper::toHolidayDto).toList();
     }
 
-    @PostMapping(value = "/holidays/create-holiday", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Map<String, String>> createHoliday(@RequestBody HolidayDto holidayDto) {
-        var createHoliday = holidayService.create(HolidayMapper.toHoliday(holidayDto));
+    @GetMapping(value = "/holidays/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public List<HolidayDto> getHolidayListById(@PathVariable Long id) {
+        logger.info("Get Holiday by ID");
+        return holidayService.getById(id).stream().map(HolidayMapper::toHolidayDto).toList();
+    }
+
+    @PostMapping(value = "/holidays/create-holiday/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Map<String, String>> createHoliday(@RequestBody HolidayDto holidayDto, @PathVariable Long id) {
+        var createHoliday = holidayService.create(HolidayMapper.toHoliday(holidayDto), id);
         if (createHoliday == null) {
             logger.info("The holiday was NOT created successfully");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
