@@ -1,8 +1,5 @@
 package lt.techin.schedule.schedules.holidays;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import lt.techin.schedule.group.GroupEntityDto;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -13,19 +10,12 @@ public class HolidayDto {
 
     private String name;
 
-    private GroupEntityDto group;
-
-    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate dateFrom;
 
-    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate dateUntil;
 
-
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime createdDate;
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime modifiedDate;
 
     public HolidayDto() {
@@ -45,14 +35,6 @@ public class HolidayDto {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public GroupEntityDto getGroup() {
-        return group;
-    }
-
-    public void setGroup(GroupEntityDto group) {
-        this.group = group;
     }
 
     public LocalDate getDateFrom() {
@@ -95,7 +77,6 @@ public class HolidayDto {
         HolidayDto that = (HolidayDto) o;
         return Objects.equals(id, that.id)
                 && Objects.equals(name, that.name)
-                && Objects.equals(group, that.group)
                 && Objects.equals(dateFrom, that.dateFrom)
                 && Objects.equals(dateUntil, that.dateUntil)
                 && Objects.equals(createdDate, that.createdDate)
@@ -104,7 +85,7 @@ public class HolidayDto {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, group, dateFrom, dateUntil, createdDate, modifiedDate);
+        return Objects.hash(id, name, dateFrom, dateUntil, createdDate, modifiedDate);
     }
 
     @Override
@@ -112,7 +93,6 @@ public class HolidayDto {
         return "HolidayDto{" +
                 "id=" + id +
                 ", holidayName='" + name + '\'' +
-                ", group=" + group +
                 ", dateFrom=" + dateFrom +
                 ", dateUntil=" + dateUntil +
                 ", createdDate=" + createdDate +
