@@ -33,18 +33,9 @@ const Transition = forwardRef(function Transition(props, ref) {
 });
 export function ScheduleList() {
   const [schedules, setSchedules] = useState([]);
-  // const [filteredSchedules, setFilteredSchedules] = useState([]);
-
   const [filter, setFilter] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  // const [currentPage2, setCurrentPage2] = useState(1);
   const [schedulesPerPage, setSchedulesPerPage] = useState(10);
-  // const [schedulesPerPage2, setSchedulesPerPage2] = useState(10);
-
-  // const paginate = (pageNumber) => setCurrentPage(pageNumber);
-  // const paginate2 = (pageNumber2) => setCurrentPage2(pageNumber2);
-
-  // const [isChecked, setChecked] = useState(false);
   const [date, setDate] = useState(null);
   const [open, setOpen] = useState(false);
   const [idToDelete, setidToDelete] = useState("");
@@ -88,15 +79,6 @@ export function ScheduleList() {
         setSchedules(jsonResponse);
       });
   };
-
-  // const deleteSchedule = () => {
-  //   fetch(`api/v1/schedules/enable-schedule/${schedule.id}`, {
-  //     method: "PATCH",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //     },
-  //   }).then(fetchSchedules);
-  // };
 
   useEffect(() => {
     fetchSchedules();
@@ -151,27 +133,14 @@ export function ScheduleList() {
     pageNumbers.push(i);
   }
 
-  // const indexOfLastSchedule2 = currentPage2 * schedulesPerPage2;
-  // const indexOfFirstSchedule2 = indexOfLastSchedule2 - schedulesPerPage2;
-  // const currentSchedule2 = filteredDisabledSchedules.slice(
-  //   indexOfFirstSchedule2,
-  //   indexOfLastSchedule2
-  // );
-
-  // const pageNumbers2 = [];
-  // for (
-  //   let i = 1;
-  //   i <= Math.ceil(filteredDisabledSchedules.length / schedulesPerPage2);
-  //   i++
-  // ) {
-  //   pageNumbers2.push(i);
-  // }
-
   const handleChange = (newValue) => {
     isNaN(newValue) ? setDate(null) : setDate(newValue);
     clearMessages();
   };
 
+  useEffect(() => {
+    setCurrentPage(1); // reset to first page
+  }, [filter, date]);
 
   return (
     <div>
@@ -359,79 +328,6 @@ export function ScheduleList() {
             </TableFooter>
           </Table>
         </TableContainer>
-
-        {/* <FormGroup>
-          <FormControlLabel
-            control={<Checkbox />}
-            label="Ištrinti tvarkaraščiai"
-            onChange={(e) =>
-              e.target.checked ? setChecked(true) : setChecked(false)
-            }
-          />
-        </FormGroup> */}
-
-        {/* {isChecked && (
-          <TableContainer component={Paper}>
-            <Table aria-label="custom pagination table">
-              <TableHead>
-                <TableRow>
-                  <TableCell>Grupės pavadinimas</TableCell>
-                  <TableCell className="activity"></TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {filteredDisabledSchedules
-                  .slice(
-                    (currentPage2 - 1) * schedulesPerPage2,
-                    currentPage2 * schedulesPerPage2
-                  )
-                  .map((schedule) => (
-                    <TableRow key={schedule.id}>
-                      <TableCell component="th" scope="row">
-                        {schedule.groups.name}
-                      </TableCell>
-                      <TableCell>
-                        <Button
-                          variant="contained"
-                          data-value="true"
-                          value={schedule}
-                          onClick={(e) => {
-                            enableSchedule(e, schedule);
-                          }}
-                        >
-                          Atstatyti
-                        </Button>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-              </TableBody>
-              <TableFooter>
-                <TableRow>
-                  <TablePagination
-                    labelRowsPerPage="Rodyti po"
-                    rowsPerPageOptions={[
-                      10,
-                      20,
-                      {
-                        label: "Visi",
-                        value: filteredDisabledSchedules.length,
-                      },
-                    ]}
-                    labelDisplayedRows={({ from, to, count }) =>
-                      `${from}-${to} iš ${count}`
-                    }
-                    count={filteredDisabledSchedules.length}
-                    page={currentPage2 - schedulesPerPage2}
-                    onPageChange={(_, page) => setCurrentPage2(page + 1)}
-                    onRowsPerPageChange={(e) =>
-                      setSchedulesPerPage2(parseInt(e.target.value))
-                    }
-                  />
-                </TableRow>
-              </TableFooter>
-            </Table>
-          </TableContainer>
-        )} */}
       </Container>
     </div>
   );
