@@ -26,7 +26,7 @@ export function CreateHoliday() {
   const params = useParams();
 
   const createHoliday = () => {
-      fetch(`api/v1/schedules/holidays/create-holiday`, {
+      fetch(`api/v1/schedules/holidays/create-holiday/${params.id}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -79,6 +79,7 @@ export function CreateHoliday() {
 
   const validateDateUntil = (value) => {
     setDateUntil(dateToUtc(value));
+  
     if (value.length === 0) {
       setDateUntilEmpty(true);
     } else {

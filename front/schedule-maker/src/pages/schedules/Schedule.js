@@ -14,6 +14,7 @@ import adaptivePlugin from "@fullcalendar/adaptive";
 export function Schedule() {
   const [weekendsVisible, setWeekendsVisible] = useState(true);
   const [schedule, setSchedule] = useState([]);
+  const [holiday, setHoliday] = useState([]);
   const params = useParams();
 
   useEffect(() => {
@@ -23,23 +24,38 @@ export function Schedule() {
       .catch((error) => console.error(error));
   }, [params.id]);
 
-  const events = schedule.map((schedule) => ({
-    title: `<b>${schedule.subject.name}</b>
-      <br />
-      ${schedule.lessonStart} - ${schedule.lessonEnd}
-      <br /> 
-      ${schedule.teacher ? schedule.teacher.lName : ""} ${
-      schedule.teacher ? schedule.teacher.fName : "nepasirinktas"
-    }
-      <br />
-      ${
-        schedule.online ? "Nuotolinė pamoka" : schedule.classroom ? schedule.classroom.classroomName : ""
-      }<br />
-      `,
-    start: schedule.date,
-    allDay: true,
-    url: `http://localhost:3000/schedule-maker#/schedules/edit-lesson/${schedule.id}`,
-  }));
+  useEffect(() => {
+    fetch(`api/v1/schedules/holidays/${params.id}`)
+      .then((response) => response.json())
+      .then((data) => setHoliday(data))
+      .catch((error) => console.error(error));
+  }, [params.id]);
+
+  const events = [
+    ...schedule.map((schedule) => ({
+      title: `<b>${schedule.subject.name}</b>
+        <br />
+        ${schedule.lessonStart} - ${schedule.lessonEnd}
+        <br /> 
+        ${schedule.teacher ? schedule.teacher.lName : ""} ${
+        schedule.teacher ? schedule.teacher.fName : "nepasirinktas"
+      }
+        <br />
+        ${
+          schedule.online ? "Nuotolinė pamoka" : schedule.classroom.classroomName
+        }<br />
+        `,
+      start: schedule.date,
+      allDay: true,
+      url: `http://localhost:3000/schedule-maker#/schedules/edit-lesson/${schedule.id}`,
+    })),
+    ...holiday.map((holiday) => ({
+      title: `<b>${holiday.name}</b>`,
+      start: holiday.dateFrom,
+      end: holiday.dateUntil,
+      allDay: true
+    }))
+  ];
 
   const renderEventContent = (eventInfo) => (
     <>

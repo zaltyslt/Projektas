@@ -2,7 +2,7 @@ package lt.techin.schedule.schedules.holidays;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
-import lt.techin.schedule.group.Group;
+import lt.techin.schedule.schedules.Schedule;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
@@ -19,8 +19,8 @@ public class Holiday {
     private String holidayName;
 
     @ManyToOne
-    @JoinColumn(name = "group_id")
-    private Group group;
+    @JoinColumn(name = "schedule_id")
+    private Schedule schedule;
 
     @Column(name = "date_from", nullable = false)
     @JsonFormat(pattern = "yyyy-MM-dd")
@@ -37,12 +37,12 @@ public class Holiday {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime modifiedDate;
 
-    public Group getGroup() {
-        return group;
+    public Schedule getSchedule() {
+        return schedule;
     }
 
-    public void setGroup(Group group) {
-        this.group = group;
+    public void setSchedule(Schedule schedule) {
+        this.schedule = schedule;
     }
 
     @PrePersist
@@ -57,6 +57,18 @@ public class Holiday {
     }
 
     public Holiday() {
+    }
+
+    public Holiday(Long id, String holidayName, Schedule schedule,
+                   LocalDate dateFrom, LocalDate dateUntil, LocalDateTime createdDate,
+                   LocalDateTime modifiedDate) {
+        this.id = id;
+        this.holidayName = holidayName;
+        this.schedule = schedule;
+        this.dateFrom = dateFrom;
+        this.dateUntil = dateUntil;
+        this.createdDate = createdDate;
+        this.modifiedDate = modifiedDate;
     }
 
     public Long getId() {
@@ -108,21 +120,8 @@ public class Holiday {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Holiday holiday = (Holiday) o;
-        return Objects.equals(id, holiday.id)
-                && Objects.equals(holidayName, holiday.holidayName)
-                && Objects.equals(group, holiday.group)
-                && Objects.equals(dateFrom, holiday.dateFrom)
-                && Objects.equals(dateUntil, holiday.dateUntil)
-                && Objects.equals(createdDate, holiday.createdDate)
-                && Objects.equals(modifiedDate, holiday.modifiedDate);
+    public int hashCode() {
+        return Objects.hash(id, holidayName,  dateFrom, dateUntil, createdDate, modifiedDate);
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, holidayName, group, dateFrom, dateUntil, createdDate, modifiedDate);
-    }
 }
