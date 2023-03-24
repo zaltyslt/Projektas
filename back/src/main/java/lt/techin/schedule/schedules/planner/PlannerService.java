@@ -175,7 +175,7 @@ public class PlannerService {
                                     plannerDto.getStartIntEnum(), plannerDto.getEndIntEnum(),
                                     plannerDto.getOnline()
                                 ),
-                        scheduleRepository);
+                        scheduleRepository, workDayRepository);
                     workDayRepository.save(workDay);
                     existingSchedule.addWorkDay(workDay);
                 }
@@ -194,7 +194,7 @@ public class PlannerService {
                                     plannerDto.getStartIntEnum(), plannerDto.getEndIntEnum(),
                                     plannerDto.getOnline()
                                 ),
-                        scheduleRepository);
+                        scheduleRepository, workDayRepository);
                     workDayRepository.save(workDay);
                     existingSchedule.addWorkDay(workDay);
                 }
@@ -210,7 +210,7 @@ public class PlannerService {
                                     plannerDto.getStartIntEnum(), plannerDto.getStartIntEnum() + lastDayHours - 1,
                                 plannerDto.getOnline()
                             ),
-                    scheduleRepository);
+                    scheduleRepository, workDayRepository);
                 workDayRepository.save(workDay);
                 existingSchedule.addWorkDay(workDay);
             }

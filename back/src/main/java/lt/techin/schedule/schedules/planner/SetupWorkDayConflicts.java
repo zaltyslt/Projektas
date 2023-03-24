@@ -6,7 +6,7 @@ import java.time.LocalDate;
 import java.util.Set;
 
 public class SetupWorkDayConflicts {
-    public static WorkDay SetupWorkDay(Long scheduleID, WorkDay workDay, ScheduleRepository scheduleRepository) {
+    public static WorkDay SetupWorkDay(Long scheduleID, WorkDay workDay, ScheduleRepository scheduleRepository, WorkDayRepository workDayRepository) {
         //Assigned so workDay.getDate() method wouldn't be called unnecessarily
         LocalDate workDayDate = workDay.getDate();
 
