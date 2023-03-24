@@ -23,7 +23,7 @@ public class ScheduleApplication extends SpringBootServletInitializer {
 		SpringApplication.run(ScheduleApplication.class, args);
 	}
 
-	@EventListener
+//	@EventListener
 	public void handleContextRefresh(ContextRefreshedEvent event) throws Exception {
 //		ApplicationContext applicationContext = event.getApplicationContext();
 //		RequestMappingHandlerMapping requestMappingHandlerMapping = applicationContext
@@ -31,7 +31,7 @@ public class ScheduleApplication extends SpringBootServletInitializer {
 //		Map<RequestMappingInfo, HandlerMethod> map = requestMappingHandlerMapping
 //				.getHandlerMethods();
 //		map.forEach((key, value) -> logger.info("{} {}", key, value));
-		excel.drawCalendar();
+//		excel.drawCalendar();
 	}
 
 	@Override

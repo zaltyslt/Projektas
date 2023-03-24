@@ -18,7 +18,9 @@ export function Schedule() {
   useEffect(() => {
     fetch(`api/v1/schedules/${params.id}/lessons`)
       .then((response) => response.json())
-      .then((data) => setSchedule(data))
+      .then((data) => {setSchedule(data);
+      // console.log(data);
+    })
       .catch((error) => console.error(error));
   }, [params.id]);
 

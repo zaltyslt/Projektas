@@ -1,4 +1,4 @@
-CREATE TABLE work_day
+CREATE TABLE IF NOT EXISTS work_day
 (
     id                 BIGINT auto_increment
         primary key,

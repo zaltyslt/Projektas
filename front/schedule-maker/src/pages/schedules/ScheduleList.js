@@ -34,6 +34,7 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Slide from "@mui/material/Slide";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
+import { dateToUtc } from "../../helpers/helpers";
 
 const Transition = forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -63,12 +64,31 @@ export function ScheduleList() {
     setOpen(true);
   };
 
+  const handleClickPrint = (subjectId) => {
+    console.log(subjectId);
+    fetch(`api/v1/schedules/excel?id=${subjectId}`, {
+      method: "Get",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }).then((response) => {
+      clearMessages();
+      if (response.ok) {
+        setCreateMessage("Tvarkaraščio failas paruoštas.");
+
+      
+      } else {
+        setErrorMessage(`Tvarkaraščio failo paruošti nepavyko.`);
+      }
+    });
+  };
+
   const handleClose = () => {
     setOpen(false);
   };
 
   const handleDelete = () => {
-    console.log(idToDelete);
+    // console.log(idToDelete);
     fetch(`api/v1/schedules/delete-schedule/${idToDelete}`, {
       method: "Delete",
       headers: {
@@ -133,13 +153,13 @@ export function ScheduleList() {
       .includes(filter.toLowerCase());
 
     const isWithinDateRange = date
-      ? new Date(schedule.dateFrom) <= date &&
-        new Date(schedule.dateUntil) >= date
+      ? new Date(schedule.dateFrom) <= dateToUtc(date) &&
+        new Date(schedule.dateUntil) >= dateToUtc(date)
       : true;
-     
+
     return (
       (groupMatches || shiftMaches || schoolYearMatches || semesterMatches) &&
-      (isWithinDateRange )
+      isWithinDateRange
     );
   });
 
@@ -176,13 +196,13 @@ export function ScheduleList() {
   // }
 
   const handleChange = (newValue) => {
- 
+    // console.log(newValue);
+    // console.log(isNaN(newValue));
+
     isNaN(newValue) ? setDate(null) : setDate(newValue);
-   
+
     clearMessages();
   };
-
- 
 
   return (
     <div>
@@ -197,8 +217,8 @@ export function ScheduleList() {
           <DialogTitle>{"Ar tikrai norite ištrinti tvarkaraštį?"}</DialogTitle>
           <DialogContent>
             <DialogContentText id="alert-dialog-slide-description">
-              Ištrynus tvarkaraštį {idToDelete}, visi su juo susieti resursai
-              bus atlaisvinti, o duomenys pašalinti negrįžtamai.
+              Ištrynus tvarkaraštį, visi su juo susieti resursai bus
+              atlaisvinti, o duomenys pašalinti negrįžtamai.
             </DialogContentText>
           </DialogContent>
           <DialogActions>
@@ -219,7 +239,6 @@ export function ScheduleList() {
                   Pridėti naują
                 </Button>
               </Link>
-             
             </Stack>
           </Grid>
         </Grid>
@@ -249,6 +268,8 @@ export function ScheduleList() {
             <Grid item sm={4}>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DatePicker
+                  clearable
+                  type="date"
                   fullWidth
                   className="DatePicker"
                   variant="outlined"
@@ -256,8 +277,9 @@ export function ScheduleList() {
                   format="YYYY/MM/DD"
                   id="date-form"
                   name="date-form"
-                  value={date || ''}
+                  value={date || ""}
                   onChange={handleChange}
+                  // onFocus={console.log(date)}
                   TextFieldComponent={TextField}
                 ></DatePicker>
               </LocalizationProvider>
@@ -305,6 +327,16 @@ export function ScheduleList() {
                       <Link to={`/schedules/${schedule.id}`}>
                         {schedule.schoolYear} m. {schedule.semester}
                       </Link>
+                    </TableCell>
+
+                    <TableCell>
+                      <Button
+                        variant="outlined"
+                        startIcon={<DeleteIcon />}
+                        onClick={() => handleClickPrint(schedule.id)}
+                      >
+                        Spausdinti
+                      </Button>
                     </TableCell>
                     <TableCell>
                       <Button
