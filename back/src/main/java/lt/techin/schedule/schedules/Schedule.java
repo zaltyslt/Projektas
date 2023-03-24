@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lt.techin.schedule.group.Group;
+import lt.techin.schedule.schedules.holidays.Holiday;
 import lt.techin.schedule.schedules.planner.WorkDay;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -25,7 +26,9 @@ public class Schedule {
     @OneToMany(mappedBy = "schedule", cascade = CascadeType.ALL)
     @JsonBackReference
     private Set<WorkDay> workingDays;
-
+    @OneToMany(mappedBy = "schedule", cascade = CascadeType.ALL)
+    @JsonBackReference
+    private Set<Holiday> holidays;
     private String schoolYear;
     private String semester;
 
@@ -66,6 +69,7 @@ public class Schedule {
     public Schedule() {
         subjectIdWithUnassignedTime = new HashMap<>();
         workingDays = new HashSet<>();
+        holidays = new LinkedHashSet<>();
     }
 
     public Long getId() {
@@ -149,9 +153,23 @@ public class Schedule {
         this.workingDays = workingDays;
     }
 
+    public Set<Holiday> getHolidays() {
+        return holidays;
+    }
+
+    public void setHolidays(Set<Holiday> holidays) {
+        this.holidays = holidays;
+    }
+
     public void addWorkDay (WorkDay workDay) {
         workingDays.add(workDay);
     }
+
+    public void addHoliday (Holiday holiday) {
+        holidays.add(holiday);
+    }
+
+
 
     public Map<Long, Integer> getSubjectIdWithUnassignedTime() {
         return subjectIdWithUnassignedTime;
