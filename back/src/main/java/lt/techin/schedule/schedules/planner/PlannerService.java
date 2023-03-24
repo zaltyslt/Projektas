@@ -196,7 +196,7 @@ public class PlannerService {
             existingSchedule.replaceUnassignedTime(subjectId, hours);
             return true;
         } else {
-            return false;
+            throw new ValidationException("Dalykas neturi suplanuotų valandų.", "Subject", "Subject does not have planned hours in schedule", subjectId.toString());
         }
     }
 }

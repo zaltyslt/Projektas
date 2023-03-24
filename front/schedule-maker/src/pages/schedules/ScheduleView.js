@@ -1,4 +1,5 @@
 import {
+  Alert,
   Button,
   Grid,
   Paper,
@@ -18,6 +19,9 @@ export function ScheduleView() {
   const [schedule, setSchedule] = useState({});
   const [subjects, setSubjects] = useState([]);
   const [hours, setHours] = useState("");
+  const [error, setError] = useState("");
+  const [message, setMessage] = useState("");
+
   const params = useParams();
 
   useEffect(() => {
@@ -35,11 +39,27 @@ export function ScheduleView() {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
-      }, 
-      body: JSON.stringify(
-        hours,
-      )
-    })
+      },
+      body: JSON.stringify(hours),
+    }).then((response) => {
+      let success = response.ok;
+
+      response.json().then((response) => {
+        if (!success) {
+          setMessage("");
+          setError(response.message);
+        } else {
+          setMessage("Dalykas sėkmingai išimtas iš tvarkaraščio");
+          setError("");
+          fetch(`api/v1/schedules/schedule/${params.id}`)
+            .then((response) => response.json())
+            .then((data) => {
+              setSchedule(data);
+              setSubjects(data.groups.program.subjectHoursList);
+            });
+        }
+      });
+    });
   };
 
   return (
@@ -60,6 +80,11 @@ export function ScheduleView() {
           </Grid>
 
           <Grid item sm={12}>
+            {error && <Alert severity="warning">{error}</Alert>}
+            {message && <Alert severity="success">{message}</Alert>}
+          </Grid>
+
+          <Grid item sm={12}>
             <TableContainer component={Paper}>
               <Table aria-label="custom pagination table">
                 <TableHead>
@@ -77,8 +102,8 @@ export function ScheduleView() {
                       Veiksmai
                     </TableCell>
                      */}
-                     <TableCell align="center" className="activity"></TableCell>
-                     <TableCell align="center" className="activity"></TableCell>
+                    <TableCell align="center" className="activity"></TableCell>
+                    <TableCell align="center" className="activity"></TableCell>
                   </TableRow>
                 </TableHead>
 
@@ -114,7 +139,9 @@ export function ScheduleView() {
                         <Button
                           id="remove-button-view-schedule"
                           variant="contained"
-                          onClick={() => handleRemove(subject.id, subject.hours)}
+                          onClick={() =>
+                            handleRemove(subject.id, subject.hours)
+                          }
                         >
                           Atšaukti
                         </Button>
