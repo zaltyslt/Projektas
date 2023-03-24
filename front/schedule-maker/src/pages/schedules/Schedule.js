@@ -52,7 +52,8 @@ export function Schedule() {
     ...holiday.map((holiday) => ({
       title: `<b>${holiday.name}</b>`,
       start: holiday.dateFrom,
-      end: holiday.dateUntil,
+      // end: holiday.dateUntil,
+      end: new Date(new Date(holiday.dateUntil).setDate(new Date(holiday.dateUntil).getDate() + 1)),
       allDay: true
     }))
   ];
