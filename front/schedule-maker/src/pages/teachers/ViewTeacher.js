@@ -28,17 +28,16 @@ export function ViewTeacher() {
 
   useEffect(() => {
     getTeacherData();
-    
   }, []);
 
   return (
     <div>
       <Container maxWidth="lg">
-        <Grid container rowSpacing={4}>
-          <Grid item sm={10}>
+        <Grid container rowSpacing={3}>
+          <Grid item sm={10} marginTop={4}>
             <header>
               <h1>{teacher.fName + " " + teacher.lName}</h1>
-             
+
               <span id="modified-date">
                 Paskutinį kartą redaguota: {teacher.dateModified}
               </span>
@@ -89,9 +88,15 @@ export function ViewTeacher() {
           <Grid item sm={12}>
             <Stack direction="row" spacing={2}>
               <Link to={`/teachers/edit/${teacher.id}`}>
-                <Button variant="contained">Redaguoti</Button>
+                <Button id="edit-button-view-teacher" variant="contained">
+                  Redaguoti
+                </Button>
               </Link>
-              <Button variant="contained" onClick={() => navigate(-1)}>
+              <Button
+                id="back-button-view-teacher"
+                variant="contained"
+                onClick={() => navigate(-1)}
+              >
                 Grįžti
               </Button>
             </Stack>

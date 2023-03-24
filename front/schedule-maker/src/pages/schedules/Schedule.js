@@ -9,6 +9,7 @@ import { Link, useParams } from "react-router-dom";
 import "./ViewSchedule.css";
 import { Stack } from "@mui/system";
 import { Button, Grid } from "@mui/material";
+import adaptivePlugin from "@fullcalendar/adaptive";
 
 export function Schedule() {
   const [weekendsVisible, setWeekendsVisible] = useState(true);
@@ -24,42 +25,52 @@ export function Schedule() {
       .catch((error) => console.error(error));
   }, [params.id]);
 
-  const events = schedule.map(schedule => ({
+  const events = schedule.map((schedule) => ({
     title: `<b>${schedule.subject.name}</b>
       <br />
       ${schedule.lessonStart} - ${schedule.lessonEnd}
       <br /> 
-      ${schedule.teacher ? schedule.teacher.lName : ""} ${schedule.teacher ? schedule.teacher.fName : "nepasirinktas"}
+      ${schedule.teacher ? schedule.teacher.lName : ""} ${
+      schedule.teacher ? schedule.teacher.fName : "nepasirinktas"
+    }
       <br />
-      ${schedule.online ? "Nuotolinė pamoka" : schedule.classroom.classroomName}<br />
+      ${
+        schedule.online ? "Nuotolinė pamoka" : schedule.classroom.classroomName
+      }<br />
       `,
     start: schedule.date,
     allDay: true,
+    url: `http://localhost:3000/schedule-maker#/schedules/edit-lesson/${schedule.id}`,
   }));
 
   const renderEventContent = (eventInfo) => (
     <>
       <b>{eventInfo.timeText}</b>
-      <div style={{fontSize: '16px', padding: '10px', fontFamily: 'Arial, sans-serif', backgroundColor: "#dcedf7", color: "black" }} dangerouslySetInnerHTML={{ __html: eventInfo.event.title }} />
+      <div
+        style={{
+          fontSize: "16px",
+          padding: "10px",
+          fontFamily: "Arial, sans-serif",
+          backgroundColor: "#dcedf7",
+          color: "black",
+        }}
+        dangerouslySetInnerHTML={{ __html: eventInfo.event.title }}
+      />
     </>
   );
 
-  
-
-  // const renderEventContent = (eventInfo) => (
-  //   <>
-  //     <b>{eventInfo.timeText}</b>
-  //     <div dangerouslySetInnerHTML={{ __html: eventInfo.event.title }} />
-  //   </>
-  // );
-
   return (
     <div className="maincontainer">
-      <div id="container"  style={{ marginBottom: "20px" }}>
+      <div id="container" style={{ marginBottom: "20px" }}>
         <FullCalendar
           locales={allLocales}
           locale={"lt"}
-          plugins={[dayGridPlugin, interactionPlugin, listPlugin]}
+          plugins={[
+            dayGridPlugin,
+            interactionPlugin,
+            listPlugin,
+            adaptivePlugin,
+          ]}
           initialView="dayGridMonth"
           contentHeight="700px"
           headerToolbar={{
@@ -71,28 +82,37 @@ export function Schedule() {
           weekends={false}
           eventContent={renderEventContent}
           dayHeaderFormat={{
-            weekday: "long", // or 'short'
+            weekday: "long",
           }}
           dayHeaderClassNames="fc-day-header-black"
           dayHeaderContent={(args) => (
             <div className="fc-day-header">{args.text}</div>
           )}
           dayCellContent={(args) => (
-            <div className="fc-day-number">
-              {args.dayNumberText}
-            </div>
+            <div className="fc-day-number">{args.dayNumberText}</div>
           )}
         />
       </div>
 
-      <Grid item sm={10}>
+      <Grid item sm={10} className="button-container">
         <Stack direction="row" spacing={2}>
           <Link to="/">
-            <Button variant="contained">Grįžti</Button>
+            <Button id="back-button-schedule" variant="contained">
+              Grįžti
+            </Button>
           </Link>
           <Link to={"/planning/" + params.id}>
-            <Button variant="contained">Planavimas</Button>
+            <Button id="plan-button-schedule" variant="contained">
+              Planavimas
+            </Button>
           </Link>
+          <Button
+            id="print-button-schedule"
+            variant="contained"
+            onClick={() => window.print()}
+          >
+            Spausdinti kalendorių
+          </Button>
         </Stack>
       </Grid>
     </div>

@@ -343,7 +343,7 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
         {mode === "update" && (
           <Grid>
             {/* <h2>{teacher && (teacher.fName +" "+teacher.lName)}</h2> */}
-            <h2>{currentTacherName}</h2>
+            <h3>{currentTacherName}</h3>
             <p>Paskutinį kartą redaguota: {teacher && teacher.dateModified}</p>
           </Grid>
         )}

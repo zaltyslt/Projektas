@@ -40,6 +40,8 @@ public class WorkDay {
 
     private Boolean online;
 
+
+
     public Schedule getSchedule() {
         return schedule;
     }

@@ -57,10 +57,8 @@ export function RoomList() {
     fetchClassrooms();
   }, []);
 
-  
   const filteredClassrooms = classrooms.filter((classroom) => {
     if (building === "All") {
-      
       return (
         String(classroom.classroomName)
           .toLowerCase()
@@ -126,7 +124,6 @@ export function RoomList() {
     pageNumbers2.push(i);
   }
 
-
   const handleChange = (event: SelectChangeEvent) => {
     setBuilding(event.target.value);
   };
@@ -138,7 +135,6 @@ export function RoomList() {
     setCurrentPage(newPage);
   };
 
-  
   const handleRowsPerPageChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
@@ -153,7 +149,6 @@ export function RoomList() {
   useEffect(() => {
     setCurrentPage2(1); // reset to first page
   }, [filter, building]);
-  
 
   return (
     <div>
@@ -165,7 +160,9 @@ export function RoomList() {
           <Grid item sm={2}>
             <Stack direction="row" justifyContent="flex-end">
               <Link to="/create-classroom">
-                <Button id="create-new-room" variant="contained">Pridėti naują</Button>
+                <Button id="create-new-room" variant="contained">
+                  Pridėti naują
+                </Button>
               </Link>
             </Stack>
           </Grid>
@@ -209,7 +206,9 @@ export function RoomList() {
           <Table aria-label="custom pagination table">
             <TableHead>
               <TableRow>
-                <TableCell style={{ width: "500px" }} >Klasės pavadinimas</TableCell>
+                <TableCell style={{ width: "500px" }}>
+                  Klasės pavadinimas
+                </TableCell>
                 <TableCell>Pastatas</TableCell>
               </TableRow>
             </TableHead>
@@ -235,7 +234,11 @@ export function RoomList() {
               <TableRow>
                 <TablePagination
                   labelRowsPerPage="Rodyti po"
-                  rowsPerPageOptions={[10, 20, { label: "Visi", value: filteredClassrooms.length }]}
+                  rowsPerPageOptions={[
+                    10,
+                    20,
+                    { label: "Visi", value: filteredClassrooms.length },
+                  ]}
                   labelDisplayedRows={({ from, to, count }) =>
                     `${from}-${to} iš ${count}`
                   }
@@ -265,8 +268,10 @@ export function RoomList() {
             <Table aria-label="custom pagination table">
               <TableHead>
                 <TableRow>
-                  <TableCell style={{ width: "500px" }} >Klasės pavadinimas</TableCell>
-                  <TableCell style={{ width: "500px" }} >Pastatas</TableCell>
+                  <TableCell style={{ width: "500px" }}>
+                    Klasės pavadinimas
+                  </TableCell>
+                  <TableCell style={{ width: "500px" }}>Pastatas</TableCell>
                   <TableCell></TableCell>
                 </TableRow>
               </TableHead>
@@ -284,6 +289,7 @@ export function RoomList() {
                       <TableCell>{classroom.building}</TableCell>
                       <TableCell>
                         <Button
+                          id="restore-button-list-room"
                           variant="contained"
                           value={classroom}
                           onClick={(e) => {
@@ -296,21 +302,30 @@ export function RoomList() {
                     </TableRow>
                   ))}
               </TableBody>
-              
+
               <TableFooter>
                 <TableRow>
                   <TablePagination
-                     labelRowsPerPage="Rodyti po"
-                     rowsPerPageOptions={[10, 20, { label: "Visi", value: filteredDisabledClassrooms.length }]}
-                     labelDisplayedRows={({ from, to, count }) => `${from}-${to} iš ${count}`}
-                     colSpan={3}
-                     count={filteredDisabledClassrooms.length}
-                     page={currentPage2 - 1}
-                     rowsPerPage={classroomsPerPage2}
-                     onPageChange={(_, page) => setCurrentPage2(page + 1)}
-                     onRowsPerPageChange={(e) =>
-                       setClassroomsPerPage2(parseInt(e.target.value))
-                     }
+                    labelRowsPerPage="Rodyti po"
+                    rowsPerPageOptions={[
+                      10,
+                      20,
+                      {
+                        label: "Visi",
+                        value: filteredDisabledClassrooms.length,
+                      },
+                    ]}
+                    labelDisplayedRows={({ from, to, count }) =>
+                      `${from}-${to} iš ${count}`
+                    }
+                    colSpan={3}
+                    count={filteredDisabledClassrooms.length}
+                    page={currentPage2 - 1}
+                    rowsPerPage={classroomsPerPage2}
+                    onPageChange={(_, page) => setCurrentPage2(page + 1)}
+                    onRowsPerPageChange={(e) =>
+                      setClassroomsPerPage2(parseInt(e.target.value))
+                    }
                   />
                 </TableRow>
               </TableFooter>

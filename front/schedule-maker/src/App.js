@@ -34,6 +34,8 @@ import { CreateSchedule } from "./pages/schedules/CreateSchedule";
 import { AddLesson } from "./pages/schedules/AddLesson";
 import { ScheduleView } from "./pages/schedules/ScheduleView";
 import { Schedule } from "./pages/schedules/Schedule";
+import { EditLesson } from "./pages/schedules/EditLesson";
+import { CreateHoliday } from "./pages/schedules/CreateHoliday";
 
 function App() {
   return (
@@ -50,10 +52,7 @@ function App() {
           {/* CLASSROOMS PATHAI */}
           <Route path="/rooms" element={<RoomList />}></Route>
           <Route path="/create-classroom" element={<CreateRoom />}></Route>
-          <Route
-            path="/classrooms/view-classroom/:id"
-            element={<ViewRoom />}
-          ></Route>
+          <Route path="/classrooms/view-classroom/:id" element={<ViewRoom />}></Route>
           <Route path="/update-classroom/:id" element={<UpdateClassroom />} />
           {/* SHIFTS PATHAI */}
           <Route exact path="/add-shift" element={<AddShift />}></Route>
@@ -62,10 +61,7 @@ function App() {
           {/* PROGRAMS PATHAI */}
           <Route path="/programs" element={<ProgramList />}></Route>
           <Route path="/create-program" element={<CreateProgram />}></Route>
-          <Route
-            path="/programs/view-program/:id"
-            element={<ViewProgram />}
-          ></Route>
+          <Route path="/programs/view-program/:id" element={<ViewProgram />}></Route>
           <Route path="/update-program/:id" element={<UpdateProgram />} />
           {/* MODULES PATHAI */}
           <Route path="/modules/create" element={<CreateModule />} />
@@ -85,12 +81,11 @@ function App() {
           <Route path="/teachers/edit/:id" element={<EditTeacher />}></Route>
           {/*   SCHEDULE PATHS */}
           <Route path="/create-schedule" element={<CreateSchedule />}></Route>
-          <Route
-            path="/schedules/add-lesson/:id"
-            element={<AddLesson />}
-          ></Route>
+          <Route path="/schedules/add-lesson/:id" element={<AddLesson />}></Route>
           <Route path="/planning/:id" element={<ScheduleView />}></Route>
           <Route path="/schedules/:id" element={<Schedule />}></Route>
+          <Route path="/schedules/edit-lesson/:id" element={<EditLesson />}></Route>
+          <Route path="/schedules/holidays/:id" element={<CreateHoliday />}></Route>
         </Routes>
       </HashRouter>
     </div>
