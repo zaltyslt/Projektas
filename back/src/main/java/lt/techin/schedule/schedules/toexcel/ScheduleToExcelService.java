@@ -158,7 +158,9 @@ public class ScheduleToExcelService {
                         row3.createCell(d).setCellStyle(styles.get("common"));
                         row3.getCell(d).setCellValue(current.getTeacher().getfName() + " " + current.getTeacher().getlName());
                         row4.createCell(d).setCellStyle(styles.get("common"));
-                        row4.getCell(d).setCellValue("Klasė: " + current.getClassroom().getClassroomName());
+                        row4.getCell(d).setCellValue(current.getOnline()
+                                ? "Nuotolinė pamoka"
+                                : "Klasė: " + current.getClassroom().getClassroomName());
                         row5.createCell(d).setCellStyle(styles.get("common"));
                         row5.getCell(d).setCellValue(current.getDate().toString());
 

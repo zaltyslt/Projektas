@@ -57,24 +57,35 @@ export function ScheduleList() {
     setOpen(true);
   };
 
-  const handleClickPrint = (subjectId) => {
-    console.log(subjectId);
-    fetch(`api/v1/schedules/excel?id=${subjectId}`, {
+  const handleClickPrint = (scheduleId) => {
+    // console.log(scheduleId);
+    fetch(`api/v1/schedules/excel?id=${scheduleId}`, {
       method: "Get",
       headers: {
         "Content-Type": "application/json",
       },
-    }).then((response) => {
+    })
+    .then((response) => {
       clearMessages();
       if (response.ok) {
         setCreateMessage("Tvarkaraščio failas paruoštas.");
-
-
       } else {
         setErrorMessage(`Tvarkaraščio failo paruošti nepavyko.`);
       }
+      return response;
+    }).then((response) => {
+      const filename =  response.headers.get('Content-Disposition').split('filename=')[1];
+      console.log(filename);
+      response.blob().then(blob => {
+        let url = window.URL.createObjectURL(blob);
+        let a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        a.click();
     });
-  };
+      
+    });
+  }
 
   const handleClose = () => {
     setOpen(false);
@@ -172,22 +183,6 @@ export function ScheduleList() {
     pageNumbers.push(i);
   }
 
-  // const indexOfLastSchedule2 = currentPage2 * schedulesPerPage2;
-  // const indexOfFirstSchedule2 = indexOfLastSchedule2 - schedulesPerPage2;
-  // const currentSchedule2 = filteredDisabledSchedules.slice(
-  //   indexOfFirstSchedule2,
-  //   indexOfLastSchedule2
-  // );
-
-  // const pageNumbers2 = [];
-  // for (
-  //   let i = 1;
-  //   i <= Math.ceil(filteredDisabledSchedules.length / schedulesPerPage2);
-  //   i++
-  // ) {
-  //   pageNumbers2.push(i);
-  // }
-
   const handleChange = (newValue) => {
     isNaN(newValue) ? setDate(null) : setDate(newValue);
     clearMessages();
@@ -196,6 +191,7 @@ export function ScheduleList() {
 
   return (
     <div>
+    <LocalizationProvider dateAdapter={AdapterDayjs}>
       <Container maxWidth="lg">
         <Dialog
           open={open}
@@ -237,9 +233,7 @@ export function ScheduleList() {
           <Grid container spacing={2}>
             <Grid item sm={8}>
               {errorMessage && <Alert severity="warning">{errorMessage}</Alert>}
-              {createMessage && (
-                <Alert severity="success">{createMessage}</Alert>
-              )}
+              {createMessage && <Alert severity="success">{createMessage}</Alert>}
             </Grid>
 
             <Grid item sm={8}>
@@ -253,10 +247,10 @@ export function ScheduleList() {
                 onChange={(e) => setFilter(e.target.value)}
                 onFocus={clearMessages}
               ></TextField>
-            </Grid>
+               </Grid>
 
-            <Grid item sm={4}>
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
+               <Grid item sm={4}>
+              {/* <LocalizationProvider dateAdapter={AdapterDayjs}> */}
                 <DatePicker
                   clearable
                   type="date"
@@ -269,9 +263,11 @@ export function ScheduleList() {
                   name="date-form"
                   value={date || ""}
                   onChange={handleChange}
-                  TextFieldComponent={TextField}
+                // TextFieldComponent={TextField}
                 ></DatePicker>
-              </LocalizationProvider>
+              
+              {/* </LocalizationProvider> */}
+         
             </Grid>
           </Grid>
         </Grid>
@@ -466,6 +462,7 @@ export function ScheduleList() {
           </TableContainer>
         )} */}
       </Container>
+      </LocalizationProvider>
     </div>
   );
 }
