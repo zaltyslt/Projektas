@@ -279,7 +279,14 @@ export function UpdateProgram() {
               <Grid container direction="row" justifyContent="space-between">
                 {subjectHoursList.map((form, index) => {
                   return (
-                    <Grid container spacing={{ xs: 2, md: 3 }} rowSpacing={{ xs: 3, sm: 3, md: 3 }} columnSpacing={{ xs: 1, sm: 1, md: 1 }} key={index}>
+                    <Grid
+                    marginBottom={2}
+                      container
+                      spacing={{ xs: 2, md: 3 }}
+                      rowSpacing={{ xs: 3, sm: 3, md: 3 }}
+                      columnSpacing={{ xs: 1, sm: 1, md: 1 }}
+                      key={index}
+                    >
                       <Grid item xs={6}>
                         <FormControl fullWidth required error={subjectNameError}>
                           <InputLabel id="subject-label">
