@@ -33,6 +33,44 @@ export function Schedule() {
       .catch((error) => console.error(error));
   }, [params.id]);
 
+/////////////////////////////////
+const handleClickPrint = (scheduleId, paged) => {
+  // console.log(scheduleId);
+  const fetchTo = paged 
+    ? `api/v1/schedules/excel?id=${scheduleId}&p=true`
+    : `api/v1/schedules/excel?id=${scheduleId}&p=false`;
+  fetch(fetchTo , {
+    method: "Get",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
+  .then((response) => {
+    // clearMessages();
+    if (response.ok) {
+      // setCreateMessage("Tvarkaraščio failas paruoštas.");
+    } else {
+      // setErrorMessage(`Tvarkaraščio failo paruošti nepavyko.`);
+    }
+    return response;
+  }).then((response) => {
+    const filename =  response.headers.get('Content-Disposition').split('filename=')[1];
+    // console.log(filename);
+    response.blob().then(blob => {
+      let url = window.URL.createObjectURL(blob);
+      let a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      a.click();
+  });
+    
+  });
+}
+////////////////////////////////
+
+
+
+
   const events = [
     ...schedule.map((schedule) => ({
       title: `<b>${schedule.subject.name}</b>
@@ -129,6 +167,22 @@ export function Schedule() {
           >
             Spausdinti kalendorių
           </Button>
+          
+                      <Button
+                        variant="outlined"
+                        
+                        onClick={() => handleClickPrint(params.id, true)}
+                      >
+                        Excelinti
+                      </Button>
+                      <Button
+                        variant="outlined"
+                        
+                        onClick={() => handleClickPrint(params.id, false)}
+                      >
+                        Excelinti 2
+                      </Button>
+                    
         </Stack>
       </Grid>
     </div>

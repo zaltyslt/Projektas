@@ -33,15 +33,18 @@ public class ScheduleToExcelController {
 
 //    @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE})
     @GetMapping
-    public ResponseEntity<byte[]> saveToExcel(@RequestParam Long id) throws IOException {
-      String fileName = excelService.toExcel(id);
+    public ResponseEntity<byte[]> saveToExcel(@RequestParam("id") Long id, @RequestParam("p") boolean paged) throws IOException {
+      excelService.cleaner();
+        String fileName = excelService.toExcel(id, paged);
 
       File file = new File(fileName);
         // Check if the file exists
         if (file.exists()) {
             // Set the headers for the response
             HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+//            headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+            headers.setContentType(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"));
+            headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
             headers.setContentLength(file.length());
             headers.setContentDispositionFormData("attachment", fileName);
 

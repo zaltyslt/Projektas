@@ -1,12 +1,18 @@
 package lt.techin.schedule.schedules.toexcel;
 
 import lt.techin.schedule.exceptions.ValidationException;
+import lt.techin.schedule.schedules.Schedule;
+import lt.techin.schedule.schedules.holidays.Holiday;
+import lt.techin.schedule.schedules.holidays.HolidayService;
 import lt.techin.schedule.schedules.planner.PlannerService;
 import lt.techin.schedule.schedules.planner.WorkDay;
+import lt.techin.schedule.subject.Subject;
+
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.ss.util.RegionUtil;
 import org.apache.poi.util.LocaleUtil;
+import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,12 +21,18 @@ import org.springframework.stereotype.Service;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.time.LocalDate;
+import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalAdjusters;
+import java.time.temporal.WeekFields;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class ScheduleToExcelService {
     private final PlannerService plannerService;
+    private final HolidayService holidayService;
     private static final Logger logger = LoggerFactory.getLogger(ScheduleToExcelService.class);
 
     private static final String[] days = {
@@ -33,18 +45,110 @@ public class ScheduleToExcelService {
             "Sausis", "Vasaris", "Kovas", "Balandis", "Gegužė", "Birželis",
             "Liepa", "Rugpjūtis", "Rugsėjis", "Spalis", "Lapkritis", "Gruodis"};
 
-    public ScheduleToExcelService(PlannerService plannerService) {
+    public ScheduleToExcelService(PlannerService plannerService, HolidayService holidayService) {
         this.plannerService = plannerService;
+        this.holidayService = holidayService;
     }
 
-    public String toExcel(Long id) {
+    public List<WorkDay> addHolidays(List<WorkDay> workDays, List<Holiday> holidays) {
+        List<WorkDay> holidaysToWorkdays = new ArrayList<>();
 
-        List<WorkDay> sortedWorkDays = plannerService.getWorkDays(id).stream()
+        for (Holiday holiday : holidays) {
+            long daysToDo = ChronoUnit.DAYS.between(holiday.getDateFrom(), holiday.getDateUntil()) + 1;
+            LocalDate date = holiday.getDateFrom();
+            Subject subject = new Subject();
+            subject.setName(holiday.getHolidayName());
+            Schedule scheduleName = workDays.get(0).getSchedule();
+
+            for (long i = 0L; i < daysToDo; i++) {
+//                var dd = date.plusDays(i).getDayOfWeek().getValue();
+                if (date.plusDays(i).getDayOfWeek().getValue() != 6
+                        && date.plusDays(i).getDayOfWeek().getValue() != 7) {
+                    WorkDay workday = new WorkDay();
+                    workday.setDate(date.plusDays(i));
+                    workday.setSubject(subject);
+                    workday.setSchedule(scheduleName);
+                    workday.setOnline(true);
+                    holidaysToWorkdays.add(workday);
+                }
+            }
+        }
+        workDays.addAll(holidaysToWorkdays);
+        List<WorkDay> sortedWorkDays = workDays.stream()
                 .sorted(Comparator.comparing(WorkDay::getDate))
                 .distinct()
                 .toList();
+        return sortedWorkDays;
+    }
 
-       return drawCalendar(sortedWorkDays);
+    public List<WorkDay> addEmptyDays(List<WorkDay> sortedDays) {
+        var firstDay = sortedDays.get(0).getDate();
+        var lastDay = sortedDays.get(sortedDays.size() - 1).getDate();
+        LocalDate startOfMonth = firstDay.with(TemporalAdjusters.firstDayOfMonth());
+        LocalDate lastOfMonth = lastDay.with(TemporalAdjusters.lastDayOfMonth()).plusDays(1L);
+        LocalDate pointerDate = startOfMonth;
+
+        int index = 0; //atejusiu workDay
+        List<WorkDay> calendar = new ArrayList<>();
+        while (pointerDate.isBefore(lastOfMonth)) {
+            if (index < sortedDays.size() && sortedDays.get(index).getDate().isEqual(pointerDate)) {
+                calendar.add(sortedDays.get(index));
+                index++;
+            } else {
+                if (pointerDate.getDayOfWeek().getValue() != 6 && pointerDate.getDayOfWeek().getValue() != 7) {
+                    WorkDay newDay = new WorkDay();
+                    Subject subject = new Subject();
+                    subject.setName("");
+                    newDay.setSubject(subject);
+                    newDay.setDate(pointerDate);
+                    calendar.add(newDay);
+                }
+            }
+            pointerDate = pointerDate.plusDays(1L);
+        }
+        return calendar;
+    }
+
+    public String toExcel(Long id, boolean paged) {
+        List<WorkDay> workDays = plannerService.getWorkDays(id);
+        List<Holiday> holidays = holidayService.getById(id);
+
+        List<WorkDay> mixedDays = addHolidays(workDays, holidays);
+        mixedDays = addEmptyDays(mixedDays);
+
+        if (paged) {
+            return drawCalendar(toMonths(mixedDays), paged);
+        } else {
+            return drawCalendar(toWeeks(mixedDays), paged);
+        }
+//        return drawCalendar(sortedWorkDays);
+//        return null;
+    }
+
+    public Map<Integer, List<WorkDay>> toMonths(List<WorkDay> sortedWorkDays) {
+        Map<Integer, List<WorkDay>> groupedWorkdays = sortedWorkDays.stream()
+                .collect(Collectors
+                        .collectingAndThen(
+                                Collectors.groupingBy(workDay -> YearMonth.from(workDay.getDate())),
+                                map -> map.entrySet().stream()
+                                        .collect(Collectors.toMap(
+                                                entry -> entry.getKey().getYear() * 12 + entry.getKey().getMonthValue(),
+                                                Map.Entry::getValue
+                                        ))
+                        ));
+        return groupedWorkdays;
+    }
+
+    public Map<Integer, List<WorkDay>> toWeeks(List<WorkDay> sortedWorkDays) {
+//        WeekFields weekFields = WeekFields.of(java.util.Locale.getDefault());
+        // Group the objects by week number
+//        Map<Integer, List<WorkDay>> groupedWorkdays = sortedWorkDays.stream()
+//                .collect(Collectors.groupingBy(
+//                        wd -> wd.getDate().get(weekFields.weekOfYear()),
+//                        Collectors.toList()));
+        Map<Integer, List<WorkDay>> groupedWorkdays = new HashMap<>();
+        groupedWorkdays.put(1,sortedWorkDays);
+        return groupedWorkdays;
     }
 
     public static String getTitleYears(List<WorkDay> workDayList) {
@@ -58,8 +162,8 @@ public class ScheduleToExcelService {
                 : years.get(0).toString();
     }
 
-    public static String getGroupTitle(List<WorkDay> workDayList) {
-        return workDayList.get(0).getSchedule().getGroups().getName();
+    public static String getGroupTitle(WorkDay workDay) {
+        return workDay.getSchedule().getGroups().getName();
     }
 
     public static String getWeekTitle(LocalDate date) {
@@ -72,138 +176,256 @@ public class ScheduleToExcelService {
         return monday.format(MMdd) + "-" + friday.format(MMdd);
     }
 
-    public String drawCalendar(List<WorkDay> workDayList) {
+    public void setCellsStyle(Sheet sheet, Map<String, CellStyle> stylesList, String styleName, int column, int startRow, int endRow) {
+        CellStyle style = stylesList.get(styleName);
+        for (int i = startRow; i <= endRow; i++) {
+            Row row = sheet.getRow(i);
+            Cell cell = row.getCell(column);
+            cell.setCellStyle(style);
+//            cell.setCellValue(i);
+        }
+    }
+
+    public static void createRows(Sheet sheet, int rowsCount) {
+        int lastRow = sheet.getLastRowNum();
+        for (int i = 1; i <= rowsCount; i++) {
+            sheet.createRow(lastRow + i);
+        }
+    }
+
+    public static void createCells(Sheet sheet, int startRow, int endRow, int cell) {
+        for (int i = startRow; i <= endRow; i++) {
+            sheet.getRow(i).createCell(cell);
+        }
+    }
+
+    public static void writeCollors(Sheet sheet) {
+        var rowNo = sheet.getLastRowNum();
+        sheet.createRow(++rowNo).createCell(0).setCellValue("***");
+
+        var colors = IndexedColors.values();
+
+        for (var color : colors) {
+            Row row = sheet.createRow(++rowNo);
+            Cell cell0 = row.createCell(0);
+            Cell cell1 = row.createCell(1);
+
+            cell0.setCellValue(color.toString());
+            cell1.setCellValue(color.getIndex());
+
+            CellStyle style = sheet.getWorkbook().createCellStyle();
+            style.setFillForegroundColor(color.getIndex());
+            style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+
+            cell0.setCellStyle(style);
+            cell1.setCellStyle(style);
+        }
+    }
+
+    public String drawCalendar(Map<Integer, List<WorkDay>> workDayList, boolean paged) {
+
+//        boolean xlsx = true;
         Calendar calendar = LocaleUtil.getLocaleCalendar();
-        boolean xlsx = true;
         calendar.setFirstDayOfWeek(Calendar.MONDAY);
         calendar.set(Calendar.DAY_OF_MONTH, 1);
+        int firstRow = 0;
+        StringBuilder printArea = new StringBuilder();
 
         try (Workbook wb = new XSSFWorkbook()) {
 
             Map<String, CellStyle> styles = createStyles(wb);
+            Sheet sheet = wb.createSheet("Sheet1"); //Sheet name
 
-            var startDate = workDayList.get(0).getDate();
-            calendar.set(startDate.getYear(), startDate.getMonth().getValue(), startDate.getDayOfMonth());
+            List<Month> monthToPrint = new ArrayList<>();
 
-            int year = calendar.get(Calendar.YEAR);
-            Sheet sheet = wb.createSheet(getTitleYears(workDayList)); //Sheet name
+               for (List<WorkDay> month : workDayList.values()) {
+                   Month tempMonth = new Month();
+                   tempMonth.setWorkDays(month);
+                   monthToPrint.add(tempMonth);
+               }
 
-            //turn off gridlines
-            sheet.setDisplayGridlines(false);
-            sheet.setPrintGridlines(false);
-            sheet.setFitToPage(true);
-            sheet.setHorizontallyCenter(true);
-            PrintSetup printSetup = sheet.getPrintSetup();
-            printSetup.setLandscape(true);
+            for (Month month : monthToPrint) {
 
-            //the header row: centered text in 18pt font
-            Row headerRow = sheet.createRow(0);
-            headerRow.setHeightInPoints(40);
-            Cell titleCell = headerRow.createCell(0);
-            titleCell.setCellValue(getGroupTitle(workDayList) + ", " + getTitleYears(workDayList));
-            titleCell.setCellStyle(styles.get("title"));
-            sheet.addMergedRegion(CellRangeAddress.valueOf("$A$1:$F$1"));
+                var startDate = month.getWorkDays().get(0).getDate();
+                calendar.set(startDate.getYear(), startDate.getMonth().getValue(), startDate.getDayOfMonth());
 
-            //header with day titles
-            Row monthRow = sheet.createRow(1);
-            sheet.setColumnWidth(0, 25 * 256); //the column is 25 characters wide
+                int year = calendar.get(Calendar.YEAR);
 
-            Cell monthCell = monthRow.createCell(0);
-            monthCell.setCellValue("Data/Savaitės diena");
-            monthCell.setCellStyle(styles.get("month"));
-            for (int i = 1; i <= days.length; i++) {
-                sheet.setColumnWidth(i, 25 * 256); //the column is 13 characters wide
-                monthCell = monthRow.createCell(i);
-                monthCell.setCellValue(days[i - 1]);
-                monthCell.setCellStyle(styles.get("month"));
-            }
 
-            int cnt = 1, wdCount = 0;
-            int rowNum = 2;
-            Map<Long, CellStyle> colors = new HashMap<>();
+                //turn off gridlines
+                sheet.setDisplayGridlines(false);
+                sheet.setPrintGridlines(false);
+                sheet.setFitToPage(true);
+                sheet.setHorizontallyCenter(true);
+                PrintSetup printSetup = sheet.getPrintSetup();
+                printSetup.setLandscape(true);
 
-            while (workDayList.size() > wdCount) {
-                Row row1 = sheet.createRow(rowNum++);
-                Row row2 = sheet.createRow(rowNum++);
-                Row row3 = sheet.createRow(rowNum++);
-                Row row4 = sheet.createRow(rowNum++);
-                Row row5 = sheet.createRow(rowNum++);
 
-                Cell nullCell = row1.createCell(0);
-                nullCell.setCellValue(getWeekTitle(workDayList.get(wdCount).getDate()));
-                sheet.addMergedRegion(CellRangeAddress.valueOf("$A$" + (rowNum - 4) + ":$A$" + (rowNum)));
-                nullCell.setCellStyle(styles.get("workday_left"));
+                    //the header row: centered text in 18pt font
+                   var aass =sheet.getLastRowNum()+1;
+                    Row headerRow = sheet.createRow(sheet.getLastRowNum()+1);
+                    headerRow.setHeightInPoints(40);
+                    Cell titleCell = headerRow.createCell(0);
 
-                for (int d = 1; d < 6; d++) {
 
-                    if (wdCount < workDayList.size() && workDayList.get(wdCount).getDate().getDayOfWeek().getValue() == cnt) {
-                        row1.createCell(d).setCellStyle(styles.get("common"));
-                        row1.getCell(d).setCellValue(workDayList.get(wdCount).getSubject().getName());
+                    titleCell.setCellValue(month.getGroup() + ", " + getTitleYears(month.getWorkDays()));
+                    titleCell.setCellStyle(styles.get("title"));
+                    sheet.addMergedRegion(CellRangeAddress.valueOf("$A$" + (sheet.getLastRowNum() + 1) + ":$F$" + (sheet.getLastRowNum() + 1)));
 
-                        if(!colors.containsKey(workDayList.get(wdCount).getSubject().getId())){
-                            CellStyle subjectCell;
-                            byte opacity = (byte) 128;
-//                            XSSFColor xssfColor = new XSSFColor(indexedColor, null);
-//                            xssfColor.setAlpha(opacity);
-                            subjectCell = wb.createCellStyle();
-                            subjectCell.setFillForegroundColor((short) (colors.size()+3));
-                            subjectCell.setFillPattern(FillPatternType.FINE_DOTS);
-                            colors.put(workDayList.get(wdCount).getSubject().getId(), subjectCell);
-                        }
-                        row1.getCell(d).setCellStyle(colors.get(workDayList.get(wdCount).getSubject().getId()));
+                    //header with day titles
+                    Row monthRow = sheet.createRow(sheet.getLastRowNum() + 1);
+                    sheet.setColumnWidth(0, 25 * 256); //the column is 25 characters wide
 
-                        var current = workDayList.get(wdCount);
-                        row2.createCell(d).setCellStyle(styles.get("common"));
-                        row2.getCell(d).setCellValue(current.getLessonStart() + " - " + current.getLessonEnd());
-                        row3.createCell(d).setCellStyle(styles.get("common"));
-                        row3.getCell(d).setCellValue(current.getTeacher().getfName() + " " + current.getTeacher().getlName());
-                        row4.createCell(d).setCellStyle(styles.get("common"));
-                        row4.getCell(d).setCellValue(current.getOnline()
-                                ? "Nuotolinė pamoka"
-                                : "Klasė: " + current.getClassroom().getClassroomName());
-                        row5.createCell(d).setCellStyle(styles.get("common"));
-                        row5.getCell(d).setCellValue(current.getDate().toString());
-
-                        cnt++;
-                        wdCount++;
-                    } else {
-                        row1.createCell(d).setCellStyle(styles.get("grey_right"));
-                        row2.createCell(d).setCellStyle(styles.get("grey_right"));
-                        row3.createCell(d).setCellStyle(styles.get("grey_right"));
-                        row4.createCell(d).setCellStyle(styles.get("grey_right"));
-                        row5.createCell(d).setCellStyle(styles.get("grey_right"));
-
-                        cnt++;
+                    Cell monthCell = monthRow.createCell(0);
+                    monthCell.setCellValue("Data/Savaitės diena");
+                    monthCell.setCellStyle(styles.get("month"));
+                    for (int i = 1; i <= days.length; i++) {
+                        sheet.setColumnWidth(i, 25 * 256);
+                        monthCell = monthRow.createCell(i);
+                        monthCell.setCellValue(days[i - 1]);
+                        monthCell.setCellStyle(styles.get("month"));
                     }
-                        if (workDayList.size() == wdCount && (cnt-1) % 5 == 0 ) {break;}
+
+
+                int cnt = 1, wdCount = 0;
+                int rowNum = 2;
+                List<WorkDay> workDays = month.getWorkDays();
+                //Map subjectId, Color for subject name
+                Map<Long, CellStyle> colors = new HashMap<>();
+                while (workDays.size() > wdCount) {
+
+                    createRows(sheet, 5);
+                    var actualRow = sheet.getLastRowNum() - 4;
+                    createCells(sheet, actualRow, sheet.getLastRowNum(), 0);
+                    setCellsStyle(sheet, styles, "week", 0, actualRow, actualRow + 4);
+
+                    Cell nullCell = sheet.getRow(actualRow).getCell(0);
+                    nullCell.setCellValue(getWeekTitle(workDays.get(wdCount).getDate()));
+                    sheet.addMergedRegion(CellRangeAddress.valueOf("$A$" + (actualRow + 1) + ":$A$" + (actualRow + 5)));
+                    nullCell.setCellStyle(styles.get("week"));
+
+                    for (int d = 1; d < 6; d++) {
+
+                        createCells(sheet, actualRow, actualRow + 4, d);
+
+                        if (wdCount < workDays.size() && workDays.get(wdCount).getDate().getDayOfWeek().getValue() == cnt) {
+                            var current = workDays.get(wdCount);
+                            var currentDate = current.getDate();
+                            var curentDay = currentDate.getDayOfWeek().getValue();
+                            sheet.getRow(actualRow).getCell(d).setCellValue(current.getSubject().getName());
+
+                            if (current.getId() != null && current.getOnline() != null) {
+                                //aprasyti diena
+                                setCellsStyle(sheet, styles, "common", d, actualRow, actualRow + 4);
+                                sheet.getRow(actualRow + 1).getCell(d).setCellValue(current.getLessonStart() != null
+                                        ? current.getLessonStart() + " - " + current.getLessonEnd()
+                                        : "");
+                                sheet.getRow(actualRow + 2).getCell(d).setCellValue(current.getTeacher() != null
+                                        ? current.getTeacher().getfName() + " " + current.getTeacher().getlName()
+                                        : "");
+                                if (current.getOnline()) {
+                                    sheet.getRow(actualRow + 3).getCell(d).setCellValue("Nuotolinė pamoka");
+                                    sheet.getRow(actualRow + 3).getCell(d).setCellStyle(styles.get("remote"));
+                                } else {
+                                    sheet.getRow(actualRow + 3).getCell(d).setCellValue("Klasė: " + current.getClassroom().getClassroomName());
+                                }
+                                sheet.getRow(actualRow + 4).getCell(d).setCellValue(current.getDate().toString());
+
+                                //paint subject name
+                                subjectStyling(wb, colors, current);
+
+                                sheet.getRow(actualRow).getCell(d).setCellStyle(colors.get(current.getSubject().getId()));
+
+                            } else if (current.getId() == null && current.getOnline() != null) {
+                                // aprasyti atostogas
+                                setCellsStyle(sheet, styles, "holiday", d, actualRow, actualRow + 4);
+                            }else{
+                                setCellsStyle(sheet, styles, "empty", d, actualRow, actualRow + 4);
+                            }
+                            cnt++;
+                            wdCount++;
+
+                        } else {
+                            //piesiam tusciadieni
+                            setCellsStyle(sheet, styles, "empty", d, actualRow, actualRow + 4);
+                            cnt++;
+                        }
+                        if (workDays.size() == wdCount && (cnt - 1) % 5 == 0) {
+                            break;
+                        }
+                    }
+
+                    CellRangeAddress range = CellRangeAddress.valueOf("A" + (actualRow + 1) + ":F" + (actualRow + 5));
+
+                    //Apply a border to the range
+                    RegionUtil.setBorderTop(BorderStyle.MEDIUM, range, sheet);
+                    RegionUtil.setBorderBottom(BorderStyle.MEDIUM, range, sheet);
+                    RegionUtil.setBorderLeft(BorderStyle.MEDIUM, range, sheet);
+                    RegionUtil.setBorderRight(BorderStyle.MEDIUM, range, sheet);
+                    cnt = 1;
+
                 }
 
-                CellRangeAddress range = CellRangeAddress.valueOf("A"+ (rowNum - 4) + ":F" + (rowNum));
+                printArea.append("$A$").append(firstRow + 1).append(":$F$").append(sheet.getLastRowNum() + 1).append(",");
 
-// Apply a border to the range
-                RegionUtil.setBorderTop(BorderStyle.MEDIUM, range, sheet);
-                RegionUtil.setBorderBottom(BorderStyle.MEDIUM, range, sheet);
-                RegionUtil.setBorderLeft(BorderStyle.MEDIUM, range, sheet);
-                RegionUtil.setBorderRight(BorderStyle.MEDIUM, range, sheet);
-                cnt = 1;
+                sheet.createRow(sheet.getLastRowNum() + 1);
+                sheet.setRowBreak(sheet.getLastRowNum());
+                firstRow = sheet.getLastRowNum() + 1;
+
+                wb.setPrintArea(0, printArea.toString().substring(0,printArea.length()-1)); // set print area for sheet 0
             }
+//            writeCollors(sheet);
 
             // Write the output to a file
-            File file = new File("example.xlsx");
+            File file = new File("schedule.xlsx");
             int count = 1;
             while (file.exists()) {
-                file = new File("example" + count + ".xlsx");
+                file = new File("schedule" + count + ".xlsx");
                 count++;
             }
+
             try (FileOutputStream out = new FileOutputStream(file)) {
                 wb.write(out);
                 var aa = file.getPath();
-                var bb = file.getName();
+//                var bb = file.getName();
                 return aa;
             }
 
         } catch (Exception e) {
+            logger.error("#ME: " + e.toString());
             throw new ValidationException("Nepavyko sukurti Excel failo", "", "", "");
+        }
+//        return null;
+    }
+
+    public void cleaner(){
+        File directory = new File(".");
+        File[] files = directory.listFiles((dir, name) -> name.matches("schedule.*\\.xlsx"));
+        for (File file : files) {
+            System.out.println("Deleting file: " + file.getName());
+            file.delete();
+        }
+    }
+
+    private static void subjectStyling(Workbook wb, Map<Long, CellStyle> colors, WorkDay current) {
+        if (!colors.containsKey(current.getSubject().getId())) {
+
+            int maxIndex = colors.values().stream()
+                    .mapToInt(CellStyle::getFillForegroundColor)
+                    .max()
+                    .orElse(39);
+
+            CellStyle style = wb.createCellStyle();
+            style.setFillForegroundColor(IndexedColors.fromInt(maxIndex + 1).getIndex());
+            style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+            style.setBorderLeft(BorderStyle.MEDIUM);
+            style.setBorderRight(BorderStyle.MEDIUM);
+            style.setLeftBorderColor(IndexedColors.GREY_50_PERCENT.getIndex());
+            style.setRightBorderColor(IndexedColors.GREY_50_PERCENT.getIndex());
+            style.setIndention((short) 1);
+
+            colors.put(current.getSubject().getId(), style);
+
         }
     }
 
@@ -245,6 +467,58 @@ public class ScheduleToExcelService {
         style.setFont(monthFont);
         styles.put("month", style);
 
+        style = wb.createCellStyle();
+        style.setAlignment(HorizontalAlignment.CENTER);
+        style.setVerticalAlignment(VerticalAlignment.CENTER);
+        style.setFillForegroundColor(IndexedColors.LIGHT_CORNFLOWER_BLUE.getIndex());
+        style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+        style.setBorderRight(BorderStyle.THIN);
+        style.setRightBorderColor(borderColor);
+//        style.setBorderBottom(BorderStyle.THIN);
+//        style.setBottomBorderColor(borderColor);
+        styles.put("week", style);
+
+        style = wb.createCellStyle();
+        style.setAlignment(HorizontalAlignment.CENTER);
+        style.setVerticalAlignment(VerticalAlignment.CENTER);
+        style.setFillForegroundColor(IndexedColors.LIGHT_YELLOW.getIndex());
+        style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+
+        style.setBorderLeft(BorderStyle.THIN);
+        style.setBorderRight(BorderStyle.THIN);
+        style.setRightBorderColor(borderColor);
+//        style.setBorderBottom(BorderStyle.THIN);
+//        style.setBottomBorderColor(borderColor);
+        styles.put("holiday", style);
+
+        style = wb.createCellStyle();
+//        style.setAlignment(HorizontalAlignment.CENTER);
+//        style.setVerticalAlignment(VerticalAlignment.CENTER);
+//        style.setFillForegroundColor(IndexedColors.LIGHT_YELLOW.getIndex());
+//        style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+        style.setBorderLeft(BorderStyle.THIN);
+        style.setBorderRight(BorderStyle.THIN);
+        style.setLeftBorderColor(borderColor);
+        style.setRightBorderColor(borderColor);
+//        style.setBorderBottom(BorderStyle.THIN);
+//        style.setBottomBorderColor(borderColor);
+        styles.put("empty", style);
+
+        Font remoteFont = wb.createFont();
+//        remoteFont.setColor(IndexedColors.WHITE.getIndex());
+        style = wb.createCellStyle();
+        style.setFillForegroundColor(IndexedColors.LEMON_CHIFFON.getIndex());
+        style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+        style.setBorderLeft(BorderStyle.MEDIUM);
+        style.setBorderRight(BorderStyle.MEDIUM);
+        style.setBorderBottom(BorderStyle.DOTTED);
+        style.setLeftBorderColor(borderColor);
+        style.setRightBorderColor(borderColor);
+        style.setBottomBorderColor(borderColor);
+        style.setIndention((short) 1);
+        style.setFont(remoteFont);
+        styles.put("remote", style);
+
         Font dayFont = wb.createFont();
         dayFont.setFontHeightInPoints((short) 14);
         dayFont.setBold(true);
@@ -274,12 +548,18 @@ public class ScheduleToExcelService {
         style = wb.createCellStyle();
         style.setAlignment(HorizontalAlignment.CENTER);
         style.setVerticalAlignment(VerticalAlignment.CENTER);
+
         style.setBorderLeft(BorderStyle.THIN);
-        style.setFillForegroundColor(IndexedColors.WHITE.getIndex());
-        style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+//        style.setBorderTop(BorderStyle.THIN);
+        style.setBorderRight(BorderStyle.THIN);
+//        style.setBorderBottom(BorderStyle.THIN);
         style.setLeftBorderColor(borderColor);
-        style.setBorderBottom(BorderStyle.THIN);
+        style.setTopBorderColor(borderColor);
+        style.setRightBorderColor(borderColor);
         style.setBottomBorderColor(borderColor);
+
+        style.setFillForegroundColor(IndexedColors.CORAL.getIndex()); //was white
+        style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
         style.setFont(dayFont);
         styles.put("workday_left", style);
 
@@ -314,7 +594,7 @@ public class ScheduleToExcelService {
         styles.put("grey_right", style);
 
         style = wb.createCellStyle();
-          style.setIndention((short) 1);
+        style.setIndention((short) 1);
         style.setBorderLeft(BorderStyle.MEDIUM);
         style.setLeftBorderColor(borderColor);
 //        style.setBorderRight(BorderStyle.MEDIUM);
@@ -328,3 +608,4 @@ public class ScheduleToExcelService {
         return styles;
     }
 }
+
