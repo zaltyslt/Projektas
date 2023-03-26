@@ -153,7 +153,7 @@ export function ProgramList() {
           </Grid>
         </Grid>
         <TableContainer component={Paper}>
-          <Table aria-label="custom pagination table">
+          <Table id="active-program-list-table" aria-label="custom pagination table">
             <TableHead>
               <TableRow>
                 <TableCell>Programos pavadinimas</TableCell>
@@ -213,7 +213,7 @@ export function ProgramList() {
         </FormGroup>
         {isChecked && (
           <TableContainer component={Paper}>
-            <Table aria-label="custom pagination table">
+            <Table id="inactive-program-list-table" aria-label="custom pagination table">
               <TableHead>
                 <TableRow>
                   <TableCell>Klasės pavadinimas</TableCell>
