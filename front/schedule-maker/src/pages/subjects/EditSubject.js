@@ -140,7 +140,7 @@ export function EditSubject() {
         } else {
           setModuleError(false);
           setClassRoomError(false);
-          setCreateMessage("Sėkmingai atnaujinta. ");
+          setCreateMessage("Dalyko duomenys sėkmingai atnaujinti.");
           setError("");
         }
       });

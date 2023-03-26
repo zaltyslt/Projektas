@@ -240,10 +240,10 @@ export function ModifyShift() {
         <Grid item sm={8}>
           {isPostUsed ? (
             successfulPost ? (
-              <Alert severity="success"> Pamaina sėkmingai pakeista.</Alert>
+              <Alert severity="success">Pamainos duomenys sėkmingai atnaujinti.</Alert>
             ) : (
               <Grid>
-                <Alert severity="warning">Nepavyko pakeisti pamainos.</Alert>
+                <Alert severity="warning">Nepavyko pakeisti pamainos duomenų.</Alert>
                 {shiftErrors.passedValidation
                   ? shiftErrors.databaseErrors.map((databaseError, index) => (
                       <Alert key={index} severity="warning">
