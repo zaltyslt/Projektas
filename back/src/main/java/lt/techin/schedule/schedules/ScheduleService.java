@@ -2,9 +2,6 @@ package lt.techin.schedule.schedules;
 
 import lt.techin.schedule.exceptions.ValidationException;
 import lt.techin.schedule.group.GroupRepository;
-import lt.techin.schedule.schedules.planner.WorkDayRepository;
-import lt.techin.schedule.subject.SubjectRepository;
-import lt.techin.schedule.teachers.TeacherRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,20 +14,11 @@ import static lt.techin.schedule.schedules.ScheduleMapper.toScheduleCreateDto;
 public class ScheduleService {
     private final ScheduleRepository scheduleRepository;
     private final GroupRepository groupRepository;
-    private final SubjectRepository subjectRepository;
-    private final TeacherRepository teacherRepository;
-
-    private final WorkDayRepository workDayRepository;
 
     public ScheduleService(ScheduleRepository scheduleRepository,
-                           GroupRepository groupRepository,
-                           SubjectRepository subjectRepository,
-                           TeacherRepository teacherRepository, WorkDayRepository workDayRepository) {
+                           GroupRepository groupRepository) {
         this.scheduleRepository = scheduleRepository;
         this.groupRepository = groupRepository;
-        this.subjectRepository = subjectRepository;
-        this.teacherRepository = teacherRepository;
-        this.workDayRepository = workDayRepository;
     }
 
     public List<Schedule> getAll() {
@@ -50,7 +38,6 @@ public class ScheduleService {
         var existingGroup = groupRepository.findById(groupId).orElseThrow(() ->
                 new ValidationException("Nurodyta grupė nerasta", "Group", "Does not exist", groupId.toString()));
         schedule.setGroups(existingGroup);
-
         var existing = scheduleRepository.findAll();
         existing = existing.stream().filter(s -> s.getGroups().getName().equalsIgnoreCase(existingGroup.getName()))
                 .filter(s -> s.getDateFrom().equals(schedule.getDateFrom()))
@@ -58,7 +45,6 @@ public class ScheduleService {
                 .collect(Collectors.toList());
         if (existing.size() > 0) {
             var scheduleDto = toScheduleCreateDto(schedule);
-
             throw new ValidationException("Tvarkaraštis šiai grupei ir šiam " +
                     "laikotarpiui jau yra sukurtas", "Schedule", "Not unique", scheduleDto.toString());
         } else {
