@@ -3,7 +3,7 @@ import {
   Button,
   Checkbox,
   Dialog,
-  DialogActions, 
+  DialogActions,
   DialogTitle,
   FormControl,
   FormControlLabel,
@@ -14,7 +14,7 @@ import {
   Stack,
 } from "@mui/material";
 import { Container } from "@mui/system";
-import { useEffect, useState, forwardRef } from "react";
+import { useEffect, useState } from "react";
 import { Link, useParams, useHref } from "react-router-dom";
 import { lessonsWithTime } from "../../helpers/constants";
 
@@ -152,8 +152,8 @@ export function EditLesson() {
             {"Ar tikrai norite ištrinti pasirinktą pamoką visam laikui?"}
           </DialogTitle>
           <DialogActions>
-            <Button onClick={handleDelete}>Ištrinti</Button>
             <Button onClick={handleClose}>Atšaukti</Button>
+            <Button onClick={handleDelete}>Ištrinti</Button>
           </DialogActions>
         </Dialog>
         <h1>Redagavimas</h1>
