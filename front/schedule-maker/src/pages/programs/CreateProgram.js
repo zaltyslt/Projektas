@@ -48,7 +48,7 @@ export function CreateProgram(props) {
 
   const applyResult = (result) => {
     if (result.ok) {
-      setSuccess("Sėkmingai pridėta!");
+      setSuccess("Programa sėkmingai sukurta.");
       clear();
     } else {
       result

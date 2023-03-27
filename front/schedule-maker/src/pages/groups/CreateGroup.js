@@ -316,10 +316,10 @@ export function CreateGroup() {
           <Grid item sm={4}>
             {isPostUsed ? (
               successfulPost ? (
-                <Alert severity="success"> Grupė sėkmingai pridėta.</Alert>
+                <Alert severity="success"> Grupė sėkmingai sukurta.</Alert>
               ) : (
                 <Grid>
-                  <Alert severity="warning">Nepavyko pridėti grupės.</Alert>
+                  <Alert severity="warning">Nepavyko sukurti grupės.</Alert>
                   {groupErrors.passedValidation
                     ? groupErrors.databaseErrors.map((databaseError, index) => (
                         <Alert key={index} severity="warning">

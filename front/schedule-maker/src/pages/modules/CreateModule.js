@@ -72,7 +72,7 @@ export function CreateModule() {
           setCreateMessage("");
           setError(response.message);
         } else {
-          setCreateMessage("Sėkmingai sukurta. ");
+          setCreateMessage("Modulis sėkmingai sukurtas. ");
           setError("");
           clear();
         }

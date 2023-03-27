@@ -107,7 +107,7 @@ export function UpdateClassroom() {
               setError("Klasės sukurti nepavyko: ", error);
             });
         } else {
-          setSuccess("Sėkmingai atnaujinote!");
+          setSuccess("Klasės duomenys sėkmingai atnaujinti.");
         }
       });
     }
