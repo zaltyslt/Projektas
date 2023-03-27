@@ -30,6 +30,14 @@ export function Schedule() {
     "#f5c4e3",
   ];
 
+  const subjectColorMap = {};
+  schedule.forEach((s) => {
+    if (!subjectColorMap[s.subject.id]) {
+      subjectColorMap[s.subject.id] =
+        subjectColors[Math.floor(Math.random() * subjectColors.length)];
+    }
+  });
+
   useEffect(() => {
     fetch(`api/v1/schedules/${params.id}/lessons`)
       .then((response) => response.json())
@@ -46,7 +54,7 @@ export function Schedule() {
 
   const events = [
     ...schedule.map((schedule) => {
-      const color = subjectColors[schedule.subject.id];
+      const color = subjectColorMap[schedule.subject.id];
       return {
         title: `<b>${schedule.subject.name}</b>
           <br />
