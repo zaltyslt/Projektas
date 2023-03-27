@@ -12,11 +12,34 @@ import { Button, Grid } from "@mui/material";
 import adaptivePlugin from "@fullcalendar/adaptive";
 import { render } from "preact/compat";
 
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
+import DialogActions from '@mui/material/DialogActions';
+import CloseIcon from '@mui/icons-material/Close';
+import { useTheme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import DialogContentText from '@mui/material/DialogContentText';
+
 export function Schedule() {
   const [weekendsVisible, setWeekendsVisible] = useState(true);
   const [schedule, setSchedule] = useState([]);
   const [holiday, setHoliday] = useState([]);
   const params = useParams();
+
+  const [open, setOpen] = React.useState(false);
+  const theme = useTheme();
+  const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
+  const [maxWidth, setMaxWidth] = React.useState('sm');
+  const [fullWidth, setFullWidth] = React.useState(true);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   const subjectColors = [
     "#f5c5c4",
@@ -52,14 +75,12 @@ export function Schedule() {
           <br />
           ${schedule.lessonStart} - ${schedule.lessonEnd}
           <br />
-          ${schedule.teacher ? schedule.teacher.lName : ""} ${
-          schedule.teacher ? schedule.teacher.fName : "nepasirinktas"
-        }
+          ${schedule.teacher ? schedule.teacher.lName : ""} ${schedule.teacher ? schedule.teacher.fName : "nepasirinktas"
+          }
           <br />
-          ${
-            schedule.online
-              ? "Nuotolinė pamoka"
-              : schedule.classroom.classroomName
+          ${schedule.online
+            ? "Nuotolinė pamoka"
+            : schedule.classroom.classroomName
           }<br />
           `,
         start: schedule.date,
@@ -95,6 +116,7 @@ export function Schedule() {
       />
     </>
   );
+
 
   return (
     <div className="maincontainer">
@@ -150,6 +172,64 @@ export function Schedule() {
           >
             Spausdinti kalendorių
           </Button>
+
+          <div>
+            <Button variant="outlined" onClick={handleClickOpen}>
+              tikrinti konfliktus
+            </Button>
+            <Dialog
+              fullScreen={fullScreen}
+              open={open}
+              onClose={handleClose}
+              maxWidth={maxWidth}
+              fullWidth={fullWidth}
+              aria-labelledby="responsive-dialog-title"
+            >
+              <DialogTitle id="responsive-dialog-title">
+                {"Rasti konfliktai:"}
+              </DialogTitle>
+              <DialogContent>
+                <DialogContentText>
+                  {schedule
+                    .filter(
+                      (item) =>
+                        (item.hasTeacherConflict &&
+                          item.scheduleIdWithTeacherNameConflict) ||
+                        (item.hasClassroomConflict &&
+                          item.scheduleIdWithClassroomNameConflict)
+                    )
+                    .map((item) => (
+                      <div key={item.id}>
+                        <h3>{`Diena:  ${item.date}`}</h3>
+                        {item.hasTeacherConflict &&
+                          item.scheduleIdWithTeacherNameConflict && (
+                            <div>
+                              {Object.entries(
+                                item.scheduleIdWithTeacherNameConflict
+                              ).map(([key, value]) => (
+                                <p key={key}>{`Mokytojas: ${value}`}</p>
+                              ))}
+                            </div>
+                          )}
+                        {item.hasClassroomConflict &&
+                          item.scheduleIdWithClassroomNameConflict && (
+                            <div>
+                              {Object.entries(
+                                item.scheduleIdWithClassroomNameConflict
+                              ).map(([key, value]) => (
+                                <p key={key}>{`Klasė: ${value}`}</p>
+                              ))}
+                            </div>)}
+                      </div>))}
+                </DialogContentText>
+              </DialogContent>
+              <DialogActions>
+                <Button variant="outlined" onClick={handleClose} autoFocus>
+                  Uždaryti
+                </Button>
+              </DialogActions>
+            </Dialog>
+          </div>
         </Stack>
       </Grid>
     </div>
