@@ -1,17 +1,27 @@
-import { Alert, Button, Grid, Stack, TextField } from "@mui/material";
 import { Container } from "@mui/system";
-import { useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import {
+  Alert,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogTitle,
+  Grid,
+  Stack,
+  TextField,
+} from "@mui/material";
+import { useEffect, useState } from "react";
+import { Link, useParams, useHref } from "react-router-dom";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { dateToUtc } from "../../helpers/helpers";
 import "./Schedule.css";
 import { BAD_SYMBOLS } from "../../helpers/constants";
 
-export function CreateHoliday() {
+export function EditHoliday() {
   const [name, setName] = useState("");
   const [dateFrom, setDateFrom] = useState("");
   const [dateUntil, setDateUntil] = useState("");
+  const [scheduleId, setScheduleId] = useState("");
 
   const [dateFromEmpty, setDateFromEmpty] = useState(false);
   const [dateUntilEmpty, setDateUntilEmpty] = useState(false);
@@ -22,42 +32,19 @@ export function CreateHoliday() {
   const [errorMessageUntil, setErrorMessageUntil] = useState("");
   const [createMessage, setCreateMessage] = useState("");
   const [error, setError] = useState("");
+  const [openPrompt, setOpenPrompt] = useState(false);
 
   const params = useParams();
+  const calendarUrl = useHref(`/schedules/${scheduleId}`);
 
-  const createHoliday = () => {
-      fetch(`api/v1/schedules/holidays/create-holiday/${params.id}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        name,
-        dateFrom: dateFrom.$d.toISOString().split("T")[0],
-        dateUntil: dateUntil.$d.toISOString().split("T")[0],
-      }),
-    }).then((response) => {
-      let success = response.ok;
-
-      response.json().then((response) => {
-        if (!success) {
-          setCreateMessage("");
-          setError(response.message);
-        } else {
-          setCreateMessage("Sėkmingai sukurta. ");
-          setError("");
-          clear();
-        }
+  useEffect(() => {
+    fetch(`api/v1/schedules/holiday/${params.id}`)
+      .then((response) => response.json())
+      .then((data) => {
+        setName(data.name);
+        setScheduleId(data.schedule.id);
       });
-    });
-  };
-
-  const clear = () => {
-    setName("");
-    setDateFrom("");
-    setDateUntil("");
-    setError("");
-  }
+  }, []);
 
   const validateName = (value) => {
     setName(value);
@@ -79,13 +66,39 @@ export function CreateHoliday() {
 
   const validateDateUntil = (value) => {
     setDateUntil(dateToUtc(value));
-  
+
     if (value.length === 0) {
       setDateUntilEmpty(true);
     } else {
       setDateUntilEmpty(false);
       setErrorMessageUntil("");
     }
+  };
+
+  const updateHoliday = () => {
+    fetch(`api/v1/schedules/holidays/update-holiday/${params.id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name,
+        dateFrom: dateFrom.$d.toISOString().split("T")[0],
+        dateUntil: dateUntil.$d.toISOString().split("T")[0],
+      }),
+    }).then((response) => {
+      let success = response.ok;
+
+      response.json().then((response) => {
+        if (!success) {
+          setCreateMessage("");
+          setError(response.message);
+        } else {
+          setCreateMessage("Sėkmingai atnaujinta. ");
+          setError("");
+        }
+      });
+    });
   };
 
   const validation = () => {
@@ -123,14 +136,45 @@ export function CreateHoliday() {
 
     if (isValid) {
       setCreateMessage("");
-      createHoliday();
+      updateHoliday();
     }
+  };
+
+  const handleDelete = () => {
+    fetch(`api/v1/schedules/holidays/delete-holiday/${params.id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }).then(() => (window.location = calendarUrl));
+  };
+
+  const handleClose = () => {
+    setOpenPrompt(false);
+  };
+
+  const handlePrompt = () => {
+    setOpenPrompt(true);
   };
 
   return (
     <div>
       <Container>
-        <h3>Atostogų planavimas</h3>
+        <Dialog
+          open={openPrompt}
+          keepMounted
+          onClose={handleClose}
+          aria-describedby="alert-dialog-slide-description"
+        >
+          <DialogTitle>
+            {"Ar tikrai norite ištrinti pasirinktas atostogas visam laikui?"}
+          </DialogTitle>
+          <DialogActions>
+            <Button onClick={handleClose}>Atšaukti</Button>
+            <Button onClick={handleDelete}>Ištrinti</Button>            
+          </DialogActions>
+        </Dialog>
+        <h3>Atostogų redagavimas</h3>
         <Grid container rowSpacing={2} spacing={2}>
           <Grid item sm={10}>
             <TextField
@@ -196,18 +240,26 @@ export function CreateHoliday() {
           <Grid item sm={10}>
             <Stack direction="row" spacing={2}>
               <Button
-                id="save-button-create-schedule"
+                id="save-button-edit-holiday"
                 variant="contained"
                 onClick={validation}
               >
                 Išsaugoti
               </Button>
 
-              <Link to={"/planning/" + params.id}>
-                <Button id="back-button-create-schedule" variant="contained">
+              <Link to={"/schedules/" + scheduleId}>
+                <Button id="back-button-edit-holiday" variant="contained">
                   Grįžti
                 </Button>
               </Link>
+
+              <Button
+                id="delete-button-edit-holiday"
+                variant="contained"
+                onClick={handlePrompt}
+              >
+                Ištrinti
+              </Button>
             </Stack>
           </Grid>
         </Grid>

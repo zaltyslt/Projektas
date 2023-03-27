@@ -95,6 +95,7 @@ export function Schedule() {
         )
       ),
       allDay: true,
+      url: `http://localhost:3000/schedule-maker#/schedules/edit-holidays/${holiday.id}`,
       color: "#cccccc",
     })),
   ];

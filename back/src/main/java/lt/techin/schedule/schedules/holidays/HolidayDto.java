@@ -1,5 +1,7 @@
 package lt.techin.schedule.schedules.holidays;
 
+import lt.techin.schedule.schedules.ScheduleEntityDto;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -17,6 +19,8 @@ public class HolidayDto {
     private LocalDateTime createdDate;
 
     private LocalDateTime modifiedDate;
+
+    private ScheduleEntityDto schedule;
 
     public HolidayDto() {
     }
@@ -68,6 +72,14 @@ public class HolidayDto {
 
     public void setModifiedDate(LocalDateTime modifiedDate) {
         this.modifiedDate = modifiedDate;
+    }
+
+    public ScheduleEntityDto getSchedule() {
+        return schedule;
+    }
+
+    public void setSchedule(ScheduleEntityDto schedule) {
+        this.schedule = schedule;
     }
 
     @Override
