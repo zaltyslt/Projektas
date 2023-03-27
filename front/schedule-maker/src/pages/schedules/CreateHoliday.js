@@ -187,12 +187,6 @@ export function CreateHoliday() {
               ></DatePicker>
             </LocalizationProvider>
           </Grid>
-
-          <Grid item sm={10}>
-            {error && <Alert severity="warning">{error}</Alert>}
-            {createMessage && <Alert severity="success">{createMessage}</Alert>}
-          </Grid>
-
           <Grid item sm={10}>
             <Stack direction="row" spacing={2}>
               <Button
@@ -209,6 +203,10 @@ export function CreateHoliday() {
                 </Button>
               </Link>
             </Stack>
+          </Grid>
+          <Grid item sm={10}>
+            {error && <Alert severity="warning">{error}</Alert>}
+            {createMessage && <Alert severity="success">{createMessage}</Alert>}
           </Grid>
         </Grid>
       </Container>

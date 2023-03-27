@@ -366,12 +366,7 @@ export function UpdateProgram() {
                 })}
               </Grid>
             </Grid>
-            <Grid item sm={8}>
-              {" "}
-              <legend>{params.programName}</legend>
-              {error && <Alert severity="warning">{error}</Alert>}
-              {success && <Alert severity="success">{success}</Alert>}
-            </Grid>
+          
             <Grid item sm={8}>
               <Stack direction="row" spacing={2} marginTop={1}>
                 <Button
@@ -417,6 +412,13 @@ export function UpdateProgram() {
                   </Button>
                 </Link>
               </Stack>
+            </Grid>
+            
+            <Grid item sm={8}>
+              {" "}
+              <legend>{params.programName}</legend>
+              {error && <Alert severity="warning">{error}</Alert>}
+              {success && <Alert severity="success">{success}</Alert>}
             </Grid>
           </Grid>
         </form>

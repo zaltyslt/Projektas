@@ -11,6 +11,7 @@ import { Stack } from "@mui/system";
 import { Button, Grid } from "@mui/material";
 import adaptivePlugin from "@fullcalendar/adaptive";
 import { render } from "preact/compat";
+import { eachDayOfInterval } from "date-fns";
 
 export function Schedule() {
   const [weekendsVisible, setWeekendsVisible] = useState(true);
@@ -98,18 +99,18 @@ export function Schedule() {
         color: color,
       };
     }),
-    ...holiday.map((holiday) => ({
-      title: `<b>${holiday.name}</b>`,
-      start: holiday.dateFrom,
-      end: new Date(
-        new Date(holiday.dateUntil).setDate(
-          new Date(holiday.dateUntil).getDate() + 1
-        )
-      ),
-      allDay: true,
-      url: `http://localhost:3000/schedule-maker#/schedules/edit-holidays/${holiday.id}`,
-      color: "#cccccc",
-    })),
+    ...holiday.flatMap((holiday) => {
+      const holidayDates = eachDayOfInterval({
+        start: new Date(holiday.dateFrom),
+        end: new Date(holiday.dateUntil),
+      });
+      return holidayDates.map((date) => ({
+        title: `<div style="margin-top: 37px; margin-bottom: 37px;"><b>${holiday.name}</b></div>` ,
+        start: date,
+        allDay: true,
+        color: "#cccccc",
+      }));
+    }),
   ];
 
   const renderEventContent = (eventInfo) => (
