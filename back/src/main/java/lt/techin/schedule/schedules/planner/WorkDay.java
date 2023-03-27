@@ -77,7 +77,9 @@ public class WorkDay {
         hasClassroomConflict = false;
     }
 
-    public WorkDay(LocalDate date, Subject subject, Teacher teacher, Schedule schedule, Classroom classroom, String lessonStart, String lessonEnd, int lessonStartIntEnum, int lessonEndIntEnum, Boolean online) {
+    public WorkDay(LocalDate date, Subject subject, Teacher teacher, Schedule schedule,
+                   Classroom classroom, String lessonStart, String lessonEnd, int lessonStartIntEnum,
+                   int lessonEndIntEnum, Boolean online) {
         this.date = date;
         this.subject = subject;
         this.teacher = teacher;
