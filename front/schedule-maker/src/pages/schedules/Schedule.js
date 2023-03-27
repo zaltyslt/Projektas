@@ -17,7 +17,6 @@ export function Schedule() {
   const [schedule, setSchedule] = useState([]);
   const [holiday, setHoliday] = useState([]);
   const params = useParams();
-  const [myMap, setMyMap] = useState(new Map());
 
   const subjectColors = [
     "#f5c5c4",
@@ -28,26 +27,14 @@ export function Schedule() {
     "#c4f5f2",
     "#c4d3f5",
     "#d8c4f5",
-    "#d6fc9c",
-    "#d5bdf9",
-    "#ffcac6",
-    "#a3b4ff",
-    "#88f7a0",
-    "#f1fc8d",
-    "#ffc6e5",
-    "#81efed",
-    "#f49a97",
-    "#93c7ff",
-    "#f9bd84",
+    "#f5c4e3",
   ];
 
-  const subjectColorMap = { index: 0 };
-  const color = schedule.forEach((s) => {
+  const subjectColorMap = {};
+  schedule.forEach((s) => {
     if (!subjectColorMap[s.subject.id]) {
-      subjectColorMap[s.subject.id] = subjectColors[subjectColorMap.index];
-      subjectColorMap.index + 1 === subjectColors.length
-        ? (subjectColorMap.index = 0)
-        : (subjectColorMap.index += 1);
+      subjectColorMap[s.subject.id] =
+        subjectColors[Math.floor(Math.random() * subjectColors.length)];
     }
   });
 
@@ -140,6 +127,7 @@ export function Schedule() {
         )
       ),
       allDay: true,
+      url: `http://localhost:3000/schedule-maker#/schedules/edit-holidays/${holiday.id}`,
       color: "#cccccc",
     })),
   ];

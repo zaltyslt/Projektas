@@ -177,7 +177,7 @@ export function ScheduleView() {
                         <Button
                           id="remove-button-view-schedule"
                           variant="contained"
-                          onClick={() => handleOpen(subject.id, subject.hours)}
+                          onClick={() => handleOpen(subject.subject, subject.hours)}
                         >
                           Atšaukti
                         </Button>
