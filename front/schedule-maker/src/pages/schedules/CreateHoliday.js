@@ -202,7 +202,6 @@ export function CreateHoliday() {
               >
                 Išsaugoti
               </Button>
-
               <Link to={"/planning/" + params.id}>
                 <Button id="back-button-create-schedule" variant="contained">
                   Grįžti

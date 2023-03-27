@@ -27,6 +27,7 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Slide from "@mui/material/Slide";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
+import { dateToUtc } from "../../helpers/helpers";
 
 const Transition = forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -46,6 +47,36 @@ export function ScheduleList() {
     setidToDelete(subjectId);
     setOpen(true);
   };
+
+  const handleClickPrint = (scheduleId) => {
+    // console.log(scheduleId);
+    fetch(`api/v1/schedules/excel?id=${scheduleId}`, {
+      method: "Get",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+    .then((response) => {
+      clearMessages();
+      if (response.ok) {
+        setCreateMessage("Tvarkaraščio failas paruoštas.");
+      } else {
+        setErrorMessage(`Tvarkaraščio failo paruošti nepavyko.`);
+      }
+      return response;
+    }).then((response) => {
+      const filename =  response.headers.get('Content-Disposition').split('filename=')[1];
+      console.log(filename);
+      response.blob().then(blob => {
+        let url = window.URL.createObjectURL(blob);
+        let a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        a.click();
+    });
+
+    });
+  }
 
   const handleClose = () => {
     setOpen(false);
@@ -133,6 +164,22 @@ export function ScheduleList() {
     pageNumbers.push(i);
   }
 
+  // const indexOfLastSchedule2 = currentPage2 * schedulesPerPage2;
+  // const indexOfFirstSchedule2 = indexOfLastSchedule2 - schedulesPerPage2;
+  // const currentSchedule2 = filteredDisabledSchedules.slice(
+  //   indexOfFirstSchedule2,
+  //   indexOfLastSchedule2
+  // );
+
+  // const pageNumbers2 = [];
+  // for (
+  //   let i = 1;
+  //   i <= Math.ceil(filteredDisabledSchedules.length / schedulesPerPage2);
+  //   i++
+  // ) {
+  //   pageNumbers2.push(i);
+  // }
+
   const handleChange = (newValue) => {
     isNaN(newValue) ? setDate(null) : setDate(newValue);
     clearMessages();
@@ -155,8 +202,7 @@ export function ScheduleList() {
           <DialogTitle>{"Ar tikrai norite ištrinti tvarkaraštį?"}</DialogTitle>
           <DialogContent>
             <DialogContentText id="alert-dialog-slide-description">
-              Ištrynus tvarkaraštį {idToDelete}, visi su juo susieti resursai
-              bus atlaisvinti, o duomenys pašalinti negrįžtamai.
+              Ištrynus tvarkaraštį jis bus pašalintas negrįžtamai;
             </DialogContentText>
           </DialogContent>
           <DialogActions>
@@ -200,7 +246,7 @@ export function ScheduleList() {
                 onChange={(e) => setFilter(e.target.value)}
                 onFocus={clearMessages}
               ></TextField>
-            </Grid>
+               </Grid>
 
             <Grid item sm={4}>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -281,16 +327,6 @@ export function ScheduleList() {
                       )}
                     </TableCell>
 
-                    <TableCell>
-                      <Button
-                        id="delete-button-list-schedule"
-                        variant="contained"
-                        startIcon={<DeleteIcon />}
-                        onClick={() => handleClickOpen(schedule.id)}
-                      >
-                        Ištrinti
-                      </Button>
-                    </TableCell>
                     <TableCell className="action" align="center">
                       <Link to={`/planning/${schedule.id}`}>
                         <Button
@@ -301,6 +337,18 @@ export function ScheduleList() {
                         </Button>
                       </Link>
                     </TableCell>
+
+                    <TableCell>
+                      <Button
+                        id="delete-button-list-schedule"
+                        variant="contained"
+                        // startIcon={<DeleteIcon />}
+                        onClick={() => handleClickOpen(schedule.id)}
+                      >
+                        Ištrinti
+                      </Button>
+                    </TableCell>
+
                   </TableRow>
                 ))}
             </TableBody>

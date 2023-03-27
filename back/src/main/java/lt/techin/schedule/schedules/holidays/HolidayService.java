@@ -24,7 +24,8 @@ public class HolidayService {
     }
 
     public List<Holiday> getById(Long id) {
-        return holidayRepository.findByScheduleId(id);
+        var aa = holidayRepository.findByScheduleId(id);
+        return aa;
     }
 
     public Holiday create(Holiday holiday, Long id) {
