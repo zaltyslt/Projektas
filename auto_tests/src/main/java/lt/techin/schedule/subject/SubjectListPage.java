@@ -55,6 +55,7 @@ public class SubjectListPage extends AbstractPage {
         subjectList.get(subjectIndex).click();
     }
     public void markCheckBox() {
+        scrollToElement(markCheckbox);
         if (!markCheckbox.isSelected()) {
             markCheckbox.click();
         }

@@ -58,7 +58,8 @@ public class SubjectEditPage extends AbstractPage {
         backButton.click();
     }
     public void clickDeleteButton() {
-        deleteSubjectButton.click();
+        WaitUtils.getVisibleWithWait(deleteSubjectButton, driver).click();
+//        deleteSubjectButton.click();
     }
     public List<String> getSelectModuleOptions() {
         selectModuleOptions = new SelectOptionElement(selectModule, driver);

@@ -5,6 +5,7 @@ import lt.techin.schedule.room.RoomEditPage;
 import lt.techin.schedule.room.RoomListPage;
 import lt.techin.schedule.room.RoomViewPage;
 import org.junit.jupiter.api.Test;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import lt.techin.schedule.utils.RandomUtils;

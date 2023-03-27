@@ -20,6 +20,11 @@ public class WaitUtils {
                 .until(visibilityOf(webElement));
     }
 
+    public static WebElement getClickableWithWait(WebElement webElement, WebDriver driver) {
+        return new WebDriverWait(driver, Duration.ofSeconds(2))
+                .until(elementToBeClickable(webElement));
+    }
+
     public static List<WebElement> getVisibleElementsWithWait(By by, WebDriver driver) {
         return new WebDriverWait(driver, Duration.ofSeconds(2))
                 .until(visibilityOfAllElementsLocatedBy(by));
