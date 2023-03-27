@@ -641,16 +641,16 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
           
           <Grid item sm={12}>
             <Stack direction="row" spacing={2}>
-              <Button variant="contained" onClick={preCreateCheck}>
+              <Button id="save-button-teacher" variant="contained" onClick={preCreateCheck}>
                 {mode === "update" ? "Išsaugoti" : "Išsaugoti"}
               </Button>
               {mode === "update" && (
-                <Button variant="contained" onClick={deleteTeacher}>
+                <Button id="delete-button-edit-teacher" variant="contained" onClick={deleteTeacher}>
                   Ištrinti
                 </Button>
               )}
 
-              <Button variant="contained" onClick={() => navigate("/teachers")}>
+              <Button id="back-button-teacher" variant="contained" onClick={() => navigate("/teachers")}>
                 Grįžti
               </Button>
             </Stack>
