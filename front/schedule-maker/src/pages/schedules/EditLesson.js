@@ -152,8 +152,8 @@ export function EditLesson() {
             {"Ar tikrai norite ištrinti pasirinktą pamoką visam laikui?"}
           </DialogTitle>
           <DialogActions>
-            <Button onClick={handleDelete}>Ištrinti</Button>
             <Button onClick={handleClose}>Atšaukti</Button>
+            <Button onClick={handleDelete}>Ištrinti</Button>
           </DialogActions>
         </Dialog>
         <h1>Redagavimas</h1>
@@ -230,12 +230,12 @@ export function EditLesson() {
                 <Button variant="contained" onClick={updateLesson}>
                   Išsaugoti
                 </Button>
-                <Link to={`/schedules/${schedule.id}`}>
-                  <Button variant="contained">Atšaukti</Button>
-                </Link>
                 <Button variant="contained" onClick={handlePrompt}>
                   Ištrinti
                 </Button>
+                <Link to={`/schedules/${schedule.id}`}>
+                  <Button variant="contained">Grįžti</Button>
+                </Link>
               </Stack>
             </Grid>
           </Grid>

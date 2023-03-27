@@ -18,6 +18,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.time.LocalDate;
@@ -25,7 +27,6 @@ import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalAdjusters;
-import java.time.temporal.WeekFields;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -260,13 +261,11 @@ public class ScheduleToExcelService {
                 PrintSetup printSetup = sheet.getPrintSetup();
                 printSetup.setLandscape(true);
 
-
                     //the header row: centered text in 18pt font
-                   var aass =sheet.getLastRowNum()+1;
+
                     Row headerRow = sheet.createRow(sheet.getLastRowNum()+1);
                     headerRow.setHeightInPoints(40);
                     Cell titleCell = headerRow.createCell(0);
-
 
                     titleCell.setCellValue(month.getGroup() + ", " + getTitleYears(month.getWorkDays()));
                     titleCell.setCellStyle(styles.get("title"));
@@ -294,19 +293,19 @@ public class ScheduleToExcelService {
                 Map<Long, CellStyle> colors = new HashMap<>();
                 while (workDays.size() > wdCount) {
 
-                    createRows(sheet, 5);
-                    var actualRow = sheet.getLastRowNum() - 4;
+                    createRows(sheet, 4);
+                    var actualRow = sheet.getLastRowNum() - 3;
                     createCells(sheet, actualRow, sheet.getLastRowNum(), 0);
-                    setCellsStyle(sheet, styles, "week", 0, actualRow, actualRow + 4);
+                    setCellsStyle(sheet, styles, "week", 0, actualRow, actualRow + 3);
 
                     Cell nullCell = sheet.getRow(actualRow).getCell(0);
                     nullCell.setCellValue(getWeekTitle(workDays.get(wdCount).getDate()));
-                    sheet.addMergedRegion(CellRangeAddress.valueOf("$A$" + (actualRow + 1) + ":$A$" + (actualRow + 5)));
+                    sheet.addMergedRegion(CellRangeAddress.valueOf("$A$" + (actualRow + 1) + ":$A$" + (actualRow + 4)));
                     nullCell.setCellStyle(styles.get("week"));
 
                     for (int d = 1; d < 6; d++) {
 
-                        createCells(sheet, actualRow, actualRow + 4, d);
+                        createCells(sheet, actualRow, actualRow + 3, d);
 
                         if (wdCount < workDays.size() && workDays.get(wdCount).getDate().getDayOfWeek().getValue() == cnt) {
                             var current = workDays.get(wdCount);
@@ -316,7 +315,7 @@ public class ScheduleToExcelService {
 
                             if (current.getId() != null && current.getOnline() != null) {
                                 //aprasyti diena
-                                setCellsStyle(sheet, styles, "common", d, actualRow, actualRow + 4);
+                                setCellsStyle(sheet, styles, "common", d, actualRow, actualRow + 3);
                                 sheet.getRow(actualRow + 1).getCell(d).setCellValue(current.getLessonStart() != null
                                         ? current.getLessonStart() + " - " + current.getLessonEnd()
                                         : "");
@@ -329,7 +328,7 @@ public class ScheduleToExcelService {
                                 } else {
                                     sheet.getRow(actualRow + 3).getCell(d).setCellValue("Klasė: " + current.getClassroom().getClassroomName());
                                 }
-                                sheet.getRow(actualRow + 4).getCell(d).setCellValue(current.getDate().toString());
+//                                sheet.getRow(actualRow + 4).getCell(d).setCellValue(current.getDate().toString());
 
                                 //paint subject name
                                 subjectStyling(wb, colors, current);
@@ -338,16 +337,16 @@ public class ScheduleToExcelService {
 
                             } else if (current.getId() == null && current.getOnline() != null) {
                                 // aprasyti atostogas
-                                setCellsStyle(sheet, styles, "holiday", d, actualRow, actualRow + 4);
+                                setCellsStyle(sheet, styles, "holiday", d, actualRow, actualRow + 3);
                             }else{
-                                setCellsStyle(sheet, styles, "empty", d, actualRow, actualRow + 4);
+                                setCellsStyle(sheet, styles, "empty", d, actualRow, actualRow + 3);
                             }
                             cnt++;
                             wdCount++;
 
                         } else {
                             //piesiam tusciadieni
-                            setCellsStyle(sheet, styles, "empty", d, actualRow, actualRow + 4);
+                            setCellsStyle(sheet, styles, "empty", d, actualRow, actualRow + 3);
                             cnt++;
                         }
                         if (workDays.size() == wdCount && (cnt - 1) % 5 == 0) {
@@ -355,7 +354,7 @@ public class ScheduleToExcelService {
                         }
                     }
 
-                    CellRangeAddress range = CellRangeAddress.valueOf("A" + (actualRow + 1) + ":F" + (actualRow + 5));
+                    CellRangeAddress range = CellRangeAddress.valueOf("A" + (actualRow + 1) + ":F" + (actualRow + 4));
 
                     //Apply a border to the range
                     RegionUtil.setBorderTop(BorderStyle.MEDIUM, range, sheet);
@@ -385,17 +384,14 @@ public class ScheduleToExcelService {
             }
 
             try (FileOutputStream out = new FileOutputStream(file)) {
-                wb.write(out);
-                var aa = file.getPath();
-//                var bb = file.getName();
-                return aa;
+              wb.write(out);
+                return file.getPath();
             }
 
         } catch (Exception e) {
             logger.error("#ME: " + e.toString());
             throw new ValidationException("Nepavyko sukurti Excel failo", "", "", "");
         }
-//        return null;
     }
 
     public void cleaner(){

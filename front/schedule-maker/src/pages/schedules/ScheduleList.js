@@ -331,26 +331,6 @@ export function ScheduleList() {
                       )}
                     </TableCell>
 
-
-                    <TableCell>
-                      <Button
-                        variant="outlined"
-                        startIcon={<DeleteIcon />}
-                        onClick={() => handleClickPrint(schedule.id)}
-                      >
-                        Spausdinti
-                      </Button>
-                    </TableCell>
-                    <TableCell>
-                      <Button
-                        id="delete-button-list-schedule"
-                        variant="outlined"
-                        startIcon={<DeleteIcon />}
-                        onClick={() => handleClickOpen(schedule.id)}
-                      >
-                        Ištrinti
-                      </Button>
-                    </TableCell>
                     <TableCell className="action" align="center">
                       <Link to={`/planning/${schedule.id}`}>
                         <Button
@@ -361,6 +341,18 @@ export function ScheduleList() {
                         </Button>
                       </Link>
                     </TableCell>
+                    
+                    <TableCell>
+                      <Button
+                        id="delete-button-list-schedule"
+                        variant="contained"
+                        // startIcon={<DeleteIcon />}
+                        onClick={() => handleClickOpen(schedule.id)}
+                      >
+                        Ištrinti
+                      </Button>
+                    </TableCell>
+                    
                   </TableRow>
                 ))}
             </TableBody>

@@ -41,7 +41,6 @@ export function ScheduleView() {
   }, []);
 
   const handleRemove = () => {
-  
     fetch(`api/v1/schedules/${params.id}/remove-lessons/${subjectId}`, {
       method: "PATCH",
       headers: {
@@ -90,7 +89,9 @@ export function ScheduleView() {
           onClose={handleClose}
           aria-describedby="alert-dialog-slide-description"
         >
-          <DialogTitle>{"Ar tikrai norite ištrinti suplanuotas dalyko pamokas?"}</DialogTitle>
+          <DialogTitle>
+            {"Ar tikrai norite ištrinti suplanuotas dalyko pamokas?"}
+          </DialogTitle>
           <DialogContent>
             <DialogContentText id="alert-dialog-slide-description">
               Visos suplanuotos pamokos bus ištrintos iš tvarkaraščio.
@@ -190,14 +191,14 @@ export function ScheduleView() {
 
           <Grid item sm={12}>
             <Stack direction="row" spacing={2}>
-              <Link to="/">
-                <Button id="back-button-view-schedule" variant="contained">
-                  Grįžti
-                </Button>
-              </Link>
               <Link to={"/schedules/" + params.id}>
                 <Button id="schedule-button-view-schedule" variant="contained">
                   Tvarkaraštis
+                </Button>
+              </Link>
+              <Link to="/">
+                <Button id="back-button-view-schedule" variant="contained">
+                  Grįžti
                 </Button>
               </Link>
             </Stack>

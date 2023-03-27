@@ -10,6 +10,8 @@ import "./ViewSchedule.css";
 import { Stack } from "@mui/system";
 import { Button, Grid } from "@mui/material";
 import adaptivePlugin from "@fullcalendar/adaptive";
+import EditIcon from '@mui/icons-material/Edit';
+import LocalPrintshopIcon from '@mui/icons-material/LocalPrintshop';
 
 export function Schedule() {
   const [weekendsVisible, setWeekendsVisible] = useState(true);
@@ -32,6 +34,11 @@ export function Schedule() {
       .then((data) => setHoliday(data))
       .catch((error) => console.error(error));
   }, [params.id]);
+  
+  useEffect(() => {
+    const div = document.querySelector('.fc-license-message');
+    div.style.visibility = 'hidden'; // or 'visible' to show the div
+  }, []);
 
 /////////////////////////////////
 const handleClickPrint = (scheduleId, paged) => {
@@ -150,39 +157,40 @@ const handleClickPrint = (scheduleId, paged) => {
 
       <Grid item sm={10} className="button-container">
         <Stack direction="row" spacing={2}>
-          <Link to="/">
-            <Button id="back-button-schedule" variant="contained">
-              Grįžti
-            </Button>
-          </Link>
           <Link to={"/planning/" + params.id}>
             <Button id="plan-button-schedule" variant="contained">
               Planavimas
             </Button>
           </Link>
-          <Button
+          {/* <Button
             id="print-button-schedule"
             variant="contained"
             onClick={() => window.print()}
           >
             Spausdinti kalendorių
-          </Button>
+          </Button> */}
           
                       <Button
-                        variant="outlined"
+                        variant="contained"
+                        // startIcon={<LocalPrintshopIcon />}
                         
                         onClick={() => handleClickPrint(params.id, true)}
                       >
-                        Excelinti
+                      SPAUSDINTI EXCEL
                       </Button>
                       <Button
-                        variant="outlined"
+                        variant="contained"
+                        // startIcon={<EditIcon />}
                         
                         onClick={() => handleClickPrint(params.id, false)}
                       >
-                        Excelinti 2
+                        REDAGUOTI EXCEL
                       </Button>
-                    
+                      <Link to="/">
+            <Button id="back-button-schedule" variant="contained">
+              Grįžti
+            </Button>
+          </Link>    
         </Stack>
       </Grid>
     </div>
