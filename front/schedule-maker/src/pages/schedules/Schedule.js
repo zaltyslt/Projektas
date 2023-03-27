@@ -40,11 +40,23 @@ export function Schedule() {
     "#f9bd84",
   ];
 
-  const subjectColorMap = {};
+  // biski pasilikau jeigu reikes sito
+  // const subjectColorMap = {};
+  // schedule.forEach((s) => {
+  //   if (!subjectColorMap[s.subject.id]) {
+  //     subjectColorMap[s.subject.id] =
+  //       subjectColors[Math.floor(Math.random() * subjectColors.length)];
+  //   }
+  // });
+
+  const subjectColorMap = { index: 0 };
   schedule.forEach((s) => {
     if (!subjectColorMap[s.subject.id]) {
-      subjectColorMap[s.subject.id] =
-        subjectColors[Math.floor(Math.random() * subjectColors.length)];
+      subjectColorMap[s.subject.id] = subjectColors[subjectColorMap.index];
+      subjectColorMap.index += 1;
+      subjectColorMap.index + 1 === subjectColors.length
+        ? (subjectColorMap.index = 0)
+        : (subjectColorMap.index += 1);
     }
   });
 

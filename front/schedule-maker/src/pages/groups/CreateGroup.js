@@ -313,30 +313,34 @@ export function CreateGroup() {
             </Grid>
           </Grid>
 
-          <Grid item sm={4}>
-            {isPostUsed ? (
-              successfulPost ? (
-                <Alert severity="success"> Grupė sėkmingai sukurta.</Alert>
+          <Grid container rowSpacing={2} marginTop={1}>
+            <Grid item sm={8}>
+              {isPostUsed ? (
+                successfulPost ? (
+                  <Alert severity="success"> Grupė sėkmingai sukurta.</Alert>
+                ) : (
+                  <Grid>
+                    <Alert severity="warning">Nepavyko sukurti grupės.</Alert>
+                    {groupErrors.passedValidation
+                      ? groupErrors.databaseErrors.map(
+                          (databaseError, index) => (
+                            <Alert key={index} severity="warning">
+                              {databaseError}
+                            </Alert>
+                          )
+                        )
+                      : Object.keys(groupErrors.validationErrors).map((key) => (
+                          <Alert key={key} severity="warning">
+                            {" "}
+                            {groupErrors.validationErrors[key]} {key} laukelyje.
+                          </Alert>
+                        ))}
+                  </Grid>
+                )
               ) : (
-                <Grid>
-                  <Alert severity="warning">Nepavyko sukurti grupės.</Alert>
-                  {groupErrors.passedValidation
-                    ? groupErrors.databaseErrors.map((databaseError, index) => (
-                        <Alert key={index} severity="warning">
-                          {databaseError}
-                        </Alert>
-                      ))
-                    : Object.keys(groupErrors.validationErrors).map((key) => (
-                        <Alert key={key} severity="warning">
-                          {" "}
-                          {groupErrors.validationErrors[key]} {key} laukelyje.
-                        </Alert>
-                      ))}
-                </Grid>
-              )
-            ) : (
-              <div></div>
-            )}
+                <div></div>
+              )}
+            </Grid>
           </Grid>
         </form>
       </Container>
