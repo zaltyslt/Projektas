@@ -237,7 +237,8 @@ export function ModifyShift() {
             </Link>
           </Stack>
         </Grid>
-        <Grid item sm={8}>
+        <Grid container rowSpacing={2} marginTop={1}>
+            <Grid item sm={8}>
           {isPostUsed ? (
             successfulPost ? (
               <Alert severity="success">
@@ -265,6 +266,7 @@ export function ModifyShift() {
           ) : (
             <div></div>
           )}
+        </Grid>
         </Grid>
       </Container>
     </div>
