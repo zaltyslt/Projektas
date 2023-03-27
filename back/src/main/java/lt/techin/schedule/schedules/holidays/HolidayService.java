@@ -1,5 +1,6 @@
 package lt.techin.schedule.schedules.holidays;
 
+import lt.techin.schedule.exceptions.ValidationException;
 import lt.techin.schedule.schedules.Schedule;
 import lt.techin.schedule.schedules.ScheduleRepository;
 import org.springframework.stereotype.Service;
@@ -43,5 +44,18 @@ public class HolidayService {
             }
             return null;
         }
+    }
+
+    public Holiday getHolidayById(Long holidayId) {
+        return holidayRepository.findById(holidayId).orElseThrow(() -> new ValidationException("Nurodytos atostogos neegzistuoja.", "Holiday", "Does nor exist", holidayId.toString()));
+    }
+
+    public Holiday update(Long holidayId, Holiday holiday) {
+        Holiday existingHoliday = holidayRepository.findById(holidayId).orElseThrow(() -> new ValidationException("Nurodytos atostogos neegzistuoja.", "Holiday", "Does nor exist", holidayId.toString()));
+        existingHoliday.setHolidayName(holiday.getHolidayName());
+        existingHoliday.setDateFrom(holiday.getDateFrom());
+        existingHoliday.setDateUntil(holiday.getDateUntil());
+
+        return holidayRepository.save(existingHoliday);
     }
 }
