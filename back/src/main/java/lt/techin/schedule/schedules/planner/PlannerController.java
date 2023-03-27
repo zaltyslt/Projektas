@@ -68,4 +68,9 @@ public class PlannerController {
         logger.log(Level.INFO, "The work day id {0} was deleted.", workDayId);
         return ok(result);
     }
+
+//    @GetMapping("/scheduleIdWithClassroomNameConflict")
+//    public ResponseEntity<WorkDay> scheduleIdWithClassroomNameConflict() {
+//        return ok(plannerService.)
+//    }
 }
