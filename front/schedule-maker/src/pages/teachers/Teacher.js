@@ -241,10 +241,10 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
       setErrorMessage(result.message);
     } else {
       if (mode === "update") {
-        setCreateMessage("Duomenys atnaujinti sėkmingai.");
+        setCreateMessage("Mokytojo duomenys sėkmingai atnaujinti.");
         setCurrentTeacherName(teacher.fName +" "+teacher.lName);
       } else {
-        setCreateMessage("Mokytojas sukurtas");
+        setCreateMessage("Mokytojas sėkmingai sukurtas");
         clear();
       }
       setErrorMessage("");

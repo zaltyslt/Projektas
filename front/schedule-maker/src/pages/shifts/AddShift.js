@@ -198,10 +198,10 @@ export function AddShift() {
           <Grid item sm={8}>
             {isPostUsed ? (
               successfulPost ? (
-                <Alert severity="success"> Pamaina sėkmingai pridėta.</Alert>
+                <Alert severity="success"> Pamaina sėkmingai sukurta.</Alert>
               ) : (
                 <Grid>
-                  <Alert severity="warning">Nepavyko pridėti pamainos.</Alert>
+                  <Alert severity="warning">Nepavyko sukurti pamainos.</Alert>
                   {shiftErrors.passedValidation
                     ? shiftErrors.databaseErrors.map((databaseError, index) => (
                         <Alert key={index} severity="warning">

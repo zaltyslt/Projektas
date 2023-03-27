@@ -181,7 +181,7 @@ public class TeacherServiceDo {
             if (newTeacherContacts.get(ContactType.PHONE_NUMBER).equals(teacherContacts.get(ContactType.PHONE_NUMBER)) ||
                     newTeacherContacts.get(ContactType.DIRECT_EMAIL).equals(teacherContacts.get(ContactType.DIRECT_EMAIL))
             ) {
-                throw new TeacherException(HttpStatus.CONFLICT, "Bandoma įvesti esamą mokytoją !!!");
+                throw new TeacherException(HttpStatus.CONFLICT, "Toks mokytojas jau sukurtas.");
             }
         }
         return true;

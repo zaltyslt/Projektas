@@ -141,7 +141,7 @@ export function UpdateProgram() {
               setError("Programos sukurti nepavyko: ", error);
             });
         } else {
-          setSuccess("Sėkmingai atnaujinote!");
+          setSuccess("Programos duomenys sėkmingai atnaujinti.");
         }
       });
     }
