@@ -10,8 +10,7 @@ import "./ViewSchedule.css";
 import { Stack } from "@mui/system";
 import { Button, Grid } from "@mui/material";
 import adaptivePlugin from "@fullcalendar/adaptive";
-import EditIcon from '@mui/icons-material/Edit';
-import LocalPrintshopIcon from '@mui/icons-material/LocalPrintshop';
+import { render } from "preact/compat";
 
 export function Schedule() {
   const [weekendsVisible, setWeekendsVisible] = useState(true);
@@ -19,12 +18,22 @@ export function Schedule() {
   const [holiday, setHoliday] = useState([]);
   const params = useParams();
 
+  const subjectColors = [
+    "#f5c5c4",
+    "#f5ddc4",
+    "#f5f3c4",
+    "#daf5c4",
+    "#c4f5d8",
+    "#c4f5f2",
+    "#c4d3f5",
+    "#d8c4f5",
+    "#f5c4e3",
+  ];
+
   useEffect(() => {
     fetch(`api/v1/schedules/${params.id}/lessons`)
       .then((response) => response.json())
-      .then((data) => {setSchedule(data);
-      // console.log(data);
-    })
+      .then((data) => setSchedule(data))
       .catch((error) => console.error(error));
   }, [params.id]);
 
@@ -34,7 +43,7 @@ export function Schedule() {
       .then((data) => setHoliday(data))
       .catch((error) => console.error(error));
   }, [params.id]);
-  
+
   useEffect(() => {
     const div = document.querySelector('.fc-license-message');
     div.style.visibility = 'hidden'; // or 'visible' to show the div
@@ -43,7 +52,7 @@ export function Schedule() {
 /////////////////////////////////
 const handleClickPrint = (scheduleId, paged) => {
   // console.log(scheduleId);
-  const fetchTo = paged 
+  const fetchTo = paged
     ? `api/v1/schedules/excel?id=${scheduleId}&p=true`
     : `api/v1/schedules/excel?id=${scheduleId}&p=false`;
   fetch(fetchTo , {
@@ -70,7 +79,7 @@ const handleClickPrint = (scheduleId, paged) => {
       a.download = filename;
       a.click();
   });
-    
+
   });
 }
 ////////////////////////////////
@@ -79,29 +88,40 @@ const handleClickPrint = (scheduleId, paged) => {
 
 
   const events = [
-    ...schedule.map((schedule) => ({
-      title: `<b>${schedule.subject.name}</b>
-        <br />
-        ${schedule.lessonStart} - ${schedule.lessonEnd}
-        <br /> 
-        ${schedule.teacher ? schedule.teacher.lName : ""} ${
-        schedule.teacher ? schedule.teacher.fName : "nepasirinktas"
-      }
-        <br />
-        ${
-          schedule.online ? "Nuotolinė pamoka" : schedule.classroom.classroomName
-        }<br />
-        `,
-      start: schedule.date,
-      allDay: true,
-      url: `http://localhost:3000/schedule-maker#/schedules/edit-lesson/${schedule.id}`,
-    })),
+    ...schedule.map((schedule) => {
+      const color = subjectColors[schedule.subject.id];
+      return {
+        title: `<b>${schedule.subject.name}</b>
+          <br />
+          ${schedule.lessonStart} - ${schedule.lessonEnd}
+          <br /> 
+          ${schedule.teacher ? schedule.teacher.lName : ""} ${
+          schedule.teacher ? schedule.teacher.fName : "nepasirinktas"
+        }
+          <br />
+          ${
+            schedule.online
+              ? "Nuotolinė pamoka"
+              : schedule.classroom.classroomName
+          }<br />
+          `,
+        start: schedule.date,
+        allDay: true,
+        url: `http://localhost:3000/schedule-maker#/schedules/edit-lesson/${schedule.id}`,
+        color: color,
+      };
+    }),
     ...holiday.map((holiday) => ({
       title: `<b>${holiday.name}</b>`,
       start: holiday.dateFrom,
-      end: holiday.dateUntil,
-      allDay: true
-    }))
+      end: new Date(
+        new Date(holiday.dateUntil).setDate(
+          new Date(holiday.dateUntil).getDate() + 1
+        )
+      ),
+      allDay: true,
+      color: "#cccccc",
+    })),
   ];
 
   const renderEventContent = (eventInfo) => (
@@ -112,7 +132,6 @@ const handleClickPrint = (scheduleId, paged) => {
           fontSize: "16px",
           padding: "10px",
           fontFamily: "Arial, sans-serif",
-          backgroundColor: "#dcedf7",
           color: "black",
         }}
         dangerouslySetInnerHTML={{ __html: eventInfo.event.title }}
@@ -169,11 +188,11 @@ const handleClickPrint = (scheduleId, paged) => {
           >
             Spausdinti kalendorių
           </Button> */}
-          
+
                       <Button
                         variant="contained"
                         // startIcon={<LocalPrintshopIcon />}
-                        
+
                         onClick={() => handleClickPrint(params.id, true)}
                       >
                       SPAUSDINTI EXCEL
@@ -181,7 +200,7 @@ const handleClickPrint = (scheduleId, paged) => {
                       <Button
                         variant="contained"
                         // startIcon={<EditIcon />}
-                        
+
                         onClick={() => handleClickPrint(params.id, false)}
                       >
                         REDAGUOTI EXCEL
@@ -190,7 +209,7 @@ const handleClickPrint = (scheduleId, paged) => {
             <Button id="back-button-schedule" variant="contained">
               Grįžti
             </Button>
-          </Link>    
+          </Link>
         </Stack>
       </Grid>
     </div>

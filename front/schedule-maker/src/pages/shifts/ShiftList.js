@@ -160,7 +160,7 @@ export function ShiftList() {
         </Grid>
 
         <TableContainer component={Paper}>
-          <Table aria-label="custom pagination table">
+          <Table id="active-shift-list-table" aria-label="custom pagination table">
             <TableHead>
               <TableRow>
                 <TableCell style={{ width: "500px" }}>
@@ -232,7 +232,7 @@ export function ShiftList() {
         </FormGroup>
         {isChecked && (
           <TableContainer component={Paper}>
-            <Table aria-label="custom pagination table">
+            <Table id="inactive-shift-list-table" aria-label="custom pagination table">
               <TableHead>
                 <TableRow>
                   <TableCell style={{ width: "500px" }}>

@@ -285,6 +285,7 @@ export function UpdateProgram() {
                 {subjectHoursList.map((form, index) => {
                   return (
                     <Grid
+                    marginBottom={2}
                       container
                       spacing={{ xs: 2, md: 3 }}
                       rowSpacing={{ xs: 3, sm: 3, md: 3 }}

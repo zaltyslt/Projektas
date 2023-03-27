@@ -76,9 +76,7 @@ export function AddLesson() {
   }, [lessonStartingTime, lessonEndTime]);
 
   useEffect(() => {
-    fetch(
-      `api/v1/teachers/subject?subjectId=${params.id}&shiftId=${shiftId}`
-    )
+    fetch(`api/v1/teachers/subject?subjectId=${params.id}&shiftId=${shiftId}`)
       .then((response) => response.json())
       .then(setTeachers);
   }, []);

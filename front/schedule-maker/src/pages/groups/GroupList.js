@@ -258,7 +258,7 @@ export function GroupList() {
         </Grid>
 
         <TableContainer component={Paper}>
-          <Table aria-label="custom pagination table">
+          <Table id="active-group-list-table" aria-label="custom pagination table">
             <TableHead>
               <TableRow>
                 <TableCell style={{ width: "250px" }}>Grupė</TableCell>
@@ -328,7 +328,7 @@ export function GroupList() {
 
         {isChecked && (
           <TableContainer component={Paper}>
-            <Table aria-label="custom pagination table">
+            <Table id="inactive-group-list-table" aria-label="custom pagination table">
               <TableHead>
                 <TableRow>
                   <TableCell style={{ width: "250px" }}>Grupė</TableCell>

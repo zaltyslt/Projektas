@@ -203,7 +203,7 @@ export function RoomList() {
         </Grid>
 
         <TableContainer component={Paper}>
-          <Table aria-label="custom pagination table">
+          <Table id="active-room-list-table" aria-label="custom pagination table">
             <TableHead>
               <TableRow>
                 <TableCell style={{ width: "500px" }}>
@@ -265,7 +265,7 @@ export function RoomList() {
         </FormGroup>
         {isChecked && (
           <TableContainer component={Paper}>
-            <Table aria-label="custom pagination table">
+            <Table id="inactive-room-list-table" aria-label="custom pagination table">
               <TableHead>
                 <TableRow>
                   <TableCell style={{ width: "500px" }}>

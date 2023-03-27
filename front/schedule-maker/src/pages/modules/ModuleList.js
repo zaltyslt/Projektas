@@ -140,7 +140,7 @@ export function ModuleList() {
         </Grid>
 
         <TableContainer component={Paper}>
-          <Table aria-label="custom pagination table">
+          <Table id="active-module-list-table" aria-label="custom pagination table">
             <TableHead>
               <TableRow>
                 <TableCell style={{ width: "500px" }}>Modulio kodas</TableCell>
@@ -212,7 +212,7 @@ export function ModuleList() {
 
         {isChecked && (
           <TableContainer component={Paper}>
-            <Table aria-label="custom pagination table">
+            <Table id="inactive-module-list-table" aria-label="custom pagination table">
               <TableHead>
                 <TableRow>
                   <TableCell style={{ width: "500px" }}>
