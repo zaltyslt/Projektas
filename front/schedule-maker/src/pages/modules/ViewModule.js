@@ -104,7 +104,7 @@ export function ViewModule() {
             </TableContainer>
           </Grid>
 
-          <Grid item sm={12} marginTop={2}>
+          <Grid item sm={12} marginTop={2} marginBottom={10}>
             <Stack direction="row" spacing={2}>
               <Link to={"/modules/edit/" + module.id}>
                 <Button id="edit-button-view-module" variant="contained">

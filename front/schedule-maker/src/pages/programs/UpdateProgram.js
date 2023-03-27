@@ -285,7 +285,7 @@ export function UpdateProgram() {
                 {subjectHoursList.map((form, index) => {
                   return (
                     <Grid
-                    marginBottom={2}
+                      marginBottom={2}
                       container
                       spacing={{ xs: 2, md: 3 }}
                       rowSpacing={{ xs: 3, sm: 3, md: 3 }}
@@ -366,12 +366,7 @@ export function UpdateProgram() {
                 })}
               </Grid>
             </Grid>
-            <Grid item sm={8}>
-              {" "}
-              <legend>{params.programName}</legend>
-              {error && <Alert severity="warning">{error}</Alert>}
-              {success && <Alert severity="success">{success}</Alert>}
-            </Grid>
+          
             <Grid item sm={8}>
               <Stack direction="row" spacing={2} marginTop={1}>
                 <Button
@@ -417,6 +412,13 @@ export function UpdateProgram() {
                   </Button>
                 </Link>
               </Stack>
+            </Grid>
+            
+            <Grid item sm={8}>
+              {" "}
+              <legend>{params.programName}</legend>
+              {error && <Alert severity="warning">{error}</Alert>}
+              {success && <Alert severity="success">{success}</Alert>}
             </Grid>
           </Grid>
         </form>

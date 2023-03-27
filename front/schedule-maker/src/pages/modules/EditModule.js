@@ -195,7 +195,9 @@ export function EditModule() {
           <Grid item sm={8}>
             {isPostUsed ? (
               successfulPost ? (
-                <Alert severity="success">Modulio duomenys sėkmingai atnaujinti.</Alert>
+                <Alert severity="success">
+                  Modulio duomenys sėkmingai atnaujinti.
+                </Alert>
               ) : (
                 <Grid>
                   <Alert severity="warning">Nepavyko pakeisti modulio.</Alert>

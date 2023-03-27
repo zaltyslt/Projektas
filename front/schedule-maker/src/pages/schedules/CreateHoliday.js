@@ -26,7 +26,7 @@ export function CreateHoliday() {
   const params = useParams();
 
   const createHoliday = () => {
-      fetch(`api/v1/schedules/holidays/create-holiday/${params.id}`, {
+    fetch(`api/v1/schedules/holidays/create-holiday/${params.id}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -57,7 +57,7 @@ export function CreateHoliday() {
     setDateFrom("");
     setDateUntil("");
     setError("");
-  }
+  };
 
   const validateName = (value) => {
     setName(value);
@@ -79,7 +79,7 @@ export function CreateHoliday() {
 
   const validateDateUntil = (value) => {
     setDateUntil(dateToUtc(value));
-  
+
     if (value.length === 0) {
       setDateUntilEmpty(true);
     } else {
@@ -187,12 +187,6 @@ export function CreateHoliday() {
               ></DatePicker>
             </LocalizationProvider>
           </Grid>
-
-          <Grid item sm={10}>
-            {error && <Alert severity="warning">{error}</Alert>}
-            {createMessage && <Alert severity="success">{createMessage}</Alert>}
-          </Grid>
-
           <Grid item sm={10}>
             <Stack direction="row" spacing={2}>
               <Button
@@ -208,6 +202,10 @@ export function CreateHoliday() {
                 </Button>
               </Link>
             </Stack>
+          </Grid>
+          <Grid item sm={10}>
+            {error && <Alert severity="warning">{error}</Alert>}
+            {createMessage && <Alert severity="success">{createMessage}</Alert>}
           </Grid>
         </Grid>
       </Container>
