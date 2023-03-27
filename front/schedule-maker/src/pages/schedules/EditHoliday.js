@@ -1,7 +1,16 @@
 import { Container } from "@mui/system";
-import { Alert, Button, Grid, Stack, TextField } from "@mui/material";
+import {
+  Alert,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogTitle,
+  Grid,
+  Stack,
+  TextField,
+} from "@mui/material";
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useHref } from "react-router-dom";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { dateToUtc } from "../../helpers/helpers";
@@ -12,7 +21,7 @@ export function EditHoliday() {
   const [name, setName] = useState("");
   const [dateFrom, setDateFrom] = useState("");
   const [dateUntil, setDateUntil] = useState("");
-  const [holidayId, setHolidayId] = useState("");
+  const [scheduleId, setScheduleId] = useState("");
 
   const [dateFromEmpty, setDateFromEmpty] = useState(false);
   const [dateUntilEmpty, setDateUntilEmpty] = useState(false);
@@ -23,15 +32,17 @@ export function EditHoliday() {
   const [errorMessageUntil, setErrorMessageUntil] = useState("");
   const [createMessage, setCreateMessage] = useState("");
   const [error, setError] = useState("");
+  const [openPrompt, setOpenPrompt] = useState(false);
 
   const params = useParams();
+  const calendarUrl = useHref(`/schedules/${scheduleId}`);
 
   useEffect(() => {
     fetch(`api/v1/schedules/holiday/${params.id}`)
       .then((response) => response.json())
       .then((data) => {
         setName(data.name);
-        setHolidayId(data.schedule.id);
+        setScheduleId(data.schedule.id);
       });
   }, []);
 
@@ -55,7 +66,7 @@ export function EditHoliday() {
 
   const validateDateUntil = (value) => {
     setDateUntil(dateToUtc(value));
-  
+
     if (value.length === 0) {
       setDateUntilEmpty(true);
     } else {
@@ -76,21 +87,19 @@ export function EditHoliday() {
         dateUntil: dateUntil.$d.toISOString().split("T")[0],
       }),
     }).then((response) => {
-        let success = response.ok;
-  
-        response.json().then((response) => {
-          if (!success) {
-            setCreateMessage("");
-            setError(response.message);
-          } else {
-            setCreateMessage("Sėkmingai sukurta. ");
-            setError("");
-            clear();
-          }
-        });
+      let success = response.ok;
+
+      response.json().then((response) => {
+        if (!success) {
+          setCreateMessage("");
+          setError(response.message);
+        } else {
+          setCreateMessage("Sėkmingai atnaujinta. ");
+          setError("");
+        }
       });
+    });
   };
-  
 
   const validation = () => {
     let isValid = true;
@@ -131,9 +140,40 @@ export function EditHoliday() {
     }
   };
 
+  const handleDelete = () => {
+    fetch(`api/v1/schedules/holidays/delete-holiday/${params.id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }).then(() => (window.location = calendarUrl));
+  };
+
+  const handleClose = () => {
+    setOpenPrompt(false);
+  };
+
+  const handlePrompt = () => {
+    setOpenPrompt(true);
+  };
+
   return (
     <div>
       <Container>
+        <Dialog
+          open={openPrompt}
+          keepMounted
+          onClose={handleClose}
+          aria-describedby="alert-dialog-slide-description"
+        >
+          <DialogTitle>
+            {"Ar tikrai norite ištrinti pasirinktas atostogas visam laikui?"}
+          </DialogTitle>
+          <DialogActions>
+            <Button onClick={handleClose}>Atšaukti</Button>
+            <Button onClick={handleDelete}>Ištrinti</Button>            
+          </DialogActions>
+        </Dialog>
         <h3>Atostogų redagavimas</h3>
         <Grid container rowSpacing={2} spacing={2}>
           <Grid item sm={10}>
@@ -144,7 +184,7 @@ export function EditHoliday() {
               id="name"
               name="name"
               value={name}
-              onChange = {(e) => validateName(e.target.value)}
+              onChange={(e) => validateName(e.target.value)}
               error={nameEmpty || validName}
               helperText={
                 validName
@@ -164,12 +204,12 @@ export function EditHoliday() {
                 format="YYYY/MM/DD"
                 value={dateFrom}
                 onChange={(e) => validateDateFrom(e)}
-                 slotProps={{
-                    textField: {
-                      helperText: errorMessageFrom,
-                      error: dateFromEmpty,
-                    },
-                  }}
+                slotProps={{
+                  textField: {
+                    helperText: errorMessageFrom,
+                    error: dateFromEmpty,
+                  },
+                }}
               ></DatePicker>
             </LocalizationProvider>
           </Grid>
@@ -183,11 +223,11 @@ export function EditHoliday() {
                 value={dateUntil}
                 onChange={(e) => validateDateUntil(e)}
                 slotProps={{
-                    textField: {
-                      helperText: errorMessageUntil,
-                      error: dateUntilEmpty,
-                    },
-                  }}
+                  textField: {
+                    helperText: errorMessageUntil,
+                    error: dateUntilEmpty,
+                  },
+                }}
               ></DatePicker>
             </LocalizationProvider>
           </Grid>
@@ -207,13 +247,17 @@ export function EditHoliday() {
                 Išsaugoti
               </Button>
 
-              <Link to={"/schedules/" + holidayId}>
+              <Link to={"/schedules/" + scheduleId}>
                 <Button id="back-button-edit-holiday" variant="contained">
                   Grįžti
                 </Button>
               </Link>
 
-              <Button id="delete-button-edit-holiday" variant="contained">
+              <Button
+                id="delete-button-edit-holiday"
+                variant="contained"
+                onClick={handlePrompt}
+              >
                 Ištrinti
               </Button>
             </Stack>
