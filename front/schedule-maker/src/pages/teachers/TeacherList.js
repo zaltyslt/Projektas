@@ -178,7 +178,7 @@ export function TeacherList() {
         </Grid>
 
         <TableContainer component={Paper}>
-          <Table aria-label="custom pagination table">
+          <Table id="active-teacher-list-table" aria-label="custom pagination table">
             <TableHead>
               <TableRow>
                 <TableCell style={{ width: "44%" }}>Vardas Pavardė</TableCell>
@@ -262,7 +262,7 @@ export function TeacherList() {
         </FormGroup>
         {isChecked && (
           <TableContainer component={Paper}>
-            <Table aria-label="custom pagination table">
+            <Table id="inactive-teacher-list-table" aria-label="custom pagination table">
               <TableHead>
                 <TableRow>
                   <TableCell style={{ width: "45%" }}>

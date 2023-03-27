@@ -23,19 +23,18 @@ export function UpdateProgram() {
   const [programName, setProgramName] = useState("");
   const [description, setDescription] = useState("");
   const invalidSymbols = "!@#$%^&*_+={}<>|~`\\\"'";
-  const invalidNumbers = /^(\d+)?$/
+  const invalidNumbers = /^(\d+)?$/;
   const [errorEmptyName, setErrorEmptyName] = useState(false);
   const [errorSymbolsName, setErrorSymbolsName] = useState(false);
   const [errorEmptyDesc, setErrorEmptyDesc] = useState(false);
   const [errorSymbolsDesc, setErrorSymbolsDesc] = useState(false);
-  const [subjects, setSubjects] = useState([])
-  const [subjectHoursList, setsubjectHoursList] = useState([])
+  const [subjects, setSubjects] = useState([]);
+  const [subjectHoursList, setsubjectHoursList] = useState([]);
   const [subjectNameError, setSubjectNameError] = useState(false);
   const [errorHours, setErrorHours] = useState(false);
   const [errorHoursNumber, setErrorHoursNumber] = useState(false);
   const [errorLengthName, setErrorLengthName] = useState(false);
   const [errorLengthDesc, setErrorLengthDesc] = useState(false);
-  
 
   const handleCNameeChange = (event) => {
     setProgramName(event.target.value);
@@ -175,13 +174,13 @@ export function UpdateProgram() {
 
   const addFields = () => {
     let object = {
-      subjectName: '',
-      subject: '',
-      deleted: '',
-      hours: ''
-    }
-    setsubjectHoursList([...subjectHoursList, object])
-  }
+      subjectName: "",
+      subject: "",
+      deleted: "",
+      hours: "",
+    };
+    setsubjectHoursList([...subjectHoursList, object]);
+  };
 
   const removeFields = (index) => {
     let data = [...subjectHoursList];
@@ -191,16 +190,18 @@ export function UpdateProgram() {
 
   const handleFormChange = (event, index) => {
     let data = [...subjectHoursList];
-    if (event.target.name === 'subjectName') {
-      const found = subjects.find(obj => { return obj.name === event.target.value })
-      data[index]['subjectName'] = event.target.value;
-      data[index]['deleted'] = found.deleted;
-      data[index]['subject'] = found.id
+    if (event.target.name === "subjectName") {
+      const found = subjects.find((obj) => {
+        return obj.name === event.target.value;
+      });
+      data[index]["subjectName"] = event.target.value;
+      data[index]["deleted"] = found.deleted;
+      data[index]["subject"] = found.id;
     } else {
       data[index][event.target.name] = event.target.value;
     }
     setsubjectHoursList(data);
-  }
+  };
 
   const handleSubjectInput = (event) => {
     const {
@@ -224,12 +225,15 @@ export function UpdateProgram() {
                 fullWidth
                 required
                 error={errorEmptyName || errorSymbolsName || errorLengthName}
-                helperText={errorEmptyName ? "Programos pavadinimas yra privalomas."
-                  : errorSymbolsName
+                helperText={
+                  errorEmptyName
+                    ? "Programos pavadinimas yra privalomas."
+                    : errorSymbolsName
                     ? "Programos pavadinimas turi neleidžiamų simbolių."
                     : errorLengthName
-                      ? "Programos pavadinimas negali būti ilgesnis nei 200 simbolių"
-                      : ""}
+                    ? "Programos pavadinimas negali būti ilgesnis nei 200 simbolių"
+                    : ""
+                }
                 variant="outlined"
                 id="programName"
                 label="Programos pavadinimas"
@@ -255,10 +259,11 @@ export function UpdateProgram() {
                   errorEmptyDesc
                     ? "Programos aprašas yra privalomas."
                     : errorSymbolsDesc
-                      ? "Programos aprašas turi neleidžiamų simbolių."
-                      : errorLengthDesc
-                        ? "Programos aprašas negali būti ilgesnis nei 2000 simbolių"
-                        : ""}
+                    ? "Programos aprašas turi neleidžiamų simbolių."
+                    : errorLengthDesc
+                    ? "Programos aprašas negali būti ilgesnis nei 2000 simbolių"
+                    : ""
+                }
                 variant="outlined"
                 label="Programos aprašas"
                 id="description"
@@ -272,16 +277,27 @@ export function UpdateProgram() {
                   }
                   setDescription(input);
                 }}
-              // onChange={(e) => setDescription(e.target.value)}
+                // onChange={(e) => setDescription(e.target.value)}
               ></TextField>
             </Grid>
-            <Grid item sm={8} >
+            <Grid item sm={8}>
               <Grid container direction="row" justifyContent="space-between">
                 {subjectHoursList.map((form, index) => {
                   return (
-                    <Grid container spacing={{ xs: 2, md: 3 }} rowSpacing={{ xs: 3, sm: 3, md: 3 }} columnSpacing={{ xs: 1, sm: 1, md: 1 }} key={index}>
+                    <Grid
+                    marginBottom={2}
+                      container
+                      spacing={{ xs: 2, md: 3 }}
+                      rowSpacing={{ xs: 3, sm: 3, md: 3 }}
+                      columnSpacing={{ xs: 1, sm: 1, md: 1 }}
+                      key={index}
+                    >
                       <Grid item xs={6}>
-                        <FormControl fullWidth required error={subjectNameError}>
+                        <FormControl
+                          fullWidth
+                          required
+                          error={subjectNameError}
+                        >
                           <InputLabel id="subject-label">
                             {subjectNameError
                               ? "Privaloma pasirinkti dalyką. "
@@ -292,13 +308,16 @@ export function UpdateProgram() {
                             variant="outlined"
                             labelId="subject-label"
                             label="Dalykas"
-                            name='subjectName'
-                            label='subjectName'
+                            name="subjectName"
+                            label="subjectName"
                             value={form.subjectName}
-                            onChange={event => handleFormChange(event, index)}
+                            onChange={(event) => handleFormChange(event, index)}
                           >
-                            {subjects.map(currentOption => (
-                              <MenuItem key={currentOption.id} value={currentOption.name}>
+                            {subjects.map((currentOption) => (
+                              <MenuItem
+                                key={currentOption.id}
+                                value={currentOption.name}
+                              >
                                 {currentOption.name}
                               </MenuItem>
                             ))}
@@ -311,48 +330,62 @@ export function UpdateProgram() {
                           required
                           error={errorHours || errorHoursNumber}
                           helperText={
-                            errorHours ? "Leidžiami tik skaičių simboliai." 
-                            : errorHoursNumber ? "Dalykas negali viršyti 1000 valandų."
-                            : ""}
+                            errorHours
+                              ? "Leidžiami tik skaičių simboliai."
+                              : errorHoursNumber
+                              ? "Dalykas negali viršyti 1000 valandų."
+                              : ""
+                          }
                           variant="outlined"
                           id="hours"
-                          name='hours'
-                          placeholder='Valandos'
-                          onChange={event => handleFormChange(event, index)}
+                          name="hours"
+                          placeholder="Valandos"
+                          onChange={(event) => handleFormChange(event, index)}
                           value={form.hours}
                         />
                       </Grid>
-                      <Grid item xs={2}
+                      <Grid
+                        item
+                        xs={2}
                         container
                         justifyContent="end"
                         justifyItems={"center"}
                         alignContent={"center"}
-                        paddingRight={0.5}>
-                        <Button variant="contained" onClick={() => removeFields(index)}>Ištrinti</Button>
+                        paddingRight={0.5}
+                      >
+                        <Button
+                          id="delete-subject-button-edit-program"
+                          variant="contained"
+                          onClick={() => removeFields(index)}
+                        >
+                          Ištrinti
+                        </Button>
                       </Grid>
                     </Grid>
-                  )
+                  );
                 })}
               </Grid>
             </Grid>
             <Grid item sm={8}>
               {" "}
               <legend>{params.programName}</legend>
-              {error && (
-                <Alert severity="warning">
-                  {error}
-                </Alert>
-              )}
-              {success && (
-                <Alert severity="success">
-                  {success}
-                </Alert>
-              )}
+              {error && <Alert severity="warning">{error}</Alert>}
+              {success && <Alert severity="success">{success}</Alert>}
             </Grid>
             <Grid item sm={8}>
               <Stack direction="row" spacing={2} marginTop={1}>
-                <Button variant="contained" onClick={addFields}>Pridėtį dalyką</Button>
-                <Button variant="contained" onClick={updateProgram}>
+                <Button
+                  id="add-subject-button-edit-program"
+                  variant="contained"
+                  onClick={addFields}
+                >
+                  Pridėtį dalyką
+                </Button>
+                <Button
+                  id="save-button-edit-program"
+                  variant="contained"
+                  onClick={updateProgram}
+                >
                   Išsaugoti
                 </Button>
                 {!program.active && (
@@ -368,6 +401,7 @@ export function UpdateProgram() {
                 {program.active && (
                   <Link to="/programs">
                     <Button
+                      id="delete-button-edit-program"
                       variant="contained"
                       data-value="true"
                       value={params.id}
@@ -378,13 +412,15 @@ export function UpdateProgram() {
                   </Link>
                 )}
                 <Link to="/programs">
-                  <Button variant="contained">Grįžti</Button>
+                  <Button id="back-button-edit-program" variant="contained">
+                    Grįžti
+                  </Button>
                 </Link>
               </Stack>
             </Grid>
           </Grid>
         </form>
       </Container>
-    </div >
+    </div>
   );
 }

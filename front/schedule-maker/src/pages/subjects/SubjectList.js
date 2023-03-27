@@ -143,7 +143,7 @@ export function SubjectList() {
         </Grid>
 
         <TableContainer component={Paper}>
-          <Table aria-label="custom pagination table">
+          <Table id="active-subject-list-table" aria-label="custom pagination table">
             <TableHead>
               <TableRow>
                 <TableCell style={{ width: "500px" }} >Dalyko pavadinimas</TableCell>
@@ -223,7 +223,7 @@ export function SubjectList() {
         </FormGroup>
         {isChecked && (
           <TableContainer component={Paper}>
-            <Table aria-label="custom pagination table">
+            <Table id="inactive-subject-list-table" aria-label="custom pagination table">
               <TableHead>
                 <TableRow>
                   <TableCell style={{ width: "500px" }}>Dalyko pavadinimas</TableCell>

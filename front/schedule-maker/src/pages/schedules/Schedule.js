@@ -9,13 +9,26 @@ import { Link, useParams } from "react-router-dom";
 import "./ViewSchedule.css";
 import { Stack } from "@mui/system";
 import { Button, Grid } from "@mui/material";
-import adaptivePlugin from '@fullcalendar/adaptive'
+import adaptivePlugin from "@fullcalendar/adaptive";
+import { render } from "preact/compat";
 
 export function Schedule() {
   const [weekendsVisible, setWeekendsVisible] = useState(true);
   const [schedule, setSchedule] = useState([]);
   const [holiday, setHoliday] = useState([]);
   const params = useParams();
+
+  const subjectColors = [
+    "#f5c5c4",
+    "#f5ddc4",
+    "#f5f3c4",
+    "#daf5c4",
+    "#c4f5d8",
+    "#c4f5f2",
+    "#c4d3f5",
+    "#d8c4f5",
+    "#f5c4e3",
+  ];
 
   useEffect(() => {
     fetch(`api/v1/schedules/${params.id}/lessons`)
@@ -32,40 +45,56 @@ export function Schedule() {
   }, [params.id]);
 
   const events = [
-    ...schedule.map((schedule) => ({
-      title: `<b>${schedule.subject.name}</b>
-        <br />
-        ${schedule.lessonStart} - ${schedule.lessonEnd}
-        <br /> 
-        ${schedule.teacher ? schedule.teacher.lName : ""} ${
-        schedule.teacher ? schedule.teacher.fName : "nepasirinktas"
-      }
-        <br />
-        ${
-          schedule.online ? "Nuotolinė pamoka" : schedule.classroom.classroomName
-        }<br />
-        `,
-      start: schedule.date,
-      allDay: true,
-      url: `http://localhost:3000/schedule-maker#/schedules/edit-lesson/${schedule.id}`,
-    })),
+    ...schedule.map((schedule) => {
+      const color = subjectColors[schedule.subject.id];
+      return {
+        title: `<b>${schedule.subject.name}</b>
+          <br />
+          ${schedule.lessonStart} - ${schedule.lessonEnd}
+          <br />
+          ${schedule.teacher ? schedule.teacher.lName : ""} ${
+          schedule.teacher ? schedule.teacher.fName : "nepasirinktas"
+        }
+          <br />
+          ${
+            schedule.online
+              ? "Nuotolinė pamoka"
+              : schedule.classroom.classroomName
+          }<br />
+          `,
+        start: schedule.date,
+        allDay: true,
+        url: `http://localhost:3000/schedule-maker#/schedules/edit-lesson/${schedule.id}`,
+        color: color,
+      };
+    }),
     ...holiday.map((holiday) => ({
       title: `<b>${holiday.name}</b>`,
       start: holiday.dateFrom,
-      // end: holiday.dateUntil,
-      end: new Date(new Date(holiday.dateUntil).setDate(new Date(holiday.dateUntil).getDate() + 1)),
-      allDay: true
-    }))
+      end: new Date(
+        new Date(holiday.dateUntil).setDate(
+          new Date(holiday.dateUntil).getDate() + 1
+        )
+      ),
+      allDay: true,
+      color: "#cccccc",
+    })),
   ];
 
   const renderEventContent = (eventInfo) => (
     <>
       <b>{eventInfo.timeText}</b>
-      <div style={{ fontSize: '16px', padding: '10px', fontFamily: 'Arial, sans-serif', backgroundColor: "#dcedf7", color: "black" }} dangerouslySetInnerHTML={{ __html: eventInfo.event.title }} />
+      <div
+        style={{
+          fontSize: "16px",
+          padding: "10px",
+          fontFamily: "Arial, sans-serif",
+          color: "black",
+        }}
+        dangerouslySetInnerHTML={{ __html: eventInfo.event.title }}
+      />
     </>
   );
-
-  
 
   return (
     <div className="maincontainer">
@@ -73,7 +102,12 @@ export function Schedule() {
         <FullCalendar
           locales={allLocales}
           locale={"lt"}
-          plugins={[dayGridPlugin, interactionPlugin, listPlugin, adaptivePlugin]}
+          plugins={[
+            dayGridPlugin,
+            interactionPlugin,
+            listPlugin,
+            adaptivePlugin,
+          ]}
           initialView="dayGridMonth"
           contentHeight="700px"
           headerToolbar={{
@@ -92,9 +126,7 @@ export function Schedule() {
             <div className="fc-day-header">{args.text}</div>
           )}
           dayCellContent={(args) => (
-            <div className="fc-day-number">
-              {args.dayNumberText}
-            </div>
+            <div className="fc-day-number">{args.dayNumberText}</div>
           )}
         />
       </div>
@@ -102,14 +134,24 @@ export function Schedule() {
       <Grid item sm={10} className="button-container">
         <Stack direction="row" spacing={2}>
           <Link to="/">
-            <Button variant="contained">Grįžti</Button>
+            <Button id="back-button-schedule" variant="contained">
+              Grįžti
+            </Button>
           </Link>
           <Link to={"/planning/" + params.id}>
-            <Button variant="contained">Planavimas</Button>
+            <Button id="plan-button-schedule" variant="contained">
+              Planavimas
+            </Button>
           </Link>
-          <Button variant="contained" onClick={() => window.print()}>Spausdinti kalendorių</Button>
+          <Button
+            id="print-button-schedule"
+            variant="contained"
+            onClick={() => window.print()}
+          >
+            Spausdinti kalendorių
+          </Button>
         </Stack>
       </Grid>
     </div>
   );
-}  
+}
