@@ -230,12 +230,12 @@ export function EditLesson() {
                 <Button variant="contained" onClick={updateLesson}>
                   Išsaugoti
                 </Button>
-                <Link to={`/schedules/${schedule.id}`}>
-                  <Button variant="contained">Atšaukti</Button>
-                </Link>
                 <Button variant="contained" onClick={handlePrompt}>
                   Ištrinti
                 </Button>
+                <Link to={`/schedules/${schedule.id}`}>
+                  <Button variant="contained">Grįžti</Button>
+                </Link>
               </Stack>
             </Grid>
           </Grid>

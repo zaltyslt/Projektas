@@ -88,6 +88,7 @@ public class ScheduleService {
         Optional<Schedule> scheduleToDelete = scheduleRepository.findById(id);
         if (scheduleToDelete.isPresent()) {
             try {
+
              scheduleRepository.delete(scheduleToDelete.get());
                 return true;
             } catch (Exception e) {

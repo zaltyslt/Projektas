@@ -324,14 +324,13 @@ export function CreateSchedule() {
 
             <Grid item sm={10}>
               <Stack direction="row" spacing={2}>
-                <Button
+              <Button
                   id="save-button-create-schedule"
                   variant="contained"
                   onClick={validation}
                 >
                   Išsaugoti
                 </Button>
-
                 <Link to="/">
                   <Button id="back-button-create-schedule" variant="contained">
                     Grįžti
