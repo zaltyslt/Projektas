@@ -184,6 +184,7 @@ public class ScheduleToExcelService {
             Cell cell = row.getCell(column);
             cell.setCellStyle(style);
 //            cell.setCellValue(i);
+//            logger.debug(style.toString());
         }
     }
 
@@ -373,7 +374,7 @@ public class ScheduleToExcelService {
 
                 wb.setPrintArea(0, printArea.toString().substring(0,printArea.length()-1)); // set print area for sheet 0
             }
-//            writeCollors(sheet);
+            writeCollors(sheet);
 
             // Write the output to a file
             File file = new File("schedule.xlsx");
@@ -403,24 +404,43 @@ public class ScheduleToExcelService {
         }
     }
 
-    private static void subjectStyling(Workbook wb, Map<Long, CellStyle> colors, WorkDay current) {
-        if (!colors.containsKey(current.getSubject().getId())) {
+    private static void subjectStyling(Workbook wb, Map<Long, CellStyle> subjectStyles, WorkDay current) {
+        if (!subjectStyles.containsKey(current.getSubject().getId())) {
 
-            int maxIndex = colors.values().stream()
-                    .mapToInt(CellStyle::getFillForegroundColor)
+            short[] colorValues= new short[]{
+                    IndexedColors.CORAL.getIndex(),
+                    IndexedColors.LIGHT_ORANGE.getIndex(),
+                    IndexedColors.LEMON_CHIFFON.getIndex(),
+                    IndexedColors.LIGHT_GREEN.getIndex(),
+                    IndexedColors.LIGHT_BLUE.getIndex(),
+                    IndexedColors.LIGHT_TURQUOISE.getIndex(),
+                    IndexedColors.LIGHT_CORNFLOWER_BLUE.getIndex(),
+                    IndexedColors.LAVENDER.getIndex(),
+                    IndexedColors.ROSE.getIndex()
+                    };
+
+//            int index = subjectStyles.values().stream()
+//                    .mapToInt(CellStyle::getFillForegroundColor)
+//                    .max()
+//                    .orElse(colorValues[0]);
+            long index = subjectStyles.keySet().stream()
+                    .mapToLong(Long::longValue)
                     .max()
-                    .orElse(39);
+                    .orElse(0L);
+
+            if(index+1 == colorValues.length){ index = 0;}
 
             CellStyle style = wb.createCellStyle();
-            style.setFillForegroundColor(IndexedColors.fromInt(maxIndex + 1).getIndex());
+            style.setFillForegroundColor(IndexedColors.fromInt(colorValues[(int) index]).getIndex());
+//            style.setFillForegroundColor(IndexedColors.fromInt(colorValues[index]));
             style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
-            style.setBorderLeft(BorderStyle.MEDIUM);
-            style.setBorderRight(BorderStyle.MEDIUM);
+            style.setBorderLeft(BorderStyle.THIN);
+            style.setBorderRight(BorderStyle.THIN);
             style.setLeftBorderColor(IndexedColors.GREY_50_PERCENT.getIndex());
             style.setRightBorderColor(IndexedColors.GREY_50_PERCENT.getIndex());
             style.setIndention((short) 1);
 
-            colors.put(current.getSubject().getId(), style);
+            subjectStyles.put(current.getSubject().getId(), style);
 
         }
     }
@@ -477,7 +497,7 @@ public class ScheduleToExcelService {
         style = wb.createCellStyle();
         style.setAlignment(HorizontalAlignment.CENTER);
         style.setVerticalAlignment(VerticalAlignment.CENTER);
-        style.setFillForegroundColor(IndexedColors.LIGHT_YELLOW.getIndex());
+        style.setFillForegroundColor(IndexedColors.GREY_25_PERCENT.getIndex());
         style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
 
         style.setBorderLeft(BorderStyle.THIN);
@@ -505,8 +525,8 @@ public class ScheduleToExcelService {
         style = wb.createCellStyle();
         style.setFillForegroundColor(IndexedColors.LEMON_CHIFFON.getIndex());
         style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
-        style.setBorderLeft(BorderStyle.MEDIUM);
-        style.setBorderRight(BorderStyle.MEDIUM);
+        style.setBorderLeft(BorderStyle.THIN);
+        style.setBorderRight(BorderStyle.THIN);
         style.setBorderBottom(BorderStyle.DOTTED);
         style.setLeftBorderColor(borderColor);
         style.setRightBorderColor(borderColor);
@@ -515,83 +535,83 @@ public class ScheduleToExcelService {
         style.setFont(remoteFont);
         styles.put("remote", style);
 
-        Font dayFont = wb.createFont();
-        dayFont.setFontHeightInPoints((short) 14);
-        dayFont.setBold(true);
-        style = wb.createCellStyle();
-        style.setAlignment(HorizontalAlignment.LEFT);
-        style.setVerticalAlignment(VerticalAlignment.TOP);
-        style.setFillForegroundColor(IndexedColors.LIGHT_CORNFLOWER_BLUE.getIndex());
-        style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
-        style.setBorderLeft(BorderStyle.THIN);
-        style.setLeftBorderColor(borderColor);
-        style.setBorderBottom(BorderStyle.THIN);
-        style.setBottomBorderColor(borderColor);
-        style.setFont(dayFont);
-        styles.put("weekend_left", style);
-
-        style = wb.createCellStyle();
-        style.setAlignment(HorizontalAlignment.CENTER);
-        style.setVerticalAlignment(VerticalAlignment.TOP);
-        style.setFillForegroundColor(IndexedColors.LIGHT_CORNFLOWER_BLUE.getIndex());
-        style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
-        style.setBorderRight(BorderStyle.THIN);
-        style.setRightBorderColor(borderColor);
-        style.setBorderBottom(BorderStyle.THIN);
-        style.setBottomBorderColor(borderColor);
-        styles.put("weekend_right", style);
-
-        style = wb.createCellStyle();
-        style.setAlignment(HorizontalAlignment.CENTER);
-        style.setVerticalAlignment(VerticalAlignment.CENTER);
-
-        style.setBorderLeft(BorderStyle.THIN);
-//        style.setBorderTop(BorderStyle.THIN);
-        style.setBorderRight(BorderStyle.THIN);
+//        Font dayFont = wb.createFont();
+//        dayFont.setFontHeightInPoints((short) 14);
+//        dayFont.setBold(true);
+//        style = wb.createCellStyle();
+//        style.setAlignment(HorizontalAlignment.LEFT);
+//        style.setVerticalAlignment(VerticalAlignment.TOP);
+//        style.setFillForegroundColor(IndexedColors.LIGHT_CORNFLOWER_BLUE.getIndex());
+//        style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+//        style.setBorderLeft(BorderStyle.THIN);
+//        style.setLeftBorderColor(borderColor);
 //        style.setBorderBottom(BorderStyle.THIN);
-        style.setLeftBorderColor(borderColor);
-        style.setTopBorderColor(borderColor);
-        style.setRightBorderColor(borderColor);
-        style.setBottomBorderColor(borderColor);
+//        style.setBottomBorderColor(borderColor);
+//        style.setFont(dayFont);
+//        styles.put("weekend_left", style);
 
-        style.setFillForegroundColor(IndexedColors.CORAL.getIndex()); //was white
-        style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
-        style.setFont(dayFont);
-        styles.put("workday_left", style);
+//        style = wb.createCellStyle();
+//        style.setAlignment(HorizontalAlignment.CENTER);
+//        style.setVerticalAlignment(VerticalAlignment.TOP);
+//        style.setFillForegroundColor(IndexedColors.LIGHT_CORNFLOWER_BLUE.getIndex());
+//        style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+//        style.setBorderRight(BorderStyle.THIN);
+//        style.setRightBorderColor(borderColor);
+//        style.setBorderBottom(BorderStyle.THIN);
+//        style.setBottomBorderColor(borderColor);
+//        styles.put("weekend_right", style);
 
-        style = wb.createCellStyle();
-        style.setAlignment(HorizontalAlignment.CENTER);
-        style.setVerticalAlignment(VerticalAlignment.TOP);
-        style.setFillForegroundColor(IndexedColors.WHITE.getIndex());
-        style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
-        style.setBorderRight(BorderStyle.THIN);
-        style.setRightBorderColor(borderColor);
-        style.setBorderBottom(BorderStyle.THIN);
-        style.setBottomBorderColor(borderColor);
-        styles.put("workday_right", style);
+//        style = wb.createCellStyle();
+//        style.setAlignment(HorizontalAlignment.CENTER);
+//        style.setVerticalAlignment(VerticalAlignment.CENTER);
+//
+//        style.setBorderLeft(BorderStyle.THIN);
+////        style.setBorderTop(BorderStyle.THIN);
+//        style.setBorderRight(BorderStyle.THIN);
+////        style.setBorderBottom(BorderStyle.THIN);
+//        style.setLeftBorderColor(borderColor);
+//        style.setTopBorderColor(borderColor);
+//        style.setRightBorderColor(borderColor);
+//        style.setBottomBorderColor(borderColor);
+//
+//        style.setFillForegroundColor(IndexedColors.CORAL.getIndex()); //was white
+//        style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+//        style.setFont(dayFont);
+//        styles.put("workday_left", style);
 
-        style = wb.createCellStyle();
-        style.setBorderLeft(BorderStyle.THIN);
-        style.setFillForegroundColor(IndexedColors.GREY_25_PERCENT.getIndex());
-        style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
-        style.setBorderBottom(BorderStyle.THIN);
-        style.setBottomBorderColor(borderColor);
-        styles.put("grey_left", style);
+//        style = wb.createCellStyle();
+//        style.setAlignment(HorizontalAlignment.CENTER);
+//        style.setVerticalAlignment(VerticalAlignment.TOP);
+//        style.setFillForegroundColor(IndexedColors.WHITE.getIndex());
+//        style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+//        style.setBorderRight(BorderStyle.THIN);
+//        style.setRightBorderColor(borderColor);
+//        style.setBorderBottom(BorderStyle.THIN);
+//        style.setBottomBorderColor(borderColor);
+//        styles.put("workday_right", style);
+//
+//        style = wb.createCellStyle();
+//        style.setBorderLeft(BorderStyle.THIN);
+//        style.setFillForegroundColor(IndexedColors.GREY_25_PERCENT.getIndex());
+//        style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+//        style.setBorderBottom(BorderStyle.THIN);
+//        style.setBottomBorderColor(borderColor);
+//        styles.put("grey_left", style);
 
-        style = wb.createCellStyle();
-        style.setFillForegroundColor(IndexedColors.GREY_25_PERCENT.getIndex());
-        style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
-        style.setBorderLeft(BorderStyle.MEDIUM);
-        style.setLeftBorderColor(borderColor);
-        style.setBorderRight(BorderStyle.MEDIUM);
-        style.setRightBorderColor(borderColor);
-        style.setBorderBottom(BorderStyle.DOTTED);
-        style.setBottomBorderColor(borderColor);
-        styles.put("grey_right", style);
-
+//        style = wb.createCellStyle();
+//        style.setFillForegroundColor(IndexedColors.GREY_25_PERCENT.getIndex());
+//        style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+//        style.setBorderLeft(BorderStyle.MEDIUM);
+//        style.setLeftBorderColor(borderColor);
+//        style.setBorderRight(BorderStyle.MEDIUM);
+//        style.setRightBorderColor(borderColor);
+//        style.setBorderBottom(BorderStyle.DOTTED);
+//        style.setBottomBorderColor(borderColor);
+//        styles.put("grey_right", style);
+//
         style = wb.createCellStyle();
         style.setIndention((short) 1);
-        style.setBorderLeft(BorderStyle.MEDIUM);
+        style.setBorderLeft(BorderStyle.THIN);
         style.setLeftBorderColor(borderColor);
 //        style.setBorderRight(BorderStyle.MEDIUM);
 //        style.setRightBorderColor(borderColor);

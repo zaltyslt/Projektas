@@ -17,6 +17,7 @@ export function Schedule() {
   const [schedule, setSchedule] = useState([]);
   const [holiday, setHoliday] = useState([]);
   const params = useParams();
+  const [myMap, setMyMap] = useState(new Map());
 
   const subjectColors = [
     "#f5c5c4",
@@ -89,7 +90,22 @@ const handleClickPrint = (scheduleId, paged) => {
 
   const events = [
     ...schedule.map((schedule) => {
-      const color = subjectColors[schedule.subject.id];
+      // const color = subjectColors[schedule.subject.id];
+      // console.log(color);
+      const color = subjectColors[0];
+      
+      
+      if(myMap.has(schedule.subject.id)){
+        // color = subjectColors[myMap.get(schedule.subject.id)];
+        console.log(myMap);
+        // let aa = subjectColors[myMap.get(schedule.subject.id)];
+      }else{
+        // color = subjectColors[Math.floor(Math.random() * (9))];
+        // const newMap = new Map(myMap);
+        // newMap.set(schedule.subject.id, subjectColors[color]);
+        // setMyMap(newMap);
+      }
+      
       return {
         title: `<b>${schedule.subject.name}</b>
           <br />
