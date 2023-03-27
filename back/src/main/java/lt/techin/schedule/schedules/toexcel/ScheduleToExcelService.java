@@ -12,12 +12,13 @@ import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.ss.util.RegionUtil;
 import org.apache.poi.util.LocaleUtil;
+import org.apache.poi.xssf.usermodel.IndexedColorMap;
 import org.apache.poi.xssf.usermodel.XSSFCellStyle;
+import org.apache.poi.xssf.usermodel.XSSFColor;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-
 
 
 import java.io.File;
@@ -148,7 +149,7 @@ public class ScheduleToExcelService {
 //                        wd -> wd.getDate().get(weekFields.weekOfYear()),
 //                        Collectors.toList()));
         Map<Integer, List<WorkDay>> groupedWorkdays = new HashMap<>();
-        groupedWorkdays.put(1,sortedWorkDays);
+        groupedWorkdays.put(1, sortedWorkDays);
         return groupedWorkdays;
     }
 
@@ -240,11 +241,11 @@ public class ScheduleToExcelService {
 
             List<Month> monthToPrint = new ArrayList<>();
 
-               for (List<WorkDay> month : workDayList.values()) {
-                   Month tempMonth = new Month();
-                   tempMonth.setWorkDays(month);
-                   monthToPrint.add(tempMonth);
-               }
+            for (List<WorkDay> month : workDayList.values()) {
+                Month tempMonth = new Month();
+                tempMonth.setWorkDays(month);
+                monthToPrint.add(tempMonth);
+            }
 
             for (Month month : monthToPrint) {
 
@@ -262,35 +263,33 @@ public class ScheduleToExcelService {
                 PrintSetup printSetup = sheet.getPrintSetup();
                 printSetup.setLandscape(true);
 
-                    //the header row: centered text in 18pt font
+                //the header row: centered text in 18pt font
 
-                    Row headerRow = sheet.createRow(sheet.getLastRowNum()+1);
-                    headerRow.setHeightInPoints(40);
-                    Cell titleCell = headerRow.createCell(0);
+                Row headerRow = sheet.createRow(sheet.getLastRowNum() + 1);
+                headerRow.setHeightInPoints(40);
+                Cell titleCell = headerRow.createCell(0);
 
-                    titleCell.setCellValue(month.getGroup() + ", " + getTitleYears(month.getWorkDays()));
-                    titleCell.setCellStyle(styles.get("title"));
-                    sheet.addMergedRegion(CellRangeAddress.valueOf("$A$" + (sheet.getLastRowNum() + 1) + ":$F$" + (sheet.getLastRowNum() + 1)));
+                titleCell.setCellValue(month.getGroup() + ", " + getTitleYears(month.getWorkDays()));
+                titleCell.setCellStyle(styles.get("title"));
+                sheet.addMergedRegion(CellRangeAddress.valueOf("$A$" + (sheet.getLastRowNum() + 1) + ":$F$" + (sheet.getLastRowNum() + 1)));
 
-                    //header with day titles
-                    Row monthRow = sheet.createRow(sheet.getLastRowNum() + 1);
-                    sheet.setColumnWidth(0, 25 * 256); //the column is 25 characters wide
+                //header with day titles
+                Row monthRow = sheet.createRow(sheet.getLastRowNum() + 1);
+                sheet.setColumnWidth(0, 25 * 256); //the column is 25 characters wide
 
-                    Cell monthCell = monthRow.createCell(0);
-                    monthCell.setCellValue("Data/Savaitės diena");
+                Cell monthCell = monthRow.createCell(0);
+                monthCell.setCellValue("Data/Savaitės diena");
+                monthCell.setCellStyle(styles.get("month"));
+                for (int i = 1; i <= days.length; i++) {
+                    sheet.setColumnWidth(i, 25 * 256);
+                    monthCell = monthRow.createCell(i);
+                    monthCell.setCellValue(days[i - 1]);
                     monthCell.setCellStyle(styles.get("month"));
-                    for (int i = 1; i <= days.length; i++) {
-                        sheet.setColumnWidth(i, 25 * 256);
-                        monthCell = monthRow.createCell(i);
-                        monthCell.setCellValue(days[i - 1]);
-                        monthCell.setCellStyle(styles.get("month"));
-                    }
-
+                }
 
                 int cnt = 1, wdCount = 0;
                 int rowNum = 2;
                 List<WorkDay> workDays = month.getWorkDays();
-                //Map subjectId, Color for subject name
                 Map<Long, CellStyle> colors = new HashMap<>();
                 while (workDays.size() > wdCount) {
 
@@ -311,11 +310,11 @@ public class ScheduleToExcelService {
                         if (wdCount < workDays.size() && workDays.get(wdCount).getDate().getDayOfWeek().getValue() == cnt) {
                             var current = workDays.get(wdCount);
                             var currentDate = current.getDate();
-                            var curentDay = currentDate.getDayOfWeek().getValue();
+//                            var curentDay = currentDate.getDayOfWeek().getValue();
                             sheet.getRow(actualRow).getCell(d).setCellValue(current.getSubject().getName());
 
                             if (current.getId() != null && current.getOnline() != null) {
-                                //aprasyti diena
+                                //draw workDay
                                 setCellsStyle(sheet, styles, "common", d, actualRow, actualRow + 3);
                                 sheet.getRow(actualRow + 1).getCell(d).setCellValue(current.getLessonStart() != null
                                         ? current.getLessonStart() + " - " + current.getLessonEnd()
@@ -329,24 +328,22 @@ public class ScheduleToExcelService {
                                 } else {
                                     sheet.getRow(actualRow + 3).getCell(d).setCellValue("Klasė: " + current.getClassroom().getClassroomName());
                                 }
-//                                sheet.getRow(actualRow + 4).getCell(d).setCellValue(current.getDate().toString());
-
                                 //paint subject name
                                 subjectStyling(wb, colors, current);
 
                                 sheet.getRow(actualRow).getCell(d).setCellStyle(colors.get(current.getSubject().getId()));
 
                             } else if (current.getId() == null && current.getOnline() != null) {
-                                // aprasyti atostogas
+                                // draw school holidays
                                 setCellsStyle(sheet, styles, "holiday", d, actualRow, actualRow + 3);
-                            }else{
+                            } else {
                                 setCellsStyle(sheet, styles, "empty", d, actualRow, actualRow + 3);
                             }
                             cnt++;
                             wdCount++;
 
                         } else {
-                            //piesiam tusciadieni
+                            //draw empty day
                             setCellsStyle(sheet, styles, "empty", d, actualRow, actualRow + 3);
                             cnt++;
                         }
@@ -372,9 +369,10 @@ public class ScheduleToExcelService {
                 sheet.setRowBreak(sheet.getLastRowNum());
                 firstRow = sheet.getLastRowNum() + 1;
 
-                wb.setPrintArea(0, printArea.toString().substring(0,printArea.length()-1)); // set print area for sheet 0
+                wb.setPrintArea(0, printArea.toString().substring(0, printArea.length() - 1)); // set print area for sheet 0
             }
-            writeCollors(sheet);
+//            helper method to visualise IndexedColors
+//            writeCollors(sheet);
 
             // Write the output to a file
             File file = new File("schedule.xlsx");
@@ -385,7 +383,7 @@ public class ScheduleToExcelService {
             }
 
             try (FileOutputStream out = new FileOutputStream(file)) {
-              wb.write(out);
+                wb.write(out);
                 return file.getPath();
             }
 
@@ -395,7 +393,7 @@ public class ScheduleToExcelService {
         }
     }
 
-    public void cleaner(){
+    public void cleaner() {
         File directory = new File(".");
         File[] files = directory.listFiles((dir, name) -> name.matches("schedule.*\\.xlsx"));
         for (File file : files) {
@@ -405,54 +403,53 @@ public class ScheduleToExcelService {
     }
 
     private static void subjectStyling(Workbook wb, Map<Long, CellStyle> subjectStyles, WorkDay current) {
+        Short[] colorValues = new Short[]{
+                45,//"#f5c5c4",
+                47,//"#f5ddc4",
+                26,//"#f5f3c4",
+                42,//"#daf5c4",
+                41,//"#c4f5d8",
+                27,//"#c4f5f2",
+                44,//"#c4d3f5",
+                46,//"#d8c4f5",
+                50,//"#d6fc9c",
+                46,//"#d5bdf9",
+                45,//"#ffcac6",
+                24,//"#a3b4ff",
+                57,//"#88f7a0",
+                43,//"#f1fc8d",
+                45,//"#ffc6e5",
+                15,//"#81efed",
+                29,//"#f49a97",
+                44,//"#93c7ff",
+                47 //"#f9bd84"
+        };
+
         if (!subjectStyles.containsKey(current.getSubject().getId())) {
-
-            short[] colorValues= new short[]{
-                    IndexedColors.CORAL.getIndex(),
-                    IndexedColors.LIGHT_ORANGE.getIndex(),
-                    IndexedColors.LEMON_CHIFFON.getIndex(),
-                    IndexedColors.LIGHT_GREEN.getIndex(),
-                    IndexedColors.LIGHT_BLUE.getIndex(),
-                    IndexedColors.LIGHT_TURQUOISE.getIndex(),
-                    IndexedColors.LIGHT_CORNFLOWER_BLUE.getIndex(),
-                    IndexedColors.LAVENDER.getIndex(),
-                    IndexedColors.ROSE.getIndex()
-                    };
-
-//            int index = subjectStyles.values().stream()
-//                    .mapToInt(CellStyle::getFillForegroundColor)
-//                    .max()
-//                    .orElse(colorValues[0]);
             long index = subjectStyles.keySet().stream()
                     .mapToLong(Long::longValue)
                     .max()
                     .orElse(0L);
 
-            if(index+1 == colorValues.length){ index = 0;}
+            if (index + 1 == colorValues.length) {
+                index = 0;
+            }
 
             CellStyle style = wb.createCellStyle();
             style.setFillForegroundColor(IndexedColors.fromInt(colorValues[(int) index]).getIndex());
-//            style.setFillForegroundColor(IndexedColors.fromInt(colorValues[index]));
             style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
             style.setBorderLeft(BorderStyle.THIN);
             style.setBorderRight(BorderStyle.THIN);
             style.setLeftBorderColor(IndexedColors.GREY_50_PERCENT.getIndex());
             style.setRightBorderColor(IndexedColors.GREY_50_PERCENT.getIndex());
             style.setIndention((short) 1);
-
             subjectStyles.put(current.getSubject().getId(), style);
-
         }
     }
-
-    /**
-     * cell styles used for formatting calendar sheets
-     */
     private static Map<String, CellStyle> createStyles(Workbook wb) {
         Map<String, CellStyle> styles = new HashMap<>();
 
         short borderColor = IndexedColors.GREY_50_PERCENT.getIndex();
-
 
         CellStyle style;
 
@@ -490,8 +487,6 @@ public class ScheduleToExcelService {
         style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
         style.setBorderRight(BorderStyle.THIN);
         style.setRightBorderColor(borderColor);
-//        style.setBorderBottom(BorderStyle.THIN);
-//        style.setBottomBorderColor(borderColor);
         styles.put("week", style);
 
         style = wb.createCellStyle();
@@ -503,25 +498,16 @@ public class ScheduleToExcelService {
         style.setBorderLeft(BorderStyle.THIN);
         style.setBorderRight(BorderStyle.THIN);
         style.setRightBorderColor(borderColor);
-//        style.setBorderBottom(BorderStyle.THIN);
-//        style.setBottomBorderColor(borderColor);
         styles.put("holiday", style);
 
         style = wb.createCellStyle();
-//        style.setAlignment(HorizontalAlignment.CENTER);
-//        style.setVerticalAlignment(VerticalAlignment.CENTER);
-//        style.setFillForegroundColor(IndexedColors.LIGHT_YELLOW.getIndex());
-//        style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
         style.setBorderLeft(BorderStyle.THIN);
         style.setBorderRight(BorderStyle.THIN);
         style.setLeftBorderColor(borderColor);
         style.setRightBorderColor(borderColor);
-//        style.setBorderBottom(BorderStyle.THIN);
-//        style.setBottomBorderColor(borderColor);
         styles.put("empty", style);
 
         Font remoteFont = wb.createFont();
-//        remoteFont.setColor(IndexedColors.WHITE.getIndex());
         style = wb.createCellStyle();
         style.setFillForegroundColor(IndexedColors.LEMON_CHIFFON.getIndex());
         style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
@@ -535,88 +521,10 @@ public class ScheduleToExcelService {
         style.setFont(remoteFont);
         styles.put("remote", style);
 
-//        Font dayFont = wb.createFont();
-//        dayFont.setFontHeightInPoints((short) 14);
-//        dayFont.setBold(true);
-//        style = wb.createCellStyle();
-//        style.setAlignment(HorizontalAlignment.LEFT);
-//        style.setVerticalAlignment(VerticalAlignment.TOP);
-//        style.setFillForegroundColor(IndexedColors.LIGHT_CORNFLOWER_BLUE.getIndex());
-//        style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
-//        style.setBorderLeft(BorderStyle.THIN);
-//        style.setLeftBorderColor(borderColor);
-//        style.setBorderBottom(BorderStyle.THIN);
-//        style.setBottomBorderColor(borderColor);
-//        style.setFont(dayFont);
-//        styles.put("weekend_left", style);
-
-//        style = wb.createCellStyle();
-//        style.setAlignment(HorizontalAlignment.CENTER);
-//        style.setVerticalAlignment(VerticalAlignment.TOP);
-//        style.setFillForegroundColor(IndexedColors.LIGHT_CORNFLOWER_BLUE.getIndex());
-//        style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
-//        style.setBorderRight(BorderStyle.THIN);
-//        style.setRightBorderColor(borderColor);
-//        style.setBorderBottom(BorderStyle.THIN);
-//        style.setBottomBorderColor(borderColor);
-//        styles.put("weekend_right", style);
-
-//        style = wb.createCellStyle();
-//        style.setAlignment(HorizontalAlignment.CENTER);
-//        style.setVerticalAlignment(VerticalAlignment.CENTER);
-//
-//        style.setBorderLeft(BorderStyle.THIN);
-////        style.setBorderTop(BorderStyle.THIN);
-//        style.setBorderRight(BorderStyle.THIN);
-////        style.setBorderBottom(BorderStyle.THIN);
-//        style.setLeftBorderColor(borderColor);
-//        style.setTopBorderColor(borderColor);
-//        style.setRightBorderColor(borderColor);
-//        style.setBottomBorderColor(borderColor);
-//
-//        style.setFillForegroundColor(IndexedColors.CORAL.getIndex()); //was white
-//        style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
-//        style.setFont(dayFont);
-//        styles.put("workday_left", style);
-
-//        style = wb.createCellStyle();
-//        style.setAlignment(HorizontalAlignment.CENTER);
-//        style.setVerticalAlignment(VerticalAlignment.TOP);
-//        style.setFillForegroundColor(IndexedColors.WHITE.getIndex());
-//        style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
-//        style.setBorderRight(BorderStyle.THIN);
-//        style.setRightBorderColor(borderColor);
-//        style.setBorderBottom(BorderStyle.THIN);
-//        style.setBottomBorderColor(borderColor);
-//        styles.put("workday_right", style);
-//
-//        style = wb.createCellStyle();
-//        style.setBorderLeft(BorderStyle.THIN);
-//        style.setFillForegroundColor(IndexedColors.GREY_25_PERCENT.getIndex());
-//        style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
-//        style.setBorderBottom(BorderStyle.THIN);
-//        style.setBottomBorderColor(borderColor);
-//        styles.put("grey_left", style);
-
-//        style = wb.createCellStyle();
-//        style.setFillForegroundColor(IndexedColors.GREY_25_PERCENT.getIndex());
-//        style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
-//        style.setBorderLeft(BorderStyle.MEDIUM);
-//        style.setLeftBorderColor(borderColor);
-//        style.setBorderRight(BorderStyle.MEDIUM);
-//        style.setRightBorderColor(borderColor);
-//        style.setBorderBottom(BorderStyle.DOTTED);
-//        style.setBottomBorderColor(borderColor);
-//        styles.put("grey_right", style);
-//
         style = wb.createCellStyle();
         style.setIndention((short) 1);
         style.setBorderLeft(BorderStyle.THIN);
         style.setLeftBorderColor(borderColor);
-//        style.setBorderRight(BorderStyle.MEDIUM);
-//        style.setRightBorderColor(borderColor);
-//        style.setBorderTop(BorderStyle.DOTTED);
-//        style.setTopBorderColor(borderColor);
         style.setBorderBottom(BorderStyle.DOTTED);
         style.setBottomBorderColor(borderColor);
         styles.put("common", style);

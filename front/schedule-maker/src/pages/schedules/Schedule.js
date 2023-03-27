@@ -28,8 +28,28 @@ export function Schedule() {
     "#c4f5f2",
     "#c4d3f5",
     "#d8c4f5",
-    "#f5c4e3",
+    "#d6fc9c",
+    "#d5bdf9",
+    "#ffcac6",
+    "#a3b4ff",
+    "#88f7a0",
+    "#f1fc8d",
+    "#ffc6e5",
+    "#81efed",
+    "#f49a97",
+    "#93c7ff",
+    "#f9bd84",
   ];
+
+  const subjectColorMap = { index: 0 };
+  const color = schedule.forEach((s) => {
+    if (!subjectColorMap[s.subject.id]) {
+      subjectColorMap[s.subject.id] = subjectColors[subjectColorMap.index];
+      subjectColorMap.index + 1 === subjectColors.length
+        ? (subjectColorMap.index = 0)
+        : (subjectColorMap.index += 1);
+    }
+  });
 
   useEffect(() => {
     fetch(`api/v1/schedules/${params.id}/lessons`)
@@ -46,66 +66,50 @@ export function Schedule() {
   }, [params.id]);
 
   useEffect(() => {
-    const div = document.querySelector('.fc-license-message');
-    div.style.visibility = 'hidden'; // or 'visible' to show the div
+    const div = document.querySelector(".fc-license-message");
+    div.style.visibility = "hidden"; // or 'visible' to show the div
   }, []);
 
-/////////////////////////////////
-const handleClickPrint = (scheduleId, paged) => {
-  // console.log(scheduleId);
-  const fetchTo = paged
-    ? `api/v1/schedules/excel?id=${scheduleId}&p=true`
-    : `api/v1/schedules/excel?id=${scheduleId}&p=false`;
-  fetch(fetchTo , {
-    method: "Get",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  })
-  .then((response) => {
-    // clearMessages();
-    if (response.ok) {
-      // setCreateMessage("Tvarkaraščio failas paruoštas.");
-    } else {
-      // setErrorMessage(`Tvarkaraščio failo paruošti nepavyko.`);
-    }
-    return response;
-  }).then((response) => {
-    const filename =  response.headers.get('Content-Disposition').split('filename=')[1];
-    // console.log(filename);
-    response.blob().then(blob => {
-      let url = window.URL.createObjectURL(blob);
-      let a = document.createElement('a');
-      a.href = url;
-      a.download = filename;
-      a.click();
-  });
-
-  });
-}
-////////////////////////////////
-
-
-
+  /////////////////////////////////
+  const handleClickPrint = (scheduleId, paged) => {
+    // console.log(scheduleId);
+    const fetchTo = paged
+      ? `api/v1/schedules/excel?id=${scheduleId}&p=true`
+      : `api/v1/schedules/excel?id=${scheduleId}&p=false`;
+    fetch(fetchTo, {
+      method: "Get",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => {
+        // clearMessages();
+        if (response.ok) {
+          // setCreateMessage("Tvarkaraščio failas paruoštas.");
+        } else {
+          // setErrorMessage(`Tvarkaraščio failo paruošti nepavyko.`);
+        }
+        return response;
+      })
+      .then((response) => {
+        const filename = response.headers
+          .get("Content-Disposition")
+          .split("filename=")[1];
+        // console.log(filename);
+        response.blob().then((blob) => {
+          let url = window.URL.createObjectURL(blob);
+          let a = document.createElement("a");
+          a.href = url;
+          a.download = filename;
+          a.click();
+        });
+      });
+  };
+  ////////////////////////////////
 
   const events = [
     ...schedule.map((schedule) => {
-      // const color = subjectColors[schedule.subject.id];
-      // console.log(color);
-      const color = subjectColors[0];
-      
-      
-      if(myMap.has(schedule.subject.id)){
-        // color = subjectColors[myMap.get(schedule.subject.id)];
-        console.log(myMap);
-        // let aa = subjectColors[myMap.get(schedule.subject.id)];
-      }else{
-        // color = subjectColors[Math.floor(Math.random() * (9))];
-        // const newMap = new Map(myMap);
-        // newMap.set(schedule.subject.id, subjectColors[color]);
-        // setMyMap(newMap);
-      }
-      
+      const color = subjectColorMap[schedule.subject.id];
       return {
         title: `<b>${schedule.subject.name}</b>
           <br />
@@ -205,23 +209,23 @@ const handleClickPrint = (scheduleId, paged) => {
             Spausdinti kalendorių
           </Button> */}
 
-                      <Button
-                        variant="contained"
-                        // startIcon={<LocalPrintshopIcon />}
+          <Button
+            variant="contained"
+            // startIcon={<LocalPrintshopIcon />}
 
-                        onClick={() => handleClickPrint(params.id, true)}
-                      >
-                      SPAUSDINTI EXCEL
-                      </Button>
-                      <Button
-                        variant="contained"
-                        // startIcon={<EditIcon />}
+            onClick={() => handleClickPrint(params.id, true)}
+          >
+            SPAUSDINTI EXCEL
+          </Button>
+          <Button
+            variant="contained"
+            // startIcon={<EditIcon />}
 
-                        onClick={() => handleClickPrint(params.id, false)}
-                      >
-                        REDAGUOTI EXCEL
-                      </Button>
-                      <Link to="/">
+            onClick={() => handleClickPrint(params.id, false)}
+          >
+            REDAGUOTI EXCEL
+          </Button>
+          <Link to="/">
             <Button id="back-button-schedule" variant="contained">
               Grįžti
             </Button>
