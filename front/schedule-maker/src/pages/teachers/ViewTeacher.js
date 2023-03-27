@@ -85,7 +85,7 @@ export function ViewTeacher() {
             })}
           </Grid>
 
-          <Grid item sm={12}>
+          <Grid item sm={12} marginBottom={10}>
             <Stack direction="row" spacing={2}>
               <Link to={`/teachers/edit/${teacher.id}`}>
                 <Button id="edit-button-view-teacher" variant="contained">
