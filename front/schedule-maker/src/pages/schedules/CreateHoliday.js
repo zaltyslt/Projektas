@@ -116,20 +116,7 @@ export function CreateHoliday() {
     }
 
     if (dateFrom !== "" && dateUntil !== "" && dateFrom.isAfter(dateUntil)) {
-      setErrorMessageUntil("Diena iki negali būti vėliau už dieną nuo.");
-      setDateUntilEmpty(true);
-      isValid = false;
-    }
-
-    if (
-      dateFrom !== "" &&
-      dateUntil !== "" &&
-      dateFrom.$d.toISOString().split("T")[0] ===
-        dateUntil.$d.toISOString().split("T")[0]
-    ) {
-      setErrorMessageUntil(
-        "Pradžios ir pabaigos data negali būti ta pati diena."
-      );
+      setErrorMessageUntil("Diena iki negali būti anksčiau už dieną nuo.");
       setDateUntilEmpty(true);
       isValid = false;
     }
