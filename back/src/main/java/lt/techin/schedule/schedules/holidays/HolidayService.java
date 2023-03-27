@@ -1,8 +1,10 @@
 package lt.techin.schedule.schedules.holidays;
 
+import jakarta.transaction.Transactional;
 import lt.techin.schedule.exceptions.ValidationException;
 import lt.techin.schedule.schedules.Schedule;
 import lt.techin.schedule.schedules.ScheduleRepository;
+import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -57,5 +59,16 @@ public class HolidayService {
         existingHoliday.setDateUntil(holiday.getDateUntil());
 
         return holidayRepository.save(existingHoliday);
+    }
+
+    @Transactional
+    public Boolean deleteHoliday(Long holidayId) {
+        Holiday existingHoliday = holidayRepository.findById(holidayId).orElseThrow(() -> new ValidationException("Nurodytos atostogos neegzistuoja", "Holiday", "Does not exist", holidayId.toString()));
+        try {
+            holidayRepository.deleteById(holidayId);
+            return true;
+        } catch (IllegalArgumentException | OptimisticLockingFailureException e) {
+            return false;
+        }
     }
 }

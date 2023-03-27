@@ -61,4 +61,10 @@ public class HolidayController {
         Holiday updatedHoliday = holidayService.update(holidayId, toHoliday(holidayDto));
         return ok(toHolidayDto(updatedHoliday));
     }
+
+    @DeleteMapping(value = "/holidays/delete-holiday/{holidayId}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<Boolean> deleteHoliday(@PathVariable Long holidayId) {
+        Boolean result = holidayService.deleteHoliday(holidayId);
+        return ok(result);
+    }
 }
