@@ -1,12 +1,21 @@
 package lt.techin.schedule.schedules;
 
+import lt.techin.schedule.config.LithuanianHolidays;
 import lt.techin.schedule.exceptions.ValidationException;
 import lt.techin.schedule.group.GroupRepository;
+import lt.techin.schedule.schedules.holidays.Holiday;
+import lt.techin.schedule.schedules.holidays.HolidayRepository;
+import lt.techin.schedule.schedules.holidays.LithuanianHolidaySetupOnCreate;
 import lt.techin.schedule.schedules.planner.WorkDayRepository;
 import lt.techin.schedule.subject.SubjectRepository;
 import lt.techin.schedule.teachers.TeacherRepository;
+import org.aspectj.lang.annotation.After;
+import org.aspectj.lang.annotation.Aspect;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -22,22 +31,24 @@ public class ScheduleService {
 
     private final WorkDayRepository workDayRepository;
 
+    private final HolidayRepository holidayRepository;
+
     public ScheduleService(ScheduleRepository scheduleRepository,
                            GroupRepository groupRepository,
                            SubjectRepository subjectRepository,
-                           TeacherRepository teacherRepository, WorkDayRepository workDayRepository) {
+                           TeacherRepository teacherRepository, WorkDayRepository workDayRepository, HolidayRepository holidayRepository) {
         this.scheduleRepository = scheduleRepository;
         this.groupRepository = groupRepository;
         this.subjectRepository = subjectRepository;
         this.teacherRepository = teacherRepository;
         this.workDayRepository = workDayRepository;
+        this.holidayRepository = holidayRepository;
     }
 
     public List<Schedule> getAll() {
         var schedule = scheduleRepository.findAll();
         for (Schedule schedule1 : schedule) {
             System.out.println(schedule1.getDateFrom().getDayOfWeek());
-
         }
         return scheduleRepository.findAll();
     }
@@ -62,7 +73,11 @@ public class ScheduleService {
             throw new ValidationException("Tvarkaraštis šiai grupei ir šiam " +
                     "laikotarpiui jau yra sukurtas", "Schedule", "Not unique", scheduleDto.toString());
         } else {
-            return scheduleRepository.save(schedule);
+            Schedule scheduleToSave = scheduleRepository.save(schedule);
+            LinkedHashSet<Holiday> predefinedHolidays = LithuanianHolidaySetupOnCreate.SetupHolidays(LithuanianHolidays.LITHUANIAN_HOLIDAYS, schedule);
+            holidayRepository.saveAll(predefinedHolidays);
+            scheduleToSave.addHolidays(predefinedHolidays);
+            return scheduleToSave;
         }
     }
 
@@ -95,7 +110,5 @@ public class ScheduleService {
             }
         }
         throw new ValidationException("Toks tvarkaraštis neegzistuoja","id","not found",id.toString());
-
     }
-
 }

@@ -70,8 +70,6 @@ public class SetupWorkDayConflicts {
         }
         return false;
     }
-    
-    
 }
 
 

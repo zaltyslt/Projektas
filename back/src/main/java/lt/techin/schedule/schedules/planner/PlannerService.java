@@ -245,14 +245,10 @@ public class PlannerService {
         var end = workDayDto.getEndIntEnum();
         int interval = end - start + INTERVAL_CONSTANT;
 
-        if (existingWorkDay != null) {
-            workDayRepository.deleteById(workDayId);
-            schedule.replaceUnassignedTime(existingWorkDay.getSubject().getId(), unassignedHours + interval);
-            scheduleRepository.save(schedule);
-            return true;
-        } else {
-            return false;
-        }
+        workDayRepository.deleteById(workDayId);
+        schedule.replaceUnassignedTime(existingWorkDay.getSubject().getId(), unassignedHours + interval);
+        scheduleRepository.save(schedule);
+        return true;
     }
 
     @Transactional

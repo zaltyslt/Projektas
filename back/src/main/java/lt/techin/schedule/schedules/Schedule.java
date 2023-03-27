@@ -3,8 +3,10 @@ package lt.techin.schedule.schedules;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
+import lt.techin.schedule.config.LithuanianHolidays;
 import lt.techin.schedule.group.Group;
 import lt.techin.schedule.schedules.holidays.Holiday;
+import lt.techin.schedule.schedules.holidays.LithuanianHolidaySetupOnCreate;
 import lt.techin.schedule.schedules.planner.WorkDay;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -104,7 +106,6 @@ public class Schedule {
         this.semester = semester;
     }
 
-
     public boolean isActive() {
         return active;
     }
@@ -169,7 +170,9 @@ public class Schedule {
         holidays.add(holiday);
     }
 
-
+    public void addHolidays (Set<Holiday> holidays) {
+        this.holidays.addAll(holidays);
+    }
 
     public Map<Long, Integer> getSubjectIdWithUnassignedTime() {
         return subjectIdWithUnassignedTime;

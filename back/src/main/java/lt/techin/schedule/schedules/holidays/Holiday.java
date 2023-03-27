@@ -59,6 +59,13 @@ public class Holiday {
     public Holiday() {
     }
 
+    public Holiday(String holidayName, Schedule schedule, LocalDate dateFrom, LocalDate dateUntil) {
+        this.holidayName = holidayName;
+        this.schedule = schedule;
+        this.dateFrom = dateFrom;
+        this.dateUntil = dateUntil;
+    }
+
     public Holiday(Long id, String holidayName, Schedule schedule,
                    LocalDate dateFrom, LocalDate dateUntil, LocalDateTime createdDate,
                    LocalDateTime modifiedDate) {
