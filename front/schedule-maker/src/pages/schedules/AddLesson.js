@@ -386,14 +386,14 @@ export function AddLesson() {
                     Tvarkaraštis
                   </Button>
                 </Link>
-              </Stack>
-            </Grid>
-            <Link to={`/planning/${scheduleId}`}>
+                <Link to={`/planning/${scheduleId}`}>
                   <Button id="cancel-button-add-lesson" variant="contained">
                     Grįžti
                   </Button>
                 </Link>
-
+              </Stack>
+            </Grid>
+            
             <Grid item sm={10}>
               {error && <Alert severity="warning">{error}</Alert>}
               {createMessage && (
