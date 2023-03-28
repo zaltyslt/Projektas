@@ -25,15 +25,14 @@ import DialogContentText from '@mui/material/DialogContentText';
 export function Schedule() {
   const [weekendsVisible, setWeekendsVisible] = useState(true);
   const [schedule, setSchedule] = useState([]);
+  const [schedules, setSchedules] = useState([]);
   const [holiday, setHoliday] = useState([]);
   const params = useParams();
-
   const [open, setOpen] = React.useState(false);
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
-  const [maxWidth, setMaxWidth] = React.useState('sm');
+  const [maxWidth, setMaxWidth] = React.useState('md');
   const [fullWidth, setFullWidth] = React.useState(true);
-
   const [conflictDates, setConflictDates] = useState([])
 
   const handleClickOpen = () => {
@@ -83,12 +82,41 @@ export function Schedule() {
 
   useEffect(() => {
     const div = document.querySelector(".fc-license-message");
-    div.style.visibility = "hidden"; // or 'visible' to show the div
+    div.style.visibility = "hidden";
   }, []);
 
-  /////////////////////////////////
+  useEffect(() => {
+    checkConflictsOnClick();
+  }, [schedule]);
+
+  const checkConflictsOnClick = async () => {
+    const promises = [];
+    const seenKeys = new Set();
+
+    schedule.forEach((item) => {
+      if (item.hasTeacherConflict && item.scheduleIdWithTeacherNameConflict) {
+        Object.entries(item.scheduleIdWithTeacherNameConflict).forEach(([key, value]) => {
+          if (!seenKeys.has(key)) {
+            promises.push(fetch(`api/v1/schedules/schedule/${key}`).then((response) => response.json()));
+            seenKeys.add(key);
+          }
+        });
+      }
+      if (item.hasClassroomConflict && item.scheduleIdWithClassroomNameConflict) {
+        Object.entries(item.scheduleIdWithClassroomNameConflict).forEach(([key, value]) => {
+          if (!seenKeys.has(key)) {
+            promises.push(fetch(`api/v1/schedules/schedule/${key}`).then((response) => response.json()));
+            seenKeys.add(key);
+          }
+        });
+      }
+    });
+    const results = await Promise.all(promises);
+    setSchedules(results);
+    console.log(results)
+  };
+
   const handleClickPrint = (scheduleId, paged) => {
-    // console.log(scheduleId);
     const fetchTo = paged
       ? `api/v1/schedules/excel?id=${scheduleId}&p=true`
       : `api/v1/schedules/excel?id=${scheduleId}&p=false`;
@@ -99,11 +127,8 @@ export function Schedule() {
       },
     })
       .then((response) => {
-        // clearMessages();
         if (response.ok) {
-          // setCreateMessage("Tvarkaraščio failas paruoštas.");
         } else {
-          // setErrorMessage(`Tvarkaraščio failo paruošti nepavyko.`);
         }
         return response;
       })
@@ -111,7 +136,6 @@ export function Schedule() {
         const filename = response.headers
           .get("Content-Disposition")
           .split("filename=")[1];
-        // console.log(filename);
         response.blob().then((blob) => {
           let url = window.URL.createObjectURL(blob);
           let a = document.createElement("a");
@@ -121,7 +145,6 @@ export function Schedule() {
         });
       });
   };
-  ////////////////////////////////
 
   const events = [
     ...schedule.map((schedule) => {
@@ -136,28 +159,24 @@ export function Schedule() {
           <br />
           ${schedule.online
             ? "Nuotolinė pamoka"
-            : schedule.classroom.classroomName
+            : schedule.classroom ? schedule.classroom.classroomName : ""
           }<br />
           `,
         start: schedule.date,
         allDay: true,
-        url: `http://localhost:3000/schedule-maker#/schedules/edit-lesson/${schedule.id}`,
+        url: `api/v1/schedules/edit-lesson/${schedule.id}`,
         color: color,
       };
     }),
-    ...holiday.flatMap((holiday) => {
-      const holidayDates = eachDayOfInterval({
-        start: new Date(holiday.dateFrom),
-        end: new Date(holiday.dateUntil),
-      });
-      return holidayDates.map((date) => ({
-        title: `<div style="margin-top: 37px; margin-bottom: 37px;"><b>${holiday.name}</b></div>` ,
-        start: date,
+    ...holiday.map((holiday) => {
+      return {
+        title: `<b>${holiday.name}</b>`,
+        start: holiday.dateFrom,
         allDay: true,
-        url: `http://localhost:3000/schedule-maker#/schedules/edit-holidays/${holiday.id}`,
+        url: `api/v1/schedules/edit-holidays/${holiday.id}`,
         color: "#cccccc",
-      }));
-    }),
+      };
+    })
   ];
 
   const renderEventContent = (eventInfo) => (
@@ -210,7 +229,6 @@ export function Schedule() {
           )}
         />
       </div>
-
       <Grid item sm={10} className="button-container">
         <Stack direction="row" spacing={2}>
           <Link to={"/planning/" + params.id}>
@@ -218,23 +236,12 @@ export function Schedule() {
               Planavimas
             </Button>
           </Link>
-          {/* <Button
-            id="print-button-schedule"
-            variant="contained"
-            onClick={() => window.print()}
-          >
-            Spausdinti kalendorių
-          </Button> */}
-
           <Button
             variant="contained"
-            // startIcon={<LocalPrintshopIcon />}
-
             onClick={() => handleClickPrint(params.id, true)}
           >
             SPAUSDINTI EXCEL
           </Button>
-
           <div>
             <Button variant="outlined" onClick={handleClickOpen}>
               Tikrinti konfliktus
@@ -252,7 +259,8 @@ export function Schedule() {
               </DialogTitle>
               <DialogContent>
                 <DialogContentText>
-                  {schedule
+                  {schedule && schedule.length > 0 ? (
+                    schedule
                     .filter(
                       (item) =>
                         (item.hasTeacherConflict &&
@@ -262,14 +270,24 @@ export function Schedule() {
                     )
                     .map((item) => (
                       <div key={item.id}>
-                        <h3>{`Diena:  ${item.date}`}</h3>
+                        <h3>Diena: {item.date}</h3>
                         {item.hasTeacherConflict &&
                           item.scheduleIdWithTeacherNameConflict && (
                             <div>
                               {Object.entries(
                                 item.scheduleIdWithTeacherNameConflict
                               ).map(([key, value]) => (
-                                <p key={key}>{`Mokytojas: ${value}`}</p>
+                                <div key={key}>
+                                  <p>Mokytojas: {value}</p>
+                                  {schedules
+                                    .filter(
+                                      (scheduleItem) =>
+                                        item.scheduleIdWithTeacherNameConflict[scheduleItem.id]
+                                    )
+                                    .map((scheduleItem) => (
+                                      <p key={scheduleItem.id}>{`Mokslo metai: ${scheduleItem.schoolYear}, pavadinimas: ${scheduleItem.semester}, laikotarpis ${scheduleItem.dateFrom} — ${scheduleItem.dateUntil}`}</p>
+                                    ))}
+                                </div>
                               ))}
                             </div>
                           )}
@@ -279,10 +297,24 @@ export function Schedule() {
                               {Object.entries(
                                 item.scheduleIdWithClassroomNameConflict
                               ).map(([key, value]) => (
-                                <p key={key}>{`Klasė: ${value}`}</p>
+                                <div key={key}>
+                                  <p>Klasė: {value}</p>
+                                  {schedules
+                                    .filter(
+                                      (scheduleItem) =>
+                                        item.scheduleIdWithClassroomNameConflict[scheduleItem.id]
+                                    )
+                                    .map((scheduleItem) => (
+                                      <p key={scheduleItem.id}>{`Mokslo metai: ${scheduleItem.schoolYear}, pavadinimas: ${scheduleItem.semester}, laikotarpis ${scheduleItem.dateFrom} — ${scheduleItem.dateUntil}`}</p>
+                                    ))}
+                                </div>
                               ))}
-                            </div>)}
-                      </div>))}
+                            </div>
+                          )}
+                      </div>
+                    ))) : (
+                    <p>Konfliktų nėra.</p>
+                  )}
                 </DialogContentText>
               </DialogContent>
               <DialogActions>

@@ -23,10 +23,6 @@ import static lt.techin.schedule.schedules.ScheduleMapper.toScheduleCreateDto;
 public class ScheduleService {
     private final ScheduleRepository scheduleRepository;
     private final GroupRepository groupRepository;
-    private final SubjectRepository subjectRepository;
-    private final TeacherRepository teacherRepository;
-
-    private final WorkDayRepository workDayRepository;
 
     private final HolidayRepository holidayRepository;
     private final HolidayPlanRepository holidayPlanRepository;
@@ -61,7 +57,6 @@ public class ScheduleService {
         var existingGroup = groupRepository.findById(groupId).orElseThrow(() ->
                 new ValidationException("Nurodyta grupė nerasta", "Group", "Does not exist", groupId.toString()));
         schedule.setGroups(existingGroup);
-
         var existing = scheduleRepository.findAll();
         existing = existing.stream().filter(s -> s.getGroups().getName().equalsIgnoreCase(existingGroup.getName()))
                 .filter(s -> s.getDateFrom().equals(schedule.getDateFrom()))

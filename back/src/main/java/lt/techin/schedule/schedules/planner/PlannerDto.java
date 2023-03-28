@@ -16,9 +16,6 @@ public class PlannerDto {
 
     private int assignedHours;
 
-//    int unassignedHours;
-
-//    private Set<LocalDate> dates;
     private LocalDate dateFrom;
 
     private int startIntEnum;
@@ -53,22 +50,6 @@ public class PlannerDto {
     public void setAssignedHours(int assignedHours) {
         this.assignedHours = assignedHours;
     }
-
-//    public int getUnassignedHours() {
-//        return unassignedHours;
-//    }
-//
-//    public void setUnassignedHours(int unassignedHours) {
-//        this.unassignedHours = unassignedHours;
-//    }
-//
-//    public Set<LocalDate> getDates() {
-//        return dates;
-//    }
-//
-//    public void setDates(Set<LocalDate> dates) {
-//        this.dates = dates;
-//    }
 
     public int getStartIntEnum() {
         return startIntEnum;

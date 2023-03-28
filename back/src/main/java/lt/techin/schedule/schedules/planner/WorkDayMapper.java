@@ -2,6 +2,8 @@ package lt.techin.schedule.schedules.planner;
 
 import static lt.techin.schedule.classrooms.ClassroomMapper.toClassroomFromSmallDto;
 import static lt.techin.schedule.classrooms.ClassroomMapper.toClassroomSmallDto;
+import static lt.techin.schedule.schedules.ScheduleMapper.toScheduleEntity;
+import static lt.techin.schedule.schedules.ScheduleMapper.toScheduleFromEntity;
 import static lt.techin.schedule.subject.SubjectMapper.toSubjectFromSmallDto;
 import static lt.techin.schedule.subject.SubjectMapper.toSubjectSmallDto;
 import static lt.techin.schedule.teachers.TeacherMapper.toTeacherEntityDto;
@@ -20,6 +22,7 @@ public class WorkDayMapper {
         workDay.setTeacher(toTeacherFromEntityDto(workDayDto.getTeacher()));
         workDay.setClassroom(toClassroomFromSmallDto(workDayDto.getClassroom()));
         workDay.setSubject(toSubjectFromSmallDto(workDayDto.getSubject()));
+        workDay.setSchedule(toScheduleFromEntity(workDayDto.getSchedule()));
 
         return workDay;
     }
@@ -36,6 +39,7 @@ public class WorkDayMapper {
         workDayDto.setClassroom(toClassroomSmallDto(workDay.getClassroom()));
         workDayDto.setSubject(toSubjectSmallDto(workDay.getSubject()));
         workDayDto.setHasClassroomConflict(workDay.isHasClassroomConflict());
+        workDayDto.setSchedule(toScheduleEntity(workDay.getSchedule()));
         workDayDto.setHasTeacherConflict(workDay.isHasTeacherConflict());
         workDayDto.setScheduleIdWithClassroomNameConflict(workDay.getScheduleIdWithClassroomNameConflict());
         workDayDto.setScheduleIdWithTeacherNameConflict(workDay.getScheduleIdWithTeacherNameConflict());

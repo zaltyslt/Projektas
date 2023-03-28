@@ -37,6 +37,7 @@ public class SubjectService {
         this.classroomRepository = classroomRepository;
     }
 
+
     public List<Subject> getAll() {
         return subjectRepository.findAll().stream().filter(subject -> !subject.getDeleted()).collect(Collectors.toList());
     }

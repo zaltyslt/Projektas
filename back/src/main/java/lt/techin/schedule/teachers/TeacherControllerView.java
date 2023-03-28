@@ -58,4 +58,9 @@ public class TeacherControllerView {
     public List<TeacherEntityDto> getTeachersBySubject(@RequestParam Long subjectId, @RequestParam Long shiftId) {
         return teacherFinder.findTeachersBySubjectsId(subjectId, shiftId).stream().map(TeacherMapper::toTeacherEntityDto).collect(Collectors.toList());
     }
+
+    @GetMapping("/{subjectId}")
+    public List<TeacherEntityDto> getTeachersBySubject(@PathVariable Long subjectId) {
+        return teacherFinder.findTeachersBySubject(subjectId).stream().map(TeacherMapper::toTeacherEntityDto).collect(Collectors.toList());
+    }
 }

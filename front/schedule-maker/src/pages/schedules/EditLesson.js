@@ -27,7 +27,7 @@ export function EditLesson() {
   const [selectedTeacher, setSelectedTeacher] = useState("");
   const [teachers, setTeachers] = useState([]);
   const [subject, setSubject] = useState({});
-  const [schedule, setSchedule] = useState({});
+  const [scheduleId, setScheduleId] = useState("");
   const [classRooms, setClassRooms] = useState([]);
   const [classRoom, setClassRoom] = useState("");
   const [selectedClassRoom, setSelectedClassRoom] = useState("");
@@ -38,15 +38,16 @@ export function EditLesson() {
   const [openPrompt, setOpenPrompt] = useState(false);
 
   const params = useParams();
-  const calendarUrl = useHref(`/schedules/${schedule.id}`);
+  const calendarUrl = useHref(`/schedules/${scheduleId}`);
 
   useEffect(() => {
     fetch(`api/v1/schedules/lesson/${params.id}`)
       .then((response) => response.json())
       .then((data) => {
+        console.log(data);
         setWorkDay(data);
         setSubject(data.subject);
-        setSchedule(data.schedule);
+        setScheduleId(data.schedule.id);
         fetchTeachers(data.subject.id);
         fetchSubjects(data.subject.id);
       });
@@ -233,7 +234,7 @@ export function EditLesson() {
                 <Button variant="contained" onClick={handlePrompt}>
                   Ištrinti
                 </Button>
-                <Link to={`/schedules/${schedule.id}`}>
+                <Link to={`/schedules/${scheduleId}`}>
                   <Button variant="contained">Grįžti</Button>
                 </Link>
               </Stack>

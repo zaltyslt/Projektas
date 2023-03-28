@@ -49,7 +49,6 @@ public class WorkDay {
     @ElementCollection
     @CollectionTable(name = "schedule_classroom_conflicts", joinColumns = @JoinColumn(name = "classroom_id"))
     @MapKeyColumn(name = "schedule_id")
-//    Schedule semester ir time
     @Column(name = "classroom_name")
     private Map<Long, String> scheduleIdWithClassroomNameConflict;
 
@@ -93,6 +92,10 @@ public class WorkDay {
         this.online = online;
         scheduleIdWithTeacherNameConflict = new HashMap<>();
         scheduleIdWithClassroomNameConflict = new HashMap<>();
+    }
+
+    public WorkDay(Long id) {
+        this.id = id;
     }
 
     public Teacher getTeacher() {
