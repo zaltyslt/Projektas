@@ -94,6 +94,10 @@ public class WorkDay {
         scheduleIdWithClassroomNameConflict = new HashMap<>();
     }
 
+    public WorkDay(Long id) {
+        this.id = id;
+    }
+
     public Teacher getTeacher() {
         return teacher;
     }
