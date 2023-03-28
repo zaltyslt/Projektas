@@ -49,34 +49,34 @@ export function ScheduleList() {
   };
 
   const handleClickPrint = (scheduleId) => {
-    // console.log(scheduleId);
     fetch(`api/v1/schedules/excel?id=${scheduleId}`, {
       method: "Get",
       headers: {
         "Content-Type": "application/json",
       },
     })
-    .then((response) => {
-      clearMessages();
-      if (response.ok) {
-        setCreateMessage("Tvarkaraščio failas paruoštas.");
-      } else {
-        setErrorMessage(`Tvarkaraščio failo paruošti nepavyko.`);
-      }
-      return response;
-    }).then((response) => {
-      const filename =  response.headers.get('Content-Disposition').split('filename=')[1];
-      console.log(filename);
-      response.blob().then(blob => {
-        let url = window.URL.createObjectURL(blob);
-        let a = document.createElement('a');
-        a.href = url;
-        a.download = filename;
-        a.click();
-    });
-
-    });
-  }
+      .then((response) => {
+        clearMessages();
+        if (response.ok) {
+          setCreateMessage("Tvarkaraščio failas paruoštas.");
+        } else {
+          setErrorMessage(`Tvarkaraščio failo paruošti nepavyko.`);
+        }
+        return response;
+      })
+      .then((response) => {
+        const filename = response.headers
+          .get("Content-Disposition")
+          .split("filename=")[1];
+        response.blob().then((blob) => {
+          let url = window.URL.createObjectURL(blob);
+          let a = document.createElement("a");
+          a.href = url;
+          a.download = filename;
+          a.click();
+        });
+      });
+  };
 
   const handleClose = () => {
     setOpen(false);
@@ -189,6 +189,16 @@ export function ScheduleList() {
     setCurrentPage(1); // reset to first page
   }, [filter, date]);
 
+  const handleDate = (endDate) => {
+    let today = new Date();
+    today = today.toISOString().split("T")[0];
+    if (today > endDate) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
   return (
     <div>
       <Container maxWidth="lg">
@@ -246,7 +256,7 @@ export function ScheduleList() {
                 onChange={(e) => setFilter(e.target.value)}
                 onFocus={clearMessages}
               ></TextField>
-               </Grid>
+            </Grid>
 
             <Grid item sm={4}>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -276,6 +286,7 @@ export function ScheduleList() {
                 </TableCell>
                 <TableCell style={{ width: "550px" }}>Tvarkaraštis</TableCell>
                 <TableCell style={{ width: "550px" }}>Laikotarpis</TableCell>
+                <TableCell>Statusas</TableCell>
                 <TableCell></TableCell>
                 <TableCell></TableCell>
               </TableRow>
@@ -327,6 +338,14 @@ export function ScheduleList() {
                       )}
                     </TableCell>
 
+                    <TableCell>
+                      {handleDate(schedule.dateUntil)
+                        ? "Neaktualus"
+                        : schedule.hasConflicts
+                        ? "Turi konfliktų"
+                        : "Suplanuotas"}
+                    </TableCell>
+
                     <TableCell className="action" align="center">
                       <Link to={`/planning/${schedule.id}`}>
                         <Button
@@ -348,7 +367,6 @@ export function ScheduleList() {
                         Ištrinti
                       </Button>
                     </TableCell>
-
                   </TableRow>
                 ))}
             </TableBody>

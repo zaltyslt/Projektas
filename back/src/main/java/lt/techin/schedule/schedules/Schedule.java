@@ -35,6 +35,8 @@ public class Schedule {
     private String schoolYear;
     private String semester;
 
+    private boolean hasConflicts;
+
     @Column(name = "date_from", nullable = false)
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate dateFrom;
@@ -73,6 +75,7 @@ public class Schedule {
         subjectIdWithUnassignedTime = new HashMap<>();
         workingDays = new LinkedHashSet<>();
         holidays = new LinkedHashSet<>();
+        hasConflicts = false;
     }
 
     public Long getId() {
@@ -106,7 +109,6 @@ public class Schedule {
     public void setSemester(String semester) {
         this.semester = semester;
     }
-
 
     public boolean isActive() {
         return active;
@@ -172,8 +174,6 @@ public class Schedule {
         holidays.add(holiday);
     }
 
-
-
     public Map<Long, Integer> getSubjectIdWithUnassignedTime() {
         return subjectIdWithUnassignedTime;
     }
@@ -196,5 +196,13 @@ public class Schedule {
 
     public void addUnassignedTimeWithSubjectId(Long subjectID, Integer time) {
         subjectIdWithUnassignedTime.put(subjectID, time);
+    }
+
+    public boolean isHasConflicts() {
+        return hasConflicts;
+    }
+
+    public void setHasConflicts(boolean hasConflicts) {
+        this.hasConflicts = hasConflicts;
     }
 }
