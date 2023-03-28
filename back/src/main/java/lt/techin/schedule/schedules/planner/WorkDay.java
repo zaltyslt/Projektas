@@ -49,6 +49,7 @@ public class WorkDay {
     @ElementCollection
     @CollectionTable(name = "schedule_classroom_conflicts", joinColumns = @JoinColumn(name = "classroom_id"))
     @MapKeyColumn(name = "schedule_id")
+//    Schedule semester ir time
     @Column(name = "classroom_name")
     private Map<Long, String> scheduleIdWithClassroomNameConflict;
 
@@ -77,7 +78,9 @@ public class WorkDay {
         hasClassroomConflict = false;
     }
 
-    public WorkDay(LocalDate date, Subject subject, Teacher teacher, Schedule schedule, Classroom classroom, String lessonStart, String lessonEnd, int lessonStartIntEnum, int lessonEndIntEnum, Boolean online) {
+    public WorkDay(LocalDate date, Subject subject, Teacher teacher, Schedule schedule,
+                   Classroom classroom, String lessonStart, String lessonEnd, int lessonStartIntEnum,
+                   int lessonEndIntEnum, Boolean online) {
         this.date = date;
         this.subject = subject;
         this.teacher = teacher;

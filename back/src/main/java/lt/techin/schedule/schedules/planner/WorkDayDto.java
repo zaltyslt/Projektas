@@ -6,6 +6,7 @@ import lt.techin.schedule.subject.SubjectSmallDto;
 import lt.techin.schedule.teachers.TeacherEntityDto;
 
 import java.time.LocalDate;
+import java.util.Map;
 import java.util.Objects;
 
 public class WorkDayDto {
@@ -31,6 +32,46 @@ public class WorkDayDto {
     private ClassroomSmallDto classroom;
 
     private ScheduleEntityDto schedule;
+
+    private Map<Long, String> scheduleIdWithClassroomNameConflict;
+
+    private Map<Long, String> scheduleIdWithTeacherNameConflict;
+
+    private boolean hasTeacherConflict;
+
+    private boolean hasClassroomConflict;
+
+    public Map<Long, String> getScheduleIdWithClassroomNameConflict() {
+        return scheduleIdWithClassroomNameConflict;
+    }
+
+    public void setScheduleIdWithClassroomNameConflict(Map<Long, String> scheduleIdWithClassroomNameConflict) {
+        this.scheduleIdWithClassroomNameConflict = scheduleIdWithClassroomNameConflict;
+    }
+
+    public Map<Long, String> getScheduleIdWithTeacherNameConflict() {
+        return scheduleIdWithTeacherNameConflict;
+    }
+
+    public void setScheduleIdWithTeacherNameConflict(Map<Long, String> scheduleIdWithTeacherNameConflict) {
+        this.scheduleIdWithTeacherNameConflict = scheduleIdWithTeacherNameConflict;
+    }
+
+    public boolean isHasTeacherConflict() {
+        return hasTeacherConflict;
+    }
+
+    public void setHasTeacherConflict(boolean hasTeacherConflict) {
+        this.hasTeacherConflict = hasTeacherConflict;
+    }
+
+    public boolean isHasClassroomConflict() {
+        return hasClassroomConflict;
+    }
+
+    public void setHasClassroomConflict(boolean hasClassroomConflict) {
+        this.hasClassroomConflict = hasClassroomConflict;
+    }
 
     public WorkDayDto() {
     }
