@@ -104,6 +104,7 @@ public class ProgramPageTest extends BaseTest {
 
         programListPage.setFilterValue(programName);
 
+        //error
         int modulesCount = programListPage.getPrograms().size();
 
         assertTrue(programListPage.getRemovedPrograms().contains(programName), "Program  " + programName + " not found!");
