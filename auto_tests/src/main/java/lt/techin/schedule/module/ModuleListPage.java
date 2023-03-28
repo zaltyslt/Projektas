@@ -8,8 +8,11 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.time.Duration;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -20,18 +23,11 @@ public class ModuleListPage extends AbstractPage {
     @FindBy(css = ".MuiNativeSelect-select")
     WebElement pageDropdownButton;
 
-    @FindBy(css = ".MuiTableBody-root")
-    private WebElement moduleCodeAndNameList;
-
-
     @FindBy(css = "tbody.MuiTableBody-root a")
     private List<WebElement> moduleCodeList;
 
     @FindBy(css = "input.PrivateSwitchBase-input")
-    private WebElement markCheckbox;
-
-    @FindBy(css = "input.PrivateSwitchBase-input")
-    private WebElement Checkbox;
+    private WebElement checkBox;
 
     @FindBy(css = "#search-form")
     private WebElement searchInputField;
@@ -55,10 +51,6 @@ public class ModuleListPage extends AbstractPage {
         select.selectByIndex(2);
     }
 
-    public WebElement getModuleCodeAndNameList() {
-        return WaitUtils.getVisibleWithWait(moduleCodeAndNameList, driver);
-    }
-
     public List<String> getModules() {
         WaitUtils.getElementWithWait(By.cssSelector("tbody.MuiTableBody-root a"), driver);
         return moduleCodeList.stream().map(el -> el.getText()).collect(Collectors.toList());
@@ -68,10 +60,12 @@ public class ModuleListPage extends AbstractPage {
         moduleCodeList.get(moduleIndex).click();
     }
 
+    public void scrollToCheckBox() {scrollToElement(checkBox);
+        new WebDriverWait(driver, Duration.ofSeconds(2)).until(ExpectedConditions.elementToBeClickable(checkBox));}
+
     public void markCheckBox() {
-        if (!markCheckbox.isSelected()) {
-            markCheckbox.click();
-        }
+        if (!checkBox.isSelected()) {
+        checkBox.click();}
     }
 
     public void setFilterValue(String moduleCode) {
