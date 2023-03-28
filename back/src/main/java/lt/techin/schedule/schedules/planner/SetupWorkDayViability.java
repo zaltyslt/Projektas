@@ -68,9 +68,7 @@ public class SetupWorkDayViability {
             return false;
         }
         //Checks whether localDate passed is a holiday, returns false if it is
-        return holidays.stream().noneMatch(h -> (h.getDateFrom().isBefore(localDate) && h.getDateUntil().isAfter(localDate)
-                || (h.getDateFrom().isEqual(localDate) || h.getDateUntil().isEqual(localDate)))
-        );
+        return holidays.stream().noneMatch(h -> (h.getDate() == localDate));
     }
 
 

@@ -12,7 +12,7 @@ public class LithuanianHolidaySetup {
     public static LinkedHashSet<Holiday> SetupHolidays(Schedule schedule) {
         LinkedHashSet<Holiday> convertedHolidays = new LinkedHashSet<>();
         for (LithuanianHolidayDto holidayDto : LithuanianHolidays.LITHUANIAN_HOLIDAYS) {
-            convertedHolidays.add(new Holiday(holidayDto.getName(), schedule, holidayDto.getDate(), holidayDto.getDate()));
+            convertedHolidays.add(new Holiday(holidayDto.getName(), schedule, holidayDto.getDate()));
         }
         return convertedHolidays;
     }
@@ -22,7 +22,7 @@ public class LithuanianHolidaySetup {
         for (LithuanianHolidayDto holidayDto : LithuanianHolidays.LITHUANIAN_HOLIDAYS) {
             LocalDate holidayDate = holidayDto.getDate();
             if (IsInRange(fromDate, untilDate, holidayDate)) {
-                convertedHolidays.add(new Holiday(holidayDto.getName(), schedule, holidayDate, holidayDate));
+                convertedHolidays.add(new Holiday(holidayDto.getName(), schedule, holidayDate));
             }
         }
         return convertedHolidays;

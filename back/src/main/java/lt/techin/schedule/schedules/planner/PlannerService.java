@@ -8,6 +8,7 @@ import lt.techin.schedule.programs.Program;
 import lt.techin.schedule.programs.subjectsHours.SubjectHours;
 import lt.techin.schedule.schedules.Schedule;
 import lt.techin.schedule.schedules.ScheduleRepository;
+import lt.techin.schedule.schedules.holidays.Holiday;
 import lt.techin.schedule.shift.LessonTime;
 import lt.techin.schedule.subject.Subject;
 import lt.techin.schedule.subject.SubjectRepository;
@@ -220,6 +221,11 @@ public class PlannerService {
 
     public List<WorkDay> getWorkDays(Long scheduleId) {
         return workDayRepository.findWorkDaysByScheduleId(scheduleId);
+    }
+
+    public Set<Holiday> getHolidays(Long scheduleId) {
+        Schedule foundSchedule = scheduleRepository.findById(scheduleId).orElseThrow(() -> new ValidationException("Tvarkaraštis nerastas", "Schedule", "Does not exist", scheduleId.toString()));
+        return foundSchedule.getHolidays();
     }
     public Optional<WorkDay> getWorkDay(Long workDayId) {
         return workDayRepository.findById(workDayId);

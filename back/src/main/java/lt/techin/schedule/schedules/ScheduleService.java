@@ -4,6 +4,7 @@ import lt.techin.schedule.config.LithuanianHolidays;
 import lt.techin.schedule.exceptions.ValidationException;
 import lt.techin.schedule.group.GroupRepository;
 import lt.techin.schedule.schedules.holidays.Holiday;
+import lt.techin.schedule.schedules.holidays.HolidayPlan.HolidayPlanRepository;
 import lt.techin.schedule.schedules.holidays.HolidayRepository;
 import lt.techin.schedule.schedules.holidays.LithuanianHolidaySetup;
 import lt.techin.schedule.schedules.planner.WorkDayRepository;
@@ -28,17 +29,20 @@ public class ScheduleService {
     private final WorkDayRepository workDayRepository;
 
     private final HolidayRepository holidayRepository;
+    private final HolidayPlanRepository holidayPlanRepository;
 
     public ScheduleService(ScheduleRepository scheduleRepository,
                            GroupRepository groupRepository,
                            SubjectRepository subjectRepository,
-                           TeacherRepository teacherRepository, WorkDayRepository workDayRepository, HolidayRepository holidayRepository) {
+                           TeacherRepository teacherRepository, WorkDayRepository workDayRepository, HolidayRepository holidayRepository,
+                           HolidayPlanRepository holidayPlanRepository) {
         this.scheduleRepository = scheduleRepository;
         this.groupRepository = groupRepository;
         this.subjectRepository = subjectRepository;
         this.teacherRepository = teacherRepository;
         this.workDayRepository = workDayRepository;
         this.holidayRepository = holidayRepository;
+        this.holidayPlanRepository = holidayPlanRepository;
     }
 
     public List<Schedule> getAll() {
@@ -101,8 +105,7 @@ public class ScheduleService {
         Optional<Schedule> scheduleToDelete = scheduleRepository.findById(id);
         if (scheduleToDelete.isPresent()) {
             try {
-
-             scheduleRepository.delete(scheduleToDelete.get());
+                scheduleRepository.delete(scheduleToDelete.get());
                 return true;
             } catch (Exception e) {
               return false;

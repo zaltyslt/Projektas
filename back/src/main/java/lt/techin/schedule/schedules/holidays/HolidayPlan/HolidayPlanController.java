@@ -1,4 +1,4 @@
-package lt.techin.schedule.schedules.holidays;
+package lt.techin.schedule.schedules.holidays.HolidayPlan;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,36 +10,34 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
 
-import static lt.techin.schedule.schedules.holidays.HolidayMapper.toHoliday;
-import static lt.techin.schedule.schedules.holidays.HolidayMapper.toHolidayDto;
 import static org.springframework.http.ResponseEntity.ok;
 
 @RestController
 @RequestMapping("/api/v1/schedules")
-public class HolidayController {
-    Logger logger = LoggerFactory.getLogger(HolidayController.class);
+public class HolidayPlanController {
+    Logger logger = LoggerFactory.getLogger(HolidayPlanController.class);
 
-    private final HolidayService holidayService;
+    private final HolidayPlanService holidayPlanService;
 
-    public HolidayController(HolidayService holidayService) {
-        this.holidayService = holidayService;
+    public HolidayPlanController(HolidayPlanService holidayPlanService) {
+        this.holidayPlanService = holidayPlanService;
     }
 
     @GetMapping(value = "/holidays", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public List<HolidayDto> getHolidayList() {
+    public List<HolidayPlanDto> getHolidayList() {
         logger.info("Get All Holidays List");
-        return holidayService.getAll().stream().map(HolidayMapper::toHolidayDto).toList();
+        return holidayPlanService.getAll().stream().map(HolidayPlanMapper::toHolidayPlanDto).toList();
     }
 
     @GetMapping(value = "/holidays/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public List<HolidayDto> getHolidayListById(@PathVariable Long id) {
+    public List<HolidayPlanDto> getHolidayListById(@PathVariable Long id) {
         logger.info("Get Holiday by ID");
-        return holidayService.getById(id).stream().map(HolidayMapper::toHolidayDto).toList();
+        return holidayPlanService.getById(id).stream().map(HolidayPlanMapper::toHolidayPlanDto).toList();
     }
 
     @PostMapping(value = "/holidays/create-holiday/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Map<String, String>> createHoliday(@RequestBody HolidayDto holidayDto, @PathVariable Long id) {
-        String returnString = holidayService.create(toHoliday(holidayDto), id);
+    public ResponseEntity<Map<String, String>> createHoliday(@RequestBody HolidayPlanDto holidayPlanDto, @PathVariable Long id) {
+        String returnString = holidayPlanService.create(HolidayPlanMapper.toHolidayPlan(holidayPlanDto), id);
         if (!returnString.isEmpty()) {
             logger.info("The holiday was NOT created successfully");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -51,20 +49,20 @@ public class HolidayController {
     }
 
     @GetMapping(value = "/holiday/{holidayId}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<HolidayDto> getHolidayById(@PathVariable Long holidayId) {
-        Holiday existingHoliday = holidayService.getHolidayById(holidayId);
-        return ok(toHolidayDto(existingHoliday));
+    public ResponseEntity<HolidayPlanDto> getHolidayById(@PathVariable Long holidayId) {
+        HolidayPlan existingHolidayPlan = holidayPlanService.getHolidayById(holidayId);
+        return ok(HolidayPlanMapper.toHolidayPlanDto(existingHolidayPlan));
     }
 
     @PutMapping(value = "/holidays/update-holiday/{holidayId}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<HolidayDto> updateHoliday(@PathVariable Long holidayId, @RequestBody HolidayDto holidayDto) {
-        Holiday updatedHoliday = holidayService.update(holidayId, toHoliday(holidayDto));
-        return ok(toHolidayDto(updatedHoliday));
+    public ResponseEntity<HolidayPlanDto> updateHoliday(@PathVariable Long holidayId, @RequestBody HolidayPlanDto holidayPlanDto) {
+        HolidayPlan updatedHolidayPlan = holidayPlanService.update(holidayId, HolidayPlanMapper.toHolidayPlan(holidayPlanDto));
+        return ok(HolidayPlanMapper.toHolidayPlanDto(updatedHolidayPlan));
     }
 
     @DeleteMapping(value = "/holidays/delete-holiday/{holidayId}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Boolean> deleteHoliday(@PathVariable Long holidayId) {
-        Boolean result = holidayService.deleteHoliday(holidayId);
+        Boolean result = holidayPlanService.deleteHoliday(holidayId);
         return ok(result);
     }
 }
