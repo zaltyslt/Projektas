@@ -59,6 +59,7 @@ public class ShiftPageTest extends BaseTest{
         String shiftName = RandomUtils.randomString(1);
         shiftEdit.setShiftName(shiftName);
         shiftEdit.clickSaveButton();
+        WaitUtils.waitPageToLoad(driver);
         WebElement alertMessage = shiftEdit.getAlertMessage();
         assertTrue(alertMessage.isDisplayed(), "Alert not visible");
         assertEquals("Pamaina sėkmingai pakeista.", alertMessage.getText(), "Error while creating room");
