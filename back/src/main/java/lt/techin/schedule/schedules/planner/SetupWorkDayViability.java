@@ -6,13 +6,18 @@ import lt.techin.schedule.schedules.holidays.Holiday;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
 public class SetupWorkDayViability {
     public static WorkDay SetupWorkDay(Long scheduleID, WorkDay workDay, ScheduleRepository scheduleRepository, WorkDayRepository workDayRepository, Schedule primarySchedule) {
         //Assigned so workDay.getDate() method wouldn't be called unnecessarily
         LocalDate workDayDate = workDay.getDate();
+
+        //This is used to avoid ConcurrentModificationException
+        Set<Schedule> schedulesWithConflicts = new HashSet<>();
 
         scheduleRepository.findAll().forEach(schedule -> {
             if (!schedule.getId().equals(scheduleID)) {
@@ -29,12 +34,8 @@ public class SetupWorkDayViability {
                             loopingWorkDay.addClassroomConflict(scheduleID, workDay.getClassroom().getClassroomName());
                             //Need to rewrite WorkDay which has conflicts with current WorkDay
                             workDayRepository.save(loopingWorkDay);
-                            //Saves schedule status as the one having at least one conflict
-                            schedule.setHasConflicts(true);
-                            scheduleRepository.save(schedule);
-                            //Sets the same to a schedule being checked
-                            primarySchedule.setHasConflicts(true);
-                            scheduleRepository.save(primarySchedule);
+
+                            schedulesWithConflicts.addAll(List.of(schedule, primarySchedule));
                         }
                         //Checks whether teachers are the ones having conflict, sending values to original WorkDay
                         if (workDay.getTeacher().equals(loopingWorkDay.getTeacher())) {
@@ -46,17 +47,18 @@ public class SetupWorkDayViability {
                             loopingWorkDay.addTeacherConflict(scheduleID, workDay.getTeacher().getfName() + " " + workDay.getTeacher().getlName());
                             //Need to rewrite WorkDay which has conflicts with current WorkDay
                             workDayRepository.save(loopingWorkDay);
-                            //Saves schedule status as the one having at least one conflict
-                            schedule.setHasConflicts(true);
-                            scheduleRepository.save(schedule);
-                            //Sets the same to a schedule being checked
-                            primarySchedule.setHasConflicts(true);
-                            scheduleRepository.save(primarySchedule);
+
+                            schedulesWithConflicts.addAll(List.of(schedule, primarySchedule));
                         }
                     }
                 }
             }
         });
+        //This is needed to avoid ConcurrentModificationException
+        for (Schedule schedule : schedulesWithConflicts) {
+            schedule.setHasConflicts(true);
+            scheduleRepository.save(schedule);
+        }
         return workDay;
     }
 
@@ -67,7 +69,7 @@ public class SetupWorkDayViability {
         }
         //Checks whether localDate passed is a holiday, returns false if it is
         return holidays.stream().noneMatch(h -> (h.getDateFrom().isBefore(localDate) && h.getDateUntil().isAfter(localDate)
-                && (h.getDateFrom().isEqual(localDate) || h.getDateFrom().isEqual(localDate)))
+                || (h.getDateFrom().isEqual(localDate) || h.getDateUntil().isEqual(localDate)))
         );
     }
 
