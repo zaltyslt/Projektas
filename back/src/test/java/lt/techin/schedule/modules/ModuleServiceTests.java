@@ -41,7 +41,9 @@ public class ModuleServiceTests {
     public void testAddUniqueModuleWithDuplicateName() {
         Module module1 = new Module(1L, "100", "Module1", LocalDateTime.now(), LocalDateTime.now(), false);
         Module module2 = new Module(2L, "100", "Module2", LocalDateTime.now(), LocalDateTime.now(), true);
+
         when(moduleDatabase.findAll()).thenReturn(List.of(module1));
+
         String result = moduleService.create(module2);
         assertEquals("Modulio numeris turi būti unikalus.", result);
     }
@@ -50,8 +52,11 @@ public class ModuleServiceTests {
     public void testGetActiveShifts() {
         Module module1 = new Module(1L, "100", "Module1", LocalDateTime.now(), LocalDateTime.now(), false);
         Module module2 = new Module(2L, "100", "Module2", LocalDateTime.now(), LocalDateTime.now(), true);
+
         when(moduleDatabase.findAll()).thenReturn(Arrays.asList(module1, module2));
+
         List<Module> activeModules = moduleService.getAll();
+
         assertEquals(List.of(module1), activeModules);
     }
 
@@ -59,16 +64,22 @@ public class ModuleServiceTests {
     public void testGetInactiveShifts() {
         Module module1 = new Module(1L, "100", "Module1", LocalDateTime.now(), LocalDateTime.now(), false);
         Module module2 = new Module(2L, "100", "Module2", LocalDateTime.now(), LocalDateTime.now(), true);
+
         when(moduleDatabase.findAll()).thenReturn(Arrays.asList(module1, module2));
+
         List<Module> inactiveModules = moduleService.getAllDeleted();
+
         assertEquals(List.of(module2), inactiveModules);
     }
 
     @Test
     public void testGetShiftByID() {
         Module module = new Module(1L, "100", "Module1", LocalDateTime.now(), LocalDateTime.now(), false);
+
         when(moduleDatabase.findById(1L)).thenReturn(Optional.of(module));
+
         Optional<Module> foundModule = moduleService.getById(1L);
+
         foundModule.ifPresent(value -> assertEquals(module, value));
     }
 
@@ -77,8 +88,10 @@ public class ModuleServiceTests {
         Module module1 = new Module(1L, "100", "Module1", LocalDateTime.now(), LocalDateTime.now(), false);
         Module module2 = new Module(2L, "1000", "Module2", LocalDateTime.now(), LocalDateTime.now(), true);
         Module module3 = new Module(2L, "1000", "Module3", LocalDateTime.now(), LocalDateTime.now(), true);
+
         when(moduleDatabase.findById(2L)).thenReturn(Optional.of(module2));
         when(moduleDatabase.findAll()).thenReturn(Arrays.asList(module1, module2));
+
         String result = moduleService.updateModule(2L, module3);
         assertEquals("", result);
     }
@@ -88,8 +101,10 @@ public class ModuleServiceTests {
         Module module1 = new Module(1L, "1000", "Module1", LocalDateTime.now(), LocalDateTime.now(), false);
         Module module2 = new Module(2L, "100", "Module2", LocalDateTime.now(), LocalDateTime.now(), true);
         Module module3 = new Module(2L, "1000", "Module3", LocalDateTime.now(), LocalDateTime.now(), true);
+
         when(moduleDatabase.findById(2L)).thenReturn(Optional.of(module2));
         when(moduleDatabase.findAll()).thenReturn(Arrays.asList(module1, module2));
+
         String result = moduleService.updateModule(2L, module3);
         assertEquals("Modulio numeris turi būti unikalus.", result);
     }

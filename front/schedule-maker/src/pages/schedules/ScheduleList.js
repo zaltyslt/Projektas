@@ -139,7 +139,7 @@ export function ScheduleList() {
 
     const isWithinDateRange = date
       ? new Date(schedule.dateFrom) <= date &&
-        new Date(schedule.dateUntil) >= date
+      new Date(schedule.dateUntil) >= date
       : true;
 
     return (

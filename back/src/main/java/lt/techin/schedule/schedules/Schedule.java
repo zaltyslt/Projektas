@@ -11,10 +11,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.LinkedHashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 public class Schedule {
@@ -73,7 +70,7 @@ public class Schedule {
 
     public Schedule() {
         subjectIdWithUnassignedTime = new HashMap<>();
-        workingDays = new LinkedHashSet<>();
+        workingDays = new HashSet<>();
         holidays = new LinkedHashSet<>();
         hasConflicts = false;
     }
@@ -172,6 +169,10 @@ public class Schedule {
 
     public void addHoliday (Holiday holiday) {
         holidays.add(holiday);
+    }
+
+    public void addHolidays (Set<Holiday> holidays) {
+        this.holidays.addAll(holidays);
     }
 
     public Map<Long, Integer> getSubjectIdWithUnassignedTime() {

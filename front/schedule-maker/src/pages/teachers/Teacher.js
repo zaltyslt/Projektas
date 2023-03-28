@@ -600,7 +600,7 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
                     <TableCell align="left">Dėstomi dalykai</TableCell>
                     {/* <TableCell align="center">Moduliai </TableCell> */}
                     <TableCell align="right">
-                      <Button variant="contained" onClick={handleShowSubjects}>
+                      <Button id="add-subject-create-teacher" variant="contained" onClick={handleShowSubjects}>
                         Pridėti
                       </Button>
                     </TableCell>

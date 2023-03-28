@@ -134,9 +134,7 @@ export function ProgramList() {
           <Grid item sm={2}>
             <Stack direction="row" justifyContent="flex-end">
               <Link to="/create-program">
-                <Button id="create-new-program" variant="contained">
-                  Pridėti naują
-                </Button>
+                <Button id="create-new-program" variant="contained">Pridėti naują</Button>
               </Link>
             </Stack>
           </Grid>
@@ -187,7 +185,7 @@ export function ProgramList() {
                   rowsPerPageOptions={[
                     10,
                     20,
-                    { label: "Visi", value: filteredPrograms.length },
+                    { label: "Visi", value: filteredPrograms.length},
                   ]}
                   colSpan={2}
                   count={filteredPrograms.length}
@@ -233,7 +231,6 @@ export function ProgramList() {
                       </TableCell>
                       <TableCell>
                         <Button
-                          id="restore-button-list-program"
                           variant="contained"
                           data-value="true"
                           value={program}

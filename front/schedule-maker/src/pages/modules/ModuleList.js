@@ -31,7 +31,6 @@ export function ModuleList() {
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [rowsPerPageInDeleted, setRowsPerPageInDeleted] = useState(10);
   const [isChecked, setChecked] = useState(false);
-
   useEffect(() => {
     fetchModules();
   }, []);
@@ -45,9 +44,8 @@ export function ModuleList() {
       .then((response) => response.json())
       .then((data) => {
         setModules(data);
-        return data;
-      })
-      .then((data) => setFilteredModules(data));
+        setFilteredModules(data);
+      });
   };
 
   const fetchDeletedModules = async () => {
@@ -57,7 +55,7 @@ export function ModuleList() {
   };
 
   const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - modules.length) : 0;
+    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - filteredModules.length) : 0;
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -93,9 +91,14 @@ export function ModuleList() {
         const moduleName = module.name.toLowerCase();
         return moduleName.includes(event.toLowerCase());
       });
+      const deletedFiltered = deletedModules.filter((module) => {
+        const moduleName = module.name.toLowerCase();
+        return moduleName.includes(event.toLowerCase());
+      });
       setPage(0);
       setPageInDeleted(0);
       setFilteredModules(filtered);
+      setDeletedModules(deletedFiltered);
     }
   };
 
@@ -110,6 +113,7 @@ export function ModuleList() {
       .then(fetchDeletedModules);
   };
 
+
   return (
     <div>
       <Container maxWidth="lg">
@@ -120,9 +124,7 @@ export function ModuleList() {
           <Grid item sm={2}>
             <Stack direction="row" justifyContent="flex-end">
               <Link to="/modules/create">
-                <Button id="create-new-module" variant="contained">
-                  Pridėti naują
-                </Button>
+                <Button id="create-new-module" variant="contained">Pridėti naują</Button>
               </Link>
             </Stack>
           </Grid>
@@ -242,7 +244,6 @@ export function ModuleList() {
                     </TableCell>
                     <TableCell align="center" className="activity">
                       <Button
-                        id="restore-button-list-module"
                         variant="contained"
                         onClick={() => handleRestore(module.id)}
                       >
