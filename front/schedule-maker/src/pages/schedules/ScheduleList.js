@@ -49,7 +49,6 @@ export function ScheduleList() {
   };
 
   const handleClickPrint = (scheduleId) => {
-    // console.log(scheduleId);
     fetch(`api/v1/schedules/excel?id=${scheduleId}`, {
       method: "Get",
       headers: {
@@ -66,7 +65,6 @@ export function ScheduleList() {
       return response;
     }).then((response) => {
       const filename =  response.headers.get('Content-Disposition').split('filename=')[1];
-      console.log(filename);
       response.blob().then(blob => {
         let url = window.URL.createObjectURL(blob);
         let a = document.createElement('a');

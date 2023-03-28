@@ -140,6 +140,7 @@ export function Schedule() {
         title: `<div style="margin-top: 37px; margin-bottom: 37px;"><b>${holiday.name}</b></div>` ,
         start: date,
         allDay: true,
+        url: `http://localhost:3000/schedule-maker#/schedules/edit-holidays/${holiday.id}`,
         color: "#cccccc",
       }));
     }),
