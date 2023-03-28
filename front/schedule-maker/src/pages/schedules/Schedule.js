@@ -111,7 +111,6 @@ export function Schedule() {
         const filename = response.headers
           .get("Content-Disposition")
           .split("filename=")[1];
-        // console.log(filename);
         response.blob().then((blob) => {
           let url = window.URL.createObjectURL(blob);
           let a = document.createElement("a");
@@ -121,7 +120,6 @@ export function Schedule() {
         });
       });
   };
-  ////////////////////////////////
 
   const events = [
     ...schedule.map((schedule) => {
@@ -136,7 +134,7 @@ export function Schedule() {
           <br />
           ${schedule.online
             ? "Nuotolinė pamoka"
-            : schedule.classroom.classroomName
+            : schedule.classroom ? schedule.classroom.classroomName : ""
           }<br />
           `,
         start: schedule.date,
