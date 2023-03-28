@@ -35,6 +35,10 @@ public class WorkDayMapper {
         workDayDto.setTeacher(toTeacherEntityDto(workDay.getTeacher()));
         workDayDto.setClassroom(toClassroomSmallDto(workDay.getClassroom()));
         workDayDto.setSubject(toSubjectSmallDto(workDay.getSubject()));
+        workDayDto.setHasClassroomConflict(workDay.isHasClassroomConflict());
+        workDayDto.setHasTeacherConflict(workDay.isHasTeacherConflict());
+        workDayDto.setScheduleIdWithClassroomNameConflict(workDay.getScheduleIdWithClassroomNameConflict());
+        workDayDto.setScheduleIdWithTeacherNameConflict(workDay.getScheduleIdWithTeacherNameConflict());
 
         return workDayDto;
     }

@@ -46,15 +46,11 @@ export function ViewGroup() {
           <Grid item sm={12}>
             <Stack direction="row" spacing={2}>
               <Link to={"/groups/edit/" + group.id}>
-                <Button id="edit-button-view-group" variant="contained">
-                  Redaguoti
-                </Button>
+                <Button variant="contained">Redaguoti</Button>
               </Link>
 
               <Link to="/groups">
-                <Button id="back-button-view-group" variant="contained">
-                  Grįžti
-                </Button>
+                <Button variant="contained">Grįžti</Button>
               </Link>
             </Stack>
           </Grid>

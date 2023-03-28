@@ -4,16 +4,14 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lt.techin.schedule.group.Group;
+import lt.techin.schedule.schedules.holidays.Holiday;
 import lt.techin.schedule.schedules.planner.WorkDay;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.LinkedHashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 public class Schedule {
@@ -28,9 +26,13 @@ public class Schedule {
     @OneToMany(mappedBy = "schedule", cascade = CascadeType.ALL)
     @JsonBackReference
     private Set<WorkDay> workingDays;
-
+    @OneToMany(mappedBy = "schedule", cascade = CascadeType.ALL)
+    @JsonBackReference
+    private Set<Holiday> holidays;
     private String schoolYear;
     private String semester;
+
+    private boolean hasConflicts;
 
     @Column(name = "date_from", nullable = false)
     @JsonFormat(pattern = "yyyy-MM-dd")
@@ -68,7 +70,9 @@ public class Schedule {
 
     public Schedule() {
         subjectIdWithUnassignedTime = new HashMap<>();
-        workingDays = new LinkedHashSet<>();
+        workingDays = new HashSet<>();
+        holidays = new LinkedHashSet<>();
+        hasConflicts = false;
     }
 
     public Long getId() {
@@ -102,7 +106,6 @@ public class Schedule {
     public void setSemester(String semester) {
         this.semester = semester;
     }
-
 
     public boolean isActive() {
         return active;
@@ -152,8 +155,24 @@ public class Schedule {
         this.workingDays = workingDays;
     }
 
+    public Set<Holiday> getHolidays() {
+        return holidays;
+    }
+
+    public void setHolidays(Set<Holiday> holidays) {
+        this.holidays = holidays;
+    }
+
     public void addWorkDay (WorkDay workDay) {
         workingDays.add(workDay);
+    }
+
+    public void addHoliday (Holiday holiday) {
+        holidays.add(holiday);
+    }
+
+    public void addHolidays (Set<Holiday> holidays) {
+        this.holidays.addAll(holidays);
     }
 
     public Map<Long, Integer> getSubjectIdWithUnassignedTime() {
@@ -178,5 +197,13 @@ public class Schedule {
 
     public void addUnassignedTimeWithSubjectId(Long subjectID, Integer time) {
         subjectIdWithUnassignedTime.put(subjectID, time);
+    }
+
+    public boolean isHasConflicts() {
+        return hasConflicts;
+    }
+
+    public void setHasConflicts(boolean hasConflicts) {
+        this.hasConflicts = hasConflicts;
     }
 }

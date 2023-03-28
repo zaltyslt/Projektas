@@ -48,7 +48,7 @@ export function CreateProgram(props) {
 
   const applyResult = (result) => {
     if (result.ok) {
-      setSuccess("Sėkmingai pridėta!");
+      setSuccess("Programa sėkmingai sukurta.");
       clear();
     } else {
       result
@@ -348,9 +348,7 @@ export function CreateProgram(props) {
               </Grid>
             </Grid>
             <Grid item sm={8}>
-              {error && <Alert severity="warning">{error}</Alert>}
-              {success && <Alert severity="success">{success}</Alert>}
-              <Stack direction="row" spacing={2}>
+              <Stack direction="row" spacing={2} marginBottom={2}>
                 <Button
                   id="add-subject-button-create-program"
                   variant="contained"
@@ -373,6 +371,8 @@ export function CreateProgram(props) {
                   Grįžti
                 </Button>
               </Stack>
+              {error && <Alert severity="warning">{error}</Alert>}
+              {success && <Alert severity="success">{success}</Alert>}
             </Grid>
           </Grid>
         </form>

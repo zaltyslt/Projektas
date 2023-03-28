@@ -3,9 +3,6 @@ import { Link } from "react-router-dom";
 import {
   Alert,
   Button,
-  Checkbox,
-  FormControlLabel,
-  FormGroup,
   Grid,
   Paper,
   Table,
@@ -17,10 +14,6 @@ import {
   TablePagination,
   TableRow,
   TextField,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { Container } from "@mui/system";
@@ -34,24 +27,16 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Slide from "@mui/material/Slide";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
+import { dateToUtc } from "../../helpers/helpers";
 
 const Transition = forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 export function ScheduleList() {
   const [schedules, setSchedules] = useState([]);
-  // const [filteredSchedules, setFilteredSchedules] = useState([]);
-
   const [filter, setFilter] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  // const [currentPage2, setCurrentPage2] = useState(1);
   const [schedulesPerPage, setSchedulesPerPage] = useState(10);
-  // const [schedulesPerPage2, setSchedulesPerPage2] = useState(10);
-
-  // const paginate = (pageNumber) => setCurrentPage(pageNumber);
-  // const paginate2 = (pageNumber2) => setCurrentPage2(pageNumber2);
-
-  // const [isChecked, setChecked] = useState(false);
   const [date, setDate] = useState(null);
   const [open, setOpen] = useState(false);
   const [idToDelete, setidToDelete] = useState("");
@@ -63,12 +48,41 @@ export function ScheduleList() {
     setOpen(true);
   };
 
+  const handleClickPrint = (scheduleId) => {
+    fetch(`api/v1/schedules/excel?id=${scheduleId}`, {
+      method: "Get",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => {
+        clearMessages();
+        if (response.ok) {
+          setCreateMessage("Tvarkaraščio failas paruoštas.");
+        } else {
+          setErrorMessage(`Tvarkaraščio failo paruošti nepavyko.`);
+        }
+        return response;
+      })
+      .then((response) => {
+        const filename = response.headers
+          .get("Content-Disposition")
+          .split("filename=")[1];
+        response.blob().then((blob) => {
+          let url = window.URL.createObjectURL(blob);
+          let a = document.createElement("a");
+          a.href = url;
+          a.download = filename;
+          a.click();
+        });
+      });
+  };
+
   const handleClose = () => {
     setOpen(false);
   };
 
   const handleDelete = () => {
-    console.log(idToDelete);
     fetch(`api/v1/schedules/delete-schedule/${idToDelete}`, {
       method: "Delete",
       headers: {
@@ -96,15 +110,6 @@ export function ScheduleList() {
         setSchedules(jsonResponse);
       });
   };
-
-  // const deleteSchedule = () => {
-  //   fetch(`api/v1/schedules/enable-schedule/${schedule.id}`, {
-  //     method: "PATCH",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //     },
-  //   }).then(fetchSchedules);
-  // };
 
   useEffect(() => {
     fetchSchedules();
@@ -134,7 +139,7 @@ export function ScheduleList() {
 
     const isWithinDateRange = date
       ? new Date(schedule.dateFrom) <= date &&
-        new Date(schedule.dateUntil) >= date
+      new Date(schedule.dateUntil) >= date
       : true;
 
     return (
@@ -177,8 +182,21 @@ export function ScheduleList() {
 
   const handleChange = (newValue) => {
     isNaN(newValue) ? setDate(null) : setDate(newValue);
-
     clearMessages();
+  };
+
+  useEffect(() => {
+    setCurrentPage(1); // reset to first page
+  }, [filter, date]);
+
+  const handleDate = (endDate) => {
+    let today = new Date();
+    today = today.toISOString().split("T")[0];
+    if (today > endDate) {
+      return true;
+    } else {
+      return false;
+    }
   };
 
   return (
@@ -194,8 +212,7 @@ export function ScheduleList() {
           <DialogTitle>{"Ar tikrai norite ištrinti tvarkaraštį?"}</DialogTitle>
           <DialogContent>
             <DialogContentText id="alert-dialog-slide-description">
-              Ištrynus tvarkaraštį {idToDelete}, visi su juo susieti resursai
-              bus atlaisvinti, o duomenys pašalinti negrįžtamai.
+              Ištrynus tvarkaraštį jis bus pašalintas negrįžtamai;
             </DialogContentText>
           </DialogContent>
           <DialogActions>
@@ -208,9 +225,8 @@ export function ScheduleList() {
           <Grid item sm={10}>
             <h3>Tvarkaraščių sąrašas</h3>
           </Grid>
-
           <Grid item sm={2}>
-            <Stack direction="row" justifyContent="flex-end" marginBottom={4}>
+            <Stack direction="row" justifyContent="flex-end" marginBottom={2}>
               <Link to="/create-schedule">
                 <Button id="create-new-schedule" variant="contained">
                   Pridėti naują
@@ -222,7 +238,7 @@ export function ScheduleList() {
 
         <Grid item sm={12}>
           <Grid container spacing={2}>
-            <Grid item sm={8}>
+            <Grid item sm={12}>
               {errorMessage && <Alert severity="warning">{errorMessage}</Alert>}
               {createMessage && (
                 <Alert severity="success">{createMessage}</Alert>
@@ -269,7 +285,10 @@ export function ScheduleList() {
                   Grupės pavadinimas
                 </TableCell>
                 <TableCell style={{ width: "550px" }}>Tvarkaraštis</TableCell>
-                <TableCell style={{ width: "100px" }}></TableCell>
+                <TableCell style={{ width: "550px" }}>Laikotarpis</TableCell>
+                <TableCell>Statusas</TableCell>
+                <TableCell></TableCell>
+                <TableCell></TableCell>
               </TableRow>
             </TableHead>
 
@@ -302,16 +321,31 @@ export function ScheduleList() {
                         {schedule.schoolYear} m. {schedule.semester}
                       </Link>
                     </TableCell>
-                    <TableCell>
-                      <Button
-                        id="delete-button-list-schedule"
-                        variant="outlined"
-                        startIcon={<DeleteIcon />}
-                        onClick={() => handleClickOpen(schedule.id)}
-                      >
-                        Ištrinti
-                      </Button>
+
+                    <TableCell component="th" scope="row">
+                      {schedule.groups ? (
+                        !schedule.groups.isActive ? (
+                          <span className="Deleted">
+                            {schedule.groups.name}
+                          </span>
+                        ) : (
+                          <span>
+                            {schedule.dateFrom} — {schedule.dateUntil}
+                          </span>
+                        )
+                      ) : (
+                        <span>Nenurodytas</span>
+                      )}
                     </TableCell>
+
+                    <TableCell>
+                      {handleDate(schedule.dateUntil)
+                        ? "Neaktualus"
+                        : schedule.hasConflicts
+                        ? "Turi konfliktų"
+                        : "Suplanuotas"}
+                    </TableCell>
+
                     <TableCell className="action" align="center">
                       <Link to={`/planning/${schedule.id}`}>
                         <Button
@@ -321,6 +355,17 @@ export function ScheduleList() {
                           Planuoti
                         </Button>
                       </Link>
+                    </TableCell>
+
+                    <TableCell>
+                      <Button
+                        id="delete-button-list-schedule"
+                        variant="contained"
+                        // startIcon={<DeleteIcon />}
+                        onClick={() => handleClickOpen(schedule.id)}
+                      >
+                        Ištrinti
+                      </Button>
                     </TableCell>
                   </TableRow>
                 ))}
@@ -349,79 +394,6 @@ export function ScheduleList() {
             </TableFooter>
           </Table>
         </TableContainer>
-
-        {/* <FormGroup>
-          <FormControlLabel
-            control={<Checkbox />}
-            label="Ištrinti tvarkaraščiai"
-            onChange={(e) =>
-              e.target.checked ? setChecked(true) : setChecked(false)
-            }
-          />
-        </FormGroup> */}
-
-        {/* {isChecked && (
-          <TableContainer component={Paper}>
-            <Table aria-label="custom pagination table">
-              <TableHead>
-                <TableRow>
-                  <TableCell>Grupės pavadinimas</TableCell>
-                  <TableCell className="activity"></TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {filteredDisabledSchedules
-                  .slice(
-                    (currentPage2 - 1) * schedulesPerPage2,
-                    currentPage2 * schedulesPerPage2
-                  )
-                  .map((schedule) => (
-                    <TableRow key={schedule.id}>
-                      <TableCell component="th" scope="row">
-                        {schedule.groups.name}
-                      </TableCell>
-                      <TableCell>
-                        <Button
-                          variant="contained"
-                          data-value="true"
-                          value={schedule}
-                          onClick={(e) => {
-                            enableSchedule(e, schedule);
-                          }}
-                        >
-                          Atstatyti
-                        </Button>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-              </TableBody>
-              <TableFooter>
-                <TableRow>
-                  <TablePagination
-                    labelRowsPerPage="Rodyti po"
-                    rowsPerPageOptions={[
-                      10,
-                      20,
-                      {
-                        label: "Visi",
-                        value: filteredDisabledSchedules.length,
-                      },
-                    ]}
-                    labelDisplayedRows={({ from, to, count }) =>
-                      `${from}-${to} iš ${count}`
-                    }
-                    count={filteredDisabledSchedules.length}
-                    page={currentPage2 - schedulesPerPage2}
-                    onPageChange={(_, page) => setCurrentPage2(page + 1)}
-                    onRowsPerPageChange={(e) =>
-                      setSchedulesPerPage2(parseInt(e.target.value))
-                    }
-                  />
-                </TableRow>
-              </TableFooter>
-            </Table>
-          </TableContainer>
-        )} */}
       </Container>
     </div>
   );

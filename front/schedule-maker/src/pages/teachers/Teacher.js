@@ -42,8 +42,7 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
   const [showSubjSelect, setShowSubjSelect] = useState(false); //show/hide
 
   const [teacher, setTeacher] = useState({});
-  const [currentTacherName, setCurrentTeacherName] = useState('');
-
+  const [currentTacherName, setCurrentTeacherName] = useState("");
 
   // const [id, setid] = useState("");
   // const [fName, setFName] = useState("");
@@ -180,7 +179,7 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
         setTeacher(data);
         setShift(data.selectedShift);
         setChosenSubjects(data.subjectsList);
-        setCurrentTeacherName(data.fName +" "+ data.lName);
+        setCurrentTeacherName(data.fName + " " + data.lName);
       } else {
         setTeacher({});
         setErrorMessage("Nepavyko parsiųsti duomenų iš serverio. (Mokytojas)");
@@ -227,13 +226,13 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
     teacherModifier(teacher);
   };
 
-  // async 
+  // async
   function deleteTeacher() {
     onSave(teacher.id);
     window.location = listUrl;
   }
 
- function applyResult(result) {
+  function applyResult(result) {
     // console.log(result);
 
     if (result.status > 299) {
@@ -241,10 +240,10 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
       setErrorMessage(result.message);
     } else {
       if (mode === "update") {
-        setCreateMessage("Duomenys atnaujinti sėkmingai.");
-        setCurrentTeacherName(teacher.fName +" "+teacher.lName);
+        setCreateMessage("Mokytojo duomenys sėkmingai atnaujinti.");
+        setCurrentTeacherName(teacher.fName + " " + teacher.lName);
       } else {
-        setCreateMessage("Mokytojas sukurtas");
+        setCreateMessage("Mokytojas sėkmingai sukurtas");
         clear();
       }
       setErrorMessage("");
@@ -336,7 +335,7 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
 
   return (
     <Container>
-     <form>
+      <form>
         <h3 className="create-header">
           {mode === "update" ? "Redagavimas" : "Pridėti naują mokytoją"}
         </h3>
@@ -347,14 +346,14 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
             <p>Paskutinį kartą redaguota: {teacher && teacher.dateModified}</p>
           </Grid>
         )}
-        
-        <Grid container rowSpacing={2} >
-            <Grid item sm={8}>
-              {errorMessage && <Alert severity="warning">{errorMessage}</Alert>}
-              {createMessage && <Alert severity="success">{createMessage}</Alert>}
-            </Grid> 
-          
-            <Grid item sm={8} >
+
+        <Grid container rowSpacing={2}>
+          <Grid item sm={8}>
+            {errorMessage && <Alert severity="warning">{errorMessage}</Alert>}
+            {createMessage && <Alert severity="success">{createMessage}</Alert>}
+          </Grid>
+
+          <Grid item sm={8}>
             <TextField
               error={errorFname.error}
               helperText={errorFname.text}
@@ -376,10 +375,9 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
                 // setTeacher(e.target.value);
               }}
             ></TextField>
-            </Grid>
+          </Grid>
 
-
-            <Grid item sm={8}>
+          <Grid item sm={8}>
             <TextField
               error={errorLname.error}
               helperText={errorLname.text}
@@ -400,9 +398,9 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
                 // setLName(e.target.value);
               }}
             ></TextField>
-            </Grid>
+          </Grid>
 
-            <Grid item sm={8}>
+          <Grid item sm={8}>
             <TextField
               error={errorPhoneNumber.error}
               helperText={errorPhoneNumber.text}
@@ -424,9 +422,9 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
                 });
               }}
             ></TextField>
-             </Grid>
+          </Grid>
 
-             <Grid item sm={8}>
+          <Grid item sm={8}>
             <TextField
               error={errorDirectMail.error}
               helperText={errorDirectMail.text}
@@ -448,11 +446,9 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
                 });
               }}
             ></TextField>
-            </Grid>
-            
+          </Grid>
 
-           
-            <Grid item sm={8}>
+          <Grid item sm={8}>
             <TextField
               error={errorTeamsName.error}
               helperText={errorTeamsName.text}
@@ -604,7 +600,7 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
                     <TableCell align="left">Dėstomi dalykai</TableCell>
                     {/* <TableCell align="center">Moduliai </TableCell> */}
                     <TableCell align="right">
-                      <Button variant="contained" onClick={handleShowSubjects}>
+                      <Button id="add-subject-create-teacher" variant="contained" onClick={handleShowSubjects}>
                         Pridėti
                       </Button>
                     </TableCell>
@@ -642,33 +638,29 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
               </Alert>
             )}
           </Grid>
-          <Grid item sm={8}>
-            {errorMessage && <Alert severity="warning">{errorMessage}</Alert>}
-            {createMessage && <Alert severity="success">{createMessage}</Alert>}
-          </Grid>
+          
           <Grid item sm={12}>
             <Stack direction="row" spacing={2}>
-              <Button variant="contained" onClick={preCreateCheck}>
+              <Button id="save-button-teacher" variant="contained" onClick={preCreateCheck}>
                 {mode === "update" ? "Išsaugoti" : "Išsaugoti"}
               </Button>
               {mode === "update" && (
-                <Button variant="contained" onClick={deleteTeacher}>
+                <Button id="delete-button-edit-teacher" variant="contained" onClick={deleteTeacher}>
                   Ištrinti
                 </Button>
               )}
 
-              <Button variant="contained" onClick={() => navigate("/teachers")}>
+              <Button id="back-button-teacher" variant="contained" onClick={() => navigate("/teachers")}>
                 Grįžti
               </Button>
-                 </Stack>
+            </Stack>
           </Grid>
-          {/* <Grid item sm={8}>
+          <Grid item sm={8} marginBottom={10}>
             {errorMessage && <Alert severity="warning">{errorMessage}</Alert>}
             {createMessage && <Alert severity="success">{createMessage}</Alert>}
-           </Grid> */}
+          </Grid>
         </Grid>
       </form>
     </Container>
   );
 }
-

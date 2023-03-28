@@ -65,15 +65,11 @@ export function ViewSubject() {
           <Grid item sm={12}>
             <Stack direction="row" spacing={2}>
               <Link to={"/subjects/edit/" + subject.id}>
-                <Button id="edit-button-view-subject" variant="contained">
-                  Redaguoti
-                </Button>
+                <Button variant="contained">Redaguoti</Button>
               </Link>
 
               <Link to="/subjects">
-                <Button id="back-button-view-subject" variant="contained">
-                  Grįžti
-                </Button>
+                <Button variant="contained">Grįžti</Button>
               </Link>
             </Stack>
           </Grid>

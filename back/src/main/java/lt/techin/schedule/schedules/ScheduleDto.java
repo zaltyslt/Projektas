@@ -1,6 +1,7 @@
 package lt.techin.schedule.schedules;
 
 import lt.techin.schedule.group.Group;
+import lt.techin.schedule.schedules.holidays.Holiday;
 import lt.techin.schedule.schedules.planner.WorkDay;
 
 import java.time.LocalDate;
@@ -15,21 +16,24 @@ public class ScheduleDto {
     private Group groups;
     private String schoolYear;
     private String semester;
-
     private LocalDate dateFrom;
-
     private LocalDate dateUntil;
     private boolean active = true;
+
+    private boolean hasConflicts;
     private LocalDateTime createdDate;
     private LocalDateTime modifiedDate;
 
     private Set<WorkDay> workingDays;
+
+    private Set<Holiday> holidays;
 
     private Map<Long, Integer> subjectIdWithUnassignedTime;
 
     public ScheduleDto() {
         subjectIdWithUnassignedTime = new HashMap<>();
         workingDays = new LinkedHashSet<>();
+        hasConflicts = false;
     }
 
     public Long getId() {
@@ -118,5 +122,21 @@ public class ScheduleDto {
 
     public void setSubjectIdWithUnassignedTime(Map<Long, Integer> subjectIdWithUnassignedTime) {
         this.subjectIdWithUnassignedTime = subjectIdWithUnassignedTime;
+    }
+
+    public Set<Holiday> getHolidays() {
+        return holidays;
+    }
+
+    public void setHolidays(Set<Holiday> holidays) {
+        this.holidays = holidays;
+    }
+
+    public boolean isHasConflicts() {
+        return hasConflicts;
+    }
+
+    public void setHasConflicts(boolean hasConflicts) {
+        this.hasConflicts = hasConflicts;
     }
 }

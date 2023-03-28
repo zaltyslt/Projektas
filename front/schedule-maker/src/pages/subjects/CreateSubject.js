@@ -124,7 +124,7 @@ export function CreateSubject() {
           setCreateMessage("");
           setError(response.message);
         } else {
-          setCreateMessage("Sėkmingai sukurta. ");
+          setCreateMessage("Dalykas sėkmingai sukurtas. ");
           setError("");
           clear();
         }
@@ -230,18 +230,12 @@ export function CreateSubject() {
 
           <Grid item sm={8} marginTop={2}>
             <Stack direction="row" spacing={2}>
-              <Button
-                id="save-button-create-subject"
-                variant="contained"
-                onClick={validation}
-              >
+              <Button variant="contained" onClick={validation}>
                 Išsaugoti
               </Button>
 
               <Link to="/subjects">
-                <Button id="back-button-create-subject" variant="contained">
-                  Grįžti
-                </Button>
+                <Button variant="contained">Grįžti</Button>
               </Link>
             </Stack>
           </Grid>

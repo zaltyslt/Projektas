@@ -107,7 +107,7 @@ export function UpdateClassroom() {
               setError("Klasės sukurti nepavyko: ", error);
             });
         } else {
-          setSuccess("Sėkmingai atnaujinote!");
+          setSuccess("Klasės duomenys sėkmingai atnaujinti.");
         }
       });
     }
@@ -228,13 +228,14 @@ export function UpdateClassroom() {
                 // onChange={(e) => setDescription(e.target.value)}
               ></TextField>
             </Grid>
-            <Grid item sm={10}>
+            <Grid item sm={8}>
               {" "}
               <legend>{params.classroomName}</legend>
               {error && <Alert severity="warning">{error}</Alert>}
               {success && <Alert severity="success">{success}</Alert>}
             </Grid>
-            <Stack direction="row" spacing={2}>
+            <Grid item sm={4}></Grid>
+            <Stack direction="row" spacing={2} marginTop={2}>
               <Button
                 id="save-button-edit-room"
                 variant="contained"
