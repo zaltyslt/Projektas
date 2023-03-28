@@ -1,14 +1,17 @@
 package lt.techin.schedule.schedules.planner;
 
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import static lt.techin.schedule.classrooms.ClassroomMapper.toClassroomDto;
 import static lt.techin.schedule.schedules.planner.WorkDayMapper.toWorkDayDto;
 import static org.springframework.http.ResponseEntity.ok;
 
@@ -25,10 +28,19 @@ public class PlannerController {
     }
 
     @PutMapping("/plan-schedule/{scheduleId}")
-    public ResponseEntity<Boolean> planSchedule(@PathVariable Long scheduleId, @RequestParam Long subjectId, @RequestBody PlannerDto plannerDto) {
-        Boolean createdDay = plannerService.addSubjectPlanToSchedule(scheduleId, subjectId, plannerDto);
-        logger.log(Level.INFO, "The lessons for schedule {0} were created", scheduleId);
-        return ok(createdDay);
+    public ResponseEntity<Map<String, String>> planSchedule(@PathVariable Long scheduleId, @RequestParam Long subjectId, @RequestBody PlannerDto plannerDto) {
+        String createdString = plannerService.addSubjectPlanToSchedule(scheduleId, subjectId, plannerDto);
+        if (createdString.isEmpty()) {
+            logger.log(Level.INFO, "Creating lessons plan for a schedule " + scheduleId + " was successful", scheduleId);
+            return ResponseEntity.status(HttpStatus.CREATED)
+                    .body(Map.of("message", plannerDto.toString()));
+        }
+        else {
+            logger.log(Level.INFO, "Creating lessons plan for a schedule " + scheduleId + " was unsuccessful", scheduleId);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of("message", createdString));
+        }
+
     }
 
     @GetMapping("/{scheduleId}/lessons")
@@ -61,4 +73,9 @@ public class PlannerController {
         logger.log(Level.INFO, "The work day id {0} was deleted.", workDayId);
         return ok(result);
     }
+
+//    @GetMapping("/scheduleIdWithClassroomNameConflict")
+//    public ResponseEntity<WorkDay> scheduleIdWithClassroomNameConflict() {
+//        return ok(plannerService.)
+//    }
 }

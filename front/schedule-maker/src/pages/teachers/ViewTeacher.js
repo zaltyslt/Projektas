@@ -28,6 +28,7 @@ export function ViewTeacher() {
 
   useEffect(() => {
     getTeacherData();
+    
   }, []);
 
   return (
@@ -37,7 +38,7 @@ export function ViewTeacher() {
           <Grid item sm={10} marginTop={4}>
             <header>
               <h1>{teacher.fName + " " + teacher.lName}</h1>
-
+             
               <span id="modified-date">
                 Paskutinį kartą redaguota: {teacher.dateModified}
               </span>
@@ -88,15 +89,9 @@ export function ViewTeacher() {
           <Grid item sm={12} marginBottom={10}>
             <Stack direction="row" spacing={2}>
               <Link to={`/teachers/edit/${teacher.id}`}>
-                <Button id="edit-button-view-teacher" variant="contained">
-                  Redaguoti
-                </Button>
+                <Button variant="contained">Redaguoti</Button>
               </Link>
-              <Button
-                id="back-button-view-teacher"
-                variant="contained"
-                onClick={() => navigate(-1)}
-              >
+              <Button variant="contained" onClick={() => navigate(-1)}>
                 Grįžti
               </Button>
             </Stack>

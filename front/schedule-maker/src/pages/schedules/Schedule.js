@@ -13,11 +13,36 @@ import adaptivePlugin from "@fullcalendar/adaptive";
 import { render } from "preact/compat";
 import { eachDayOfInterval } from "date-fns";
 
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
+import DialogActions from '@mui/material/DialogActions';
+import CloseIcon from '@mui/icons-material/Close';
+import { useTheme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import DialogContentText from '@mui/material/DialogContentText';
+
 export function Schedule() {
   const [weekendsVisible, setWeekendsVisible] = useState(true);
   const [schedule, setSchedule] = useState([]);
   const [holiday, setHoliday] = useState([]);
   const params = useParams();
+
+  const [open, setOpen] = React.useState(false);
+  const theme = useTheme();
+  const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
+  const [maxWidth, setMaxWidth] = React.useState('sm');
+  const [fullWidth, setFullWidth] = React.useState(true);
+
+  const [conflictDates, setConflictDates] = useState([])
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   const subjectColors = [
     "#f5c5c4",
@@ -30,15 +55,6 @@ export function Schedule() {
     "#d8c4f5",
     "#f5c4e3",
   ];
-
-  // biski pasilikau jeigu reikes sito
-  // const subjectColorMap = {};
-  // schedule.forEach((s) => {
-  //   if (!subjectColorMap[s.subject.id]) {
-  //     subjectColorMap[s.subject.id] =
-  //       subjectColors[Math.floor(Math.random() * subjectColors.length)];
-  //   }
-  // });
 
   const subjectColorMap = { index: 0 };
   schedule.forEach((s) => {
@@ -114,15 +130,13 @@ export function Schedule() {
         title: `<b>${schedule.subject.name}</b>
           <br />
           ${schedule.lessonStart} - ${schedule.lessonEnd}
-          <br /> 
-          ${schedule.teacher ? schedule.teacher.lName : ""} ${
-          schedule.teacher ? schedule.teacher.fName : "nepasirinktas"
-        }
           <br />
-          ${
-            schedule.online
-              ? "Nuotolinė pamoka"
-              : schedule.classroom ? schedule.classroom.classroomName : ""
+          ${schedule.teacher ? schedule.teacher.lName : ""} ${schedule.teacher ? schedule.teacher.fName : "nepasirinktas"
+          }
+          <br />
+          ${schedule.online
+            ? "Nuotolinė pamoka"
+            : schedule.classroom.classroomName
           }<br />
           `,
         start: schedule.date,
@@ -160,6 +174,7 @@ export function Schedule() {
       />
     </>
   );
+
 
   return (
     <div className="maincontainer">
@@ -219,19 +234,64 @@ export function Schedule() {
           >
             SPAUSDINTI EXCEL
           </Button>
-          <Button
-            variant="contained"
-            // startIcon={<EditIcon />}
 
-            onClick={() => handleClickPrint(params.id, false)}
-          >
-            REDAGUOTI EXCEL
-          </Button>
-          <Link to="/">
-            <Button id="back-button-schedule" variant="contained">
-              Grįžti
+          <div>
+            <Button variant="outlined" onClick={handleClickOpen}>
+              Tikrinti konfliktus
             </Button>
-          </Link>
+            <Dialog
+              fullScreen={fullScreen}
+              open={open}
+              onClose={handleClose}
+              maxWidth={maxWidth}
+              fullWidth={fullWidth}
+              aria-labelledby="responsive-dialog-title"
+            >
+              <DialogTitle id="responsive-dialog-title">
+                {"Rasti konfliktai:"}
+              </DialogTitle>
+              <DialogContent>
+                <DialogContentText>
+                  {schedule
+                    .filter(
+                      (item) =>
+                        (item.hasTeacherConflict &&
+                          item.scheduleIdWithTeacherNameConflict) ||
+                        (item.hasClassroomConflict &&
+                          item.scheduleIdWithClassroomNameConflict)
+                    )
+                    .map((item) => (
+                      <div key={item.id}>
+                        <h3>{`Diena:  ${item.date}`}</h3>
+                        {item.hasTeacherConflict &&
+                          item.scheduleIdWithTeacherNameConflict && (
+                            <div>
+                              {Object.entries(
+                                item.scheduleIdWithTeacherNameConflict
+                              ).map(([key, value]) => (
+                                <p key={key}>{`Mokytojas: ${value}`}</p>
+                              ))}
+                            </div>
+                          )}
+                        {item.hasClassroomConflict &&
+                          item.scheduleIdWithClassroomNameConflict && (
+                            <div>
+                              {Object.entries(
+                                item.scheduleIdWithClassroomNameConflict
+                              ).map(([key, value]) => (
+                                <p key={key}>{`Klasė: ${value}`}</p>
+                              ))}
+                            </div>)}
+                      </div>))}
+                </DialogContentText>
+              </DialogContent>
+              <DialogActions>
+                <Button variant="outlined" onClick={handleClose} autoFocus>
+                  Uždaryti
+                </Button>
+              </DialogActions>
+            </Dialog>
+          </div>
         </Stack>
       </Grid>
     </div>

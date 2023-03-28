@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS SUBJECT_HOURS
+create table SUBJECT_HOURS
 (
     ID            BIGINT auto_increment
         primary key,

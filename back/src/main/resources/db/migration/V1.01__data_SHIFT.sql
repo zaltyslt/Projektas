@@ -1,6 +1,7 @@
-CREATE TABLE IF NOT EXISTS SHIFT
+create table SHIFT
 (
     ID                  BIGINT auto_increment
+--         not null
         primary key,
     CREATED_DATE        TIMESTAMP,
     END_INT_ENUM        INTEGER not null,
