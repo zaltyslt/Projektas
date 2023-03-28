@@ -51,7 +51,7 @@ public class HomePage extends AbstractPage {
         navigateDalykai.click();
     }
 
-    public void navigateProgramos() {
+    public void navigateToProgramos() {
         navigateProgramos.click();
     }
 

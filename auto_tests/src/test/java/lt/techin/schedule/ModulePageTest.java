@@ -80,8 +80,8 @@ public class ModulePageTest extends BaseTest {
 
         WebElement alertMessage = moduleEditPage.getAlertMessage();
         assertTrue(alertMessage.isDisplayed(), "Alert not visible");
-        assertEquals("Modulis sėkmingai pakeistas.", alertMessage.getText(), "Error while creating room");
-        moduleEditPage.clickBackButton();
+        assertEquals("Modulis sėkmingai pakeistas.", alertMessage.getText(), "Error while creating module");
+        //moduleEditPage.clickBackButton();
 
     }
 
