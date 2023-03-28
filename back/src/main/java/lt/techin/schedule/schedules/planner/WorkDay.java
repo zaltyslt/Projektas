@@ -49,7 +49,6 @@ public class WorkDay {
     @ElementCollection
     @CollectionTable(name = "schedule_classroom_conflicts", joinColumns = @JoinColumn(name = "classroom_id"))
     @MapKeyColumn(name = "schedule_id")
-//    Schedule semester ir time
     @Column(name = "classroom_name")
     private Map<Long, String> scheduleIdWithClassroomNameConflict;
 
