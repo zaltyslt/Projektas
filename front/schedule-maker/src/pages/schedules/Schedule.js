@@ -176,7 +176,7 @@ export function Schedule() {
         title: `<div style="margin-top: 37px; margin-bottom: 37px;"><b>${holiday.name}</b></div>`,
         start: date,
         allDay: true,
-        url: `hapi/v1/schedules/edit-holidays/${holiday.id}`,
+        url: `api/v1/schedules/edit-holidays/${holiday.id}`,
         color: "#cccccc",
       }));
     }),
