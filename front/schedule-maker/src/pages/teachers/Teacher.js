@@ -336,9 +336,9 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
   return (
     <Container>
       <form>
-      <h3 className="create-header">
-  {mode === "update" ? "Redagavimas" : <button id="teacher">Pridėti naują mokytoją</button>}
-</h3>
+        <h3 className="create-header">
+          {mode === "update" ? "Redagavimas" : "Pridėti naują mokytoją"}
+        </h3>
         {mode === "update" && (
           <Grid>
             {/* <h2>{teacher && (teacher.fName +" "+teacher.lName)}</h2> */}
