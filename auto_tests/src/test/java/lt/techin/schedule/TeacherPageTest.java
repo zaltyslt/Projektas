@@ -13,7 +13,6 @@ public class TeacherPageTest extends BaseTest {
     public void createNewTeacher(String firstName, String lastName, String phone, String email,
                                  String teamsName, String teamsEmail, int hours,
                                  String shift, String subject, boolean success) {
-        //Antanas,Antanaitis,861015658,antanas@gmail.com,Antanas,Antanas@vtmc.lt,40,PamainaTest,DalykasTest,true
 
         homePage = new HomePage(driver);
         teacherListPage = new TeacherListPage(driver);

@@ -1,10 +1,11 @@
 package lt.techin.schedule.shift;
 
 import lt.techin.schedule.AbstractPage;
+import lt.techin.schedule.utils.WaitUtils;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import utils.WaitUtils;
+
 
 public class ShiftCreateNewPage extends AbstractPage {
     public ShiftCreateNewPage(WebDriver driver) {super(driver);}
