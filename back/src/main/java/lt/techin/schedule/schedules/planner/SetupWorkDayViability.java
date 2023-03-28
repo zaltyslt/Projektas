@@ -1,16 +1,18 @@
 package lt.techin.schedule.schedules.planner;
 
 import lt.techin.schedule.schedules.ScheduleRepository;
+import lt.techin.schedule.schedules.holidays.Holiday;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
-public class SetupWorkDayConflicts {
+public class SetupWorkDayViability {
     public static WorkDay SetupWorkDay(Long scheduleID, WorkDay workDay, ScheduleRepository scheduleRepository, WorkDayRepository workDayRepository) {
         //Assigned so workDay.getDate() method wouldn't be called unnecessarily
         LocalDate workDayDate = workDay.getDate();
 
-        int something = scheduleRepository.findAll().size();
         scheduleRepository.findAll().forEach(schedule -> {
             if (!schedule.getId().equals(scheduleID)) {
                 Set<WorkDay> workingDays = schedule.getWorkingDays();
@@ -45,9 +47,13 @@ public class SetupWorkDayConflicts {
         return workDay;
     }
 
-    //SORTING NEEDED IN A CASE OF MORE EFFICIENT LOOPS
-    //schedule.getWorkingDays().stream().sorted(new WorkDayDtoComparator());
-    //PROBABLY?
+    public static boolean CheckIfLocalDateIsWorkable (LocalDate localDate, Set<Holiday> holidays) {
+        if (localDate.getDayOfWeek() == DayOfWeek.SATURDAY || localDate.getDayOfWeek() == DayOfWeek.SUNDAY) {
+            return false;
+        }
+        return holidays.stream().noneMatch(h -> (h.getDateFrom().isBefore(localDate) && h.getDateUntil().isAfter(localDate))
+        );
+    }
 
 
     private static boolean CheckIfWorkdaysIntertwine (WorkDay currentWorkDay, LocalDate currentDate, WorkDay loopingWorkDay) {

@@ -11,6 +11,7 @@ import { Stack } from "@mui/system";
 import { Button, Grid } from "@mui/material";
 import adaptivePlugin from "@fullcalendar/adaptive";
 import { render } from "preact/compat";
+import { eachDayOfInterval } from "date-fns";
 
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
@@ -55,6 +56,17 @@ export function Schedule() {
     "#f5c4e3",
   ];
 
+  const subjectColorMap = { index: 0 };
+  schedule.forEach((s) => {
+    if (!subjectColorMap[s.subject.id]) {
+      subjectColorMap[s.subject.id] = subjectColors[subjectColorMap.index];
+      subjectColorMap.index += 1;
+      subjectColorMap.index + 1 === subjectColors.length
+        ? (subjectColorMap.index = 0)
+        : (subjectColorMap.index += 1);
+    }
+  });
+
   useEffect(() => {
     fetch(`api/v1/schedules/${params.id}/lessons`)
       .then((response) => response.json())
@@ -69,9 +81,51 @@ export function Schedule() {
       .catch((error) => console.error(error));
   }, [params.id]);
 
+  useEffect(() => {
+    const div = document.querySelector(".fc-license-message");
+    div.style.visibility = "hidden"; // or 'visible' to show the div
+  }, []);
+
+  /////////////////////////////////
+  const handleClickPrint = (scheduleId, paged) => {
+    // console.log(scheduleId);
+    const fetchTo = paged
+      ? `api/v1/schedules/excel?id=${scheduleId}&p=true`
+      : `api/v1/schedules/excel?id=${scheduleId}&p=false`;
+    fetch(fetchTo, {
+      method: "Get",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => {
+        // clearMessages();
+        if (response.ok) {
+          // setCreateMessage("Tvarkaraščio failas paruoštas.");
+        } else {
+          // setErrorMessage(`Tvarkaraščio failo paruošti nepavyko.`);
+        }
+        return response;
+      })
+      .then((response) => {
+        const filename = response.headers
+          .get("Content-Disposition")
+          .split("filename=")[1];
+        // console.log(filename);
+        response.blob().then((blob) => {
+          let url = window.URL.createObjectURL(blob);
+          let a = document.createElement("a");
+          a.href = url;
+          a.download = filename;
+          a.click();
+        });
+      });
+  };
+  ////////////////////////////////
+
   const events = [
     ...schedule.map((schedule) => {
-      const color = subjectColors[schedule.subject.id];
+      const color = subjectColorMap[schedule.subject.id];
       return {
         title: `<b>${schedule.subject.name}</b>
           <br />
@@ -91,17 +145,19 @@ export function Schedule() {
         color: color,
       };
     }),
-    ...holiday.map((holiday) => ({
-      title: `<b>${holiday.name}</b>`,
-      start: holiday.dateFrom,
-      end: new Date(
-        new Date(holiday.dateUntil).setDate(
-          new Date(holiday.dateUntil).getDate() + 1
-        )
-      ),
-      allDay: true,
-      color: "#cccccc",
-    })),
+    ...holiday.flatMap((holiday) => {
+      const holidayDates = eachDayOfInterval({
+        start: new Date(holiday.dateFrom),
+        end: new Date(holiday.dateUntil),
+      });
+      return holidayDates.map((date) => ({
+        title: `<div style="margin-top: 37px; margin-bottom: 37px;"><b>${holiday.name}</b></div>` ,
+        start: date,
+        allDay: true,
+        url: `http://localhost:3000/schedule-maker#/schedules/edit-holidays/${holiday.id}`,
+        color: "#cccccc",
+      }));
+    }),
   ];
 
   const renderEventContent = (eventInfo) => (
@@ -157,22 +213,26 @@ export function Schedule() {
 
       <Grid item sm={10} className="button-container">
         <Stack direction="row" spacing={2}>
-          <Link to="/">
-            <Button id="back-button-schedule" variant="contained">
-              Grįžti
-            </Button>
-          </Link>
           <Link to={"/planning/" + params.id}>
             <Button id="plan-button-schedule" variant="contained">
               Planavimas
             </Button>
           </Link>
-          <Button
+          {/* <Button
             id="print-button-schedule"
             variant="contained"
             onClick={() => window.print()}
           >
             Spausdinti kalendorių
+          </Button> */}
+
+          <Button
+            variant="contained"
+            // startIcon={<LocalPrintshopIcon />}
+
+            onClick={() => handleClickPrint(params.id, true)}
+          >
+            SPAUSDINTI EXCEL
           </Button>
 
           <div>

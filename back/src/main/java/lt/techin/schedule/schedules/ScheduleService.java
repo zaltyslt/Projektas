@@ -5,16 +5,12 @@ import lt.techin.schedule.exceptions.ValidationException;
 import lt.techin.schedule.group.GroupRepository;
 import lt.techin.schedule.schedules.holidays.Holiday;
 import lt.techin.schedule.schedules.holidays.HolidayRepository;
-import lt.techin.schedule.schedules.holidays.LithuanianHolidaySetupOnCreate;
+import lt.techin.schedule.schedules.holidays.LithuanianHolidaySetup;
 import lt.techin.schedule.schedules.planner.WorkDayRepository;
 import lt.techin.schedule.subject.SubjectRepository;
 import lt.techin.schedule.teachers.TeacherRepository;
-import org.aspectj.lang.annotation.After;
-import org.aspectj.lang.annotation.Aspect;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Optional;
@@ -69,14 +65,16 @@ public class ScheduleService {
                 .collect(Collectors.toList());
         if (existing.size() > 0) {
             var scheduleDto = toScheduleCreateDto(schedule);
-
             throw new ValidationException("Tvarkaraštis šiai grupei ir šiam " +
                     "laikotarpiui jau yra sukurtas", "Schedule", "Not unique", scheduleDto.toString());
         } else {
             Schedule scheduleToSave = scheduleRepository.save(schedule);
-            LinkedHashSet<Holiday> predefinedHolidays = LithuanianHolidaySetupOnCreate.SetupHolidays(LithuanianHolidays.LITHUANIAN_HOLIDAYS, schedule);
+
+            //Setting up predefined holidays for schedule which are in the range of this schedule
+            LinkedHashSet<Holiday> predefinedHolidays = LithuanianHolidaySetup.SetupHolidaysInRange(schedule.getDateFrom(), schedule.getDateUntil(), schedule);
             holidayRepository.saveAll(predefinedHolidays);
             scheduleToSave.addHolidays(predefinedHolidays);
+
             return scheduleToSave;
         }
     }
@@ -103,6 +101,7 @@ public class ScheduleService {
         Optional<Schedule> scheduleToDelete = scheduleRepository.findById(id);
         if (scheduleToDelete.isPresent()) {
             try {
+
              scheduleRepository.delete(scheduleToDelete.get());
                 return true;
             } catch (Exception e) {

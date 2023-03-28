@@ -3,10 +3,8 @@ package lt.techin.schedule.schedules;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
-import lt.techin.schedule.config.LithuanianHolidays;
 import lt.techin.schedule.group.Group;
 import lt.techin.schedule.schedules.holidays.Holiday;
-import lt.techin.schedule.schedules.holidays.LithuanianHolidaySetupOnCreate;
 import lt.techin.schedule.schedules.planner.WorkDay;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -33,6 +31,8 @@ public class Schedule {
     private Set<Holiday> holidays;
     private String schoolYear;
     private String semester;
+
+    private boolean hasConflicts;
 
     @Column(name = "date_from", nullable = false)
     @JsonFormat(pattern = "yyyy-MM-dd")
@@ -72,6 +72,7 @@ public class Schedule {
         subjectIdWithUnassignedTime = new HashMap<>();
         workingDays = new HashSet<>();
         holidays = new LinkedHashSet<>();
+        hasConflicts = false;
     }
 
     public Long getId() {
@@ -196,5 +197,13 @@ public class Schedule {
 
     public void addUnassignedTimeWithSubjectId(Long subjectID, Integer time) {
         subjectIdWithUnassignedTime.put(subjectID, time);
+    }
+
+    public boolean isHasConflicts() {
+        return hasConflicts;
+    }
+
+    public void setHasConflicts(boolean hasConflicts) {
+        this.hasConflicts = hasConflicts;
     }
 }

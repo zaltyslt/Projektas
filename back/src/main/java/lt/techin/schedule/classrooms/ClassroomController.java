@@ -47,7 +47,7 @@ public class ClassroomController {
         if (createClassroom == null) {
             logger.info("The class in this building is already created");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(Map.of("message", "Tokia klasė šiame pastate jau yra sukurta"));
+                    .body(Map.of("message", "Tokia klasė šiame pastate jau sukurta."));
         }
         logger.info("The class was created, successfully");
         return ResponseEntity.status(HttpStatus.CREATED)
@@ -61,7 +61,7 @@ public class ClassroomController {
         if (updatedClassroom == null) {
             logger.info("The class in this building is already created");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(Map.of("message", "Tokia klasė šiame pastate jau yra sukurta"));
+                    .body(Map.of("message", "Tokia klasė šiame pastate jau sukurta."));
         }
         logger.info("The class was updated, successfully");
         return ResponseEntity.status(HttpStatus.CREATED)

@@ -48,7 +48,7 @@ export function CreateProgram(props) {
 
   const applyResult = (result) => {
     if (result.ok) {
-      setSuccess("Sėkmingai pridėta!");
+      setSuccess("Programa sėkmingai sukurta.");
       clear();
     } else {
       result
@@ -335,6 +335,7 @@ export function CreateProgram(props) {
                         paddingRight={0.5}
                       >
                         <Button
+                          id="delete-subject-button-create-program"
                           variant="contained"
                           onClick={() => removeFields(index)}
                         >
@@ -347,19 +348,31 @@ export function CreateProgram(props) {
               </Grid>
             </Grid>
             <Grid item sm={8}>
-              {error && <Alert severity="warning">{error}</Alert>}
-              {success && <Alert severity="success">{success}</Alert>}
-              <Stack direction="row" spacing={2}>
-                <Button variant="contained" onClick={addFields}>
+              <Stack direction="row" spacing={2} marginBottom={2}>
+                <Button
+                  id="add-subject-button-create-program"
+                  variant="contained"
+                  onClick={addFields}
+                >
                   Pridėtį dalyką
                 </Button>
-                <Button variant="contained" onClick={createProgram}>
+                <Button
+                  id="save-button-create-program"
+                  variant="contained"
+                  onClick={createProgram}
+                >
                   Išsaugoti
                 </Button>
-                <Button variant="contained" onClick={() => navigate(-1)}>
+                <Button
+                  id="back-button-create-program"
+                  variant="contained"
+                  onClick={() => navigate(-1)}
+                >
                   Grįžti
                 </Button>
               </Stack>
+              {error && <Alert severity="warning">{error}</Alert>}
+              {success && <Alert severity="success">{success}</Alert>}
             </Grid>
           </Grid>
         </form>

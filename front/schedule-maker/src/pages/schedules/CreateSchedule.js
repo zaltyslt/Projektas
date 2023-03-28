@@ -103,7 +103,7 @@ export function CreateSchedule() {
       isValid = false;
     }
 
-    if(schoolYearValid) {
+    if (schoolYearValid) {
       isValid = false;
     }
 
@@ -134,8 +134,15 @@ export function CreateSchedule() {
       isValid = false;
     }
 
-    if (dateFrom !== "" && dateUntil !== "" && dateFrom.$d.toISOString().split('T')[0] === dateUntil.$d.toISOString().split('T')[0]) {
-      setErrorMessageUntil("Pradžios ir pabaigos data negali būti ta pati diena.");
+    if (
+      dateFrom !== "" &&
+      dateUntil !== "" &&
+      dateFrom.$d.toISOString().split("T")[0] ===
+        dateUntil.$d.toISOString().split("T")[0]
+    ) {
+      setErrorMessageUntil(
+        "Pradžios ir pabaigos data negali būti ta pati diena."
+      );
       setDateUntilEmpty(true);
       isValid = false;
     }
@@ -189,7 +196,7 @@ export function CreateSchedule() {
       <Container>
         <h3>Sukurti naują tvarkaraštį</h3>
         <form>
-          <Grid container rowSpacing={2} spacing={2}>
+          <Grid container rowSpacing={2} spacing={2} marginTop={2}>
             <Grid item sm={10}>
               <FormControl fullWidth required error={groupEmpty}>
                 <InputLabel id="group-label">Gupės pavadinimas</InputLabel>
@@ -230,10 +237,10 @@ export function CreateSchedule() {
                   schoolYearValid
                     ? "Laukas gali susidėti iš skaičių bei - ar / simbolių."
                     : schoolYearEmpty
-                      ? "Mokslo metai yra privalomi."
-                      : errorLengthYear
-                        ? "Mokslo metai negali būti ilgesnis nei 200 simbolių."
-                        : ""
+                    ? "Mokslo metai yra privalomi."
+                    : errorLengthYear
+                    ? "Mokslo metai negali būti ilgesnis nei 200 simbolių."
+                    : ""
                 }
                 value={schoolYear}
                 onChange={(e) => {
@@ -261,10 +268,10 @@ export function CreateSchedule() {
                   !semesterValid
                     ? "Pavadinimas turi neleidžiamų simbolių."
                     : semesterEmpty
-                      ? "Pavadinimas yra privalomas."
-                      : errorLengthName
-                        ? "Pavadinimas negali būti ilgesnis nei 200 simbolių."
-                        : ""
+                    ? "Pavadinimas yra privalomas."
+                    : errorLengthName
+                    ? "Pavadinimas negali būti ilgesnis nei 200 simbolių."
+                    : ""
                 }
                 value={semester}
                 onChange={(e) => {
@@ -316,22 +323,27 @@ export function CreateSchedule() {
             </Grid>
 
             <Grid item sm={10}>
+              <Stack direction="row" spacing={2}>
+              <Button
+                  id="save-button-create-schedule"
+                  variant="contained"
+                  onClick={validation}
+                >
+                  Išsaugoti
+                </Button>
+                <Link to="/">
+                  <Button id="back-button-create-schedule" variant="contained">
+                    Grįžti
+                  </Button>
+                </Link>
+              </Stack>
+            </Grid>
+
+            <Grid item sm={10}>
               {error && <Alert severity="warning">{error}</Alert>}
               {createMessage && (
                 <Alert severity="success">{createMessage}</Alert>
               )}
-            </Grid>
-
-            <Grid item sm={10}>
-              <Stack direction="row" spacing={2}>
-                <Button variant="contained" onClick={validation}>
-                  Išsaugoti
-                </Button>
-
-                <Link to="/">
-                  <Button variant="contained">Grįžti</Button>
-                </Link>
-              </Stack>
             </Grid>
           </Grid>
         </form>

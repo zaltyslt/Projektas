@@ -41,7 +41,6 @@ export function ScheduleView() {
   }, []);
 
   const handleRemove = () => {
-  
     fetch(`api/v1/schedules/${params.id}/remove-lessons/${subjectId}`, {
       method: "PATCH",
       headers: {
@@ -90,7 +89,9 @@ export function ScheduleView() {
           onClose={handleClose}
           aria-describedby="alert-dialog-slide-description"
         >
-          <DialogTitle>{"Ar tikrai norite ištrinti suplanuotas dalyko pamokas?"}</DialogTitle>
+          <DialogTitle>
+            {"Ar tikrai norite ištrinti suplanuotas dalyko pamokas?"}
+          </DialogTitle>
           <DialogContent>
             <DialogContentText id="alert-dialog-slide-description">
               Visos suplanuotos pamokos bus ištrintos iš tvarkaraščio.
@@ -164,14 +165,19 @@ export function ScheduleView() {
                             subject: { subject },
                           }}
                         >
-                          <Button variant="contained">Planuoti</Button>
+                          <Button
+                            id="plan-button-view-schedule"
+                            variant="contained"
+                          >
+                            Planuoti
+                          </Button>
                         </Link>
                       </TableCell>
                       <TableCell align="center" className="activity">
                         <Button
                           id="remove-button-view-schedule"
                           variant="contained"
-                          onClick={() => handleOpen(subject.id, subject.hours)}
+                          onClick={() => handleOpen(subject.subject, subject.hours)}
                         >
                           Atšaukti
                         </Button>
@@ -185,11 +191,15 @@ export function ScheduleView() {
 
           <Grid item sm={12}>
             <Stack direction="row" spacing={2}>
-              <Link to="/">
-                <Button variant="contained">Grįžti</Button>
-              </Link>
               <Link to={"/schedules/" + params.id}>
-                <Button variant="contained">Tvarkaraštis</Button>
+                <Button id="schedule-button-view-schedule" variant="contained">
+                  Tvarkaraštis
+                </Button>
+              </Link>
+              <Link to="/">
+                <Button id="back-button-view-schedule" variant="contained">
+                  Grįžti
+                </Button>
               </Link>
             </Stack>
           </Grid>

@@ -18,8 +18,6 @@ import org.springframework.stereotype.Service;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
 
 import static lt.techin.schedule.classrooms.ClassroomMapper.toClassroomFromSmallDto;
 import static lt.techin.schedule.teachers.TeacherMapper.toTeacherFromEntityDto;
@@ -145,9 +143,10 @@ public class PlannerService {
 
         List<LocalDate> workableDates = new ArrayList<>();
         LocalDate date = plannerDto.getDateFrom();
-        //Finding every workday
+        //Finding every possible workday
         for (int i = 0; i < workDaysRequired; i++) {
-            while (date.getDayOfWeek() == DayOfWeek.SATURDAY || date.getDayOfWeek() == DayOfWeek.SUNDAY) {
+            //If the date found is not workable, iterating it through
+            while (!SetupWorkDayViability.CheckIfLocalDateIsWorkable(date, existingSchedule.getHolidays())) {
                 date = date.plusDays(1);
             }
             workableDates.add(date);
@@ -164,12 +163,11 @@ public class PlannerService {
         }
 
         Set<WorkDay> workDaySet = existingSchedule.getWorkingDays();
-
         //Iterating through workdays if all workdays has same amount of lesson hours
         if (lastDayHours == 0) {
             for (LocalDate workableDate : workableDates) {
                 if (workDaySet.stream().noneMatch(wd -> wd.getDate().isEqual(workableDate))) {
-                    WorkDay workDay = SetupWorkDayConflicts.SetupWorkDay(scheduleId,
+                    WorkDay workDay = SetupWorkDayViability.SetupWorkDay(scheduleId,
                         new WorkDay
                                 (
                                     workableDate, existingSubject, existingTeacher, existingSchedule, existingClassroom, getLessonStartString(plannerDto),
@@ -188,7 +186,7 @@ public class PlannerService {
             for (int i = 0; i < workableDates.size() - 1; i++) {
                 LocalDate workableDate = workableDates.get(i);
                 if (workDaySet.stream().noneMatch(wd -> wd.getDate().isEqual(workableDate))) {
-                    WorkDay workDay = SetupWorkDayConflicts.SetupWorkDay(scheduleId,
+                    WorkDay workDay = SetupWorkDayViability.SetupWorkDay(scheduleId,
                         new WorkDay
                                 (
                                     workableDate, existingSubject, existingTeacher, existingSchedule, existingClassroom, getLessonStartString(plannerDto),
@@ -203,7 +201,7 @@ public class PlannerService {
             }
             LocalDate lastWorkableDate = workableDates.get(workableDates.size() - 1);
             if (workDaySet.stream().noneMatch(wd -> wd.getDate().isEqual(lastWorkableDate))) {
-                WorkDay workDay = SetupWorkDayConflicts.SetupWorkDay(scheduleId,
+                WorkDay workDay = SetupWorkDayViability.SetupWorkDay(scheduleId,
                     new WorkDay
                             (
                                 lastWorkableDate, existingSubject, existingTeacher, existingSchedule, existingClassroom, getLessonStartString(plannerDto),
