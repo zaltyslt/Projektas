@@ -22,7 +22,7 @@ import "./Program.css";
 export function ViewProgram() {
   const [program, setProgram] = useState({});
   const params = useParams();
-  const [subjects, setSubjects] = useState([]);
+  const [subjects, setSubjects] = useState([])
   let navigate = useNavigate();
 
   useEffect(() => {
@@ -30,7 +30,7 @@ export function ViewProgram() {
       .then((response) => response.json())
       .then((data) => {
         setProgram(data);
-        setSubjects(data.subjectHoursList);
+        setSubjects(data.subjectHoursList)
       });
   }, [params.id]);
 
@@ -45,9 +45,7 @@ export function ViewProgram() {
                 <span id="created-date">Sukurta: {program.createdDate}</span>
               </div> */}
               <div>
-                <span id="modified-date">
-                  Paskutinį kartą redaguota: {program.modifiedDate}
-                </span>
+                <span id="modified-date">Paskutinį kartą redaguota: {program.modifiedDate}</span>
               </div>
             </header>
           </Grid>
@@ -64,39 +62,37 @@ export function ViewProgram() {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {subjects.map((program) => (
-                  <TableRow key={program.id}>
-                    <TableCell component="th" scope="row">
-                      {/* {program.subjectName} */}
+                {subjects
+                  .map((program) => (
+                    <TableRow key={program.id}>
+                      <TableCell component="th" scope="row">
+                        {/* {program.subjectName} */}
 
-                      {program.subjectName ? (
-                        program.deleted ? (
-                          <span className="Deleted">{program.subjectName}</span>
-                        ) : (
-                          program.subjectName
-                        )
+                        {program.subjectName ? (
+                      program.deleted ? (
+                        <span className="Deleted">
+                          {program.subjectName}
+                        </span>
                       ) : (
-                        <span>Nenurodytas</span>
-                      )}
-                    </TableCell>
-                    <TableCell>{program.hours}</TableCell>
-                  </TableRow>
-                ))}
+                        program.subjectName
+                      )
+                    ) : (
+                      <span>Nenurodytas</span>
+                    )}
+
+                      </TableCell>
+                      <TableCell>{program.hours}</TableCell>
+                    </TableRow>
+                  ))}
               </TableBody>
             </Table>
           </TableContainer>
           <Grid item sm={8}>
             <Stack direction="row" spacing={2} marginTop={2}>
               <Link to={`/update-program/${program.id}`}>
-                <Button id="edit-button-view-program" variant="contained">
-                  Redaguoti
-                </Button>
+                <Button variant="contained">Redaguoti</Button>
               </Link>
-              <Button
-                id="back-button-view-program"
-                variant="contained"
-                onClick={() => navigate(-1)}
-              >
+              <Button variant="contained" onClick={() => navigate(-1)}>
                 Grįžti
               </Button>
             </Stack>

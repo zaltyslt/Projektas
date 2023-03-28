@@ -10,4 +10,7 @@ import java.util.List;
 public interface WorkDayRepository extends JpaRepository<WorkDay, Long> {
 
     List<WorkDay> findWorkDaysByScheduleId(Long scheduleId);
+
+    long deleteBySubjectId(Long subjectId);
+
 }

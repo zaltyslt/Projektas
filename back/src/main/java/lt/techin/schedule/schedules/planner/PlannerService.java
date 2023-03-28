@@ -1,5 +1,6 @@
 package lt.techin.schedule.schedules.planner;
 
+import jakarta.transaction.Transactional;
 import lt.techin.schedule.classrooms.Classroom;
 import lt.techin.schedule.classrooms.ClassroomRepository;
 import lt.techin.schedule.exceptions.ValidationException;
@@ -16,9 +17,10 @@ import org.springframework.stereotype.Service;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
+
+import static lt.techin.schedule.classrooms.ClassroomMapper.toClassroomFromSmallDto;
+import static lt.techin.schedule.teachers.TeacherMapper.toTeacherFromEntityDto;
 
 @Service
 public class PlannerService {
@@ -31,6 +33,8 @@ public class PlannerService {
 
     private final WorkDayRepository workDayRepository;
     private final ClassroomRepository classroomRepository;
+
+    private final int INTERVAL_CONSTANT = 1;
 
     public PlannerService(ScheduleRepository scheduleRepository, SubjectRepository subjectRepository, TeacherRepository teacherRepository, WorkDayRepository workDayRepository,
                           ClassroomRepository classroomRepository) {
@@ -49,8 +53,54 @@ public class PlannerService {
         return LessonTime.getLessonTimeByInt(plannerDto.getEndIntEnum()).getLessonEnd();
     }
 
+    /*
+    Checks whether it's possible to put lessons plan into schedule without exceeding schedule date limits
+    */
+    public String isValidDates(LocalDate startDatePlanner, LocalDate endDatePlanner, LocalDate startDateSchedule, LocalDate endDateSchedule) {
+        if (startDatePlanner.isBefore(startDateSchedule) || startDatePlanner.isAfter(endDateSchedule)) {
+            return "Pateikta plano data neįeina į tvarkaraščio laikotarpį.";
+        }
+        if (endDatePlanner.isAfter(endDateSchedule)) {
+            return "Viršijamas nustatytas tvarkaraščio laikotarpis. Paskutinė plano diena yra " + endDatePlanner +
+                    ", vėliausia leidžiama tvarkaraščio diena yra " + endDateSchedule + ".";
+        }
+        return "";
+    }
 
-    public Boolean addSubjectPlanToSchedule(Long scheduleId, Long subjectId, PlannerDto plannerDto) {
+    public int SetupAndValidateUnassignedHoursMap(Schedule currentSchedule, Integer unassignedHours, int plannerAssignedHours, Long subjectId, SubjectHours subjectHour) {
+        //In a case where Map already has a value of that particular subjectId
+        if (unassignedHours != null) {
+            if (unassignedHours == 0) {
+                throw new ValidationException("Dalykas pasirinktoje programoje nebeturi nepanaudotų valandų", "Program", "Unassigned hours value is 0", currentSchedule.getSubjectIdWithUnassignedTime().toString());
+            }
+            //Checks so that passed value wouldn't exceed maximum hours subject has
+            if (plannerAssignedHours >= unassignedHours) {
+                currentSchedule.replaceUnassignedTime(subjectId, 0);
+                return unassignedHours;
+            }
+            //Places new assigned hours amount
+            else {
+                currentSchedule.replaceUnassignedTime(subjectId, unassignedHours - plannerAssignedHours);
+                return plannerAssignedHours;
+            }
+        }
+        //In a case where Map doesn't have a value of that particular subjectId
+        else {
+            //Checks so that passed value wouldn't exceed maximum hours subject has
+            if (plannerAssignedHours >= subjectHour.getHours()) {
+                currentSchedule.addUnassignedTimeWithSubjectId(subjectId, 0);
+                return subjectHour.getHours();
+            }
+            //Places new assigned hours amount
+            else {
+                currentSchedule.addUnassignedTimeWithSubjectId(subjectId, subjectHour.getHours() - plannerAssignedHours);
+                return plannerAssignedHours;
+            }
+        }
+    }
+
+
+    public String addSubjectPlanToSchedule(Long scheduleId, Long subjectId, PlannerDto plannerDto) {
         Schedule existingSchedule = scheduleRepository.findById(scheduleId).orElseThrow(()-> new ValidationException("Tvarkaraštis neegzistuoja", "Schedule", "Does not exist", scheduleId.toString()));
         Subject existingSubject = subjectRepository.findById(subjectId).orElseThrow(()-> new ValidationException("Pasirinktas dalykas neegzistuoja", "Subject", "Does no exist", subjectId.toString()));
         Teacher existingTeacher;
@@ -68,83 +118,147 @@ public class PlannerService {
             existingClassroom = classroomRepository.findById(plannerDto.getClassroom().getId()).orElseThrow(()-> new ValidationException("Pasirinkta klasė neegzistuoja", "Classroom", "Does not exist", plannerDto.getClassroom().getId().toString()));
         }
 
-        int hours;
-        Integer unassignedHours = existingSchedule.getUnassignedTimeWithSubjectId(subjectId);
         Program program = existingSchedule.getGroups().getProgram();
-        SubjectHours subjectHour = program.getSubjectHoursList().stream().filter(sh -> sh.getSubject().equals(subjectId)).findAny().orElseThrow(() -> new ValidationException("Pasirinktas dalykas neegzistuoja programoje", "Program", "Does not exist", program.toString()));
+        SubjectHours subjectHour = program.getSubjectHoursList().stream().filter(sh -> sh.getSubject().equals(subjectId)).findAny().orElseThrow(() ->
+                new ValidationException("Pasirinktas dalykas neegzistuoja programoje", "Program", "Does not exist", program.toString()));
 
+        Integer unassignedHours = existingSchedule.getUnassignedTimeWithSubjectId(subjectId);
         int plannerAssignedHours = plannerDto.getAssignedHours();
 
-        //In a case where Map already has a value of that particular subjectId
-        if (unassignedHours != null) {
-            if (unassignedHours == 0) {
-                throw new ValidationException("Dalykas pasirinktoje programoje nebeturi nepanaudotų valandų", "Program", "Unassigned hours value is 0", existingSchedule.getSubjectIdWithUnassignedTime().toString());
-            }
-            //Checks so that passed value wouldn't exceed maximum hours subject has
-            if (plannerAssignedHours > unassignedHours) {
-                hours = unassignedHours;
-                existingSchedule.replaceUnassignedTime(subjectId, 0);
-            }
-            //Places new assigned hours amount
-            else {
-                hours = plannerAssignedHours;
-                existingSchedule.replaceUnassignedTime(subjectId, unassignedHours - hours);
-            }
-        }
-        //In a case where Map doesn't have a value of that particular subjectId
-        else {
-            //Checks so that passed value wouldn't exceed maximum hours subject has
-            if (plannerAssignedHours > subjectHour.getHours()) {
-                hours = subjectHour.getHours();
-                existingSchedule.addUnassignedTimeWithSubjectId(subjectId, 0);
-            }
-            //Places new assigned hours amount
-            else {
-                hours = plannerAssignedHours;
-                existingSchedule.addUnassignedTimeWithSubjectId(subjectId, subjectHour.getHours() - hours);
-            }
-        }
+        //Setting values of unassigned hours in scheduler entity
+        int hours = SetupAndValidateUnassignedHoursMap(existingSchedule, unassignedHours, plannerAssignedHours, subjectId, subjectHour);
 
-        LocalDate date = plannerDto.getDateFrom();
         int interval = plannerDto.getEndIntEnum() - plannerDto.getStartIntEnum() + 1;
-        int days = hours/interval;
-        int leftHours = hours % interval;
-        boolean created = false;
-        int looper = 0;
+        int workDaysRequired;
+        int lastDayHours;
 
-        while(looper < days) {
+        if (hours % interval != 0) {
+            workDaysRequired = hours / interval + 1;
+            lastDayHours = hours % interval;
+        }
+        else {
+            workDaysRequired = hours / interval;
+            lastDayHours = 0;
+        }
 
-            DayOfWeek dayOfWeek = date.getDayOfWeek();
-            if (dayOfWeek == DayOfWeek.SATURDAY) {
-                date = date.plusDays(2);
-            }
-            else if (dayOfWeek == DayOfWeek.SUNDAY) {
+        List<LocalDate> workableDates = new ArrayList<>();
+        LocalDate date = plannerDto.getDateFrom();
+        //Finding every possible workday
+        for (int i = 0; i < workDaysRequired; i++) {
+            //If the date found is not workable, iterating it through
+            while (!SetupWorkDayViability.CheckIfLocalDateIsWorkable(date, existingSchedule.getHolidays())) {
                 date = date.plusDays(1);
             }
-            else {
-                WorkDay workDay = new WorkDay(date, existingSubject, existingTeacher, existingSchedule, existingClassroom, getLessonStartString(plannerDto), getLessonEndString(plannerDto), plannerDto.getOnline());
+            workableDates.add(date);
+            date = date.plusDays(1);
+        }
+
+        //Getting last lesson date of the planner
+        LocalDate lastDate = workableDates.get(workableDates.size() - 1);
+
+        //Validating whether planned lessons are viable for this schedule
+        String isDateValid = isValidDates(plannerDto.getDateFrom(), lastDate, existingSchedule.getDateFrom(), existingSchedule.getDateUntil());
+        if (!isDateValid.isEmpty()) {
+            return isDateValid;
+        }
+
+        Set<WorkDay> workDaySet = existingSchedule.getWorkingDays();
+        //Iterating through workdays if all workdays has same amount of lesson hours
+        if (lastDayHours == 0) {
+            for (LocalDate workableDate : workableDates) {
+                if (workDaySet.stream().noneMatch(wd -> wd.getDate().isEqual(workableDate))) {
+                    WorkDay workDay = SetupWorkDayViability.SetupWorkDay(scheduleId,
+                        new WorkDay
+                                (
+                                    workableDate, existingSubject, existingTeacher, existingSchedule, existingClassroom, getLessonStartString(plannerDto),
+                                    getLessonEndString(plannerDto),
+                                    plannerDto.getStartIntEnum(), plannerDto.getEndIntEnum(),
+                                    plannerDto.getOnline()
+                                ),
+                        scheduleRepository, workDayRepository);
+                    workDayRepository.save(workDay);
+                    existingSchedule.addWorkDay(workDay);
+                }
+            }
+        }
+        //In a case where there is an uneven amount of hours and the last day has a different amount
+        else {
+            for (int i = 0; i < workableDates.size() - 1; i++) {
+                LocalDate workableDate = workableDates.get(i);
+                if (workDaySet.stream().noneMatch(wd -> wd.getDate().isEqual(workableDate))) {
+                    WorkDay workDay = SetupWorkDayViability.SetupWorkDay(scheduleId,
+                        new WorkDay
+                                (
+                                    workableDate, existingSubject, existingTeacher, existingSchedule, existingClassroom, getLessonStartString(plannerDto),
+                                    getLessonEndString(plannerDto),
+                                    plannerDto.getStartIntEnum(), plannerDto.getEndIntEnum(),
+                                    plannerDto.getOnline()
+                                ),
+                        scheduleRepository, workDayRepository);
+                    workDayRepository.save(workDay);
+                    existingSchedule.addWorkDay(workDay);
+                }
+            }
+            LocalDate lastWorkableDate = workableDates.get(workableDates.size() - 1);
+            if (workDaySet.stream().noneMatch(wd -> wd.getDate().isEqual(lastWorkableDate))) {
+                WorkDay workDay = SetupWorkDayViability.SetupWorkDay(scheduleId,
+                    new WorkDay
+                            (
+                                lastWorkableDate, existingSubject, existingTeacher, existingSchedule, existingClassroom, getLessonStartString(plannerDto),
+                                    //Gets end of lesson by the amount of hours left
+                                    LessonTime.getLessonTimeByInt(plannerDto.getStartIntEnum() + lastDayHours - 1).getLessonEnd(),
+                                    plannerDto.getStartIntEnum(), plannerDto.getStartIntEnum() + lastDayHours - 1,
+                                plannerDto.getOnline()
+                            ),
+                    scheduleRepository, workDayRepository);
                 workDayRepository.save(workDay);
-                date = date.plusDays(1);
-                created = true;
                 existingSchedule.addWorkDay(workDay);
-                looper++;
             }
         }
-
-        if (leftHours != 0) {
-            while (date.getDayOfWeek() == DayOfWeek.SATURDAY || date.getDayOfWeek() == DayOfWeek.SUNDAY) {
-                date = date.plusDays(1);
-            }
-            String lastLesson = LessonTime.getLessonTimeByInt(plannerDto.getStartIntEnum() + leftHours - 1).getLessonEnd();
-            WorkDay lastWorkDay = new WorkDay(date, existingSubject, existingTeacher, existingSchedule, existingClassroom, getLessonStartString(plannerDto), lastLesson, plannerDto.getOnline());
-            workDayRepository.save(lastWorkDay);
-            created = true;
-            existingSchedule.addWorkDay(lastWorkDay);
-        }
-        return created;
+        return "";
     }
 
     public List<WorkDay> getWorkDays(Long scheduleId) {
         return workDayRepository.findWorkDaysByScheduleId(scheduleId);
+    }
+    public Optional<WorkDay> getWorkDay(Long workDayId) {
+        return workDayRepository.findById(workDayId);
+    }
+
+    public WorkDay updateWorkDay(Long workDayId, WorkDayDto workDayDto) {
+        WorkDay existingWorkDay = workDayRepository.findById(workDayId).orElseThrow(() -> new ValidationException("Nurodyta darbo diena neegzistuoja", "WorkDay", "Does not exist", workDayId.toString()));
+        existingWorkDay.setTeacher(toTeacherFromEntityDto(workDayDto.getTeacher()));
+        existingWorkDay.setClassroom(toClassroomFromSmallDto(workDayDto.getClassroom()));
+        existingWorkDay.setOnline(workDayDto.getOnline());
+
+        return workDayRepository.save(existingWorkDay);
+    }
+
+    @Transactional
+    public boolean deleteWorkDay(Long workDayId, WorkDayDto workDayDto) {
+        WorkDay existingWorkDay = workDayRepository.findById(workDayId).orElseThrow(() -> new ValidationException("Nurodyta darbo diena neegzistuoja", "WorkDay", "Does not exist", workDayId.toString()));
+        Schedule schedule = scheduleRepository.findById(existingWorkDay.getSchedule().getId()).orElseThrow(() -> new ValidationException("Nurodytas tvarkaraštis neegzistuoja", "Schedule", "Does not exist", existingWorkDay.getSchedule().getId().toString()));
+        Integer unassignedHours = schedule.getUnassignedTimeWithSubjectId(existingWorkDay.getSubject().getId());
+        var start = workDayDto.getStartIntEnum();
+        var end = workDayDto.getEndIntEnum();
+        int interval = end - start + INTERVAL_CONSTANT;
+
+        workDayRepository.deleteById(workDayId);
+        schedule.replaceUnassignedTime(existingWorkDay.getSubject().getId(), unassignedHours + interval);
+        scheduleRepository.save(schedule);
+        return true;
+    }
+
+    @Transactional
+    public boolean deleteLessonsBySubjectId(Long scheduleId, Long subjectId, int hours) {
+        Schedule existingSchedule = scheduleRepository.findById(scheduleId).orElseThrow(() -> new ValidationException("Nurodytas tvarkaraštis neegzistuoja", "Schedule", "Does not exist", scheduleId.toString()));
+        long deleted = workDayRepository.deleteBySubjectId(subjectId);
+
+        if(deleted > 0 ){
+            existingSchedule.replaceUnassignedTime(subjectId, hours);
+            return true;
+        } else {
+            throw new ValidationException("Dalykas neturi suplanuotų valandų.", "Subject", "Subject does not have planned hours in schedule", subjectId.toString());
+        }
     }
 }

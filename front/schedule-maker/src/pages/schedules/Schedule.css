@@ -19,7 +19,6 @@
 }
 
 @page {
-    /* margin: 2cm; */
     size: A4 portrait;
  }
 
@@ -38,4 +37,10 @@
   .fc-title {
     margin-bottom: 5px;
   }
+  
+  .red-border {
+    border: 2px solid red;
+    border-radius: 50%;
+  }
+  
   

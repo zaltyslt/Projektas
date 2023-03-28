@@ -14,6 +14,8 @@ public class ScheduleMapper {
         scheduleDto.setModifiedDate(schedule.getModifiedDate());
         scheduleDto.setWorkingDays(schedule.getWorkingDays());
         scheduleDto.setSubjectIdWithUnassignedTime(schedule.getSubjectIdWithUnassignedTime());
+        scheduleDto.setHolidays(schedule.getHolidays());
+        scheduleDto.setHasConflicts(schedule.isHasConflicts());
         return scheduleDto;
     }
 
@@ -30,6 +32,8 @@ public class ScheduleMapper {
         schedule.setModifiedDate(scheduleDto.getModifiedDate());
         schedule.setWorkingDays(scheduleDto.getWorkingDays());
         schedule.setSubjectIdWithUnassignedTime(scheduleDto.getSubjectIdWithUnassignedTime());
+        schedule.setHolidays(scheduleDto.getHolidays());
+        schedule.setHasConflicts(scheduleDto.isHasConflicts());
         return schedule;
     }
 
@@ -49,5 +53,23 @@ public class ScheduleMapper {
         scheduleCreateDto.setDateFrom(schedule.getDateFrom());
         scheduleCreateDto.setDateUntil(schedule.getDateUntil());
         return scheduleCreateDto;
+    }
+
+    public static ScheduleEntityDto toScheduleEntity(Schedule schedule) {
+        ScheduleEntityDto scheduleEntityDto = new ScheduleEntityDto();
+
+        scheduleEntityDto.setId(schedule.getId());
+        return scheduleEntityDto;
+    }
+
+    public static Schedule toScheduleFromEntity(ScheduleEntityDto scheduleEntityDto) {
+        Schedule schedule = new Schedule();
+
+        if (scheduleEntityDto != null) {
+            schedule.setId(scheduleEntityDto.getId());
+            return schedule;
+        } else {
+            return null;
+        }
     }
 }

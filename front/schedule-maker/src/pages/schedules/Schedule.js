@@ -10,11 +10,62 @@ import "./ViewSchedule.css";
 import { Stack } from "@mui/system";
 import { Button, Grid } from "@mui/material";
 import adaptivePlugin from "@fullcalendar/adaptive";
+import { render } from "preact/compat";
+import { eachDayOfInterval } from "date-fns";
+
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
+import DialogActions from '@mui/material/DialogActions';
+import CloseIcon from '@mui/icons-material/Close';
+import { useTheme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import DialogContentText from '@mui/material/DialogContentText';
 
 export function Schedule() {
   const [weekendsVisible, setWeekendsVisible] = useState(true);
   const [schedule, setSchedule] = useState([]);
+  const [holiday, setHoliday] = useState([]);
   const params = useParams();
+
+  const [open, setOpen] = React.useState(false);
+  const theme = useTheme();
+  const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
+  const [maxWidth, setMaxWidth] = React.useState('sm');
+  const [fullWidth, setFullWidth] = React.useState(true);
+
+  const [conflictDates, setConflictDates] = useState([])
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const subjectColors = [
+    "#f5c5c4",
+    "#f5ddc4",
+    "#f5f3c4",
+    "#daf5c4",
+    "#c4f5d8",
+    "#c4f5f2",
+    "#c4d3f5",
+    "#d8c4f5",
+    "#f5c4e3",
+  ];
+
+  const subjectColorMap = { index: 0 };
+  schedule.forEach((s) => {
+    if (!subjectColorMap[s.subject.id]) {
+      subjectColorMap[s.subject.id] = subjectColors[subjectColorMap.index];
+      subjectColorMap.index += 1;
+      subjectColorMap.index + 1 === subjectColors.length
+        ? (subjectColorMap.index = 0)
+        : (subjectColorMap.index += 1);
+    }
+  });
 
   useEffect(() => {
     fetch(`api/v1/schedules/${params.id}/lessons`)
@@ -23,22 +74,91 @@ export function Schedule() {
       .catch((error) => console.error(error));
   }, [params.id]);
 
-  const events = schedule.map((schedule) => ({
-    title: `<b>${schedule.subject.name}</b>
-      <br />
-      ${schedule.lessonStart} - ${schedule.lessonEnd}
-      <br /> 
-      ${schedule.teacher ? schedule.teacher.lName : ""} ${
-      schedule.teacher ? schedule.teacher.fName : "nepasirinktas"
-    }
-      <br />
-      ${
-        schedule.online ? "Nuotolinė pamoka" : schedule.classroom.classroomName
-      }<br />
-      `,
-    start: schedule.date,
-    allDay: true,
-  }));
+  useEffect(() => {
+    fetch(`api/v1/schedules/holidays/${params.id}`)
+      .then((response) => response.json())
+      .then((data) => setHoliday(data))
+      .catch((error) => console.error(error));
+  }, [params.id]);
+
+  useEffect(() => {
+    const div = document.querySelector(".fc-license-message");
+    div.style.visibility = "hidden"; // or 'visible' to show the div
+  }, []);
+
+  /////////////////////////////////
+  const handleClickPrint = (scheduleId, paged) => {
+    // console.log(scheduleId);
+    const fetchTo = paged
+      ? `api/v1/schedules/excel?id=${scheduleId}&p=true`
+      : `api/v1/schedules/excel?id=${scheduleId}&p=false`;
+    fetch(fetchTo, {
+      method: "Get",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => {
+        // clearMessages();
+        if (response.ok) {
+          // setCreateMessage("Tvarkaraščio failas paruoštas.");
+        } else {
+          // setErrorMessage(`Tvarkaraščio failo paruošti nepavyko.`);
+        }
+        return response;
+      })
+      .then((response) => {
+        const filename = response.headers
+          .get("Content-Disposition")
+          .split("filename=")[1];
+        // console.log(filename);
+        response.blob().then((blob) => {
+          let url = window.URL.createObjectURL(blob);
+          let a = document.createElement("a");
+          a.href = url;
+          a.download = filename;
+          a.click();
+        });
+      });
+  };
+  ////////////////////////////////
+
+  const events = [
+    ...schedule.map((schedule) => {
+      const color = subjectColorMap[schedule.subject.id];
+      return {
+        title: `<b>${schedule.subject.name}</b>
+          <br />
+          ${schedule.lessonStart} - ${schedule.lessonEnd}
+          <br />
+          ${schedule.teacher ? schedule.teacher.lName : ""} ${schedule.teacher ? schedule.teacher.fName : "nepasirinktas"
+          }
+          <br />
+          ${schedule.online
+            ? "Nuotolinė pamoka"
+            : schedule.classroom.classroomName
+          }<br />
+          `,
+        start: schedule.date,
+        allDay: true,
+        url: `http://localhost:3000/schedule-maker#/schedules/edit-lesson/${schedule.id}`,
+        color: color,
+      };
+    }),
+    ...holiday.flatMap((holiday) => {
+      const holidayDates = eachDayOfInterval({
+        start: new Date(holiday.dateFrom),
+        end: new Date(holiday.dateUntil),
+      });
+      return holidayDates.map((date) => ({
+        title: `<div style="margin-top: 37px; margin-bottom: 37px;"><b>${holiday.name}</b></div>` ,
+        start: date,
+        allDay: true,
+        url: `http://localhost:3000/schedule-maker#/schedules/edit-holidays/${holiday.id}`,
+        color: "#cccccc",
+      }));
+    }),
+  ];
 
   const renderEventContent = (eventInfo) => (
     <>
@@ -48,13 +168,13 @@ export function Schedule() {
           fontSize: "16px",
           padding: "10px",
           fontFamily: "Arial, sans-serif",
-          backgroundColor: "#dcedf7",
           color: "black",
         }}
         dangerouslySetInnerHTML={{ __html: eventInfo.event.title }}
       />
     </>
   );
+
 
   return (
     <div className="maincontainer">
@@ -93,23 +213,85 @@ export function Schedule() {
 
       <Grid item sm={10} className="button-container">
         <Stack direction="row" spacing={2}>
-          <Link to="/">
-            <Button id="back-button-schedule" variant="contained">
-              Grįžti
-            </Button>
-          </Link>
           <Link to={"/planning/" + params.id}>
             <Button id="plan-button-schedule" variant="contained">
               Planavimas
             </Button>
           </Link>
-          <Button
+          {/* <Button
             id="print-button-schedule"
             variant="contained"
             onClick={() => window.print()}
           >
             Spausdinti kalendorių
+          </Button> */}
+
+          <Button
+            variant="contained"
+            // startIcon={<LocalPrintshopIcon />}
+
+            onClick={() => handleClickPrint(params.id, true)}
+          >
+            SPAUSDINTI EXCEL
           </Button>
+
+          <div>
+            <Button variant="outlined" onClick={handleClickOpen}>
+              Tikrinti konfliktus
+            </Button>
+            <Dialog
+              fullScreen={fullScreen}
+              open={open}
+              onClose={handleClose}
+              maxWidth={maxWidth}
+              fullWidth={fullWidth}
+              aria-labelledby="responsive-dialog-title"
+            >
+              <DialogTitle id="responsive-dialog-title">
+                {"Rasti konfliktai:"}
+              </DialogTitle>
+              <DialogContent>
+                <DialogContentText>
+                  {schedule
+                    .filter(
+                      (item) =>
+                        (item.hasTeacherConflict &&
+                          item.scheduleIdWithTeacherNameConflict) ||
+                        (item.hasClassroomConflict &&
+                          item.scheduleIdWithClassroomNameConflict)
+                    )
+                    .map((item) => (
+                      <div key={item.id}>
+                        <h3>{`Diena:  ${item.date}`}</h3>
+                        {item.hasTeacherConflict &&
+                          item.scheduleIdWithTeacherNameConflict && (
+                            <div>
+                              {Object.entries(
+                                item.scheduleIdWithTeacherNameConflict
+                              ).map(([key, value]) => (
+                                <p key={key}>{`Mokytojas: ${value}`}</p>
+                              ))}
+                            </div>
+                          )}
+                        {item.hasClassroomConflict &&
+                          item.scheduleIdWithClassroomNameConflict && (
+                            <div>
+                              {Object.entries(
+                                item.scheduleIdWithClassroomNameConflict
+                              ).map(([key, value]) => (
+                                <p key={key}>{`Klasė: ${value}`}</p>
+                              ))}
+                            </div>)}
+                      </div>))}
+                </DialogContentText>
+              </DialogContent>
+              <DialogActions>
+                <Button variant="outlined" onClick={handleClose} autoFocus>
+                  Uždaryti
+                </Button>
+              </DialogActions>
+            </Dialog>
+          </div>
         </Stack>
       </Grid>
     </div>
