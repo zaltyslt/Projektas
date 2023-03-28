@@ -1,19 +1,90 @@
 package lt.techin.schedule.module;
 
+import com.google.common.collect.FluentIterable;
 import lt.techin.schedule.AbstractPage;
+import lt.techin.schedule.utils.WaitUtils;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.Select;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class ModuleListPage extends AbstractPage {
     @FindBy(css = "#create-new-module")
-    private WebElement selectCreateNewModuleButton;
+    WebElement createNewModuleButton;
+
+    @FindBy(css = ".MuiNativeSelect-select")
+    WebElement pageDropdownButton;
+
+    @FindBy(css = ".MuiTableBody-root")
+    private WebElement moduleCodeAndNameList;
+
+
+    @FindBy(css = "tbody.MuiTableBody-root a")
+    private List<WebElement> moduleCodeList;
+
+    @FindBy(css = "input.PrivateSwitchBase-input")
+    private WebElement markCheckbox;
+
+    @FindBy(css = "input.PrivateSwitchBase-input")
+    private WebElement Checkbox;
+
+    @FindBy(css = "#search-form")
+    private WebElement searchInputField;
+
+    @FindBy (xpath= "//tbody//tr[td/button]")
+    private List<WebElement> removedModuleList;
+
+    @FindBy(css = "#restore-button-list-module")
+    private WebElement RestoreButton;
 
     public ModuleListPage(WebDriver driver) {
         super(driver);
     }
 
-    public void selectCreateNewModuleButton() {
-        selectCreateNewModuleButton.click();
+    public void clickCreateNewModuleButton() {
+        createNewModuleButton.click();
     }
+
+    public void selectPageDropdownButton(){
+        Select select = new Select(pageDropdownButton);
+        select.selectByIndex(2);
+    }
+
+    public WebElement getModuleCodeAndNameList() {
+        return WaitUtils.getVisibleWithWait(moduleCodeAndNameList, driver);
+    }
+
+    public List<String> getModules() {
+        WaitUtils.getElementWithWait(By.cssSelector("tbody.MuiTableBody-root a"), driver);
+        return moduleCodeList.stream().map(el -> el.getText()).collect(Collectors.toList());
+    }
+
+    public void selectModule(int moduleIndex) {
+        moduleCodeList.get(moduleIndex).click();
+    }
+
+    public void markCheckBox() {
+        if (!markCheckbox.isSelected()) {
+            markCheckbox.click();
+        }
+    }
+
+    public void setFilterValue(String moduleCode) {
+        searchInputField.sendKeys(moduleCode);
+    }
+
+    public List<String> getRemovedModules() {
+        WaitUtils.getElementWithWait(By.xpath("//tbody//tr[td/button]"), driver);
+        return removedModuleList.stream()
+                .map(row -> row.findElement(By.cssSelector("th")))
+                .map(el -> el.getText()).collect(Collectors.toList());
+    }
+
+
+    public void clickRestoreButton() {RestoreButton.click();}
 }
