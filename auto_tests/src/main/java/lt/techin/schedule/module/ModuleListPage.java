@@ -61,7 +61,8 @@ public class ModuleListPage extends AbstractPage {
     }
 
     public void scrollToCheckBox() {scrollToElement(checkBox);
-        new WebDriverWait(driver, Duration.ofSeconds(2)).until(ExpectedConditions.elementToBeClickable(checkBox));}
+        //new WebDriverWait(driver, Duration.ofSeconds(2)).until(ExpectedConditions.elementToBeClickable(checkBox));
+    }
 
     public void markCheckBox() {
         if (!checkBox.isSelected()) {
