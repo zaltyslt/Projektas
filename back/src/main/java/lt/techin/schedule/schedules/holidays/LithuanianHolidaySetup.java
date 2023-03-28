@@ -31,7 +31,7 @@ public class LithuanianHolidaySetup {
     These methods are here to avoid comparison of the year.
     Year defined in config directory might be faulty.
     */
-   private static boolean IsAfterOrEqual (LocalDate localDate, LocalDate isAfterDate) {
+    private static boolean IsAfterOrEqual (LocalDate localDate, LocalDate isAfterDate) {
         if (localDate.getMonthValue() < isAfterDate.getMonthValue()) {
             return true;
         }
@@ -41,7 +41,7 @@ public class LithuanianHolidaySetup {
         return localDate.getDayOfMonth() <= localDate.getDayOfMonth();
    }
 
-   private static boolean IsBeforeOrEqual (LocalDate localDate, LocalDate isBeforeDate) {
+    private static boolean IsBeforeOrEqual (LocalDate localDate, LocalDate isBeforeDate) {
        if (localDate.getMonthValue() > isBeforeDate.getMonthValue()) {
            return true;
        }
@@ -51,7 +51,7 @@ public class LithuanianHolidaySetup {
        return localDate.getDayOfMonth() >= localDate.getDayOfMonth();
    }
 
-   private static boolean IsInRange (LocalDate fromDate, LocalDate toDate, LocalDate dateToFind) {
+    private static boolean IsInRange (LocalDate fromDate, LocalDate toDate, LocalDate dateToFind) {
         int month = dateToFind.getMonthValue();
         int day = dateToFind.getDayOfMonth();
 

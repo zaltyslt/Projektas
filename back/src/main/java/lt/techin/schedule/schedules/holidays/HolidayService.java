@@ -28,24 +28,34 @@ public class HolidayService {
         return aa;
     }
 
-    public Holiday create(Holiday holiday, Long id) {
+    public String create(Holiday holiday, Long id) {
         Schedule existingSchedule = scheduleRepository.findById(id).orElse(null);
         if (existingSchedule == null) {
-            return null;
+            return "Toks tvarkaraštis neegzistuoja.";
         } else {
-            try {
-                Holiday holiday1 = new Holiday();
-                holiday1.setHolidayName(holiday.getHolidayName());
-                holiday1.setDateFrom(holiday.getDateFrom());
-                holiday1.setDateUntil(holiday.getDateUntil());
-                holiday1.setSchedule(existingSchedule);
-                Holiday save = holidayRepository.save(holiday1);
-                existingSchedule.addHoliday(holiday1);
-                return save;
-            } catch (Exception e) {
-                System.out.println(e.getLocalizedMessage());
+            //Checks if holidays being created are in range of specified schedule
+            if ((existingSchedule.getDateFrom().isEqual(holiday.getDateFrom()) || existingSchedule.getDateFrom().isBefore(holiday.getDateFrom())) &&
+                    (existingSchedule.getDateUntil().isEqual(holiday.getDateUntil()) || existingSchedule.getDateUntil().isAfter(holiday.getDateUntil())))
+            {
+                try {
+                    Holiday holiday1 = new Holiday();
+                    holiday1.setHolidayName(holiday.getHolidayName());
+                    holiday1.setDateFrom(holiday.getDateFrom());
+                    holiday1.setDateUntil(holiday.getDateUntil());
+                    holiday1.setSchedule(existingSchedule);
+                    Holiday save = holidayRepository.save(holiday1);
+                    existingSchedule.addHoliday(holiday1);
+                    return "";
+                } catch (Exception e) {
+                    System.out.println(e.getLocalizedMessage());
+                }
             }
-            return null;
+            else {
+                return "Atostogų datos nesutampa su tvarkaraščio datomis. Tvarkaraštis prasideda/pasibaigia: " +
+                        existingSchedule.getDateFrom() + "/" + existingSchedule.getDateUntil() + ". Atostogos prasideda/pasibaigia: " +
+                        holiday.getDateFrom() + "/" + holiday.getDateUntil() + ".";
+            }
+            return "Atostogų sukūrimas nepavyko.";
         }
     }
 
