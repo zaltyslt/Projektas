@@ -75,7 +75,7 @@ const validation = () => {
           setCreateMessage("");
           setError(response.message);
         } else {
-          setCreateMessage("Sėkmingai sukurta. ");
+          setCreateMessage("Modulis sėkmingai sukurtas. ");
           setError("");
           clear();
         }

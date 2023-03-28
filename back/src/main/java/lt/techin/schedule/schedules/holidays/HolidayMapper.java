@@ -1,5 +1,8 @@
 package lt.techin.schedule.schedules.holidays;
 
+import static lt.techin.schedule.schedules.ScheduleMapper.toScheduleEntity;
+import static lt.techin.schedule.schedules.ScheduleMapper.toScheduleFromEntity;
+
 public class HolidayMapper {
     public static Holiday toHoliday(HolidayDto holidayDto) {
         var holiday = new Holiday();
@@ -9,6 +12,7 @@ public class HolidayMapper {
         holiday.setDateUntil(holidayDto.getDateUntil());
         holiday.setCreatedDate(holidayDto.getCreatedDate());
         holiday.setModifiedDate(holidayDto.getModifiedDate());
+        holiday.setSchedule(toScheduleFromEntity(holidayDto.getSchedule()));
         return holiday;
     }
 
@@ -20,6 +24,7 @@ public class HolidayMapper {
         holidayDto.setDateUntil(holiday.getDateUntil());
         holidayDto.setCreatedDate(holiday.getCreatedDate());
         holidayDto.setModifiedDate(holiday.getModifiedDate());
+        holidayDto.setSchedule(toScheduleEntity(holiday.getSchedule()));
         return holidayDto;
     }
 }

@@ -29,7 +29,7 @@ export function UpdateClassroom() {
   const [errorEmptyDesc, setErrorEmptyDesc] = useState(false);
   const [errorSymbolsDesc, setErrorSymbolsDesc] = useState(false);
   const [errorBuilding, setErrorBuilding] = useState(false);
-    const [errorLengthName, setErrorLengthName] = useState(false);
+  const [errorLengthName, setErrorLengthName] = useState(false);
   const [errorLengthDesc, setErrorLengthDesc] = useState(false);
 
   const handleDescriptionChange = (event) => {
@@ -69,7 +69,7 @@ export function UpdateClassroom() {
     setErrorSymbolsName(false);
     setErrorEmptyDesc(false);
     setErrorSymbolsDesc(false);
-    setErrorBuilding(false)
+    setErrorBuilding(false);
     if (!classroomName) {
       setErrorEmptyName(true);
     } else if (
@@ -97,14 +97,17 @@ export function UpdateClassroom() {
         }),
       }).then((result) => {
         if (!result.ok) {
-          result.text().then(text => {
-            const response = JSON.parse(text);
-            setError(response.message)
-          }).catch(error => {
-            setError("Klasės sukurti nepavyko: ", error);
-          });
+          result
+            .text()
+            .then((text) => {
+              const response = JSON.parse(text);
+              setError(response.message);
+            })
+            .catch((error) => {
+              setError("Klasės sukurti nepavyko: ", error);
+            });
         } else {
-          setSuccess("Sėkmingai atnaujinote!");
+          setSuccess("Klasės duomenys sėkmingai atnaujinti.");
         }
       });
     }
@@ -146,11 +149,10 @@ export function UpdateClassroom() {
         <form>
           <Grid container rowSpacing={3}>
             <Grid item sm={8}>
-            <FormControl fullWidth required error={errorBuilding}>
-              <InputLabel id="building-label">
-                {errorBuilding
-                  ? "Prašome pasirinkti pastatą."
-                  : "Pastatas"}</InputLabel>
+              <FormControl fullWidth required error={errorBuilding}>
+                <InputLabel id="building-label">
+                  {errorBuilding ? "Prašome pasirinkti pastatą." : "Pastatas"}
+                </InputLabel>
                 <Select
                   required
                   variant="outlined"
@@ -169,31 +171,30 @@ export function UpdateClassroom() {
               <TextField
                 fullWidth
                 required
-              error={errorEmptyName || errorSymbolsName || errorLengthName }
-              helperText={
-                errorEmptyName
-                  ? "Klasės pavadinimas yra privalomas."
-                  : errorSymbolsName
-                    ? "Klasės pavadinimas turi neleidžiamų simbolių." 
+                error={errorEmptyName || errorSymbolsName || errorLengthName}
+                helperText={
+                  errorEmptyName
+                    ? "Klasės pavadinimas yra privalomas."
+                    : errorSymbolsName
+                    ? "Klasės pavadinimas turi neleidžiamų simbolių."
                     : errorLengthName
                     ? "Klasės pavadinimas negali būti ilgesnis nei 200 simbolių"
                     : ""
-              }
+                }
                 variant="outlined"
                 id="classroomName"
                 label="Klasės pavadinimas"
                 value={classroomName}
-              onChange={(e) => {
-                const input = e.target.value;
-                if (input.length > 200) {
-                  setErrorLengthName(true);
-                } else {
-                  setErrorLengthName(false);
-                }
-                setClassroomName(input);
-              }}
+                onChange={(e) => {
+                  const input = e.target.value;
+                  if (input.length > 200) {
+                    setErrorLengthName(true);
+                  } else {
+                    setErrorLengthName(false);
+                  }
+                  setClassroomName(input);
+                }}
                 // onChange={(e) => setClassroomName(e.target.value)}
-
               ></TextField>
             </Grid>
             <Grid item sm={8}>
@@ -206,10 +207,10 @@ export function UpdateClassroom() {
                   errorEmptyDesc
                     ? "Klasės aprašas yra privalomas."
                     : errorSymbolsDesc
-                      ? "Klasės aprašas turi neleidžiamų simbolių."
-                      : errorLengthDesc
-                      ? "Klasės aprašas negali būti ilgesnis nei 2000 simbolių"
-                      : ""
+                    ? "Klasės aprašas turi neleidžiamų simbolių."
+                    : errorLengthDesc
+                    ? "Klasės aprašas negali būti ilgesnis nei 2000 simbolių"
+                    : ""
                 }
                 variant="outlined"
                 label="Klasės aprašas"
@@ -227,14 +228,19 @@ export function UpdateClassroom() {
                 // onChange={(e) => setDescription(e.target.value)}
               ></TextField>
             </Grid>
-            <Grid item sm={10}>
+            <Grid item sm={8}>
               {" "}
               <legend>{params.classroomName}</legend>
               {error && <Alert severity="warning">{error}</Alert>}
               {success && <Alert severity="success">{success}</Alert>}
             </Grid>
-            <Stack direction="row" spacing={2}>
-              <Button variant="contained" onClick={updateClassroom}>
+            <Grid item sm={4}></Grid>
+            <Stack direction="row" spacing={2} marginTop={2}>
+              <Button
+                id="save-button-edit-room"
+                variant="contained"
+                onClick={updateClassroom}
+              >
                 Išsaugoti
               </Button>
               {!classroom.active && (
@@ -250,6 +256,7 @@ export function UpdateClassroom() {
               {classroom.active && (
                 <Link to="/rooms">
                   <Button
+                    id="delete-button-edit-room"
                     variant="contained"
                     data-value="true"
                     value={params.id}
@@ -260,7 +267,9 @@ export function UpdateClassroom() {
                 </Link>
               )}
               <Link to="/rooms">
-                <Button variant="contained">Grįžti</Button>
+                <Button id="back-button-edit-room" variant="contained">
+                  Grįžti
+                </Button>
               </Link>
             </Stack>
           </Grid>

@@ -16,11 +16,11 @@ public class ScheduleDto {
     private Group groups;
     private String schoolYear;
     private String semester;
-
     private LocalDate dateFrom;
-
     private LocalDate dateUntil;
     private boolean active = true;
+
+    private boolean hasConflicts;
     private LocalDateTime createdDate;
     private LocalDateTime modifiedDate;
 
@@ -33,6 +33,7 @@ public class ScheduleDto {
     public ScheduleDto() {
         subjectIdWithUnassignedTime = new HashMap<>();
         workingDays = new LinkedHashSet<>();
+        hasConflicts = false;
     }
 
     public Long getId() {
@@ -129,5 +130,13 @@ public class ScheduleDto {
 
     public void setHolidays(Set<Holiday> holidays) {
         this.holidays = holidays;
+    }
+
+    public boolean isHasConflicts() {
+        return hasConflicts;
+    }
+
+    public void setHasConflicts(boolean hasConflicts) {
+        this.hasConflicts = hasConflicts;
     }
 }

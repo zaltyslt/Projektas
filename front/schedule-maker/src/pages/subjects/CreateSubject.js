@@ -124,7 +124,7 @@ export function CreateSubject() {
           setCreateMessage("");
           setError(response.message);
         } else {
-          setCreateMessage("Sėkmingai sukurta. ");
+          setCreateMessage("Dalykas sėkmingai sukurtas. ");
           setError("");
           clear();
         }

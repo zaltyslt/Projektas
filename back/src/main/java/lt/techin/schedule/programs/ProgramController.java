@@ -51,7 +51,7 @@ public class ProgramController {
         if (createProgram == null) {
             logger.info("The program is already created");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(Map.of("message", "Tokia programa jau yra sukurta"));
+                    .body(Map.of("message", "Tokia programa jau sukurta."));
         }
         logger.info("The program was created, successfully");
         return ResponseEntity.status(HttpStatus.CREATED)
@@ -91,7 +91,7 @@ public class ProgramController {
         if (createProgram == null) {
             logger.info("The program is already created");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(Map.of("message", "Tokia programa jau yra sukurta"));
+                    .body(Map.of("message", "Tokia programa jau sukurta."));
         }
         logger.info("The program was created, successfully");
         return ResponseEntity.status(HttpStatus.CREATED)
@@ -112,7 +112,7 @@ public class ProgramController {
             if (programNameExists) {
                 logger.info("The program is already created");
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                        .body(Map.of("message", "Tokia programa jau yra sukurta"));
+                        .body(Map.of("message", "Tokia programa jau sukurta."));
             }
             var hourlist = subjectHoursService.updateAll(subjectHoursDto.getSubjectHoursList());
             program.setSubjectHoursList(hourlist);
