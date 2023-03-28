@@ -1,5 +1,6 @@
 package lt.techin.schedule.schedules;
 
+import lt.techin.schedule.schedules.ScheduleService;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;

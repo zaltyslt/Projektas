@@ -64,6 +64,10 @@ public class WorkDay {
         this.online = online;
     }
 
+    public WorkDay(Long id) {
+        this.id = id;
+    }
+
     public Teacher getTeacher() {
         return teacher;
     }

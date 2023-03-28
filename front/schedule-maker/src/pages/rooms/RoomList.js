@@ -143,13 +143,15 @@ export function RoomList() {
   };
 
   useEffect(() => {
-    setCurrentPage(1); // reset to first page
+    setCurrentPage(1);
   }, [filter, building]);
 
   useEffect(() => {
-    setCurrentPage2(1); // reset to first page
+    setCurrentPage2(1);
   }, [filter, building]);
 
+
+  
   return (
     <div>
       <Container maxWidth="lg">
@@ -311,9 +313,7 @@ export function RoomList() {
                       10,
                       20,
                       {
-                        label: "Visi",
-                        value: filteredDisabledClassrooms.length,
-                      },
+                        label: "Visi", value: filteredDisabledClassrooms.length },
                     ]}
                     labelDisplayedRows={({ from, to, count }) =>
                       `${from}-${to} iš ${count}`

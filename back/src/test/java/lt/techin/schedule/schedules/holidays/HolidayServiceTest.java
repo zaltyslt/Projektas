@@ -2,6 +2,9 @@ package lt.techin.schedule.schedules.holidays;
 
 import lt.techin.schedule.schedules.Schedule;
 import lt.techin.schedule.schedules.ScheduleRepository;
+import lt.techin.schedule.schedules.holidays.Holiday;
+import lt.techin.schedule.schedules.holidays.HolidayRepository;
+import lt.techin.schedule.schedules.holidays.HolidayService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
