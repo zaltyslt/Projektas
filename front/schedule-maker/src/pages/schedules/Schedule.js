@@ -113,6 +113,7 @@ export function Schedule() {
     });
     const results = await Promise.all(promises);
     setSchedules(results);
+    console.log(results)
   };
 
   const handleClickPrint = (scheduleId, paged) => {
@@ -167,19 +168,15 @@ export function Schedule() {
         color: color,
       };
     }),
-    ...holiday.flatMap((holiday) => {
-      const holidayDates = eachDayOfInterval({
-        start: new Date(holiday.dateFrom),
-        end: new Date(holiday.dateUntil),
-      });
-      return holidayDates.map((date) => ({
-        title: `<div style="margin-top: 37px; margin-bottom: 37px;"><b>${holiday.name}</b></div>`,
-        start: date,
+    ...holiday.map((holiday) => {
+      return {
+        title: `<b>${holiday.name}</b>`,
+        start: holiday.dateFrom,
         allDay: true,
         url: `api/v1/schedules/edit-holidays/${holiday.id}`,
         color: "#cccccc",
-      }));
-    }),
+      };
+    })
   ];
 
   const renderEventContent = (eventInfo) => (
@@ -262,7 +259,8 @@ export function Schedule() {
               </DialogTitle>
               <DialogContent>
                 <DialogContentText>
-                  {schedule && schedule.length > 0 ? (schedule
+                  {schedule && schedule.length > 0 ? (
+                    schedule
                     .filter(
                       (item) =>
                         (item.hasTeacherConflict &&
