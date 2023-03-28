@@ -78,4 +78,8 @@ public class TeacherServiceFind {
                 .stream().filter(t -> t.getShift().getId().equals(shiftId)).collect(Collectors.toList());
 
     }
+
+    public List<Teacher> findTeachersBySubject(Long subjectId) {
+        return teacherRepository.findTeachersBySubjectsId(subjectId).stream().collect(Collectors.toList());
+    }
 }
