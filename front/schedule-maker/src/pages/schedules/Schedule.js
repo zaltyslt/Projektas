@@ -122,7 +122,7 @@ export function Schedule() {
           ${
             schedule.online
               ? "Nuotolinė pamoka"
-              : schedule.classroom.classroomName
+              : schedule.classroom ? schedule.classroom.classroomName : ""
           }<br />
           `,
         start: schedule.date,
