@@ -16,4 +16,5 @@ public class TeacherListPage extends AbstractPage {
     public void selectCreateNewTeacherButton() {
         selectCreateNewTeacherButton.click();
     }
+
 }
