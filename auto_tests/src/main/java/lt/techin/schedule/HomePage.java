@@ -39,7 +39,7 @@ public class HomePage extends AbstractPage {
         navigateKlases.click();
     }
 
-    public void navigateModuliai() {
+    public void navigateToModules() {
         navigateModuliai.click();
     }
 
