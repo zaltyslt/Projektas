@@ -33,6 +33,8 @@ export function Schedule() {
   const [maxWidth, setMaxWidth] = React.useState('sm');
   const [fullWidth, setFullWidth] = React.useState(true);
 
+  const [conflictDates, setConflictDates] = useState([])
+
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -175,7 +177,7 @@ export function Schedule() {
 
           <div>
             <Button variant="outlined" onClick={handleClickOpen}>
-              tikrinti konfliktus
+              Tikrinti konfliktus
             </Button>
             <Dialog
               fullScreen={fullScreen}
