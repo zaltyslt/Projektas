@@ -16,8 +16,8 @@ public class BaseTest {
         edgeOptions.setPageLoadStrategy(PageLoadStrategy.NORMAL);
         driver = new EdgeDriver(edgeOptions);
         driver.manage().window().maximize();
-       driver.get("https://schedule-maker-production.up.railway.app/schedule-maker/#/");
-//        driver.get("http://localhost:3000/schedule-maker#/");
+//       driver.get("https://schedule-maker-production.up.railway.app/schedule-maker/#/");
+        driver.get("http://localhost:3000/schedule-maker#/");
     }
 
 //    @AfterEach

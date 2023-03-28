@@ -30,7 +30,7 @@ public class ShiftPageTest extends BaseTest{
         listPage.selectCreateNewShiftButton();
         shiftCreate.shiftNameInput();
 
-    String shiftName = RandomUtils.randomString(6);
+    String shiftName = RandomUtils.randomNumber(6);
     shiftCreate.shiftNameInput(shiftName);
     shiftCreate.saveButton();
     WebElement alert = shiftCreate.getAlertMessage();
@@ -56,7 +56,7 @@ public class ShiftPageTest extends BaseTest{
         listPage.selectShift(0);
         shiftView.clickEditButton();
         WaitUtils.waitPageToLoad(driver);
-        String shiftName = RandomUtils.randomString(1);
+        String shiftName = RandomUtils.randomNumber(1);
         shiftEdit.setShiftName(shiftName);
         shiftEdit.clickSaveButton();
         WaitUtils.waitPageToLoad(driver);

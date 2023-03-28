@@ -33,7 +33,7 @@ public class SubjectPageTest extends BaseTest {
         subjectListPage.selectCreateNewRoomButton();
 
         WaitUtils.waitPageToLoad(driver);
-        String subjectName = "Dalykas" + RandomUtils.randomString(6);
+        String subjectName = "Dalykas" + RandomUtils.randomNumber(6);
         subjectCreateNewPage.setSubjectName(subjectName);
         subjectCreateNewPage.setSubjectDescription("Dalyko " + subjectName + " aprašymas");
 
@@ -69,7 +69,7 @@ public class SubjectPageTest extends BaseTest {
         WaitUtils.waitPageToLoad(driver);
         subjectViewPage.clickEditButton();
         WaitUtils.waitPageToLoad(driver);
-        String subjectName = "Dalykas" + RandomUtils.randomString(6);
+        String subjectName = "Dalykas" + RandomUtils.randomNumber(6);
         subjectEditPage.setSubjectName(subjectName);
         List<String> moduleOptions = subjectEditPage.getSelectModuleOptions();
         subjectEditPage.selectModuleOption(0);

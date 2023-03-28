@@ -37,12 +37,12 @@ public class RoomListPage extends AbstractPage {
     }
 
     public List<String> getRooms() {
-        WaitUtils.getElementWithWait(By.cssSelector("tbody.MuiTableBody-root a"), driver);
+        WaitUtils.getElementWithWaitNotFail(By.cssSelector("tbody.MuiTableBody-root a"), driver);
         return roomList.stream().map(el -> el.getText()).collect(Collectors.toList());
     }
 
     public List<String> getRemovedRooms() {
-        WaitUtils.getElementWithWait(By.xpath("//tbody//tr[td/button]"), driver);
+        WaitUtils.getElementWithWaitNotFail(By.xpath("//tbody//tr[td/button]"), driver);
         return removedRoomList.stream()
                 .map(row -> row.findElement(By.cssSelector("th")))
                 .map(el -> el.getText()).collect(Collectors.toList());

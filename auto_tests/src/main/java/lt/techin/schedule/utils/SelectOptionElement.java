@@ -21,9 +21,13 @@ public class SelectOptionElement {
     private final List<WebElement> selectOptions;
 
     public SelectOptionElement(WebElement element, WebDriver driver) {
+        this(element, true, driver);
+    }
+
+    public SelectOptionElement(WebElement element, boolean click, WebDriver driver) {
         this.element = element;
         this.driver = driver;
-        this.selectOptions = getSelectOptions();
+        this.selectOptions = getSelectOptions(click);
     }
 
     public List<String> getOptions() {
@@ -36,8 +40,10 @@ public class SelectOptionElement {
         new WebDriverWait(driver, Duration.ofSeconds(2)).until(stalenessOf(option));
     }
 
-    private List<WebElement> getSelectOptions() {
-        element.click();
+    private List<WebElement> getSelectOptions(boolean click) {
+        if (click) {
+            element.click();
+        }
         return getSelectOptionElements(element, driver);
     }
 

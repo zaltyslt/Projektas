@@ -3,6 +3,7 @@ package lt.techin.schedule;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.PageFactory;
 
 public class AbstractPage {
@@ -13,6 +14,12 @@ public class AbstractPage {
     }
 
     protected void scrollToElement(WebElement element) {
-        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
+        try {
+            Actions actions = new Actions(driver);
+            actions.scrollToElement(element).perform();
+        } catch (RuntimeException e) {
+            //Ignore
+        }
     }
+
 }

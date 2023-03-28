@@ -5,7 +5,6 @@ import lt.techin.schedule.room.RoomEditPage;
 import lt.techin.schedule.room.RoomListPage;
 import lt.techin.schedule.room.RoomViewPage;
 import org.junit.jupiter.api.Test;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import lt.techin.schedule.utils.RandomUtils;
@@ -36,7 +35,7 @@ public class RoomPageTest extends BaseTest {
         roomListPage.selectCreateNewRoomButton();
 
         roomCreateNewPage.selectRoomBuilding();
-        String roomName = RandomUtils.randomString(6);
+        String roomName = RandomUtils.randomNumber(6);
         roomCreateNewPage.inputClassRoomName(roomName);
         roomCreateNewPage.inputRoomDescription("Klasėje gali mokintis 50 mokinių. Viso turi 46 kompiuterius.");
         roomCreateNewPage.clickOnSaveButton();
@@ -66,7 +65,7 @@ public class RoomPageTest extends BaseTest {
         roomViewPage.clickEditButton();
         WaitUtils.waitPageToLoad(driver);
 
-        String roomName = RandomUtils.randomString(6);
+        String roomName = RandomUtils.randomNumber(6);
         roomEditPage.setClassroomName(roomName);
         roomEditPage.clickSaveButton();
 
