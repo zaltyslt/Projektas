@@ -36,6 +36,7 @@ import { ScheduleView } from "./pages/schedules/ScheduleView";
 import { Schedule } from "./pages/schedules/Schedule";
 import { EditLesson } from "./pages/schedules/EditLesson";
 import { CreateHoliday } from "./pages/schedules/CreateHoliday";
+import { EditHoliday } from "./pages/schedules/EditHoliday";
 
 function App() {
   return (
@@ -86,6 +87,7 @@ function App() {
           <Route path="/schedules/:id" element={<Schedule />}></Route>
           <Route path="/schedules/edit-lesson/:id" element={<EditLesson />}></Route>
           <Route path="/schedules/holidays/:id" element={<CreateHoliday />}></Route>
+          <Route path="/schedules/edit-holidays/:id" element={<EditHoliday />}></Route>
         </Routes>
       </HashRouter>
     </div>

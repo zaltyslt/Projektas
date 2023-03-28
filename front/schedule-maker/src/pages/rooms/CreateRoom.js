@@ -43,7 +43,7 @@ export function CreateRoom(props) {
 
   const applyResult = (result) => {
     if (result.ok) {
-      setSuccess("Sėkmingai sukurta.");
+      setSuccess("Klasė sėkmingai sukurta.");
       clear();
     } else {
       result
@@ -53,7 +53,7 @@ export function CreateRoom(props) {
           setError(response.message);
         })
         .catch((error) => {
-          setError("Klasės sukurti nepavyko: ", error);
+          setError("Nepavyko sukurti klasės: ", error);
         });
     }
   };

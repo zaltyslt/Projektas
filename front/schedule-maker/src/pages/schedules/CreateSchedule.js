@@ -196,7 +196,7 @@ export function CreateSchedule() {
       <Container>
         <h3>Sukurti naują tvarkaraštį</h3>
         <form>
-          <Grid container rowSpacing={2} spacing={2}>
+          <Grid container rowSpacing={2} spacing={2} marginTop={2}>
             <Grid item sm={10}>
               <FormControl fullWidth required error={groupEmpty}>
                 <InputLabel id="group-label">Gupės pavadinimas</InputLabel>
@@ -323,28 +323,27 @@ export function CreateSchedule() {
             </Grid>
 
             <Grid item sm={10}>
-              {error && <Alert severity="warning">{error}</Alert>}
-              {createMessage && (
-                <Alert severity="success">{createMessage}</Alert>
-              )}
-            </Grid>
-
-            <Grid item sm={10}>
               <Stack direction="row" spacing={2}>
-                <Button
+              <Button
                   id="save-button-create-schedule"
                   variant="contained"
                   onClick={validation}
                 >
                   Išsaugoti
                 </Button>
-
                 <Link to="/">
                   <Button id="back-button-create-schedule" variant="contained">
                     Grįžti
                   </Button>
                 </Link>
               </Stack>
+            </Grid>
+
+            <Grid item sm={10}>
+              {error && <Alert severity="warning">{error}</Alert>}
+              {createMessage && (
+                <Alert severity="success">{createMessage}</Alert>
+              )}
             </Grid>
           </Grid>
         </form>

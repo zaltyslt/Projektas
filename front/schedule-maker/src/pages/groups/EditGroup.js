@@ -352,7 +352,9 @@ export function EditGroup() {
             <Grid item sm={8}>
               {isPostUsed ? (
                 successfulPost ? (
-                  <Alert severity="success"> Grupė sėkmingai pakeista.</Alert>
+                  <Alert severity="success">
+                    Grupės duomenys sėkmingai atnaujinti.
+                  </Alert>
                 ) : (
                   <Grid>
                     <Alert severity="warning">Nepavyko pakeisti grupės.</Alert>

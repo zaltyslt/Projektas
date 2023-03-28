@@ -140,7 +140,7 @@ export function EditSubject() {
         } else {
           setModuleError(false);
           setClassRoomError(false);
-          setCreateMessage("Sėkmingai atnaujinta. ");
+          setCreateMessage("Dalyko duomenys sėkmingai atnaujinti.");
           setError("");
         }
       });
@@ -242,12 +242,6 @@ export function EditSubject() {
             </Select>
           </FormControl>
         </Grid>
-
-        <Grid item sm={8}>
-          {error && <Alert severity="warning">{error}</Alert>}
-          {createMessage && <Alert severity="success">{createMessage}</Alert>}
-        </Grid>
-
         <Grid item sm={8}>
           <Stack direction="row" spacing={2}>
             <Button
@@ -272,6 +266,10 @@ export function EditSubject() {
               </Button>
             </Link>
           </Stack>
+        </Grid>
+        <Grid item sm={8}>
+          {error && <Alert severity="warning">{error}</Alert>}
+          {createMessage && <Alert severity="success">{createMessage}</Alert>}
         </Grid>
       </Grid>
     </Container>

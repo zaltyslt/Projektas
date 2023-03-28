@@ -195,30 +195,34 @@ export function AddShift() {
             </Stack>
           </Grid>
 
-          <Grid item sm={8}>
-            {isPostUsed ? (
-              successfulPost ? (
-                <Alert severity="success"> Pamaina sėkmingai pridėta.</Alert>
+          <Grid container rowSpacing={2} marginTop={1}>
+            <Grid item sm={8}>
+              {isPostUsed ? (
+                successfulPost ? (
+                  <Alert severity="success"> Pamaina sėkmingai sukurta.</Alert>
+                ) : (
+                  <Grid>
+                    <Alert severity="warning">Nepavyko sukurti pamainos.</Alert>
+                    {shiftErrors.passedValidation
+                      ? shiftErrors.databaseErrors.map(
+                          (databaseError, index) => (
+                            <Alert key={index} severity="warning">
+                              {databaseError}
+                            </Alert>
+                          )
+                        )
+                      : Object.keys(shiftErrors.validationErrors).map((key) => (
+                          <Alert key={key} severity="warning">
+                            {" "}
+                            {shiftErrors.validationErrors[key]} {key} laukelyje.
+                          </Alert>
+                        ))}
+                  </Grid>
+                )
               ) : (
-                <Grid>
-                  <Alert severity="warning">Nepavyko pridėti pamainos.</Alert>
-                  {shiftErrors.passedValidation
-                    ? shiftErrors.databaseErrors.map((databaseError, index) => (
-                        <Alert key={index} severity="warning">
-                          {databaseError}
-                        </Alert>
-                      ))
-                    : Object.keys(shiftErrors.validationErrors).map((key) => (
-                        <Alert key={key} severity="warning">
-                          {" "}
-                          {shiftErrors.validationErrors[key]} {key} laukelyje.
-                        </Alert>
-                      ))}
-                </Grid>
-              )
-            ) : (
-              <div></div>
-            )}
+                <div></div>
+              )}
+            </Grid>
           </Grid>
         </form>
       </Container>

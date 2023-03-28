@@ -63,7 +63,11 @@ public class ScheduleMapper {
     public static Schedule toScheduleFromEntity(ScheduleEntityDto scheduleEntityDto) {
         Schedule schedule = new Schedule();
 
-        schedule.setId(scheduleEntityDto.getId());
-        return schedule;
+        if (scheduleEntityDto != null) {
+            schedule.setId(scheduleEntityDto.getId());
+            return schedule;
+        } else {
+            return null;
+        }
     }
 }
