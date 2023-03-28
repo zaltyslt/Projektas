@@ -1,7 +1,6 @@
 package lt.techin.schedule.utils;
 
 import org.openqa.selenium.*;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
@@ -37,7 +36,7 @@ public class WaitUtils {
 
     public static void waitPageToLoad(WebDriver driver) {
         /*
-          Dabartinis sprendimas yra negalutinis.
+          Dabartinis sprendimas negalutinis.
           Reiketu geresnio budo kaip palaukti kol react uzkraus puslapio duomenis.
          */
         try {

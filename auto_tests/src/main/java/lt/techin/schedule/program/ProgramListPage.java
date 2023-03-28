@@ -7,13 +7,13 @@ import org.openqa.selenium.support.FindBy;
 
 public class ProgramListPage extends AbstractPage {
     @FindBy(xpath = "#create-new-program")
-    private WebElement selectCreatNewProgramButton;
+    private WebElement selectCreateNewProgramButton;
 
     public ProgramListPage(WebDriver driver) {
         super(driver);
     }
 
-    public void selectCreatNewProgramButton() {
-        selectCreatNewProgramButton.click();
+    public void selectCreateNewProgramButton() {
+        selectCreateNewProgramButton.click();
     }
 }

@@ -6,14 +6,14 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 public class GroupListPage extends AbstractPage {
-    @FindBy(xpath = "#create-new-group")
-    private WebElement selectCreatNewGroupButton;
+    @FindBy(css = "#create-new-group")
+    private WebElement selectCreateNewGroupButton;
 
     public GroupListPage(WebDriver driver) {
         super(driver);
     }
 
-    public void selectCreatNewGroupButton() {
-        selectCreatNewGroupButton.click();
+    public void selectCreateNewGroupButton() {
+        selectCreateNewGroupButton.click();
     }
 }

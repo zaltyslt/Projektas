@@ -7,14 +7,14 @@ import org.openqa.selenium.support.FindBy;
 
 public class ShiftListPage extends AbstractPage {
 
-    @FindBy(xpath = "#create-new-shift")
-    private WebElement selectCreatNewShiftButton;
+    @FindBy(css = "#create-new-shift")
+    private WebElement selectCreateNewShiftButton;
 
     public ShiftListPage(WebDriver driver) {
         super(driver);
     }
 
-    public void selectCreatNewShiftButton() {
-        selectCreatNewShiftButton.click();
+    public void selectCreateNewShiftButton() {
+        selectCreateNewShiftButton.click();
     }
 }

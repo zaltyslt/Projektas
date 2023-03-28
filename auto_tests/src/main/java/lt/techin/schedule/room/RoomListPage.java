@@ -2,11 +2,11 @@ package lt.techin.schedule.room;
 
 import lt.techin.schedule.AbstractPage;
 import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import lt.techin.schedule.utils.WaitUtils;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
@@ -70,6 +70,7 @@ public class RoomListPage extends AbstractPage {
 
     public void markCheckBox() {
         scrollToElement(markCheckbox);
+ //       new WebDriverWait(driver, Duration.ofSeconds(2)).until(ExpectedConditions.elementToBeClickable(markCheckbox));
         if (!markCheckbox.isSelected()) {
             markCheckbox.click();
         }

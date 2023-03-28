@@ -7,13 +7,13 @@ import org.openqa.selenium.support.FindBy;
 
 public class TeacherListPage extends AbstractPage {
     @FindBy(css = "#create-new-teacher")
-    private WebElement selectCreatNewTeacherButton;
+    private WebElement selectCreateNewTeacherButton;
 
     public TeacherListPage(WebDriver driver) {
         super(driver);
     }
 
     public void selectCreateNewTeacherButton() {
-        selectCreatNewTeacherButton.click();
+        selectCreateNewTeacherButton.click();
     }
 }

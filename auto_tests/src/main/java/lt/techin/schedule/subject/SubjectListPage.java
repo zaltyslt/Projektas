@@ -2,6 +2,7 @@ package lt.techin.schedule.subject;
 
 import lt.techin.schedule.AbstractPage;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -45,7 +46,10 @@ public class SubjectListPage extends AbstractPage {
 
 
     public void setFilterValue(String subjectName) {
-        filterInputField.sendKeys(subjectName);
+        this.filterInputField.click();
+        this.filterInputField.clear();
+        this.filterInputField.sendKeys(Keys.chord(Keys.CONTROL, "a"), Keys.DELETE, subjectName);
+      //  filterInputField.sendKeys(subjectName);
     }
     public WebElement getSubject(int subjectIndex) {
         return subjectList.get(subjectIndex);

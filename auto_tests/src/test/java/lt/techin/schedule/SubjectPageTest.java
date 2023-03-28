@@ -121,11 +121,12 @@ public class SubjectPageTest extends BaseTest {
 
         subjectListPage.clickRestoreRemovedRoomButton(0);
         WaitUtils.waitPageToLoad(driver);
+        subjectListPage.setFilterValue(subjectName);
 
         int expectedSubject = subjectCount+1;
-       //new WebDriverWait(driver, Duration.ofSeconds(2)).until(driver -> subjectListPage.getSubjects().size()==expectedSubject);
+       new WebDriverWait(driver, Duration.ofSeconds(2)).until(driver -> subjectListPage.getSubjects().size()==expectedSubject);
 
-//        assertEquals(expectedSubject, subjectListPage.getSubjects().size(), "Invalid active subjects count");
+       assertEquals(expectedSubject, subjectListPage.getSubjects().size(), "Invalid active subjects count");
        assertTrue(subjectListPage.getSubjects().contains(subjectName), "Subject " + subjectName + " not found!");
     }
 

@@ -6,14 +6,14 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 public class ScheduleListPage extends AbstractPage {
-    @FindBy(xpath = "#create-new-schedule")
-    private WebElement selectCreatNewScheduleButton;
+    @FindBy(css = "#create-new-schedule")
+    private WebElement selectCreateNewScheduleButton;
 
     public ScheduleListPage(WebDriver driver) {
         super(driver);
     }
 
-    public void selectCreatNewScheduleButton() {
-        selectCreatNewScheduleButton.click();
+    public void selectCreateNewScheduleButton() {
+        selectCreateNewScheduleButton.click();
     }
 }

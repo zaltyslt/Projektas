@@ -7,13 +7,13 @@ import org.openqa.selenium.support.FindBy;
 
 public class ModuleListPage extends AbstractPage {
     @FindBy(css = "#create-new-module")
-    private WebElement selectCreatNewModuleButton;
+    private WebElement selectCreateNewModuleButton;
 
     public ModuleListPage(WebDriver driver) {
         super(driver);
     }
 
-    public void selectCreatNewModuleButton() {
-        selectCreatNewModuleButton.click();
+    public void selectCreateNewModuleButton() {
+        selectCreateNewModuleButton.click();
     }
 }
