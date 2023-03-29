@@ -197,6 +197,7 @@ export function AddLesson() {
                   label="Mokytojas"
                   labelId="teacher-label"
                   id="classroom"
+                  defaultValue=""
                   value={selectedTeacher}
                   onChange={(e) => {
                     setSelectedTeacher(e.target.value);
@@ -207,6 +208,8 @@ export function AddLesson() {
                       Nurodytai pamainai ir dalykui tinkamo mokytojo nerasta
                     </MenuItem>
                   )}
+                  <MenuItem value=""> ---
+                  </MenuItem>
                   {teachers.map((teacher) => (
                     <MenuItem key={teacher.id} value={teacher}>
                       {teacher.fName} {teacher.lName}
@@ -228,6 +231,7 @@ export function AddLesson() {
                     setSelectedClassRoom(e.target.value);
                   }}
                 >
+                  <MenuItem value="">---</MenuItem>
                   {classRooms.map((classroom) => (
                     <MenuItem key={classroom.id} value={classroom}>
                       {classroom.classroomName}
