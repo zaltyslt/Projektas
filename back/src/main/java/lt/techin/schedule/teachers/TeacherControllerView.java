@@ -1,12 +1,8 @@
 package lt.techin.schedule.teachers;
 
-import lt.techin.schedule.subject.SubjectService;
-import lt.techin.schedule.teachers.contacts.ContactService;
 import lt.techin.schedule.teachers.helpers.TeacherSubjectsDto;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -33,13 +29,11 @@ public class TeacherControllerView {
             teachers = teacherFinder.getAllTeachers();
         }
         return teachers;
-
     }
 
     @GetMapping(value = "/view") //view by teacherID via params
     public ResponseEntity<TeacherDto> getTeacherById(@RequestParam(value = "tid", required = true) Long teacherId) {
         var result = teacherFinder.getTeacherById(teacherId);
-
         return result.getId() != null
                 ? ResponseEntity.ok(result)
                 : ResponseEntity.notFound().build();
@@ -49,18 +43,19 @@ public class TeacherControllerView {
     @GetMapping(value = "/subjects") //get
     public ResponseEntity<Set<TeacherSubjectsDto>> getActiveTeacherSubjectsDto() {
         var result = teacherFinder.getMiniSubjects();
-
         return ResponseEntity.ok(result);
 
     }
 
     @GetMapping(value = "/subject")
     public List<TeacherEntityDto> getTeachersBySubject(@RequestParam Long subjectId, @RequestParam Long shiftId) {
-        return teacherFinder.findTeachersBySubjectsId(subjectId, shiftId).stream().map(TeacherMapper::toTeacherEntityDto).collect(Collectors.toList());
+        return teacherFinder.findTeachersBySubjectsId(subjectId, shiftId).stream()
+                .map(TeacherMapper::toTeacherEntityDto).collect(Collectors.toList());
     }
 
     @GetMapping("/{subjectId}")
     public List<TeacherEntityDto> getTeachersBySubject(@PathVariable Long subjectId) {
-        return teacherFinder.findTeachersBySubject(subjectId).stream().map(TeacherMapper::toTeacherEntityDto).collect(Collectors.toList());
+        return teacherFinder.findTeachersBySubject(subjectId).stream()
+                .map(TeacherMapper::toTeacherEntityDto).collect(Collectors.toList());
     }
 }

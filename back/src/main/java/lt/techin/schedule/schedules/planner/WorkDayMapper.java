@@ -13,7 +13,6 @@ public class WorkDayMapper {
 
     public static WorkDay toWorkDay(WorkDayDto workDayDto) {
         var workDay = new WorkDay();
-
         workDay.setId(workDayDto.getId());
         workDay.setDate(workDayDto.getDate());
         workDay.setOnline(workDayDto.getOnline());
@@ -23,13 +22,11 @@ public class WorkDayMapper {
         workDay.setClassroom(toClassroomFromSmallDto(workDayDto.getClassroom()));
         workDay.setSubject(toSubjectFromSmallDto(workDayDto.getSubject()));
         workDay.setSchedule(toScheduleFromEntity(workDayDto.getSchedule()));
-
         return workDay;
     }
 
     public static WorkDayDto toWorkDayDto(WorkDay workDay) {
         var workDayDto = new WorkDayDto();
-
         workDayDto.setId(workDay.getId());
         workDayDto.setDate(workDay.getDate());
         workDayDto.setOnline(workDay.getOnline());
@@ -43,7 +40,6 @@ public class WorkDayMapper {
         workDayDto.setHasTeacherConflict(workDay.isHasTeacherConflict());
         workDayDto.setScheduleIdWithClassroomNameConflict(workDay.getScheduleIdWithClassroomNameConflict());
         workDayDto.setScheduleIdWithTeacherNameConflict(workDay.getScheduleIdWithTeacherNameConflict());
-
         return workDayDto;
     }
 }

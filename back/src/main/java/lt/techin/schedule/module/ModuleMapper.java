@@ -6,7 +6,6 @@ public class ModuleMapper {
         var moduleDto = new ModuleDto();
         moduleDto.setNumber(module.getNumber());
         moduleDto.setName(module.getName());
-
         return moduleDto;
     }
 
@@ -15,7 +14,6 @@ public class ModuleMapper {
         moduleEntityDto.setId(module.getId());
         moduleEntityDto.setNumber(module.getNumber());
         moduleEntityDto.setName(module.getName());
-
         return moduleEntityDto;
     }
 
@@ -25,5 +23,4 @@ public class ModuleMapper {
         module.setName(moduleDto.getName());
         return module;
     }
-
 }

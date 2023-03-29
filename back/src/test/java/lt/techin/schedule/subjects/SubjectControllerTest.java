@@ -25,17 +25,13 @@ import java.util.Set;
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
-
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
 class SubjectControllerTest {
-
     @MockBean
     SubjectService subjectService;
 
@@ -55,7 +51,6 @@ class SubjectControllerTest {
         subject2.setName("Subject2");
         List<Subject> subjectList = Arrays.asList(subject1, subject2);
         when(subjectService.getAll()).thenReturn(subjectList);
-
         mockMvc.perform(get("/api/v1/subjects")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$", hasSize(2)))
@@ -70,10 +65,8 @@ class SubjectControllerTest {
         Set<Classroom> classroomSet = new HashSet<>();
         Subject subject1 = new Subject(1L, "Subject1", "Description1", new Module(), classroomSet, true);
         Subject subject2 = new Subject(2L, "Subject2", "Description2", new Module(), classroomSet, true);
-
         List<Subject> deletedSubjects = List.of(subject1, subject2);
         when(subjectService.getAllDeleted()).thenReturn(deletedSubjects);
-
         mockMvc.perform(get("/api/v1/subjects/deleted").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(2)))
@@ -89,23 +82,19 @@ class SubjectControllerTest {
     public void testCreateSubject() throws Exception {
         Module module = new Module();
         Set<Classroom> classroomSet = new HashSet<>();
-
         SubjectDto subjectDto = new SubjectDto();
         subjectDto.setDeleted(false);
         subjectDto.setName("Subject1");
         subjectDto.setDescription("Description1");
         subjectDto.setModule(module);
         subjectDto.setClassRooms(classroomSet);
-
         Subject createdSubject = new Subject(1L, "Subject1", "Description1", module, classroomSet, false);
         when(subjectService.create(any(Subject.class))).thenReturn(createdSubject);
-
         ObjectMapper objectMapper = new ObjectMapper();
         String json = objectMapper.writeValueAsString(subjectDto);
-
         mockMvc.perform(
-                MockMvcRequestBuilders.post("/api/v1/subjects").contentType(MediaType.APPLICATION_JSON).content(json)
-        ).andExpect(status().isOk())
+                        MockMvcRequestBuilders.post("/api/v1/subjects").contentType(MediaType.APPLICATION_JSON).content(json)
+                ).andExpect(status().isOk())
                 .andExpect(jsonPath("$.name").value("Subject1"))
                 .andExpect(jsonPath("$.description").value("Description1"))
                 .andExpect(jsonPath("$.deleted").value(false));

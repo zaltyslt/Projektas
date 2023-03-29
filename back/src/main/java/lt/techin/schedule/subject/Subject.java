@@ -26,54 +26,37 @@ public class Subject {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     @NotBlank
     private String name;
-
     @NotBlank
     @Size(min = 1, max = 2000)
     private String description;
-
     @ManyToOne
     @JoinColumn(name = "module_id")
     @NotNull
     private Module module;
-
     @ManyToMany
-//    @JsonIgnore
     @JoinTable(name = "subject_classrooms", joinColumns = {@JoinColumn(name = "subject_id")}, inverseJoinColumns = {@JoinColumn(name = "classroom_id")})
     @NotEmpty
     private Set<Classroom> classRooms;
-
-//    @ManyToMany(mappedBy = "subjects")
-////@JsonIgnore
-//    @JsonBackReference
-//    private Set<Teacher> teachers;
-@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-@JoinTable(
-        name = "teacher_subject",
-        joinColumns = @JoinColumn(name = "subject_id", referencedColumnName = "id"),
-        inverseJoinColumns = @JoinColumn(name = "teacher_id", referencedColumnName = "teacher_id"))
-@JsonBackReference
-private Set<Teacher> teachers;
-
-
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @JoinTable(
+            name = "teacher_subject",
+            joinColumns = @JoinColumn(name = "subject_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "teacher_id", referencedColumnName = "teacher_id"))
+    @JsonBackReference
+    private Set<Teacher> teachers;
     @CreatedDate
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime createdDate;
-
     @CreatedBy
     private String createdBy;
-
     @LastModifiedDate
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime modifiedDate;
-
     @LastModifiedBy
     private String modifiedBy;
-
     private Boolean deleted;
-
 
     @PrePersist
     public void prePersist() {
@@ -196,7 +179,8 @@ private Set<Teacher> teachers;
     }
 
     public void removeClassRoom(Long classroomId) {
-        var classRoomToRemove = classRooms.stream().filter(c -> c.getId().equals(classroomId)).findFirst().orElseThrow();
+        var classRoomToRemove = classRooms.stream().filter(c ->
+                c.getId().equals(classroomId)).findFirst().orElseThrow();
         if (classRoomToRemove != null) {
             classRooms.remove(classRoomToRemove);
         }
@@ -210,14 +194,14 @@ private Set<Teacher> teachers;
         return Objects.equals(id, subject.id) && Objects.equals(name, subject.name)
                 && Objects.equals(description, subject.description) && Objects.equals(module, subject.module)
                 && Objects.equals(classRooms, subject.classRooms)
-//                && Objects.equals(teachers, subject.teachers)
-                && Objects.equals(createdDate, subject.createdDate) && Objects.equals(createdBy, subject.createdBy) && Objects.equals(modifiedDate, subject.modifiedDate) && Objects.equals(modifiedBy, subject.modifiedBy) && Objects.equals(deleted, subject.deleted);
+                && Objects.equals(createdDate, subject.createdDate) && Objects.equals(createdBy, subject.createdBy)
+                && Objects.equals(modifiedDate, subject.modifiedDate) && Objects.equals(modifiedBy, subject.modifiedBy)
+                && Objects.equals(deleted, subject.deleted);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(id, name, description, module, classRooms,
-//                teachers,
                 createdDate, createdBy, modifiedDate, modifiedBy, deleted);
     }
 
@@ -229,7 +213,6 @@ private Set<Teacher> teachers;
                 ", description='" + description + '\'' +
                 ", module=" + module +
                 ", classRooms=" + classRooms +
-//                ", teachers=" + teachers +
                 ", createdDate=" + createdDate +
                 ", createdBy='" + createdBy + '\'' +
                 ", modifiedDate=" + modifiedDate +

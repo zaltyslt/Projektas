@@ -13,14 +13,11 @@ import java.util.Set;
 
 public class SetupHolidaysSetForSchedule {
 
-    public static Set<Holiday> AddHolidaysByPlan (HolidayPlan holidayPlan, Schedule currentSchedule) {
+    public static Set<Holiday> AddHolidaysByPlan(HolidayPlan holidayPlan, Schedule currentSchedule) {
         LocalDate start = holidayPlan.getDateFrom();
         LocalDate end = holidayPlan.getDateUntil();
-
         String holidayName = holidayPlan.getHolidayName();
-
         Set<Holiday> returnedHolidaysSet = new HashSet<>();
-
         long loopLength = start.datesUntil(end).count();
         //Loops for the amount of days to add
         for (long x = 0; x <= loopLength; x++) {
@@ -32,7 +29,7 @@ public class SetupHolidaysSetForSchedule {
         return returnedHolidaysSet;
     }
 
-    public static boolean ShouldAddHoliday (LocalDate dateToCheck, Set<WorkDay> workDays) {
+    public static boolean ShouldAddHoliday(LocalDate dateToCheck, Set<WorkDay> workDays) {
         //Returns false if a localDate checked is a weekend
         if (dateToCheck.getDayOfWeek() == DayOfWeek.SATURDAY || dateToCheck.getDayOfWeek() == DayOfWeek.SUNDAY) {
             return false;
@@ -48,7 +45,7 @@ public class SetupHolidaysSetForSchedule {
         return true;
     }
 
-    public static boolean LookForHolidayDoublesByRange (LocalDate dateFrom, LocalDate dateUntil, Set<Holiday> setToCheck) {
+    public static boolean LookForHolidayDoublesByRange(LocalDate dateFrom, LocalDate dateUntil, Set<Holiday> setToCheck) {
         long looper = dateFrom.datesUntil(dateUntil).count();
 
         for (long x = 0; x < looper; x++) {
@@ -60,12 +57,11 @@ public class SetupHolidaysSetForSchedule {
         return false;
     }
 
-
-    //Good luck understanding this nonsense, presented to you by one and only lover of String
-    public static boolean LookForHolidayDoubles (LocalDate dateToCheck, Set<Holiday> setToCheck) {
+    public static boolean LookForHolidayDoubles(LocalDate dateToCheck, Set<Holiday> setToCheck) {
         return setToCheck.stream().anyMatch(holidayFromSet -> {
             if (holidayFromSet.getDate().isEqual(dateToCheck)) {
-                return LithuanianHolidays.LITHUANIAN_HOLIDAYS.stream().noneMatch(lithuanianHoliday -> 0 == new LocalDateComparator().compare(lithuanianHoliday.getDate(), dateToCheck));
+                return LithuanianHolidays.LITHUANIAN_HOLIDAYS.stream().noneMatch(lithuanianHoliday -> 0 ==
+                        new LocalDateComparator().compare(lithuanianHoliday.getDate(), dateToCheck));
             } else {
                 return false;
             }

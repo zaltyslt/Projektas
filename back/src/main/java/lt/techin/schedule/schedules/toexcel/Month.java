@@ -1,8 +1,6 @@
 package lt.techin.schedule.schedules.toexcel;
 
-import lt.techin.schedule.group.Group;
 import lt.techin.schedule.schedules.planner.WorkDay;
-import org.hibernate.boot.registry.classloading.spi.ClassLoaderService;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -22,10 +20,9 @@ public class Month {
     }
 
     public LocalDate getDate() {
-       if(!workDays.isEmpty()){
-         this.date = workDays.get(0).getDate();
-       }
-
+        if (!workDays.isEmpty()) {
+            this.date = workDays.get(0).getDate();
+        }
         return date;
     }
 
@@ -34,15 +31,12 @@ public class Month {
     }
 
     public String getGroup() {
-        if(!workDays.isEmpty()){
+        if (!workDays.isEmpty()) {
             this.group = workDays.stream()
                     .filter(obj -> obj.getSchedule() != null)
                     .findFirst()
                     .map(obj -> obj.getSchedule().getGroups().getName())
                     .orElse(null);
-
-
-//                    .getGroups().getName();
         }
         return group;
     }
@@ -58,7 +52,6 @@ public class Month {
     public void setWorkDays(List<WorkDay> workDays) {
         this.workDays = workDays;
     }
-
 
     @Override
     public String toString() {

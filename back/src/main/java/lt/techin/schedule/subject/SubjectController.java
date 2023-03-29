@@ -1,8 +1,6 @@
 package lt.techin.schedule.subject;
 
 import jakarta.validation.Valid;
-import org.springframework.data.domain.Page;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -18,7 +16,6 @@ import static org.springframework.http.ResponseEntity.ok;
 @Validated
 @RequestMapping("/api/v1/subjects")
 public class SubjectController {
-
     private final SubjectService subjectService;
 
     public SubjectController(SubjectService subjectService) {
@@ -34,8 +31,9 @@ public class SubjectController {
     @GetMapping(value = "/{subjectId}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<SubjectEntityDto> getSubject(@PathVariable Long subjectId) {
         var subjectOptional = subjectService.getById(subjectId);
-
-        var responseEntity = subjectOptional.map(subject -> ok(toSubjectEntityDto(subject))).orElseGet(()-> ResponseEntity.notFound().build());
+        var responseEntity =
+                subjectOptional.map(subject -> ok(toSubjectEntityDto(subject))).
+                        orElseGet(() -> ResponseEntity.notFound().build());
 
         return responseEntity;
     }
@@ -63,18 +61,6 @@ public class SubjectController {
         return ok(toSubjectDto(updatedSubject));
     }
 
-    //Not used
-//    @DeleteMapping("/{subjectId}")
-//    public ResponseEntity<Void> deleteSubject(@PathVariable Long subjectId) {
-//        boolean deleted = subjectService.deleteById(subjectId);
-//
-//        if(deleted) {
-//            return ResponseEntity.noContent().build();
-//        } else {
-//            return ResponseEntity.notFound().build();
-//        }
-//    }
-
     @PatchMapping("/restore/{subjectId}")
     public ResponseEntity<SubjectDto> restoreSubject(@PathVariable Long subjectId) {
         var restoredSubject = subjectService.restoreSubject(subjectId);
@@ -86,20 +72,4 @@ public class SubjectController {
         var subjects = subjectService.findAllByModuleId(moduleId);
         return subjects.stream().map(SubjectMapper::toSubjectEntityDto).collect(toList());
     }
-
-//    Not used at demo v1/v2
-//    @GetMapping("/paged")
-//    @ResponseBody
-//    public ResponseEntity<List<SubjectEntityDto>> findSubjectsPaged(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int pageSize) {
-//        Page<Subject> pagedSubjects = subjectService.findAllPaged(page, pageSize, false);
-//        int totalPageCount = pagedSubjects.getTotalPages();
-//        List<SubjectEntityDto> subjects = pagedSubjects.stream()
-//                .map(SubjectMapper::toSubjectEntityDto)
-//                .collect(toList());
-//
-//        HttpHeaders httpHeaders = new HttpHeaders();
-//        httpHeaders.set("totalCount", Integer.toString(totalPageCount));
-//        return ResponseEntity.ok().headers(httpHeaders).body(subjects);
-//    }
-
 }

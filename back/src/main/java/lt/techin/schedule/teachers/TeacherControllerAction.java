@@ -20,15 +20,12 @@ public class TeacherControllerAction {
     @PostMapping(value = "/create", consumes = {MediaType.APPLICATION_JSON_VALUE}) //teacher create
     public ResponseEntity<TeacherDto> createTeacher(@RequestBody TeacherDto teacherDto) {
         var result = teacherDto;
-
         if (
                 result.getSelectedShift() != null &&
-                result.getfName() != null &&
-//              result.getSubjectsList() != null &&
-                result.getContacts() != null &&
-                result.getSelectedShift() != null &&
-//              result.getWorkHoursPerWeek() != null &&
-                result.getActive() != null
+                        result.getfName() != null &&
+                        result.getContacts() != null &&
+                        result.getSelectedShift() != null &&
+                        result.getActive() != null
         ) {
             return teacherServiceDo.createTeacher(result);
         } else {
@@ -37,7 +34,8 @@ public class TeacherControllerAction {
     }
 
     @PutMapping("/update")
-    public ResponseEntity<TeacherDto> updateTeacherDetails(@RequestParam("tid") Long teacherId, @RequestBody TeacherDto teacherDto) {
+    public ResponseEntity<TeacherDto> updateTeacherDetails(@RequestParam("tid") Long teacherId,
+                                                           @RequestBody TeacherDto teacherDto) {
         return teacherServiceDo.updateTeacher(teacherId, teacherDto);
     }
 
@@ -52,5 +50,4 @@ public class TeacherControllerAction {
     public ResponseEntity<Void> deleteTeacherDetails(@RequestParam("tid") Long teacherId) {
         return teacherServiceDo.deleteTeacherById(teacherId);
     }
-
 }

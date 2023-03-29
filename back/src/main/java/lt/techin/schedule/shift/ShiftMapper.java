@@ -2,7 +2,7 @@ package lt.techin.schedule.shift;
 
 public class ShiftMapper {
 
-    public static ShiftDto shiftToDto(Shift shift){
+    public static ShiftDto shiftToDto(Shift shift) {
         ShiftDto shiftDto = new ShiftDto();
         shiftDto.setId(shift.getId());
         shiftDto.setName(shift.getName());
@@ -16,7 +16,7 @@ public class ShiftMapper {
         return shiftDto;
     }
 
-    public static Shift dtoToShift(ShiftDto shiftDto){
+    public static Shift dtoToShift(ShiftDto shiftDto) {
         Shift shift = new Shift();
         shift.setId(shiftDto.getId());
         shift.setName(shiftDto.getName());

@@ -1,4 +1,4 @@
-create table MODULE
+CREATE TABLE IF NOT EXISTS MODULE
 (
     ID            BIGINT auto_increment
         primary key,

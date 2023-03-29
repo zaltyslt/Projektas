@@ -38,8 +38,6 @@ public class GroupMapper {
         var groupEntityDto = new GroupEntityDto();
         groupEntityDto.setId(group.getId());
         groupEntityDto.setName(group.getName());
-
         return groupEntityDto;
     }
-
 }
