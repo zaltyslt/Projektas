@@ -79,11 +79,10 @@ public class HolidayService {
                 new ValidationException("Nurodytų atostogų data neegzistuoja.", "Holiday", "Does not exist", holidayId.toString()));
     }
 
-    public Holiday update(Long holidayId, Holiday holiday) {
+    public Holiday update(Long holidayId, String holidayName) {
         Holiday existingHoliday = holidayRepository.findById(holidayId).orElseThrow(() ->
                 new ValidationException("Nurodytų atostogų data neegzistuoja.", "Holiday", "Does not exist", holidayId.toString()));
-        existingHoliday.setHolidayName(holiday.getHolidayName());
-        existingHoliday.setDate(holiday.getDate());
+        existingHoliday.setHolidayName(holidayName);
 
         return holidayRepository.save(existingHoliday);
     }

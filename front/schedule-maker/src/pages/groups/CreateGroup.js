@@ -48,14 +48,29 @@ export function CreateGroup() {
   }, []);
 
   const validation = () => {
-    if (program === "") {
-      setProgramError(true);
+    if (program === "" || shift === "" || name === "" || schoolYear === "" || studentAmount === "") {
+      program === "" ?
+        setProgramError(true) :
+        null;
+      
+      shift === "" ?
+        setShiftError(true) :
+        null;
+
+      name === "" ?
+        setNameError(true) :
+        null;
+
+      schoolYear === "" ?
+        setYearError(true) :
+        null;
+
+      studentAmount === "" ?
+        setStudentAmountError(true) :
+        null;
       return;
     }
-    if (shift === "") {
-      setShiftError(true);
-      return;
-    }
+
     if (
       nameError ||
       nameNotValid ||
@@ -102,21 +117,6 @@ export function CreateGroup() {
     setIsPostUsed(true);
   };
 
-  const clear = () => {
-    setName("");
-    setSchoolYear("");
-    setStudentAmount("");
-    fetchPrograms();
-    fetchShifts();
-    setNameError(false);
-    setYearError(false);
-    setStudentAmountError(false);
-    setProgramError(false);
-    setShiftError(false);
-    setNameNotValid(false);
-    setYearNotValid(false);
-  };
-
   const badSymbols = "!@#$%^&*_+={}<>|~`\\'";
   const textLength = 200;
   const setNameAndCheck = (name) => {
@@ -148,6 +148,16 @@ export function CreateGroup() {
       ? setStudentAmountNotValid(false)
       : setStudentAmountNotValid(true);
   };
+
+  const setProgramAndCheck = (programToSet) => {
+    setProgram(programToSet);
+    setProgramError(false);
+  }
+
+  const setShiftAndCheck = (shiftToSet) => {
+    setShift(shiftToSet);
+    setShiftError(false);
+  }
 
   return (
     <div>
@@ -238,7 +248,7 @@ export function CreateGroup() {
                   id="program"
                   value={program}
                   onChange={(e) => {
-                    setProgram(e.target.value);
+                    setProgramAndCheck(e.target.value);
                   }}
                 >
                   {programs.map((program) => (
@@ -262,7 +272,7 @@ export function CreateGroup() {
                   id="shift"
                   value={shift}
                   onChange={(e) => {
-                    setShift(e.target.value);
+                    setShiftAndCheck(e.target.value);
                   }}
                 >
                   {shifts.map((shift) => (
@@ -297,7 +307,6 @@ export function CreateGroup() {
                   <Alert severity="success"> Grupė sėkmingai sukurta.</Alert>
                 ) : (
                   <Grid>
-                    <Alert severity="warning">Nepavyko sukurti grupės.</Alert>
                     {groupErrors.passedValidation
                       ? groupErrors.databaseErrors.map(
                         (databaseError, index) => (
