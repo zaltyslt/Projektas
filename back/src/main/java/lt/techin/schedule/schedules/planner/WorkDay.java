@@ -17,35 +17,49 @@ public class WorkDay {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
-    public LocalDate date;
+
+    private LocalDate date;
+
     @ManyToOne
     @JoinColumn(name = "subject_id")
-    public Subject subject;
+    private Subject subject;
+
     @ManyToOne
     @JoinColumn(name = "teacher_teacher_id")
-    public Teacher teacher;
+    private Teacher teacher;
+
     @ManyToOne
     @JoinColumn(name = "schedule_id")
     private Schedule schedule;
+
     @ManyToOne
     @JoinColumn(name = "classroom_id")
     private Classroom classroom;
+
     private String lessonStart;
+
     private String lessonEnd;
+
     private int lessonStartIntEnum;
+
     private int lessonEndIntEnum;
+
     private Boolean online;
+
     @ElementCollection
     @CollectionTable(name = "schedule_classroom_conflicts", joinColumns = @JoinColumn(name = "classroom_id"))
     @MapKeyColumn(name = "schedule_id")
     @Column(name = "classroom_name")
     private Map<Long, String> scheduleIdWithClassroomNameConflict;
+
     @ElementCollection
     @CollectionTable(name = "schedule_teacher_conflicts", joinColumns = @JoinColumn(name = "teacher_id"))
     @MapKeyColumn(name = "schedule_id")
     @Column(name = "teacher_name")
     private Map<Long, String> scheduleIdWithTeacherNameConflict;
+
     private boolean hasTeacherConflict;
+
     private boolean hasClassroomConflict;
 
     public Schedule getSchedule() {
@@ -180,6 +194,14 @@ public class WorkDay {
         return scheduleIdWithClassroomNameConflict;
     }
 
+    public boolean removeTeacherConflictFromMap (Long scheduleId) {
+        return !scheduleIdWithTeacherNameConflict.remove(scheduleId).isEmpty();
+    }
+
+    public boolean removeClassroomConflictFromMap (Long scheduleId) {
+        return !scheduleIdWithClassroomNameConflict.remove(scheduleId).isEmpty();
+    }
+
     public boolean isHasTeacherConflict() {
         return hasTeacherConflict;
     }
@@ -208,15 +230,7 @@ public class WorkDay {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof WorkDay workDay)) return false;
-        return Objects.equals(id, workDay.id)
-                && Objects.equals(date, workDay.date)
-                && Objects.equals(subject, workDay.subject)
-                && Objects.equals(teacher, workDay.teacher)
-                && Objects.equals(schedule, workDay.schedule)
-                && Objects.equals(classroom, workDay.classroom)
-                && Objects.equals(lessonStart, workDay.lessonStart)
-                && Objects.equals(lessonEnd, workDay.lessonEnd)
-                && Objects.equals(online, workDay.online);
+        return Objects.equals(id, workDay.id) && Objects.equals(date, workDay.date) && Objects.equals(subject, workDay.subject) && Objects.equals(teacher, workDay.teacher) && Objects.equals(schedule, workDay.schedule) && Objects.equals(classroom, workDay.classroom) && Objects.equals(lessonStart, workDay.lessonStart) && Objects.equals(lessonEnd, workDay.lessonEnd) && Objects.equals(online, workDay.online);
     }
 
     @Override

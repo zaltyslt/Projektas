@@ -11,6 +11,7 @@ public class ShiftDto {
     private Long id;
     @TextValid(textMaximumLength = DataFieldsLengthConstraints.TEXT_FIELD_MAXIMUM_LENGTH)
     private String name;
+
     private String shiftStartingTime;
     private String shiftEndingTime;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
