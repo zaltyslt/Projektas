@@ -275,6 +275,9 @@ public class PlannerService {
             existingWorkDay.setClassroom(null);
             WorkDayConflictSolver.solveClassroomConflicts(existingWorkDay, scheduleRepository, workDayRepository, false);
         }
+
+        WorkDayConflictSolver.checkIfAllConflictsAreResolved(existingWorkDay.getSchedule().getId(), scheduleRepository);
+
         existingWorkDay.setOnline(workDayDto.getOnline());
 
         return workDayRepository.save(existingWorkDay);
