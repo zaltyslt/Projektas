@@ -30,7 +30,7 @@ public class SetupWorkDayViability {
                             workDay.setHasClassroomConflict(true);
                             workDay.addClassroomConflict(schedule.getId(), workDay.getClassroom().getClassroomName());
                             //Setting WorkDay which has conflicts
-                            loopingWorkDay.setHasTeacherConflict(true);
+                            loopingWorkDay.setHasClassroomConflict(true);
                             loopingWorkDay.addClassroomConflict(scheduleID, workDay.getClassroom().getClassroomName());
                             //Need to rewrite WorkDay which has conflicts with current WorkDay
                             workDayRepository.save(loopingWorkDay);

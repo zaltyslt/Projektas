@@ -247,17 +247,19 @@ public class PlannerService {
         Teacher teacherToChangeTo = toTeacherFromEntityDto(workDayDto.getTeacher());
         //Teacher is changed, need to update conflicts if any are found
         if (teacherToChangeTo != null && !teacherToChangeTo.equals(existingWorkDay.getTeacher())) {
-            WorkDayConflictSolver.solveTeacherConflicts(existingWorkDay, teacherToChangeTo, scheduleRepository, workDayRepository);
+            //Sets teacher before conflicts logic
+            existingWorkDay.setTeacher(teacherToChangeTo);
+            WorkDayConflictSolver.solveTeacherConflicts(existingWorkDay, scheduleRepository, workDayRepository);
         }
 
         Classroom classroomToChangeTo = toClassroomFromSmallDto(workDayDto.getClassroom());
         //Classroom is changed, need to update conflicts if any are found
         if (classroomToChangeTo != null && !classroomToChangeTo.equals(existingWorkDay.getClassroom())) {
-
+            //Sets classroom before conflicts logic
+            existingWorkDay.setClassroom(classroomToChangeTo);
+            WorkDayConflictSolver.solveClassroomConflicts(existingWorkDay, scheduleRepository, workDayRepository);
         }
 
-        existingWorkDay.setTeacher(toTeacherFromEntityDto(workDayDto.getTeacher()));
-        existingWorkDay.setClassroom(toClassroomFromSmallDto(workDayDto.getClassroom()));
         existingWorkDay.setOnline(workDayDto.getOnline());
 
         return workDayRepository.save(existingWorkDay);
