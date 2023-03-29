@@ -4,7 +4,6 @@ package lt.techin.schedule.schedules.planner;
 import lt.techin.schedule.schedules.holidays.Holiday;
 import lt.techin.schedule.schedules.holidays.HolidayDto;
 import lt.techin.schedule.schedules.holidays.HolidayMapper;
-import lt.techin.schedule.schedules.holidays.HolidayPlan.HolidayPlanMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

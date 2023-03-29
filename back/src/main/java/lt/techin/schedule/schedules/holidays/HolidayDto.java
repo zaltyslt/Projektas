@@ -1,6 +1,7 @@
 package lt.techin.schedule.schedules.holidays;
 
 import lt.techin.schedule.schedules.ScheduleEntityDto;
+import lt.techin.schedule.validators.TextValid;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

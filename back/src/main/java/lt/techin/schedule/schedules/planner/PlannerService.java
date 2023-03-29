@@ -16,10 +16,8 @@ import lt.techin.schedule.teachers.Teacher;
 import lt.techin.schedule.teachers.TeacherRepository;
 import org.springframework.stereotype.Service;
 
-import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static lt.techin.schedule.classrooms.ClassroomMapper.toClassroomFromSmallDto;
 import static lt.techin.schedule.teachers.TeacherMapper.toTeacherFromEntityDto;
@@ -69,7 +67,7 @@ public class PlannerService {
         return "";
     }
 
-    public int SetupAndValidateUnassignedHoursMap(Schedule currentSchedule, Integer unassignedHours, int plannerAssignedHours, Long subjectId, SubjectHours subjectHour) {
+    public int setupAndValidateUnassignedHoursMap (Schedule currentSchedule, Integer unassignedHours, int plannerAssignedHours, Long subjectId, SubjectHours subjectHour) {
         //In a case where Map already has a value of that particular subjectId
         if (unassignedHours != null) {
             if (unassignedHours == 0) {
@@ -128,7 +126,7 @@ public class PlannerService {
         int plannerAssignedHours = plannerDto.getAssignedHours();
 
         //Setting values of unassigned hours in scheduler entity
-        int hours = SetupAndValidateUnassignedHoursMap(existingSchedule, unassignedHours, plannerAssignedHours, subjectId, subjectHour);
+        int hours = setupAndValidateUnassignedHoursMap(existingSchedule, unassignedHours, plannerAssignedHours, subjectId, subjectHour);
 
         int interval = plannerDto.getEndIntEnum() - plannerDto.getStartIntEnum() + 1;
         int workDaysRequired;
@@ -151,7 +149,7 @@ public class PlannerService {
         //Finding every possible workday
         for (int i = 0; i < workDaysRequired; i++) {
             //If the date found is not workable, iterating it through until viable date is found
-            while (!SetupWorkDayViability.CheckIfLocalDateIsWorkable(date, existingSchedule.getHolidays(), existingSchedule.getWorkingDays())) {
+            while (!SetupWorkDayViability.checkIfLocalDateIsWorkable(date, existingSchedule.getHolidays(), existingSchedule.getWorkingDays())) {
                 date = date.plusDays(1);
                 /*
                 If it loops for 100 times, something went wrong (most likely)
@@ -180,7 +178,7 @@ public class PlannerService {
         if (lastDayHours == 0) {
             for (LocalDate workableDate : workableDates) {
                 if (workDaySet.stream().noneMatch(wd -> wd.getDate().isEqual(workableDate))) {
-                    WorkDay workDay = SetupWorkDayViability.SetupWorkDay(scheduleId,
+                    WorkDay workDay = SetupWorkDayViability.setupWorkDay(scheduleId,
                         new WorkDay
                                 (
                                     workableDate, existingSubject, existingTeacher, existingSchedule, existingClassroom, getLessonStartString(plannerDto),
@@ -199,7 +197,7 @@ public class PlannerService {
             for (int i = 0; i < workableDates.size() - 1; i++) {
                 LocalDate workableDate = workableDates.get(i);
                 if (workDaySet.stream().noneMatch(wd -> wd.getDate().isEqual(workableDate))) {
-                    WorkDay workDay = SetupWorkDayViability.SetupWorkDay(scheduleId,
+                    WorkDay workDay = SetupWorkDayViability.setupWorkDay(scheduleId,
                         new WorkDay
                                 (
                                     workableDate, existingSubject, existingTeacher, existingSchedule, existingClassroom, getLessonStartString(plannerDto),
@@ -214,7 +212,7 @@ public class PlannerService {
             }
             LocalDate lastWorkableDate = workableDates.get(workableDates.size() - 1);
             if (workDaySet.stream().noneMatch(wd -> wd.getDate().isEqual(lastWorkableDate))) {
-                WorkDay workDay = SetupWorkDayViability.SetupWorkDay(scheduleId,
+                WorkDay workDay = SetupWorkDayViability.setupWorkDay(scheduleId,
                     new WorkDay
                             (
                                 lastWorkableDate, existingSubject, existingTeacher, existingSchedule, existingClassroom, getLessonStartString(plannerDto),
@@ -245,6 +243,19 @@ public class PlannerService {
 
     public WorkDay updateWorkDay(Long workDayId, WorkDayDto workDayDto) {
         WorkDay existingWorkDay = workDayRepository.findById(workDayId).orElseThrow(() -> new ValidationException("Nurodyta darbo diena neegzistuoja", "WorkDay", "Does not exist", workDayId.toString()));
+
+        Teacher teacherToChangeTo = toTeacherFromEntityDto(workDayDto.getTeacher());
+        //Teacher is changed, need to update conflicts if any are found
+        if (teacherToChangeTo != null && !teacherToChangeTo.equals(existingWorkDay.getTeacher())) {
+            WorkDayConflictSolver.solveTeacherConflicts(existingWorkDay, teacherToChangeTo, scheduleRepository, workDayRepository);
+        }
+
+        Classroom classroomToChangeTo = toClassroomFromSmallDto(workDayDto.getClassroom());
+        //Classroom is changed, need to update conflicts if any are found
+        if (classroomToChangeTo != null && !classroomToChangeTo.equals(existingWorkDay.getClassroom())) {
+
+        }
+
         existingWorkDay.setTeacher(toTeacherFromEntityDto(workDayDto.getTeacher()));
         existingWorkDay.setClassroom(toClassroomFromSmallDto(workDayDto.getClassroom()));
         existingWorkDay.setOnline(workDayDto.getOnline());
@@ -279,6 +290,4 @@ public class PlannerService {
             throw new ValidationException("Dalykas neturi suplanuotų valandų.", "Subject", "Subject does not have planned hours in schedule", subjectId.toString());
         }
     }
-
-    
 }

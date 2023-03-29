@@ -18,15 +18,15 @@ public class WorkDay {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    public LocalDate date;
+    private LocalDate date;
 
     @ManyToOne
     @JoinColumn(name = "subject_id")
-    public Subject subject;
+    private Subject subject;
 
     @ManyToOne
     @JoinColumn(name = "teacher_teacher_id")
-    public Teacher teacher;
+    private Teacher teacher;
 
     @ManyToOne
     @JoinColumn(name = "schedule_id")
@@ -192,6 +192,14 @@ public class WorkDay {
 
     public Map<Long, String> getScheduleIdWithClassroomNameConflict() {
         return scheduleIdWithClassroomNameConflict;
+    }
+
+    public boolean removeTeacherConflictFromMap (Long scheduleId) {
+        return !scheduleIdWithTeacherNameConflict.remove(scheduleId).isEmpty();
+    }
+
+    public boolean removeClassroomConflictFromMap (Long scheduleId) {
+        return !scheduleIdWithClassroomNameConflict.remove(scheduleId).isEmpty();
     }
 
     public boolean isHasTeacherConflict() {

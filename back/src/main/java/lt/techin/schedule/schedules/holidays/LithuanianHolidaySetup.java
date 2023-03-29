@@ -9,7 +9,7 @@ import java.util.LinkedHashSet;
 
 public class LithuanianHolidaySetup {
 
-    public static LinkedHashSet<Holiday> SetupHolidays(Schedule schedule) {
+    public static LinkedHashSet<Holiday> setupHolidays(Schedule schedule) {
         LinkedHashSet<Holiday> convertedHolidays = new LinkedHashSet<>();
         for (LithuanianHolidayDto holidayDto : LithuanianHolidays.LITHUANIAN_HOLIDAYS) {
             convertedHolidays.add(new Holiday(holidayDto.getName(), schedule, holidayDto.getDate()));
@@ -17,11 +17,11 @@ public class LithuanianHolidaySetup {
         return convertedHolidays;
     }
 
-    public static LinkedHashSet<Holiday> SetupHolidaysInRange(LocalDate fromDate, LocalDate untilDate, Schedule schedule) {
+    public static LinkedHashSet<Holiday> setupHolidaysInRange(LocalDate fromDate, LocalDate untilDate, Schedule schedule) {
         LinkedHashSet<Holiday> convertedHolidays = new LinkedHashSet<>();
         for (LithuanianHolidayDto holidayDto : LithuanianHolidays.LITHUANIAN_HOLIDAYS) {
             LocalDate holidayDate = holidayDto.getDate();
-            if (IsInRange(fromDate, untilDate, holidayDate)) {
+            if (isInRange(fromDate, untilDate, holidayDate)) {
                 convertedHolidays.add(new Holiday(holidayDto.getName(), schedule, holidayDate));
             }
         }
@@ -33,7 +33,7 @@ public class LithuanianHolidaySetup {
     Custom comparator is necessary to avoid comparison of the year - year defined in lithuanian holidays is redundant
     If it's 0, dates are even
     */
-    public static boolean IsItNotAnLithuanianHolidayDate (LocalDate dateToCheck) {
+    public static boolean isItNotAnLithuanianHolidayDate (LocalDate dateToCheck) {
         return LithuanianHolidays.LITHUANIAN_HOLIDAYS.stream().noneMatch(lithuanianHoliday -> 0 == new LocalDateComparator().compare(lithuanianHoliday.getDate(), dateToCheck));
     }
 
@@ -61,7 +61,7 @@ public class LithuanianHolidaySetup {
        return localDate.getDayOfMonth() >= localDate.getDayOfMonth();
    }
 
-    private static boolean IsInRange (LocalDate fromDate, LocalDate toDate, LocalDate dateToFind) {
+    private static boolean isInRange (LocalDate fromDate, LocalDate toDate, LocalDate dateToFind) {
         int month = dateToFind.getMonthValue();
         int day = dateToFind.getDayOfMonth();
 

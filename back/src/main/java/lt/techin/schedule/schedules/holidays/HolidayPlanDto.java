@@ -1,15 +1,17 @@
-package lt.techin.schedule.schedules.holidays.HolidayPlan;
+package lt.techin.schedule.schedules.holidays;
 
+import lt.techin.schedule.config.DataFieldsLengthConstraints;
 import lt.techin.schedule.schedules.ScheduleEntityDto;
+import lt.techin.schedule.validators.TextValid;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Objects;
 
 public class HolidayPlanDto {
 
     private Long id;
 
+    @TextValid(textMaximumLength = DataFieldsLengthConstraints.TEXT_FIELD_MAXIMUM_LENGTH)
     private String name;
 
     private LocalDate dateFrom;
@@ -79,6 +81,4 @@ public class HolidayPlanDto {
     public void setSchedule(ScheduleEntityDto schedule) {
         this.schedule = schedule;
     }
-
-
 }
