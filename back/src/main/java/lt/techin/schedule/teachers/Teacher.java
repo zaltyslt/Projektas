@@ -21,10 +21,9 @@ import java.util.Set;
 @Entity
 @Table(name = "teacher")
 public class Teacher implements Serializable {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "teacher_id", nullable = false) //nurodau stulpo name, kad galeciau panaudoti kaip ID kontaktui
+    @Column(name = "teacher_id", nullable = false)
     private Long id;
     @JsonIgnore
     @OneToMany(mappedBy = "teacher", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
