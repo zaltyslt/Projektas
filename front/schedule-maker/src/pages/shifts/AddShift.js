@@ -192,7 +192,6 @@ export function AddShift() {
                   <Alert severity="success"> Pamaina sėkmingai sukurta.</Alert>
                 ) : (
                   <Grid>
-                    <Alert severity="warning">Nepavyko sukurti pamainos.</Alert>
                     {shiftErrors.passedValidation
                       ? shiftErrors.databaseErrors.map(
                         (databaseError, index) => (

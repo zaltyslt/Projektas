@@ -64,10 +64,12 @@ public class SubjectService {
     public Subject delete(Long subjectId) {
         var existingSubject = subjectRepository.findById(subjectId).orElseThrow();
         existingSubject.setDeleted(true);
-        var existingsubjecthours = subjectHours.findBySubject(subjectId).orElse(null);
-        if (existingsubjecthours != null) {
-            existingsubjecthours.setDeleted(true);
-            subjectHours.save(existingsubjecthours);
+        if (subjectHours != null) {
+            var existingsubjecthours = subjectHours.findBySubject(subjectId).orElse(null);
+            if (existingsubjecthours != null) {
+                existingsubjecthours.setDeleted(true);
+                subjectHours.save(existingsubjecthours);
+            }
         }
         return subjectRepository.save(existingSubject);
     }
@@ -85,10 +87,12 @@ public class SubjectService {
     public Subject restoreSubject(Long id) {
         var subject = subjectRepository.findById(id).orElseThrow();
         subject.setDeleted(false);
-        var existingsubjecthours = subjectHours.findBySubject(id).orElse(null);
-        if (existingsubjecthours != null) {
-            existingsubjecthours.setDeleted(false);
-            subjectHours.save(existingsubjecthours);
+        if (subjectHours != null) {
+            var existingsubjecthours = subjectHours.findBySubject(id).orElse(null);
+            if (existingsubjecthours != null) {
+                existingsubjecthours.setDeleted(false);
+                subjectHours.save(existingsubjecthours);
+            }
         }
         return subjectRepository.save(subject);
     }
