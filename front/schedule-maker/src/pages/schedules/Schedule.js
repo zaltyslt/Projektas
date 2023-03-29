@@ -36,6 +36,13 @@ export function Schedule() {
   const [conflictDates, setConflictDates] = useState([])
 
   const handleClickOpen = () => {
+    console.log("Dog says woof");
+    console.log(holiday);
+    holiday.map((holiday) => {
+     
+    })
+    console.log(schedule);
+    
     setOpen(true);
   };
 
@@ -74,7 +81,7 @@ export function Schedule() {
   }, [params.id]);
 
   useEffect(() => {
-    fetch(`api/v1/schedules/holidays/${params.id}`)
+    fetch(`api/v1/schedules/${params.id}/holidays`)
       .then((response) => response.json())
       .then((data) => setHoliday(data))
       .catch((error) => console.error(error));
@@ -113,7 +120,6 @@ export function Schedule() {
     });
     const results = await Promise.all(promises);
     setSchedules(results);
-    console.log(results)
   };
 
   const handleClickPrint = (scheduleId, paged) => {
@@ -171,7 +177,7 @@ export function Schedule() {
     ...holiday.map((holiday) => {
       return {
         title: `<b>${holiday.name}</b>`,
-        start: holiday.dateFrom,
+        start: holiday.date,
         allDay: true,
         url: `api/v1/schedules/edit-holidays/${holiday.id}`,
         color: "#cccccc",

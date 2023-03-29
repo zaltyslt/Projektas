@@ -1,4 +1,4 @@
-package lt.techin.schedule.schedules.holidays;
+package lt.techin.schedule.schedules.holidays.HolidayPlan;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
-public class Holiday {
+public class HolidayPlan {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -22,14 +22,17 @@ public class Holiday {
     @JoinColumn(name = "schedule_id")
     private Schedule schedule;
 
-    @Column(name = "holiday_date", nullable = false)
+    @Column(name = "date_from", nullable = false)
     @JsonFormat(pattern = "yyyy-MM-dd")
-    private LocalDate holidayDate;
+    private LocalDate dateFrom;
+
+    @Column(name = "date_until", nullable = false)
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private LocalDate dateUntil;
 
     @CreatedDate
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime createdDate;
-
     @LastModifiedDate
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime modifiedDate;
@@ -53,22 +56,24 @@ public class Holiday {
         modifiedDate = LocalDateTime.now();
     }
 
-    public Holiday() {
+    public HolidayPlan() {
     }
 
-    public Holiday(String holidayName, Schedule schedule, LocalDate holidayDate) {
+    public HolidayPlan(String holidayName, Schedule schedule, LocalDate dateFrom, LocalDate dateUntil) {
         this.holidayName = holidayName;
         this.schedule = schedule;
-        this.holidayDate = holidayDate;
+        this.dateFrom = dateFrom;
+        this.dateUntil = dateUntil;
     }
 
-    public Holiday(Long id, String holidayName, Schedule schedule,
-                   LocalDate holidayDate, LocalDateTime createdDate,
+    public HolidayPlan(Long id, String holidayName, Schedule schedule,
+                   LocalDate dateFrom, LocalDate dateUntil, LocalDateTime createdDate,
                    LocalDateTime modifiedDate) {
         this.id = id;
         this.holidayName = holidayName;
         this.schedule = schedule;
-        this.holidayDate = holidayDate;
+        this.dateFrom = dateFrom;
+        this.dateUntil = dateUntil;
         this.createdDate = createdDate;
         this.modifiedDate = modifiedDate;
     }
@@ -89,12 +94,20 @@ public class Holiday {
         this.holidayName = holidayName;
     }
 
-    public LocalDate getDate() {
-        return holidayDate;
+    public LocalDate getDateFrom() {
+        return dateFrom;
     }
 
-    public void setDate(LocalDate holidayDate) {
-        this.holidayDate = holidayDate;
+    public void setDateFrom(LocalDate dateFrom) {
+        this.dateFrom = dateFrom;
+    }
+
+    public LocalDate getDateUntil() {
+        return dateUntil;
+    }
+
+    public void setDateUntil(LocalDate dateUntil) {
+        this.dateUntil = dateUntil;
     }
 
     public LocalDateTime getCreatedDate() {
@@ -114,14 +127,8 @@ public class Holiday {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Holiday holiday)) return false;
-        return Objects.equals(holidayDate, holiday.holidayDate);
-    }
-
-    @Override
     public int hashCode() {
-        return Objects.hash(holidayDate);
+        return Objects.hash(id, holidayName,  dateFrom, dateUntil, createdDate, modifiedDate);
     }
 }
+

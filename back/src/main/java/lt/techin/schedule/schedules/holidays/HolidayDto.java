@@ -12,9 +12,7 @@ public class HolidayDto {
 
     private String name;
 
-    private LocalDate dateFrom;
-
-    private LocalDate dateUntil;
+    private LocalDate holidayDate;
 
     private LocalDateTime createdDate;
 
@@ -41,21 +39,12 @@ public class HolidayDto {
         this.name = name;
     }
 
-    public LocalDate getDateFrom() {
-        return dateFrom;
+    public LocalDate getDate() {
+        return holidayDate;
     }
 
-    public void setDateFrom(LocalDate dateFrom) {
-
-        this.dateFrom = dateFrom;
-    }
-
-    public LocalDate getDateUntil() {
-        return dateUntil;
-    }
-
-    public void setDateUntil(LocalDate dateUntil) {
-        this.dateUntil = dateUntil;
+    public void setDate(LocalDate holidayDate) {
+        this.holidayDate = holidayDate;
     }
 
     public LocalDateTime getCreatedDate() {
@@ -85,30 +74,24 @@ public class HolidayDto {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        HolidayDto that = (HolidayDto) o;
-        return Objects.equals(id, that.id)
-                && Objects.equals(name, that.name)
-                && Objects.equals(dateFrom, that.dateFrom)
-                && Objects.equals(dateUntil, that.dateUntil)
-                && Objects.equals(createdDate, that.createdDate)
-                && Objects.equals(modifiedDate, that.modifiedDate);
+        if (!(o instanceof HolidayDto that)) return false;
+        return Objects.equals(id, that.id) && Objects.equals(name, that.name) && Objects.equals(holidayDate, that.holidayDate) && Objects.equals(createdDate, that.createdDate) && Objects.equals(modifiedDate, that.modifiedDate) && Objects.equals(schedule, that.schedule);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, dateFrom, dateUntil, createdDate, modifiedDate);
+        return Objects.hash(id, name, holidayDate, createdDate, modifiedDate, schedule);
     }
 
     @Override
     public String toString() {
         return "HolidayDto{" +
                 "id=" + id +
-                ", holidayName='" + name + '\'' +
-                ", dateFrom=" + dateFrom +
-                ", dateUntil=" + dateUntil +
+                ", name='" + name + '\'' +
+                ", holidayDate=" + holidayDate +
                 ", createdDate=" + createdDate +
                 ", modifiedDate=" + modifiedDate +
+                ", schedule=" + schedule +
                 '}';
     }
 }

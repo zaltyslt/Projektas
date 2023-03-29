@@ -51,7 +51,7 @@ class ScheduleServiceTest {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        scheduleService = new ScheduleService(scheduleRepository, groupRepository);
+//        scheduleService = new ScheduleService(scheduleRepository, groupRepository);
     }
 
     @Test

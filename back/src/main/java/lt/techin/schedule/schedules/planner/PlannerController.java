@@ -1,6 +1,10 @@
 package lt.techin.schedule.schedules.planner;
 
 
+import lt.techin.schedule.schedules.holidays.Holiday;
+import lt.techin.schedule.schedules.holidays.HolidayDto;
+import lt.techin.schedule.schedules.holidays.HolidayMapper;
+import lt.techin.schedule.schedules.holidays.HolidayPlan.HolidayPlanMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -40,13 +44,19 @@ public class PlannerController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(Map.of("message", createdString));
         }
-
     }
 
     @GetMapping("/{scheduleId}/lessons")
     public List<WorkDayDto> getWorkDays(@PathVariable Long scheduleId) {
         return plannerService.getWorkDays(scheduleId).stream().map(WorkDayMapper::toWorkDayDto).toList();
     }
+
+    @GetMapping("/{scheduleId}/holidays")
+    public List<HolidayDto> getHolidays(@PathVariable Long scheduleId) {
+        List<Holiday> stuff = plannerService.getHolidays(scheduleId).stream().toList();
+        return plannerService.getHolidays(scheduleId).stream().map(HolidayMapper::toHolidayDto).toList();
+    }
+
 
     @GetMapping("/lesson/{workDayId}")
     public ResponseEntity<WorkDayDto> getWorkDay(@PathVariable Long workDayId) {
