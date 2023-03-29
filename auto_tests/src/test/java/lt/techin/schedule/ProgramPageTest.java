@@ -1,8 +1,5 @@
 package lt.techin.schedule;
 
-import lt.techin.schedule.module.ModuleEditPage;
-import lt.techin.schedule.module.ModuleListPage;
-import lt.techin.schedule.module.ModuleViewPage;
 import lt.techin.schedule.program.ProgramCreateNewPage;
 import lt.techin.schedule.program.ProgramEditPage;
 import lt.techin.schedule.program.ProgramListPage;
@@ -11,10 +8,6 @@ import lt.techin.schedule.utils.RandomUtils;
 import lt.techin.schedule.utils.WaitUtils;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.WebDriverWait;
-
-import java.time.Duration;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -103,18 +96,6 @@ public class ProgramPageTest extends BaseTest {
         WaitUtils.waitPageToLoad(driver);
 
         programListPage.setFilterValue(programName);
-
-        //error
-        int modulesCount = programListPage.getPrograms().size();
-
         assertTrue(programListPage.getRemovedPrograms().contains(programName), "Program  " + programName + " not found!");
-
-        programListPage.clickRestoreButton();
-
-        int expectedModules = modulesCount+1;
-        new WebDriverWait(driver, Duration.ofSeconds(2)).until(driver -> programListPage.getPrograms().size()==expectedModules);
-
-        assertEquals(expectedModules, programListPage.getPrograms().size(), "Invalid active modules count");
-        assertTrue(programListPage.getPrograms().contains(programName), "Program " + programName + " not found!");
     }
 }

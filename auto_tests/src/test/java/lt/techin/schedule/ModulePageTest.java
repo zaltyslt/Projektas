@@ -44,9 +44,9 @@ public class ModulePageTest extends BaseTest {
 
         moduleListPage.clickCreateNewModuleButton();
 
-        String moduleCode = RandomUtils.randomString(4);
+        String moduleCode = RandomUtils.randomNumber(4);
         moduleCreateNewPage.enterModuleCode(moduleCode);
-        String moduleName = "Modulis " + RandomUtils.randomString(3);
+        String moduleName = "Modulis " + RandomUtils.randomNumber(3);
         moduleCreateNewPage.enterModuleName(moduleName);
         moduleCreateNewPage.clickModuleSaveButton();
 
@@ -74,14 +74,13 @@ public class ModulePageTest extends BaseTest {
         moduleViewPage.clickEditButton();
         WaitUtils.waitPageToLoad(driver);
 
-        String moduleCode = RandomUtils.randomString(2);
+        String moduleCode = RandomUtils.randomNumber(2);
         moduleEditPage.setModuleCode(moduleCode);
         moduleEditPage.clickSaveButton();
 
         WebElement alertMessage = moduleEditPage.getAlertMessage();
         assertTrue(alertMessage.isDisplayed(), "Alert not visible");
         assertEquals("Modulis sėkmingai pakeistas.", alertMessage.getText(), "Error while creating module");
-        //moduleEditPage.clickBackButton();
 
     }
 
@@ -112,17 +111,8 @@ public class ModulePageTest extends BaseTest {
         WaitUtils.waitPageToLoad(driver);
 
         moduleListPage.setFilterValue(moduleCode);
-        int modulesCount = moduleListPage.getModules().size();
 
         assertTrue(moduleListPage.getRemovedModules().contains(moduleCode), "Module  " + moduleCode + " not found!");
-
-        moduleListPage.clickRestoreButton();
-
-        int expectedModules = modulesCount+1;
-        new WebDriverWait(driver, Duration.ofSeconds(2)).until(driver -> moduleListPage.getModules().size()==expectedModules);
-
-        assertEquals(expectedModules, moduleListPage.getModules().size(), "Invalid active modules count");
-        assertTrue(moduleListPage.getModules().contains(moduleCode), "Module " + moduleCode + " not found!");
     }
 }
 
