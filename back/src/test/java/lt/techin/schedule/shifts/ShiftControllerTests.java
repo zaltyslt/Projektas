@@ -39,7 +39,7 @@ public class ShiftControllerTests {
         shift2.setId(2L);
         List<Shift> expectedShifts = List.of(shift1, shift2);
         when(shiftService.getActiveShifts()).thenReturn(expectedShifts);
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/shift/get-active"))
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/schedules/get-active"))
                 .andExpect(status().isOk())
                 .andExpect(content().json("[" +
                         "{\"id\": 1,\"name\": \"Shift 1\",\"shiftStartingTime\": \"8:00\",\"shiftEndingTime\": \"16:00\",\"startIntEnum\": 1, \"endIntEnum\": 8, \"isActive\": true}," +
