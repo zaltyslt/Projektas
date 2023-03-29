@@ -32,11 +32,9 @@ export function EditLesson() {
   const [classRoom, setClassRoom] = useState("");
   const [selectedClassRoom, setSelectedClassRoom] = useState("");
   const [online, setOnline] = useState(false);
-
   const [error, setError] = useState("");
   const [createMessage, setCreateMessage] = useState("");
   const [openPrompt, setOpenPrompt] = useState(false);
-
   const params = useParams();
   const calendarUrl = useHref(`/schedules/${scheduleId}`);
 
@@ -90,7 +88,6 @@ export function EditLesson() {
       }),
     }).then((response) => {
       let success = response.ok;
-
       response.json().then((response) => {
         if (!success) {
           setCreateMessage("");
@@ -122,7 +119,6 @@ export function EditLesson() {
     );
     const firstLesson = startLessons[0];
     const startint = firstLesson.value;
-
     const endLesson = lessonsWithTime.filter(
       (value) => value.label === workDay.lessonEnd
     );
@@ -189,7 +185,6 @@ export function EditLesson() {
                 </Select>
               </FormControl>
             </Grid>
-
             <Grid item sm={10}>
               <FormControl fullWidth>
                 <InputLabel id="classroom-label">Klasės pavadinimas</InputLabel>
@@ -210,21 +205,18 @@ export function EditLesson() {
                 </Select>
               </FormControl>
             </Grid>
-
             <Grid item sm={10}>
               <FormControlLabel
                 label="Nuotolinės pamokos"
                 control={<Checkbox onChange={handleCheck}></Checkbox>}
               ></FormControlLabel>
             </Grid>
-
             <Grid item sm={10}>
               {error && <Alert severity="warning">{error}</Alert>}
               {createMessage && (
                 <Alert severity="success">{createMessage}</Alert>
               )}
             </Grid>
-
             <Grid item sm={10}>
               <Stack direction="row" spacing={2}>
                 <Button variant="contained" onClick={updateLesson}>

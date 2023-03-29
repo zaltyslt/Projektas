@@ -28,7 +28,6 @@ export function ScheduleView() {
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
   const [open, setOpen] = useState(false);
-
   const params = useParams();
 
   useEffect(() => {
@@ -49,7 +48,6 @@ export function ScheduleView() {
       body: JSON.stringify(hours),
     }).then((response) => {
       let success = response.ok;
-
       response.json().then((response) => {
         if (!success) {
           setMessage("");
@@ -102,7 +100,6 @@ export function ScheduleView() {
             <Button onClick={handleRemove}>Ištrinti</Button>
           </DialogActions>
         </Dialog>
-
         <Grid container rowSpacing={2}>
           <Grid item sm={10}>
             <h3>{schedule.groups && schedule.groups.name}</h3>
@@ -116,12 +113,10 @@ export function ScheduleView() {
               <Button variant="contained">Planuoti atostogas</Button>
             </Link>
           </Grid>
-
           <Grid item sm={12}>
             {error && <Alert severity="warning">{error}</Alert>}
             {message && <Alert severity="success">{message}</Alert>}
           </Grid>
-
           <Grid item sm={12}>
             <TableContainer component={Paper}>
               <Table aria-label="custom pagination table">
@@ -136,15 +131,10 @@ export function ScheduleView() {
                     <TableCell>Dalykas</TableCell>
                     <TableCell align="center">Trukmė (val.)</TableCell>
                     <TableCell align="center">Nesuplanuota (val.)</TableCell>
-                    {/* <TableCell align="center" className="activity">
-                      Veiksmai
-                    </TableCell>
-                     */}
                     <TableCell align="center" className="activity"></TableCell>
                     <TableCell align="center" className="activity"></TableCell>
                   </TableRow>
                 </TableHead>
-
                 <TableBody>
                   {subjects.map((subject) => (
                     <TableRow key={subject.id}>
@@ -153,8 +143,8 @@ export function ScheduleView() {
                       <TableCell align="center">
                         {subject.subject in schedule.subjectIdWithUnassignedTime
                           ? schedule.subjectIdWithUnassignedTime[
-                              subject.subject
-                            ]
+                          subject.subject
+                          ]
                           : subject.hours}
                       </TableCell>
                       <TableCell align="center" className="activity">
@@ -188,7 +178,6 @@ export function ScheduleView() {
               </Table>
             </TableContainer>
           </Grid>
-
           <Grid item sm={12}>
             <Stack direction="row" spacing={2}>
               <Link to={"/schedules/" + params.id}>

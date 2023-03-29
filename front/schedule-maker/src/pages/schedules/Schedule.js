@@ -12,7 +12,6 @@ import { Button, Grid } from "@mui/material";
 import adaptivePlugin from "@fullcalendar/adaptive";
 import { render } from "preact/compat";
 import { eachDayOfInterval } from "date-fns";
-
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
@@ -38,9 +37,8 @@ export function Schedule() {
   const handleClickOpen = () => {
     console.log("Dog says woof");
     console.log(holiday);
-    holiday.map((holiday) => {});
+    holiday.map((holiday) => { });
     console.log(schedule);
-
     setOpen(true);
   };
 
@@ -97,7 +95,6 @@ export function Schedule() {
   const checkConflictsOnClick = async () => {
     const promises = [];
     const seenKeys = new Set();
-
     schedule.forEach((item) => {
       if (item.hasTeacherConflict && item.scheduleIdWithTeacherNameConflict) {
         Object.entries(item.scheduleIdWithTeacherNameConflict).forEach(
@@ -173,14 +170,12 @@ export function Schedule() {
           <br />
           ${schedule.lessonStart} - ${schedule.lessonEnd}
           <br />
-          ${schedule.teacher ? schedule.teacher.lName : ""} ${
-          schedule.teacher ? schedule.teacher.fName : "nepasirinktas"
-        }
+          ${schedule.teacher ? schedule.teacher.lName : ""} ${schedule.teacher ? schedule.teacher.fName : "nepasirinktas"
+          }
           <br />
-          ${
-            schedule.online
-              ? "Nuotolinė pamoka"
-              : schedule.classroom
+          ${schedule.online
+            ? "Nuotolinė pamoka"
+            : schedule.classroom
               ? schedule.classroom.classroomName
               : ""
           }<br />
@@ -306,7 +301,7 @@ export function Schedule() {
                                         (scheduleItem) =>
                                           item
                                             .scheduleIdWithTeacherNameConflict[
-                                            scheduleItem.id
+                                          scheduleItem.id
                                           ]
                                       )
                                       .map((scheduleItem) => (
@@ -331,7 +326,7 @@ export function Schedule() {
                                         (scheduleItem) =>
                                           item
                                             .scheduleIdWithClassroomNameConflict[
-                                            scheduleItem.id
+                                          scheduleItem.id
                                           ]
                                       )
                                       .map((scheduleItem) => (

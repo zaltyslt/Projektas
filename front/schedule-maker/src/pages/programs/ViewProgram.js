@@ -41,9 +41,6 @@ export function ViewProgram() {
           <Grid item sm={8} marginTop={4}>
             <header>
               <h1>{program.programName}</h1>
-              {/* <div>
-                <span id="created-date">Sukurta: {program.createdDate}</span>
-              </div> */}
               <div>
                 <span id="modified-date">Paskutinį kartą redaguota: {program.modifiedDate}</span>
               </div>
@@ -66,20 +63,17 @@ export function ViewProgram() {
                   .map((program) => (
                     <TableRow key={program.id}>
                       <TableCell component="th" scope="row">
-                        {/* {program.subjectName} */}
-
                         {program.subjectName ? (
-                      program.deleted ? (
-                        <span className="Deleted">
-                          {program.subjectName}
-                        </span>
-                      ) : (
-                        program.subjectName
-                      )
-                    ) : (
-                      <span>Nenurodytas</span>
-                    )}
-
+                          program.deleted ? (
+                            <span className="Deleted">
+                              {program.subjectName}
+                            </span>
+                          ) : (
+                            program.subjectName
+                          )
+                        ) : (
+                          <span>Nenurodytas</span>
+                        )}
                       </TableCell>
                       <TableCell>{program.hours}</TableCell>
                     </TableRow>

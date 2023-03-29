@@ -24,32 +24,28 @@ import ".././pages.css";
 export function ShiftList() {
   const [activeShifts, setActiveShifts] = useState([]);
   const [inactiveShifts, setInactiveShifts] = useState([]);
-
   const [currentActiveShifts, setCurrentActiveShifts] = useState([]);
-
   const [rowsPerPageActive, setRowsPerPageActive] = useState(10);
   const [currentPageActive, setCurrentPageActive] = useState(0);
-
   const [rowsPerPageInactive, setRowsPerPageInactive] = useState(10);
   const [currentPageInactive, setCurrentPageInactive] = useState(0);
-
   const [isChecked, setIsChecked] = useState(false);
 
   const emptyRowsActive =
     currentPageActive > 0
       ? Math.max(
-          0,
-          (1 + currentPageActive) * rowsPerPageActive -
-            currentActiveShifts.length
-        )
+        0,
+        (1 + currentPageActive) * rowsPerPageActive -
+        currentActiveShifts.length
+      )
       : 0;
   const emptyRowsInactive =
     currentPageInactive > 0
       ? Math.max(
-          0,
-          (1 + currentPageInactive) * rowsPerPageInactive -
-            currentActiveShifts.length
-        )
+        0,
+        (1 + currentPageInactive) * rowsPerPageInactive -
+        currentActiveShifts.length
+      )
       : 0;
 
   const handleChangeRowsPerPageActive = (event) => {
@@ -146,7 +142,6 @@ export function ShiftList() {
               </Link>
             </Stack>
           </Grid>
-
           <Grid item sm={12}>
             <TextField
               fullWidth
@@ -158,7 +153,6 @@ export function ShiftList() {
             ></TextField>
           </Grid>
         </Grid>
-
         <TableContainer component={Paper}>
           <Table
             id="active-shift-list-table"
@@ -172,13 +166,12 @@ export function ShiftList() {
                 <TableCell>Pamainos laikas</TableCell>
               </TableRow>
             </TableHead>
-
             <TableBody>
               {(rowsPerPageActive > 0
                 ? currentActiveShifts.slice(
-                    currentPageActive * rowsPerPageActive,
-                    currentPageActive * rowsPerPageActive + rowsPerPageActive
-                  )
+                  currentPageActive * rowsPerPageActive,
+                  currentPageActive * rowsPerPageActive + rowsPerPageActive
+                )
                 : currentActiveShifts
               ).map((shift) => (
                 <TableRow key={shift.id}>
@@ -190,14 +183,12 @@ export function ShiftList() {
                   </TableCell>
                 </TableRow>
               ))}
-
               {emptyRowsActive > 0 && (
                 <TableRow style={{ height: 53 * emptyRowsActive }}>
                   <TableCell colSpan={6} />
                 </TableRow>
               )}
             </TableBody>
-
             <TableFooter>
               <TableRow>
                 <TablePagination
@@ -223,7 +214,6 @@ export function ShiftList() {
             </TableFooter>
           </Table>
         </TableContainer>
-
         <FormGroup>
           <FormControlLabel
             control={<Checkbox />}
@@ -250,14 +240,13 @@ export function ShiftList() {
                   <TableCell></TableCell>
                 </TableRow>
               </TableHead>
-
               <TableBody>
                 {(rowsPerPageInactive > 0
                   ? inactiveShifts.slice(
-                      currentPageInactive * rowsPerPageInactive,
-                      currentPageInactive * rowsPerPageInactive +
-                        rowsPerPageInactive
-                    )
+                    currentPageInactive * rowsPerPageInactive,
+                    currentPageInactive * rowsPerPageInactive +
+                    rowsPerPageInactive
+                  )
                   : inactiveShifts
                 ).map((shift) => (
                   <TableRow key={shift.id}>
@@ -278,7 +267,6 @@ export function ShiftList() {
                     </TableCell>
                   </TableRow>
                 ))}
-
                 {emptyRowsInactive > 0 && (
                   <TableRow style={{ height: 53 * emptyRowsInactive }}>
                     <TableCell colSpan={6} />

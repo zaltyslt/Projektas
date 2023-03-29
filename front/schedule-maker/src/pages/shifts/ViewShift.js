@@ -1,12 +1,10 @@
 import { Button, Grid } from "@mui/material";
 import { Container, Stack } from "@mui/system";
-
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 
 export function ViewShift() {
   const params = useParams();
-
   const [currentShift, setCurrentShift] = useState([]);
 
   useEffect(() => {
@@ -29,17 +27,14 @@ export function ViewShift() {
               </span>
             </header>
           </Grid>
-
           <Grid item sm={12}>
             <h4>Pamainos pradžia:</h4>
             <p>{currentShift.shiftStartingTime}</p>
           </Grid>
-
           <Grid item sm={12}>
             <h4>Pamainos pabaiga:</h4>
             <p>{currentShift.shiftEndingTime}</p>
           </Grid>
-
           <Grid item sm={12}>
             <Stack direction="row" spacing={2}>
               <Link to={"/modify-shift/" + currentShift.id}>

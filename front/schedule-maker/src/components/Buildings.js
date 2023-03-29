@@ -17,20 +17,20 @@ export function Buildings(props) {
                 'Content-Type': 'application/json'
             }
         }).then(response => response.json())
-        .then((classroom) => props.onClassroomChange(classroom))
+            .then((classroom) => props.onClassroomChange(classroom))
     }
 
-    return(
+    return (
         <div>
             <select value={selectedBuilding} onChange={
                 (e) => setSelectedBuilding(e.target.value)
             }>
                 <option>...</option>
                 {
-                    buildings.map((building) => 
-                    <option 
-                    key={building.id}
-                        value={building.id}>
+                    buildings.map((building) =>
+                        <option
+                            key={building.id}
+                            value={building.id}>
                             {building.name}</option>)
                 }
             </select>
