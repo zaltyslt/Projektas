@@ -285,64 +285,83 @@ export function Schedule() {
                           (item.hasClassroomConflict &&
                             item.scheduleIdWithClassroomNameConflict)
                       )
-                      .map((item) => (
-                        <div key={item.id}>
-                          <h3>Diena: {item.date}</h3>
-                          {item.hasTeacherConflict &&
-                            item.scheduleIdWithTeacherNameConflict && (
-                              <div>
-                                {Object.entries(
-                                  item.scheduleIdWithTeacherNameConflict
-                                ).map(([key, value]) => (
-                                  <div key={key}>
-                                    <p>Mokytojas: {value}</p>
-                                    {schedules
-                                      .filter(
-                                        (scheduleItem) =>
-                                          item
-                                            .scheduleIdWithTeacherNameConflict[
-                                          scheduleItem.id
-                                          ]
-                                      )
-                                      .map((scheduleItem) => (
-                                        <p
-                                          key={scheduleItem.id}
-                                        >{`Mokslo metai: ${scheduleItem.schoolYear}, pavadinimas: ${scheduleItem.semester}, laikotarpis ${scheduleItem.dateFrom} — ${scheduleItem.dateUntil}`}</p>
-                                      ))}
-                                  </div>
-                                ))}
-                              </div>
-                            )}
-                          {item.hasClassroomConflict &&
-                            item.scheduleIdWithClassroomNameConflict && (
-                              <div>
-                                {Object.entries(
-                                  item.scheduleIdWithClassroomNameConflict
-                                ).map(([key, value]) => (
-                                  <div key={key}>
-                                    <p>Klasė: {value}</p>
-                                    {schedules
-                                      .filter(
-                                        (scheduleItem) =>
-                                          item
-                                            .scheduleIdWithClassroomNameConflict[
-                                          scheduleItem.id
-                                          ]
-                                      )
-                                      .map((scheduleItem) => (
-                                        <p
-                                          key={scheduleItem.id}
-                                        >{`Mokslo metai: ${scheduleItem.schoolYear}, pavadinimas: ${scheduleItem.semester}, laikotarpis ${scheduleItem.dateFrom} — ${scheduleItem.dateUntil}`}</p>
-                                      ))}
-                                  </div>
-                                ))}
-                              </div>
-                            )}
-                        </div>
-                      ))
+                      .some(
+                        (item) =>
+                          (item.hasTeacherConflict &&
+                            item.scheduleIdWithTeacherNameConflict) ||
+                          (item.hasClassroomConflict &&
+                            item.scheduleIdWithClassroomNameConflict)
+                      ) ? (
+                      schedule
+                        .filter(
+                          (item) =>
+                            (item.hasTeacherConflict &&
+                              item.scheduleIdWithTeacherNameConflict) ||
+                            (item.hasClassroomConflict &&
+                              item.scheduleIdWithClassroomNameConflict)
+                        )
+                        .map((item) => (
+                          <div key={item.id}>
+                            <h3>Diena: {item.date}</h3>
+                            {item.hasTeacherConflict &&
+                              item.scheduleIdWithTeacherNameConflict && (
+                                <div>
+                                  {Object.entries(
+                                    item.scheduleIdWithTeacherNameConflict
+                                  ).map(([key, value]) => (
+                                    <div key={key}>
+                                      <p>Mokytojas: {value}</p>
+                                      {schedules
+                                        .filter(
+                                          (scheduleItem) =>
+                                            item
+                                              .scheduleIdWithTeacherNameConflict[
+                                            scheduleItem.id
+                                            ]
+                                        )
+                                        .map((scheduleItem) => (
+                                          <p
+                                            key={scheduleItem.id}
+                                          >{`Mokslo metai: ${scheduleItem.schoolYear}, pavadinimas: ${scheduleItem.semester}, laikotarpis ${scheduleItem.dateFrom} — ${scheduleItem.dateUntil}`}</p>
+                                        ))}
+                                    </div>
+                                  ))}
+                                </div>
+                              )}
+                            {item.hasClassroomConflict &&
+                              item.scheduleIdWithClassroomNameConflict && (
+                                <div>
+                                  {Object.entries(
+                                    item.scheduleIdWithClassroomNameConflict
+                                  ).map(([key, value]) => (
+                                    <div key={key}>
+                                      <p>Klasė: {value}</p>
+                                      {schedules
+                                        .filter(
+                                          (scheduleItem) =>
+                                            item
+                                              .scheduleIdWithClassroomNameConflict[
+                                            scheduleItem.id
+                                            ]
+                                        )
+                                        .map((scheduleItem) => (
+                                          <p
+                                            key={scheduleItem.id}
+                                          >{`Mokslo metai: ${scheduleItem.schoolYear}, pavadinimas: ${scheduleItem.semester}, laikotarpis ${scheduleItem.dateFrom} — ${scheduleItem.dateUntil}`}</p>
+                                        ))}
+                                    </div>
+                                  ))}
+                                </div>
+                              )}
+                          </div>
+                        ))
+                    ) : (
+                      <p>Konfliktų nėra.</p>
+                    )
                   ) : (
                     <p>Konfliktų nėra.</p>
                   )}
+
                 </DialogContentText>
               </DialogContent>
               <DialogActions>
