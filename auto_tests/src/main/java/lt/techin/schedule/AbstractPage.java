@@ -13,6 +13,10 @@ public class AbstractPage {
         PageFactory.initElements(driver, this);
     }
 
+//    protected void scrollToElement(WebElement element) {
+//        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
+//    }
+
     protected void scrollToElement(WebElement element) {
         try {
             Actions actions = new Actions(driver);

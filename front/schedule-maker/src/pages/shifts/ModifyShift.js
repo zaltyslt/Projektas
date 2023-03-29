@@ -238,35 +238,35 @@ export function ModifyShift() {
           </Stack>
         </Grid>
         <Grid container rowSpacing={2} marginTop={1}>
-            <Grid item sm={8}>
-          {isPostUsed ? (
-            successfulPost ? (
-              <Alert severity="success">
-                Pamainos duomenys sėkmingai atnaujinti.
-              </Alert>
-            ) : (
-              <Grid>
-                <Alert severity="warning">
-                  Nepavyko pakeisti pamainos duomenų.
+          <Grid item sm={8}>
+            {isPostUsed ? (
+              successfulPost ? (
+                <Alert severity="success">
+                  Pamainos duomenys sėkmingai atnaujinti.
                 </Alert>
-                {shiftErrors.passedValidation
-                  ? shiftErrors.databaseErrors.map((databaseError, index) => (
-                      <Alert key={index} severity="warning">
-                        {databaseError}
-                      </Alert>
-                    ))
-                  : Object.keys(shiftErrors.validationErrors).map((key) => (
-                      <Alert key={key} severity="warning">
-                        {" "}
-                        {shiftErrors.validationErrors[key]} {key} laukelyje.
-                      </Alert>
-                    ))}
-              </Grid>
-            )
-          ) : (
-            <div></div>
-          )}
-        </Grid>
+              ) : (
+                <Grid>
+                  <Alert severity="warning">
+                    Nepavyko pakeisti pamainos duomenų.
+                  </Alert>
+                  {shiftErrors.passedValidation
+                    ? shiftErrors.databaseErrors.map((databaseError, index) => (
+                        <Alert key={index} severity="warning">
+                          {databaseError}
+                        </Alert>
+                      ))
+                    : Object.keys(shiftErrors.validationErrors).map((key) => (
+                        <Alert key={key} severity="warning">
+                          {" "}
+                          {shiftErrors.validationErrors[key]} {key} laukelyje.
+                        </Alert>
+                      ))}
+                </Grid>
+              )
+            ) : (
+              <div></div>
+            )}
+          </Grid>
         </Grid>
       </Container>
     </div>

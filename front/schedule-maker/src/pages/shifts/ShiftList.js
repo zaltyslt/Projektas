@@ -19,7 +19,7 @@ import { Container } from "@mui/system";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Stack from "@mui/material/Stack";
-import ".././pages.css"
+import ".././pages.css";
 
 export function ShiftList() {
   const [activeShifts, setActiveShifts] = useState([]);
@@ -100,15 +100,12 @@ export function ShiftList() {
   };
 
   const activateShift = async (shiftID) => {
-    await fetch(
-      `api/v1/shift/activate-shift/${shiftID}`,
-      {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
+    await fetch(`api/v1/shift/activate-shift/${shiftID}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
     getActiveShifts();
     getInactiveShifts();
   };
@@ -143,7 +140,9 @@ export function ShiftList() {
           <Grid item sm={2}>
             <Stack direction="row" justifyContent="flex-end">
               <Link to="/add-shift">
-                <Button id="create-new-shift" variant="contained">Pridėti naują</Button>
+                <Button id="create-new-shift" variant="contained">
+                  Pridėti naują
+                </Button>
               </Link>
             </Stack>
           </Grid>
@@ -161,12 +160,16 @@ export function ShiftList() {
         </Grid>
 
         <TableContainer component={Paper}>
-          <Table id="active-shift-list-table" aria-label="custom pagination table">
+          <Table
+            id="active-shift-list-table"
+            aria-label="custom pagination table"
+          >
             <TableHead>
               <TableRow>
-                <TableCell style={{ width: "500px" }} >Pamainos pavadinimas</TableCell>
+                <TableCell style={{ width: "500px" }}>
+                  Pamainos pavadinimas
+                </TableCell>
                 <TableCell>Pamainos laikas</TableCell>
-                
               </TableRow>
             </TableHead>
 
@@ -182,7 +185,9 @@ export function ShiftList() {
                   <TableCell component="th" scope="row">
                     <Link to={"/view-shift/" + shift.id}>{shift.name}</Link>
                   </TableCell>
-                  <TableCell>{shift.shiftStartingTime + "-" + shift.shiftEndingTime}</TableCell>
+                  <TableCell>
+                    {shift.shiftStartingTime + "-" + shift.shiftEndingTime}
+                  </TableCell>
                 </TableRow>
               ))}
 
@@ -230,11 +235,18 @@ export function ShiftList() {
         </FormGroup>
         {isChecked && (
           <TableContainer component={Paper}>
-            <Table id="inactive-shift-list-table" aria-label="custom pagination table">
+            <Table
+              id="inactive-shift-list-table"
+              aria-label="custom pagination table"
+            >
               <TableHead>
                 <TableRow>
-                  <TableCell style={{ width: "500px" }}>Pamainos pavadinimas</TableCell>
-                  <TableCell style={{ width: "500px" }} >Pamainos laikas</TableCell>
+                  <TableCell style={{ width: "500px" }}>
+                    Pamainos pavadinimas
+                  </TableCell>
+                  <TableCell style={{ width: "500px" }}>
+                    Pamainos laikas
+                  </TableCell>
                   <TableCell></TableCell>
                 </TableRow>
               </TableHead>
@@ -249,10 +261,15 @@ export function ShiftList() {
                   : inactiveShifts
                 ).map((shift) => (
                   <TableRow key={shift.id}>
-                    <TableCell component="th" scope="row">{shift.name}</TableCell>
-                    <TableCell component="th" scope="row">{shift.shiftTime}</TableCell>
+                    <TableCell component="th" scope="row">
+                      {shift.name}
+                    </TableCell>
+                    <TableCell component="th" scope="row">
+                      {shift.shiftTime}
+                    </TableCell>
                     <TableCell style={{ width: "80px" }}>
                       <Button
+                        id=" restore-button-list-shift"
                         variant="contained"
                         onClick={() => activateShift(shift.id)}
                       >
