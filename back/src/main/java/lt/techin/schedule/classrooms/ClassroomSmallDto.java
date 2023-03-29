@@ -5,7 +5,6 @@ import java.util.Objects;
 public class ClassroomSmallDto {
     private Long id;
     private String classroomName;
-
     public ClassroomSmallDto() {
     }
 

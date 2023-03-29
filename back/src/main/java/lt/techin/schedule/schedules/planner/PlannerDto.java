@@ -1,27 +1,17 @@
 package lt.techin.schedule.schedules.planner;
 
 import lt.techin.schedule.classrooms.Classroom;
-import lt.techin.schedule.teachers.Teacher;
 import lt.techin.schedule.teachers.TeacherEntityDto;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.Set;
 
 public class PlannerDto {
-
     private TeacherEntityDto teacher;
-
     private Classroom classroom;
-
     private int assignedHours;
-
     private LocalDate dateFrom;
-
     private int startIntEnum;
-
     private int endIntEnum;
-
     private Boolean online;
 
     public PlannerDto() {

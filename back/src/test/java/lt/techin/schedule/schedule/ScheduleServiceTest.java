@@ -21,7 +21,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 public class ScheduleServiceTest {
-
     private ScheduleService scheduleService;
     private ScheduleRepository scheduleRepository;
     private GroupRepository groupRepository;
@@ -30,7 +29,6 @@ public class ScheduleServiceTest {
     public void setUp() {
         scheduleRepository = mock(ScheduleRepository.class);
         groupRepository = mock(GroupRepository.class);
-//        scheduleService = new ScheduleService(scheduleRepository, groupRepository);
     }
 
     @Test
@@ -39,9 +37,7 @@ public class ScheduleServiceTest {
         schedules.add(new Schedule());
         schedules.add(new Schedule());
         when(scheduleRepository.findAll()).thenReturn(schedules);
-
         List<Schedule> result = scheduleService.getAll();
-
         assertEquals(schedules, result);
     }
 
@@ -49,9 +45,7 @@ public class ScheduleServiceTest {
     public void testFindById() {
         Schedule schedule = new Schedule();
         when(scheduleRepository.findById(1L)).thenReturn(Optional.of(schedule));
-
         Schedule result = scheduleService.findById(1L);
-
         assertNotNull(result);
         assertEquals(schedule, result);
     }
@@ -65,13 +59,10 @@ public class ScheduleServiceTest {
         schedule.setDateFrom(LocalDate.now().minusDays(1));
         schedule.setDateUntil(LocalDate.now().plusDays(1));
         schedule.setGroups(group);
-
         when(groupRepository.findById(1L)).thenReturn(Optional.of(group));
         when(scheduleRepository.findAll()).thenReturn(new ArrayList<>());
         when(scheduleRepository.save(any(Schedule.class))).thenReturn(schedule);
-
         Schedule result = scheduleService.createSchedule(schedule, 1L);
-
         assertNotNull(result);
         assertEquals(schedule, result);
     }
@@ -80,7 +71,6 @@ public class ScheduleServiceTest {
         var existingGroup = groupRepository.findById(groupId).orElseThrow(() ->
                 new ValidationException("Nurodyta grupė nerasta", "Group", "Does not exist", groupId.toString()));
         schedule.setGroups(existingGroup);
-
         var existing = scheduleRepository.findAll();
         existing = existing.stream().filter(s -> existingGroup.getName() != null && s.getGroups().getName().equalsIgnoreCase(existingGroup.getName()))
                 .filter(s -> s.getDateFrom().equals(schedule.getDateFrom()))
@@ -88,7 +78,6 @@ public class ScheduleServiceTest {
                 .collect(Collectors.toList());
         if (existing.size() > 0) {
             var scheduleDto = toScheduleCreateDto(schedule);
-
             throw new ValidationException("Tvarkaraštis šiai grupei ir šiam " +
                     "laikotarpiui jau yra sukurtas", "Schedule", "Not unique", scheduleDto.toString());
         } else {
@@ -98,18 +87,13 @@ public class ScheduleServiceTest {
 
     @Test
     public void disableSchedule_ValidScheduleId_ShouldReturnDisabledSchedule() {
-        // Arrange
         long scheduleId = 1;
         Schedule existingSchedule = new Schedule();
         existingSchedule.setId(scheduleId);
         existingSchedule.setActive(true);
         when(scheduleRepository.findById(scheduleId)).thenReturn(Optional.of(existingSchedule));
         when(scheduleRepository.save(existingSchedule)).thenReturn(existingSchedule);
-
-        // Act
         Schedule disabledSchedule = scheduleService.disable(scheduleId);
-
-        // Assert
         assertNotNull(disabledSchedule);
         assertFalse(disabledSchedule.isActive());
         verify(scheduleRepository, times(1)).findById(scheduleId);
@@ -118,14 +102,9 @@ public class ScheduleServiceTest {
 
     @Test
     public void disableSchedule_InvalidScheduleId_ShouldReturnNull() {
-        // Arrange
         long scheduleId = 1;
         when(scheduleRepository.findById(scheduleId)).thenReturn(Optional.empty());
-
-        // Act
         Schedule disabledSchedule = scheduleService.disable(scheduleId);
-
-        // Assert
         assertNull(disabledSchedule);
         verify(scheduleRepository, times(1)).findById(scheduleId);
         verify(scheduleRepository, never()).save(any());
@@ -133,18 +112,13 @@ public class ScheduleServiceTest {
 
     @Test
     public void enableSchedule_ValidScheduleId_ShouldReturnEnabledSchedule() {
-        // Arrange
         long scheduleId = 1;
         Schedule existingSchedule = new Schedule();
         existingSchedule.setId(scheduleId);
         existingSchedule.setActive(false);
         when(scheduleRepository.findById(scheduleId)).thenReturn(Optional.of(existingSchedule));
         when(scheduleRepository.save(existingSchedule)).thenReturn(existingSchedule);
-
-        // Act
         Schedule enabledSchedule = scheduleService.enable(scheduleId);
-
-        // Assert
         assertNotNull(enabledSchedule);
         assertTrue(enabledSchedule.isActive());
         verify(scheduleRepository, times(1)).findById(scheduleId);
@@ -153,17 +127,11 @@ public class ScheduleServiceTest {
 
     @Test
     public void enableSchedule_InvalidScheduleId_ShouldReturnNull() {
-        // Arrange
         long scheduleId = 1;
         when(scheduleRepository.findById(scheduleId)).thenReturn(Optional.empty());
-
-        // Act
         Schedule enabledSchedule = scheduleService.enable(scheduleId);
-
-        // Assert
         assertNull(enabledSchedule);
         verify(scheduleRepository, times(1)).findById(scheduleId);
         verify(scheduleRepository, never()).save(any());
     }
-
 }

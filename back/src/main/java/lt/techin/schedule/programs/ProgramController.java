@@ -1,5 +1,6 @@
 package lt.techin.schedule.programs;
 
+import lt.techin.schedule.programs.subjectsHours.SubjectHours;
 import lt.techin.schedule.programs.subjectsHours.SubjectHoursService;
 import lt.techin.schedule.subject.SubjectRepository;
 import lt.techin.schedule.subject.SubjectService;
@@ -9,6 +10,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -87,6 +89,16 @@ public class ProgramController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(Map.of("message", "Prašome pridėti dalyką"));
         }
+
+        List<SubjectHours> subjectsCheck = new ArrayList<>();
+        for (SubjectHours subjectHours : programDto.getSubjectHoursList()) {
+            if (subjectsCheck.stream().anyMatch(s-> s.getSubject().equals(subjectHours.getSubject()))) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body(Map.of("message", "Dalykas jau yra pridėtas prie šios programos."));
+            }
+            subjectsCheck.add(subjectHours);
+        }
+
         var createProgram = programService.createWithSubjectList(ProgramMapper.toProgram(programDto));
         if (createProgram == null) {
             logger.info("The program is already created");
@@ -105,6 +117,14 @@ public class ProgramController {
             logger.info("getSubjectHoursList is empty");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(Map.of("message", "Prašome pridėti dalyką"));
+        }
+        List<SubjectHours> subjectsCheck = new ArrayList<>();
+        for (SubjectHours subjectHours : subjectHoursDto.getSubjectHoursList()) {
+            if (subjectsCheck.stream().anyMatch(s-> s.getSubject().equals(subjectHours.getSubject()))) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body(Map.of("message", "Dalykas jau yra pridėtas prie šios programos."));
+            }
+            subjectsCheck.add(subjectHours);
         }
         var program = programService.finById(programId);
         if (program != null) {

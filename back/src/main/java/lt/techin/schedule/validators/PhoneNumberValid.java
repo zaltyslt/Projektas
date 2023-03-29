@@ -10,17 +10,16 @@ import java.lang.annotation.Target;
 import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
-@Target({ FIELD })
+@Target({FIELD})
 @Retention(RUNTIME)
 @Constraint(validatedBy = PhoneNumberValidator.class)
 @Documented
 public @interface PhoneNumberValid {
-
     String message() default "Numeris yra negalimas";
 
     int maximumLength() default 20;
 
-    Class<?>[] groups() default { };
+    Class<?>[] groups() default {};
 
-    Class<? extends Payload>[] payload() default { };
+    Class<? extends Payload>[] payload() default {};
 }

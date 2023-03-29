@@ -1,11 +1,11 @@
 package lt.techin.schedule.teachers;
 
+import lt.techin.schedule.exceptions.TeacherException;
 import lt.techin.schedule.shift.Shift;
 import lt.techin.schedule.shift.ShiftRepository;
 import lt.techin.schedule.subject.Subject;
 import lt.techin.schedule.subject.SubjectRepository;
 import lt.techin.schedule.teachers.contacts.*;
-import lt.techin.schedule.exceptions.TeacherException;
 import lt.techin.schedule.teachers.helpers.TeacherSubjectMapper;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpHeaders;
@@ -35,12 +35,8 @@ public class TeacherServiceDo {
 
     public ResponseEntity<TeacherDto> createTeacher(TeacherDto teacherDto) {
         Teacher newTeacher = TeacherMapper.teacherFromDto(teacherDto);
-
         newTeacher.setId(null);
-
         if (isNotDuplicate(newTeacher)) {
-
-
             newTeacher.setContacts(null);
             newTeacher.setShift(null);
             newTeacher.setSubjects(null);
@@ -49,33 +45,27 @@ public class TeacherServiceDo {
         } else {
             throw new RuntimeException("Teacher creation process failed.");
         }
-
         ContactDto2 contactsDto = teacherDto.getContacts();
         contactsDto.setTeacherId(newTeacher.getId());
         List<Contact> contactsToSave = ContactMapper.contactFromDto2(contactsDto);
         newTeacher.setContacts(contactsToSave);
-
         if (teacherDto.getSubjectsList() != null && !teacherDto.getSubjectsList().isEmpty()) {
             Set<Subject> subjectsFromDto = TeacherSubjectMapper.subjectsFromDtos(teacherDto.getSubjectsList());
-
             Set<Subject> foundSubjects = subjectsFromDto.stream()
                     .filter(s -> subjectRepository.existsById(s.getId()))
                     .collect(Collectors.toSet());
-
             if (!foundSubjects.isEmpty()) {
                 newTeacher.setSubjects(foundSubjects);
             }
         } else {
             newTeacher.setSubjects(new HashSet<>());
         }
-
         if (teacherDto.getSelectedShift() != null) {
             Optional<Shift> shift = shiftRepository.findById(teacherDto.getSelectedShift().getId());
             if (shift.isPresent()) {
                 newTeacher.setShift(shift.get());
             }
         }
-
         try {
             newTeacher = teacherRepository.save(newTeacher);
         } catch (Exception e) {
@@ -83,7 +73,6 @@ public class TeacherServiceDo {
         }
         return ResponseEntity.ok(TeacherMapper.teacherToDto(newTeacher));
     }
-
 
 
     public ResponseEntity<TeacherDto> updateTeacher(Long teacherId, TeacherDto teacherDto) {

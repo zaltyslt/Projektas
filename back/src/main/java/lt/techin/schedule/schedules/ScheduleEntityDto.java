@@ -1,7 +1,6 @@
 package lt.techin.schedule.schedules;
 
 public class ScheduleEntityDto {
-
     private Long id;
 
     public ScheduleEntityDto() {

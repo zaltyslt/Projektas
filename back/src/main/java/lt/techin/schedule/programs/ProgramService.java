@@ -41,6 +41,9 @@ public class ProgramService {
         if (findByProgramName(program.getProgramName())) {
             return null;
         } else {
+
+//            if (program.getSubjectHoursList())
+
             try {
                 var hourlist = subjectHoursService.create(
                         program.getSubjectHoursList()

@@ -6,7 +6,6 @@ import jakarta.validation.ConstraintValidatorContext;
 import java.util.regex.Pattern;
 
 public class SchoolYearValidator extends ValidatorBase implements ConstraintValidator<SchoolYearValid, CharSequence> {
-
     private int textMaximumLength;
     private final static String validSymbols = "0-9-/";
 
@@ -23,10 +22,12 @@ public class SchoolYearValidator extends ValidatorBase implements ConstraintVali
 
     @Override
     protected void buildPattern() {
-        super.validSymbolsPattern = Pattern.compile("^[" + validSymbols + "]{1," + textMaximumLength + "}$");
+        super.validSymbolsPattern =
+                Pattern.compile("^[" + validSymbols + "]{1," + textMaximumLength + "}$");
     }
 
-    public static boolean isSchoolYearValid (CharSequence textToCheck, int textMaximumLength) {
-        return ValidatorBase.isCharSequenceValid(textToCheck, Pattern.compile("^[" + validSymbols + "]{1," + textMaximumLength + "}$"));
+    public static boolean isSchoolYearValid(CharSequence textToCheck, int textMaximumLength) {
+        return ValidatorBase.isCharSequenceValid(textToCheck,
+                Pattern.compile("^[" + validSymbols + "]{1," + textMaximumLength + "}$"));
     }
 }

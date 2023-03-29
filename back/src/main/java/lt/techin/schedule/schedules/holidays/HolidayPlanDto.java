@@ -54,6 +54,7 @@ public class HolidayPlanDto {
     public LocalDate getDateUntil() {
         return dateUntil;
     }
+
     public void setDateUntil(LocalDate dateUntil) {
         this.dateUntil = dateUntil;
     }

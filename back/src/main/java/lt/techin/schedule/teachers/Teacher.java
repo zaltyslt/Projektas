@@ -26,11 +26,9 @@ public class Teacher implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "teacher_id", nullable = false) //nurodau stulpo name, kad galeciau panaudoti kaip ID kontaktui
     private Long id;
-
     @JsonIgnore
     @OneToMany(mappedBy = "teacher", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Contact> contacts;
-
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @JoinTable(
             name = "teacher_subject",
@@ -38,19 +36,16 @@ public class Teacher implements Serializable {
             inverseJoinColumns = @JoinColumn(name = "subject_id", referencedColumnName = "id"))
     @JsonManagedReference
     private Set<Subject> subjects;
-
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "shift_id")
     @JsonManagedReference
-    private  Shift shift;
-
+    private Shift shift;
     @NotBlank
     @Size(min = 1, max = 30)
     private String fName = "";
     @NotBlank
     private String lName = "";
-
     private Boolean isActive;
     @CreatedDate
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
@@ -60,7 +55,6 @@ public class Teacher implements Serializable {
     private LocalDateTime modifiedDateAndTime;
     private Integer workHoursPerWeek;
     private Integer hashCode;
-
 
     @PrePersist
     public void prePersist() {
@@ -75,12 +69,8 @@ public class Teacher implements Serializable {
         hashCode = hashCode();
     }
 
-    //*************************
-
-
     public Teacher() {
     }
-
 
     public Teacher(Long id, String fName, String lName, Boolean isActive) {
         this.id = id;
@@ -89,19 +79,20 @@ public class Teacher implements Serializable {
         this.isActive = isActive;
     }
 
-    public Teacher(Long id, List<Contact> contacts, Set<Subject> subjects, Shift shift, String fName, String lName, Boolean isActive, LocalDateTime createdDateTime, LocalDateTime modifiedDateAndTime, Integer workHoursPerWeek) {
+    public Teacher(Long id, List<Contact> contacts,
+                   Set<Subject> subjects, Shift shift, String fName,
+                   String lName, Boolean isActive, LocalDateTime createdDateTime,
+                   LocalDateTime modifiedDateAndTime, Integer workHoursPerWeek) {
         this.id = id;
         this.contacts = contacts;
         this.subjects = subjects;
         this.shift = shift;
         this.fName = fName;
         this.lName = lName;
-
         this.isActive = isActive;
         this.createdDateTime = createdDateTime;
         this.modifiedDateAndTime = modifiedDateAndTime;
         this.workHoursPerWeek = workHoursPerWeek;
-
     }
 
     public Integer getHashCode() {
@@ -197,9 +188,14 @@ public class Teacher implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Teacher teacher = (Teacher) o;
-        return id.equals(teacher.id) && Objects.equals(contacts, teacher.contacts) && Objects.equals(subjects, teacher.subjects) &&
-                Objects.equals(shift, teacher.shift) && Objects.equals(fName, teacher.fName) && Objects.equals(lName, teacher.lName)
-              && Objects.equals(isActive, teacher.isActive) && Objects.equals(workHoursPerWeek, teacher.workHoursPerWeek);
+        return id.equals(teacher.id)
+                && Objects.equals(contacts, teacher.contacts)
+                && Objects.equals(subjects, teacher.subjects)
+                && Objects.equals(shift, teacher.shift)
+                && Objects.equals(fName, teacher.fName)
+                && Objects.equals(lName, teacher.lName)
+                && Objects.equals(isActive, teacher.isActive)
+                && Objects.equals(workHoursPerWeek, teacher.workHoursPerWeek);
     }
 
     @Override

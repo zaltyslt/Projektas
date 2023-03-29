@@ -76,7 +76,12 @@ public class HolidayDto {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof HolidayDto that)) return false;
-        return Objects.equals(id, that.id) && Objects.equals(name, that.name) && Objects.equals(holidayDate, that.holidayDate) && Objects.equals(createdDate, that.createdDate) && Objects.equals(modifiedDate, that.modifiedDate) && Objects.equals(schedule, that.schedule);
+        return Objects.equals(id, that.id)
+                && Objects.equals(name, that.name)
+                && Objects.equals(holidayDate, that.holidayDate)
+                && Objects.equals(createdDate, that.createdDate)
+                && Objects.equals(modifiedDate, that.modifiedDate)
+                && Objects.equals(schedule, that.schedule);
     }
 
     @Override

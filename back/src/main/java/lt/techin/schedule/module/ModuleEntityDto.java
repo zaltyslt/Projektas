@@ -3,7 +3,6 @@ package lt.techin.schedule.module;
 import java.util.Objects;
 
 public class ModuleEntityDto extends ModuleDto {
-
     private Long id;
 
     public ModuleEntityDto() {

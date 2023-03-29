@@ -600,7 +600,11 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
                     <TableCell align="left">Dėstomi dalykai</TableCell>
                     {/* <TableCell align="center">Moduliai </TableCell> */}
                     <TableCell align="right">
-                      <Button id="add-subject-create-teacher" variant="contained" onClick={handleShowSubjects}>
+                      <Button
+                        id="add-subject-create-teacher"
+                        variant="contained"
+                        onClick={handleShowSubjects}
+                      >
                         Pridėti
                       </Button>
                     </TableCell>
@@ -638,19 +642,31 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
               </Alert>
             )}
           </Grid>
-          
+
           <Grid item sm={12}>
             <Stack direction="row" spacing={2}>
-              <Button id="save-button-teacher" variant="contained" onClick={preCreateCheck}>
+              <Button
+                id="save-button-teacher"
+                variant="contained"
+                onClick={preCreateCheck}
+              >
                 {mode === "update" ? "Išsaugoti" : "Išsaugoti"}
               </Button>
               {mode === "update" && (
-                <Button id="delete-button-edit-teacher" variant="contained" onClick={deleteTeacher}>
+                <Button
+                  id="delete-button-edit-teacher"
+                  variant="contained"
+                  onClick={deleteTeacher}
+                >
                   Ištrinti
                 </Button>
               )}
 
-              <Button id="back-button-teacher" variant="contained" onClick={() => navigate("/teachers")}>
+              <Button
+                id="back-button-teacher"
+                variant="contained"
+                onClick={() => navigate("/teachers")}
+              >
                 Grįžti
               </Button>
             </Stack>

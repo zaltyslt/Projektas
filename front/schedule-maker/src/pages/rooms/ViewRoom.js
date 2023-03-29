@@ -2,13 +2,8 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
-import {
-  Button,
-  Grid,
-  Stack,
-} from "@mui/material";
+import { Button, Grid, Stack } from "@mui/material";
 import { Container } from "@mui/system";
-
 
 export function ViewRoom() {
   const [classroom, setClassroom] = useState({});
@@ -21,7 +16,6 @@ export function ViewRoom() {
       .then(setClassroom);
   }, [params.id]);
 
-
   return (
     <div>
       <Container>
@@ -33,7 +27,9 @@ export function ViewRoom() {
                 <span id="created-date">Sukurta: {classroom.createdDate}</span>
                 </div> */}
               <div>
-                <span id="modified-date">Paskutinį kartą redaguota: {classroom.modifiedDate}</span>
+                <span id="modified-date">
+                  Paskutinį kartą redaguota: {classroom.modifiedDate}
+                </span>
               </div>
             </header>
           </Grid>
@@ -51,9 +47,15 @@ export function ViewRoom() {
           <Grid item sm={12}>
             <Stack direction="row" spacing={2}>
               <Link to={`/update-classroom/${classroom.id}`}>
-                <Button variant="contained">Redaguoti</Button>
+                <Button id="edit-button-view-room" variant="contained">
+                  Redaguoti
+                </Button>
               </Link>
-              <Button variant="contained" onClick={() => navigate(-1)}>
+              <Button
+                id="back-button-view-room"
+                variant="contained"
+                onClick={() => navigate(-1)}
+              >
                 Grįžti
               </Button>
             </Stack>

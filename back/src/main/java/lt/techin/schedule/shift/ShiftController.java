@@ -7,14 +7,13 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.*;
+import java.util.List;
+import java.util.Objects;
 
 
 @RestController
 @RequestMapping("/api/v1/shift")
-//@CrossOrigin("http://localhost:3000/")
 public class ShiftController {
-
     private final ShiftService shiftService;
 
     public ShiftController(ShiftService shiftService) {
@@ -38,7 +37,7 @@ public class ShiftController {
     }
 
     @PostMapping(value = "/add-shift", consumes = {MediaType.APPLICATION_JSON_VALUE})
-    public @ResponseBody ValidationDto addShift (@RequestBody @Valid ShiftDto shiftToAddDto, BindingResult bindingResult) {
+    public @ResponseBody ValidationDto addShift(@RequestBody @Valid ShiftDto shiftToAddDto, BindingResult bindingResult) {
         ValidationDto validationDto = new ValidationDto();
         if (bindingResult.hasErrors()) {
             List<ObjectError> errors = bindingResult.getAllErrors();
@@ -49,11 +48,10 @@ public class ShiftController {
             }
             validationDto.setPassedValidation(false);
             validationDto.setValid(false);
-        }
-        else {
+        } else {
             String addResponse = shiftService.addUniqueShift(shiftToAddDto);
             validationDto.setPassedValidation(true);
-            if(addResponse.isEmpty()) {
+            if (addResponse.isEmpty()) {
                 validationDto.setValid(true);
             } else {
                 validationDto.setValid(false);
@@ -65,6 +63,7 @@ public class ShiftController {
 
     @PatchMapping("/activate-shift/{shiftID}")
     public void activateShift(@PathVariable Long shiftID) {
+
         shiftService.changeActiveShiftStatusByID(shiftID, true);
     }
 
@@ -74,14 +73,17 @@ public class ShiftController {
     }
 
     @PutMapping(value = "/modify-shift/{shiftID}", consumes = {MediaType.APPLICATION_JSON_VALUE})
-    public @ResponseBody ValidationDto modifyShift(@PathVariable Long shiftID, @RequestBody @Valid ShiftDto shiftToChangeDto, BindingResult bindingResult) {
+    public @ResponseBody ValidationDto modifyShift(@PathVariable Long shiftID,
+                                                   @RequestBody @Valid ShiftDto shiftToChangeDto,
+                                                   BindingResult bindingResult) {
         ShiftDto shiftDto = shiftToChangeDto;
         ValidationDto validationDto = new ValidationDto();
         if (bindingResult.hasErrors()) {
             List<ObjectError> errors = bindingResult.getAllErrors();
             for (int x = 0; x < bindingResult.getAllErrors().size(); x++) {
                 validationDto.addValidationError(
-                        "\"" + Objects.requireNonNull(bindingResult.getFieldError()).getField() + "\"",
+                        "\"" + Objects.requireNonNull(bindingResult.
+                                getFieldError()).getField() + "\"",
                         errors.get(x).getDefaultMessage());
             }
             validationDto.setPassedValidation(false);

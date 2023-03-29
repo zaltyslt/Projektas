@@ -3,11 +3,8 @@ package lt.techin.schedule.teachers;
 import java.util.Objects;
 
 public class TeacherEntityDto {
-
     private Long id;
-
     private String fName;
-
     private String lName;
 
     public TeacherEntityDto() {
@@ -48,7 +45,9 @@ public class TeacherEntityDto {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         TeacherEntityDto that = (TeacherEntityDto) o;
-        return Objects.equals(id, that.id) && Objects.equals(fName, that.fName) && Objects.equals(lName, that.lName);
+        return Objects.equals(id, that.id)
+                && Objects.equals(fName, that.fName)
+                && Objects.equals(lName, that.lName);
     }
 
     @Override

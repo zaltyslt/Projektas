@@ -56,7 +56,6 @@ public class ClassroomService {
     }
 
     public Classroom disable(Long id) {
-
         var existingClassroom = classroomRepository.findById(id).orElse(null);
         if (existingClassroom != null) {
             existingClassroom.setActive(false);

@@ -3,15 +3,10 @@ package lt.techin.schedule.schedules;
 import java.time.LocalDate;
 import java.util.Objects;
 
-//SIcia
 public class ScheduleCreateDto {
-
     private String schoolYear;
-
     private String semester;
-
     private LocalDate dateFrom;
-
     private LocalDate dateUntil;
 
     public ScheduleCreateDto() {

@@ -10,8 +10,7 @@ public class WorkDayDtoComparator implements Comparator<WorkDay> {
         if (date == 0) {
             if (o1.getLessonStartIntEnum() == (o2.getLessonStartIntEnum())) {
                 return o1.getLessonStartIntEnum() - o2.getLessonStartIntEnum();
-            }
-            else{
+            } else {
                 return o1.getLessonEndIntEnum() - o2.getLessonEndIntEnum();
             }
         }

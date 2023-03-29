@@ -6,9 +6,9 @@ import jakarta.validation.ConstraintValidatorContext;
 import java.util.regex.Pattern;
 
 public class TextValidator extends ValidatorBase implements ConstraintValidator<TextValid, CharSequence> {
-
     private int textMaximumLength;
     private final static String validSymbols = "A-Za-z0-9-,.:;)(/?'\"\\s\\]\\[ĄČĘĖĮŠŲŪŽąčęėįšųūž";
+
     @Override
     public void initialize(TextValid constraintAnnotation) {
         textMaximumLength = constraintAnnotation.textMaximumLength();
@@ -33,7 +33,8 @@ public class TextValidator extends ValidatorBase implements ConstraintValidator<
     }
 
     //Static to avoid creating unnecessary objects
-    public static boolean isTextValid (CharSequence textToCheck, int textMaximumLength) {
-        return ValidatorBase.isCharSequenceValid(textToCheck, Pattern.compile("^[" + validSymbols + "]{1," + textMaximumLength + "}$"));
+    public static boolean isTextValid(CharSequence textToCheck, int textMaximumLength) {
+        return ValidatorBase.isCharSequenceValid(textToCheck,
+                Pattern.compile("^[" + validSymbols + "]{1," + textMaximumLength + "}$"));
     }
 }
