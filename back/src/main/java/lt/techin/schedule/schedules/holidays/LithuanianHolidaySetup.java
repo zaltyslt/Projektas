@@ -34,7 +34,8 @@ public class LithuanianHolidaySetup {
     If it's 0, dates are even
     */
     public static boolean isItNotAnLithuanianHolidayDate (LocalDate dateToCheck) {
-        return LithuanianHolidays.LITHUANIAN_HOLIDAYS.stream().anyMatch(lithuanianHoliday -> 0 == new LocalDateComparator().compare(lithuanianHoliday.getDate(), dateToCheck));
+        return LithuanianHolidays.LITHUANIAN_HOLIDAYS.stream().anyMatch(lithuanianHoliday -> 0 ==
+                new LocalDateComparator().compare(lithuanianHoliday.getDate(), dateToCheck));
     }
 
     /*

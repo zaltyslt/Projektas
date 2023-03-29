@@ -64,7 +64,8 @@ public class SetupHolidaysSetForSchedule {
     public static boolean lookForHolidayDoubles (LocalDate dateToCheck, Set<Holiday> setToCheck) {
         return setToCheck.stream().anyMatch(holidayFromSet -> {
             if (holidayFromSet.getDate().isEqual(dateToCheck)) {
-                return LithuanianHolidays.LITHUANIAN_HOLIDAYS.stream().noneMatch(lithuanianHoliday -> 0 == new LocalDateComparator().compare(lithuanianHoliday.getDate(), dateToCheck));
+                return LithuanianHolidays.LITHUANIAN_HOLIDAYS.stream().noneMatch(lithuanianHoliday -> 0 ==
+                        new LocalDateComparator().compare(lithuanianHoliday.getDate(), dateToCheck));
             } else {
                 return false;
             }

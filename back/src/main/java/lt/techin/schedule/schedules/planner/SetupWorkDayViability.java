@@ -12,7 +12,8 @@ import java.util.List;
 import java.util.Set;
 
 public class SetupWorkDayViability {
-    public static WorkDay setupWorkDay (Long scheduleID, WorkDay workDay, ScheduleRepository scheduleRepository, WorkDayRepository workDayRepository, Schedule primarySchedule) {
+    public static WorkDay setupWorkDay (Long scheduleID, WorkDay workDay, ScheduleRepository scheduleRepository,
+                                        WorkDayRepository workDayRepository, Schedule primarySchedule) {
         //Assigned so workDay.getDate() method wouldn't be called unnecessarily
         LocalDate workDayDate = workDay.getDate();
 

@@ -22,7 +22,8 @@ public class WorkDayConflictSolver {
 
             //Finds a workday by a conflicting schedule id - each schedule workdays has unique LocalDate
             if (foundSchedule.isPresent()) {
-                Optional<WorkDay> foundWorkDay = foundSchedule.get().getWorkingDays().stream().filter(workDay -> workDay.getDate().equals(workdayBeingChanged.getDate())).findAny();
+                Optional<WorkDay> foundWorkDay = foundSchedule.get().getWorkingDays().stream().filter(workDay ->
+                        workDay.getDate().equals(workdayBeingChanged.getDate())).findAny();
                 if (foundWorkDay.isPresent()) {
                     //Removing existing conflicts which were present with old teacher name, and are redundant with a new one
                     if (!foundWorkDay.get().getScheduleIdWithTeacherNameConflict().isEmpty()) {
@@ -59,7 +60,8 @@ public class WorkDayConflictSolver {
 
             //Finds a workday by a conflicting schedule id - each schedule workdays has unique LocalDate
             if (foundSchedule.isPresent()) {
-                Optional<WorkDay> foundWorkDay = foundSchedule.get().getWorkingDays().stream().filter(workDay -> workDay.getDate().equals(workdayBeingChanged.getDate())).findAny();
+                Optional<WorkDay> foundWorkDay = foundSchedule.get().getWorkingDays().stream().filter(workDay ->
+                        workDay.getDate().equals(workdayBeingChanged.getDate())).findAny();
                 if (foundWorkDay.isPresent()) {
                     //Removing existing conflicts which were present with old teacher name, and are redundant with a new one
                     if (!foundWorkDay.get().getScheduleIdWithClassroomNameConflict().isEmpty()) {

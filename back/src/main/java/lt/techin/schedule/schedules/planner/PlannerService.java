@@ -101,21 +101,25 @@ public class PlannerService {
 
 
     public String addSubjectPlanToSchedule(Long scheduleId, Long subjectId, PlannerDto plannerDto) {
-        Schedule existingSchedule = scheduleRepository.findById(scheduleId).orElseThrow(()-> new ValidationException("Tvarkaraštis neegzistuoja", "Schedule", "Does not exist", scheduleId.toString()));
-        Subject existingSubject = subjectRepository.findById(subjectId).orElseThrow(()-> new ValidationException("Pasirinktas dalykas neegzistuoja", "Subject", "Does no exist", subjectId.toString()));
+        Schedule existingSchedule = scheduleRepository.findById(scheduleId).orElseThrow(()->
+                new ValidationException("Tvarkaraštis neegzistuoja", "Schedule", "Does not exist", scheduleId.toString()));
+        Subject existingSubject = subjectRepository.findById(subjectId).orElseThrow(()->
+                new ValidationException("Pasirinktas dalykas neegzistuoja", "Subject", "Does no exist", subjectId.toString()));
         Teacher existingTeacher;
         Classroom existingClassroom;
 
         if (plannerDto.getTeacher() == null) {
             existingTeacher = null;
         } else {
-           existingTeacher = teacherRepository.findById(plannerDto.getTeacher().getId()).orElseThrow(() -> new ValidationException("Pasirinktas mokytojas neegzistuoja", "Teacher", "Does not exist", plannerDto.getTeacher().getId().toString()));
+           existingTeacher = teacherRepository.findById(plannerDto.getTeacher().getId()).orElseThrow(() ->
+                   new ValidationException("Pasirinktas mokytojas neegzistuoja", "Teacher", "Does not exist", plannerDto.getTeacher().getId().toString()));
         }
 
         if(plannerDto.getClassroom() == null) {
             existingClassroom = null;
         } else {
-            existingClassroom = classroomRepository.findById(plannerDto.getClassroom().getId()).orElseThrow(()-> new ValidationException("Pasirinkta klasė neegzistuoja", "Classroom", "Does not exist", plannerDto.getClassroom().getId().toString()));
+            existingClassroom = classroomRepository.findById(plannerDto.getClassroom().getId()).orElseThrow(()->
+                    new ValidationException("Pasirinkta klasė neegzistuoja", "Classroom", "Does not exist", plannerDto.getClassroom().getId().toString()));
         }
 
         Program program = existingSchedule.getGroups().getProgram();
@@ -234,7 +238,8 @@ public class PlannerService {
     }
 
     public List<Holiday> getHolidays(Long scheduleId) {
-        Schedule foundSchedule = scheduleRepository.findById(scheduleId).orElseThrow(() -> new ValidationException("Tvarkaraštis nerastas", "Schedule", "Does not exist", scheduleId.toString()));
+        Schedule foundSchedule = scheduleRepository.findById(scheduleId).orElseThrow(() ->
+                new ValidationException("Tvarkaraštis nerastas", "Schedule", "Does not exist", scheduleId.toString()));
         return new ArrayList<>(foundSchedule.getHolidays());
     }
     public Optional<WorkDay> getWorkDay(Long workDayId) {
@@ -242,7 +247,8 @@ public class PlannerService {
     }
 
     public WorkDay updateWorkDay(Long workDayId, WorkDayDto workDayDto) {
-        WorkDay existingWorkDay = workDayRepository.findById(workDayId).orElseThrow(() -> new ValidationException("Nurodyta darbo diena neegzistuoja", "WorkDay", "Does not exist", workDayId.toString()));
+        WorkDay existingWorkDay = workDayRepository.findById(workDayId).orElseThrow(() ->
+                new ValidationException("Nurodyta darbo diena neegzistuoja", "WorkDay", "Does not exist", workDayId.toString()));
 
         Teacher teacherToChangeTo = toTeacherFromEntityDto(workDayDto.getTeacher());
         //Teacher is changed, need to update conflicts if any are found
@@ -267,8 +273,10 @@ public class PlannerService {
 
     @Transactional
     public boolean deleteWorkDay(Long workDayId, WorkDayDto workDayDto) {
-        WorkDay existingWorkDay = workDayRepository.findById(workDayId).orElseThrow(() -> new ValidationException("Nurodyta darbo diena neegzistuoja", "WorkDay", "Does not exist", workDayId.toString()));
-        Schedule schedule = scheduleRepository.findById(existingWorkDay.getSchedule().getId()).orElseThrow(() -> new ValidationException("Nurodytas tvarkaraštis neegzistuoja", "Schedule", "Does not exist", existingWorkDay.getSchedule().getId().toString()));
+        WorkDay existingWorkDay = workDayRepository.findById(workDayId).orElseThrow(() ->
+                new ValidationException("Nurodyta darbo diena neegzistuoja", "WorkDay", "Does not exist", workDayId.toString()));
+        Schedule schedule = scheduleRepository.findById(existingWorkDay.getSchedule().getId()).orElseThrow(() ->
+                new ValidationException("Nurodytas tvarkaraštis neegzistuoja", "Schedule", "Does not exist", existingWorkDay.getSchedule().getId().toString()));
         Integer unassignedHours = schedule.getUnassignedTimeWithSubjectId(existingWorkDay.getSubject().getId());
         var start = workDayDto.getStartIntEnum();
         var end = workDayDto.getEndIntEnum();
@@ -282,7 +290,8 @@ public class PlannerService {
 
     @Transactional
     public boolean deleteLessonsBySubjectId(Long scheduleId, Long subjectId, int hours) {
-        Schedule existingSchedule = scheduleRepository.findById(scheduleId).orElseThrow(() -> new ValidationException("Nurodytas tvarkaraštis neegzistuoja", "Schedule", "Does not exist", scheduleId.toString()));
+        Schedule existingSchedule = scheduleRepository.findById(scheduleId).orElseThrow(() ->
+                new ValidationException("Nurodytas tvarkaraštis neegzistuoja", "Schedule", "Does not exist", scheduleId.toString()));
         long deleted = workDayRepository.deleteBySubjectId(subjectId);
 
         if(deleted > 0 ){
