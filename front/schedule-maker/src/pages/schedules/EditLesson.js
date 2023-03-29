@@ -44,7 +44,6 @@ export function EditLesson() {
     fetch(`api/v1/schedules/lesson/${params.id}`)
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
         setWorkDay(data);
         setSubject(data.subject);
         setScheduleId(data.schedule.id);
