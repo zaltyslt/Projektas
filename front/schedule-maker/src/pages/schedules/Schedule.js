@@ -361,7 +361,6 @@ export function Schedule() {
                   ) : (
                     <p>Konfliktų nėra.</p>
                   )}
-
                 </DialogContentText>
               </DialogContent>
               <DialogActions>
