@@ -37,14 +37,12 @@ public class TeacherControllerView {
         return result.getId() != null
                 ? ResponseEntity.ok(result)
                 : ResponseEntity.notFound().build();
-
     }
 
     @GetMapping(value = "/subjects") //get
     public ResponseEntity<Set<TeacherSubjectsDto>> getActiveTeacherSubjectsDto() {
         var result = teacherFinder.getMiniSubjects();
         return ResponseEntity.ok(result);
-
     }
 
     @GetMapping(value = "/subject")
