@@ -37,7 +37,7 @@ public class SetupHolidaysSetForSchedule {
             return false;
         }
         //Checks if it's a Lithuanian holiday
-        if (!LithuanianHolidaySetup.isItNotAnLithuanianHolidayDate(dateToCheck)) {
+        if (LithuanianHolidaySetup.isItNotAnLithuanianHolidayDate(dateToCheck)) {
             return false;
         }
         //Checks if there are any assigned WorkDays in a holiday plan date range

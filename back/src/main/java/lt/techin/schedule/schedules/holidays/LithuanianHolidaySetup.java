@@ -34,14 +34,14 @@ public class LithuanianHolidaySetup {
     If it's 0, dates are even
     */
     public static boolean isItNotAnLithuanianHolidayDate (LocalDate dateToCheck) {
-        return LithuanianHolidays.LITHUANIAN_HOLIDAYS.stream().noneMatch(lithuanianHoliday -> 0 == new LocalDateComparator().compare(lithuanianHoliday.getDate(), dateToCheck));
+        return LithuanianHolidays.LITHUANIAN_HOLIDAYS.stream().anyMatch(lithuanianHoliday -> 0 == new LocalDateComparator().compare(lithuanianHoliday.getDate(), dateToCheck));
     }
 
     /*
     These methods are here to avoid the comparison of the year.
     Year defined in config directory might be faulty.
     */
-    private static boolean IsAfterOrEqual (LocalDate localDate, LocalDate isAfterDate) {
+    private static boolean isAfterOrEqual(LocalDate localDate, LocalDate isAfterDate) {
         if (localDate.getMonthValue() < isAfterDate.getMonthValue()) {
             return true;
         }
@@ -51,7 +51,7 @@ public class LithuanianHolidaySetup {
         return localDate.getDayOfMonth() <= localDate.getDayOfMonth();
    }
 
-    private static boolean IsBeforeOrEqual (LocalDate localDate, LocalDate isBeforeDate) {
+    private static boolean isBeforeOrEqual(LocalDate localDate, LocalDate isBeforeDate) {
        if (localDate.getMonthValue() > isBeforeDate.getMonthValue()) {
            return true;
        }

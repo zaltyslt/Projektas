@@ -68,7 +68,7 @@ public class SetupWorkDayViability {
             return false;
         }
         //Checks whether it's a Lithuanian holiday date
-        if (!LithuanianHolidaySetup.isItNotAnLithuanianHolidayDate(localDate)) {
+        if (LithuanianHolidaySetup.isItNotAnLithuanianHolidayDate(localDate)) {
             return false;
         }
         //Checks whether localDate passed is a holiday, returns false if it is
@@ -83,7 +83,7 @@ public class SetupWorkDayViability {
     }
 
 
-    private static boolean checkIfWorkdaysIntertwine (WorkDay currentWorkDay, LocalDate currentDate, WorkDay loopingWorkDay) {
+    public static boolean checkIfWorkdaysIntertwine (WorkDay currentWorkDay, LocalDate currentDate, WorkDay loopingWorkDay) {
         //Checks whether WorkDays are on the same date
         if (currentDate.isEqual(loopingWorkDay.getDate())) {
             //Returns true if a lesson happens at the same time
