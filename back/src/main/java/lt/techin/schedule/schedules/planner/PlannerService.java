@@ -251,21 +251,27 @@ public class PlannerService {
                 new ValidationException("Nurodyta darbo diena neegzistuoja", "WorkDay", "Does not exist", workDayId.toString()));
 
         Teacher teacherToChangeTo = toTeacherFromEntityDto(workDayDto.getTeacher());
-        existingWorkDay.setTeacher(teacherToChangeTo);
-        
+
         //Teacher is changed, need to update conflicts if any are found
         if (teacherToChangeTo != null && !teacherToChangeTo.equals(existingWorkDay.getTeacher())) {
             //Sets teacher before conflicts logic
+            existingWorkDay.setTeacher(teacherToChangeTo);
             WorkDayConflictSolver.solveTeacherConflicts(existingWorkDay, scheduleRepository, workDayRepository);
+        }
+        else if (teacherToChangeTo == null) {
+            existingWorkDay.setTeacher(null);
         }
 
         Classroom classroomToChangeTo = toClassroomFromSmallDto(workDayDto.getClassroom());
-        existingWorkDay.setClassroom(classroomToChangeTo);
 
         //Classroom is changed, need to update conflicts if any are found
         if (classroomToChangeTo != null && !classroomToChangeTo.equals(existingWorkDay.getClassroom())) {
             //Sets classroom before conflicts logic
+            existingWorkDay.setClassroom(classroomToChangeTo);
             WorkDayConflictSolver.solveClassroomConflicts(existingWorkDay, scheduleRepository, workDayRepository);
+        }
+        else if (classroomToChangeTo == null) {
+            existingWorkDay.setClassroom(null);
         }
 
         existingWorkDay.setOnline(workDayDto.getOnline());

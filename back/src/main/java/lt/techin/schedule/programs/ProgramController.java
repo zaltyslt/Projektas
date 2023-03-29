@@ -135,8 +135,8 @@ public class ProgramController {
                         .body(Map.of("message", "Tokia programa jau sukurta."));
             }
             var hourlist = subjectHoursService.updateAll(subjectHoursDto.getSubjectHoursList());
-            program.setSubjectHoursList(hourlist);
-            programService.update(program.getId(), program);
+            subjectHoursDto.setSubjectHoursList(hourlist);
+            programService.update(program.getId(), ProgramMapper.toProgram(subjectHoursDto));
             logger.info("The program was updated, successfully");
             return ResponseEntity.status(HttpStatus.CREATED)
                     .body(Map.of("message", (ProgramMapper.toProgramDto(program)).toString()));

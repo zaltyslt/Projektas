@@ -17,13 +17,11 @@ public class TeacherMapper {
         dto.setId(teacher.getId());
         dto.setfName(teacher.getfName() != null ? teacher.getfName() : "");
         dto.setlName(teacher.getlName() != null ? teacher.getlName() : "");
-
         dto.setSubjectsList(teacher.getSubjects() != null
                 ? TeacherSubjectMapper.subjectsToDtos(teacher.getSubjects())
                 : new HashSet<TeacherSubjectsDto>());
         dto.setWorkHoursPerWeek(teacher.getWorkHoursPerWeek() != null ? teacher.getWorkHoursPerWeek().toString() : "0");
         dto.setSelectedShift(teacher.getShift() != null ? ShiftMapper.shiftToDto(teacher.getShift()) : new ShiftDto());
-
         dto.setActive(teacher.getActive() != null ? teacher.getActive() : true);
         dto.setContacts(teacher.getContacts() != null
                 ? ContactMapper.contactToDto2(teacher.getContacts()) : new ContactDto2());
@@ -66,7 +64,6 @@ public class TeacherMapper {
                 ? dtoList.stream().map(d -> teacherFromDto(d)).collect(Collectors.toSet())
                 : new HashSet<Teacher>();
     }
-
 
     public static TeacherEntityDto toTeacherEntityDto(Teacher teacher) {
         var teacherEntityDto = new TeacherEntityDto();
