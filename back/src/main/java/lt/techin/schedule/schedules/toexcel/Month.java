@@ -9,7 +9,6 @@ import java.util.List;
 
 public class Month {
     private int index;
-    private LocalDate date;
     private String group;
     private List<WorkDay> workDays;
 
@@ -21,20 +20,24 @@ public class Month {
         this.index = index;
     }
 
-    public LocalDate getDate() {
-       if(!workDays.isEmpty()){
-         this.date = workDays.get(0).getDate();
-       }
+    public LocalDate getFirstDay() {
+        if (!workDays.isEmpty()) {
+            return workDays.get(0).getDate();
 
-        return date;
+        }
+        return null;
     }
 
-    public void setDate(LocalDate date) {
-        this.date = date;
+    public LocalDate getLastDay() {
+        if (!workDays.isEmpty()) {
+            return workDays.get(workDays.size() - 1).getDate();
+        }
+return null;
     }
+
 
     public String getGroup() {
-        if(!workDays.isEmpty()){
+        if (!workDays.isEmpty()) {
             this.group = workDays.stream()
                     .filter(obj -> obj.getSchedule() != null)
                     .findFirst()
@@ -64,7 +67,7 @@ public class Month {
     public String toString() {
         return "Month{" +
                 "index=" + index +
-                ", date=" + date +
+                ", date=" + getFirstDay() + " - " + getLastDay() +
                 ", group='" + group + '\'' +
                 ", workDays=" + workDays +
                 '}';

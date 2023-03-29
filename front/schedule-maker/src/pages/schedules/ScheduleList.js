@@ -125,9 +125,9 @@ export function ScheduleList() {
       .toLowerCase()
       .includes(filter.toLowerCase());
 
-    const shiftMaches = String(schedule.groups.shift.name)
-      .toLowerCase()
-      .includes(filter.toLowerCase());
+    // const shiftMaches = String(schedule.groups.shift.name)
+    //   .toLowerCase()
+    //   .includes(filter.toLowerCase());
 
     const schoolYearMatches = String(schedule.schoolYear)
       .toLowerCase()

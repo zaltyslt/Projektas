@@ -214,7 +214,10 @@ export function Schedule() {
             adaptivePlugin,
           ]}
           initialView="dayGridMonth"
-          contentHeight="700px"
+          fixedWeekCount={false}
+          showNonCurrentDates={true}
+          
+          contentHeight="850px"
           headerToolbar={{
             left: "prev,next today",
             center: "title",
@@ -248,8 +251,15 @@ export function Schedule() {
           >
             SPAUSDINTI EXCEL
           </Button>
+          <Button
+            variant="contained"
+            onClick={() => handleClickPrint(params.id, false)}
+          >
+            REDAGUOTI EXCEL
+          </Button>
+         
           <div>
-            <Button variant="outlined" onClick={handleClickOpen}>
+            <Button variant="contained" onClick={handleClickOpen}>
               Tikrinti konfliktus
             </Button>
             <Dialog
@@ -330,6 +340,11 @@ export function Schedule() {
               </DialogActions>
             </Dialog>
           </div>
+          <Link to="/">
+            <Button id="back-button-schedule" variant="contained">
+              Grįžti
+            </Button>
+            </Link>
         </Stack>
       </Grid>
     </div>

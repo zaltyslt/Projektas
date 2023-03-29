@@ -1,4 +1,4 @@
-create table CLASSROOM
+CREATE TABLE IF NOT EXISTS  CLASSROOM
 (
     ID             BIGINT  auto_increment not null
         primary key,

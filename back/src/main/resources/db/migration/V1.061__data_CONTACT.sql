@@ -1,4 +1,4 @@
-create table CONTACT
+CREATE TABLE IF NOT EXISTS CONTACT
 (
     CONTACT_ID   BIGINT auto_increment
         primary key,

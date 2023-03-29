@@ -1,5 +1,9 @@
 package lt.techin.schedule.schedules;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.Persistence;
 import lt.techin.schedule.config.LithuanianHolidays;
 import lt.techin.schedule.exceptions.ValidationException;
 import lt.techin.schedule.group.GroupRepository;
@@ -105,6 +109,20 @@ public class ScheduleService {
 
     public boolean deleteSchedule(Long id) {
         Optional<Schedule> scheduleToDelete = scheduleRepository.findById(id);
+// obtain EntityManager instance
+//        EntityManagerFactory emf = Persistence.createEntityManagerFactory("persistenceUnitName");
+//        EntityManager em = emf.createEntityManager();
+//        EntityTransaction transaction = em.getTransaction();
+//        transaction.begin();
+//        em.getTransaction().begin();
+//
+//        Query query = em.createNativeQuery("DELETE FROM customer WHERE id = :id");
+//        query.setParameter("id", 1L);
+//        int deletedCount = query.executeUpdate();
+//
+//        em.getTransaction().commit();
+//        scheduleRepository.deleteClassGroupById(4L);
+
         if (scheduleToDelete.isPresent()) {
             try {
                 scheduleRepository.delete(scheduleToDelete.get());
@@ -114,5 +132,6 @@ public class ScheduleService {
             }
         }
         throw new ValidationException("Toks tvarkaraštis neegzistuoja","id","not found",id.toString());
+
     }
 }
