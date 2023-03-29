@@ -3,7 +3,6 @@ package lt.techin.schedule.schedules;
 import lt.techin.schedule.exceptions.ValidationException;
 import lt.techin.schedule.group.GroupRepository;
 import lt.techin.schedule.schedules.holidays.Holiday;
-import lt.techin.schedule.schedules.holidays.HolidayPlan.HolidayPlanRepository;
 import lt.techin.schedule.schedules.holidays.HolidayRepository;
 import lt.techin.schedule.schedules.holidays.LithuanianHolidaySetup;
 import lt.techin.schedule.schedules.planner.WorkDayRepository;
@@ -22,26 +21,25 @@ import static lt.techin.schedule.schedules.ScheduleMapper.toScheduleCreateDto;
 public class ScheduleService {
     private final ScheduleRepository scheduleRepository;
     private final GroupRepository groupRepository;
+
     private final HolidayRepository holidayRepository;
-    private final HolidayPlanRepository holidayPlanRepository;
+
     private final SubjectRepository subjectRepository;
+
     private final TeacherRepository teacherRepository;
+
     private final WorkDayRepository workDayRepository;
 
     public ScheduleService(ScheduleRepository scheduleRepository,
                            GroupRepository groupRepository,
                            SubjectRepository subjectRepository,
-                           TeacherRepository teacherRepository,
-                           WorkDayRepository workDayRepository,
-                           HolidayRepository holidayRepository,
-                           HolidayPlanRepository holidayPlanRepository) {
+                           TeacherRepository teacherRepository, WorkDayRepository workDayRepository, HolidayRepository holidayRepository) {
         this.scheduleRepository = scheduleRepository;
         this.groupRepository = groupRepository;
         this.subjectRepository = subjectRepository;
         this.teacherRepository = teacherRepository;
         this.workDayRepository = workDayRepository;
         this.holidayRepository = holidayRepository;
-        this.holidayPlanRepository = holidayPlanRepository;
     }
 
     public List<Schedule> getAll() {
@@ -71,11 +69,12 @@ public class ScheduleService {
                     "laikotarpiui jau yra sukurtas", "Schedule", "Not unique", scheduleDto.toString());
         } else {
             Schedule scheduleToSave = scheduleRepository.save(schedule);
+
             //Setting up predefined holidays for schedule which are in the range of this schedule
-            LinkedHashSet<Holiday> predefinedHolidays =
-                    LithuanianHolidaySetup.SetupHolidaysInRange(schedule.getDateFrom(), schedule.getDateUntil(), schedule);
+            LinkedHashSet<Holiday> predefinedHolidays = LithuanianHolidaySetup.setupHolidaysInRange(schedule.getDateFrom(), schedule.getDateUntil(), schedule);
             holidayRepository.saveAll(predefinedHolidays);
             scheduleToSave.addHolidays(predefinedHolidays);
+
             return scheduleToSave;
         }
     }
@@ -105,9 +104,9 @@ public class ScheduleService {
                 scheduleRepository.delete(scheduleToDelete.get());
                 return true;
             } catch (Exception e) {
-                return false;
+              return false;
             }
         }
-        throw new ValidationException("Toks tvarkaraštis neegzistuoja", "id", "not found", id.toString());
+        throw new ValidationException("Toks tvarkaraštis neegzistuoja","id","not found",id.toString());
     }
 }

@@ -17,6 +17,9 @@ public class SchoolYearValidator extends ValidatorBase implements ConstraintVali
 
     @Override
     public boolean isValid(CharSequence charSequence, ConstraintValidatorContext constraintValidatorContext) {
+        ValidationDto validationDto = new ValidationDto();
+        validationDto.addDatabaseError(validationDto.toString().split("validationErrors=")[1]);
+        validationDto.ValidateDatabaseError(validSymbols);
         return super.isValid(charSequence, constraintValidatorContext);
     }
 
