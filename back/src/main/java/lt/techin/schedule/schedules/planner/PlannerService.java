@@ -256,11 +256,11 @@ public class PlannerService {
         if (teacherToChangeTo != null && !teacherToChangeTo.equals(existingWorkDay.getTeacher())) {
             //Sets teacher before conflicts logic
             existingWorkDay.setTeacher(teacherToChangeTo);
-            WorkDayConflictSolver.solveTeacherConflicts(existingWorkDay, scheduleRepository, workDayRepository);
+            WorkDayConflictSolver.solveTeacherConflicts(existingWorkDay, scheduleRepository, workDayRepository, true);
         }
         else if (teacherToChangeTo == null) {
             existingWorkDay.setTeacher(null);
-            WorkDayConflictSolver.setConflictsAsSolvedTeacher(existingWorkDay, scheduleRepository, workDayRepository);
+            WorkDayConflictSolver.solveTeacherConflicts(existingWorkDay, scheduleRepository, workDayRepository, false);
         }
 
         Classroom classroomToChangeTo = toClassroomFromSmallDto(workDayDto.getClassroom());
@@ -269,11 +269,11 @@ public class PlannerService {
         if (classroomToChangeTo != null && !classroomToChangeTo.equals(existingWorkDay.getClassroom())) {
             //Sets classroom before conflicts logic
             existingWorkDay.setClassroom(classroomToChangeTo);
-            WorkDayConflictSolver.solveClassroomConflicts(existingWorkDay, scheduleRepository, workDayRepository);
+            WorkDayConflictSolver.solveClassroomConflicts(existingWorkDay, scheduleRepository, workDayRepository, true);
         }
         else if (classroomToChangeTo == null) {
             existingWorkDay.setClassroom(null);
-            WorkDayConflictSolver.setConflictsAsSolvedClassroom(existingWorkDay, scheduleRepository, workDayRepository);
+            WorkDayConflictSolver.solveClassroomConflicts(existingWorkDay, scheduleRepository, workDayRepository, false);
         }
         existingWorkDay.setOnline(workDayDto.getOnline());
 
