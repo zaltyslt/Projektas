@@ -238,7 +238,9 @@ export function GroupList() {
           <Grid item sm={2}>
             <Link to="/groups/create">
               <Stack direction="row" justifyContent="flex-end">
-                <Button id="create-new-group" variant="contained">Pridėti naują</Button>
+                <Button id="create-new-group" variant="contained">
+                  Pridėti naują
+                </Button>
               </Stack>
             </Link>
           </Grid>
@@ -256,7 +258,10 @@ export function GroupList() {
         </Grid>
 
         <TableContainer component={Paper}>
-          <Table id="active-group-list-table" aria-label="custom pagination table">
+          <Table
+            id="active-group-list-table"
+            aria-label="custom pagination table"
+          >
             <TableHead>
               <TableRow>
                 <TableCell style={{ width: "250px" }}>Grupė</TableCell>
@@ -326,7 +331,10 @@ export function GroupList() {
 
         {isChecked && (
           <TableContainer component={Paper}>
-            <Table id="inactive-group-list-table" aria-label="custom pagination table">
+            <Table
+              id="inactive-group-list-table"
+              aria-label="custom pagination table"
+            >
               <TableHead>
                 <TableRow>
                   <TableCell style={{ width: "250px" }}>Grupė</TableCell>
@@ -354,6 +362,7 @@ export function GroupList() {
                     <TableCell>{group.studentAmount}</TableCell>
                     <TableCell className="activity">
                       <Button
+                        id="restore-button-list-group"
                         variant="contained"
                         onClick={() => handleRestore(group.id)}
                       >

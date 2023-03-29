@@ -26,9 +26,9 @@ export function CreateModule() {
   const clear = () => {
     setNumber("");
     setName("");
-    };
+  };
 
-const validation = () => {
+  const validation = () => {
     setCreateMessage("");
     const badSymbols = "!@#$%^&*_+={}<>|~`\\'";
     let notValidName = name.split("").some((char) => badSymbols.includes(char));
@@ -36,26 +36,23 @@ const validation = () => {
       .split("")
       .some((char) => badSymbols.includes(char));
 
-  if (
-    number === "" &&
-    name === ""
-  ) {
-    setNameError(true);
-    setNumberError(true);
-  } else if (name === "") {
-    setNameError(true);
-  } else if (notValidName) {
-    setNameError(false);
-    setNameNotValid(true);
-  } else if (number === "") {
-    setNumberError(true);
-  } else if (notValidNumber) {
-    setNumberError(false);
-    setNumberNotValid(true);
-  } else {
-    createModule();
-  }
-};
+    if (number === "" && name === "") {
+      setNameError(true);
+      setNumberError(true);
+    } else if (name === "") {
+      setNameError(true);
+    } else if (notValidName) {
+      setNameError(false);
+      setNameNotValid(true);
+    } else if (number === "") {
+      setNumberError(true);
+    } else if (notValidNumber) {
+      setNumberError(false);
+      setNumberNotValid(true);
+    } else {
+      createModule();
+    }
+  };
 
   const createModule = async () => {
     await fetch("api/v1/modules/create", {
@@ -86,7 +83,7 @@ const validation = () => {
   return (
     <Container>
       <h3 className="create-header">Pridėti naują modulį</h3>
-      <form> 
+      <form>
         <Grid container rowSpacing={2}>
           <Grid item sm={8}>
             <TextField
@@ -130,12 +127,18 @@ const validation = () => {
 
           <Grid item sm={8} marginTop={2}>
             <Stack direction="row" spacing={2}>
-              <Button variant="contained" onClick={validation}>
+              <Button
+                id="save-button-create-module"
+                variant="contained"
+                onClick={validation}
+              >
                 Išsaugoti
               </Button>
 
               <Link to="/modules">
-                <Button variant="contained">Grįžti</Button>
+                <Button id="back-button-create-module" variant="contained">
+                  Grįžti
+                </Button>
               </Link>
             </Stack>
           </Grid>
@@ -147,4 +150,4 @@ const validation = () => {
       </form>
     </Container>
   );
-} 
+}

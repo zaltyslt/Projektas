@@ -230,12 +230,18 @@ export function CreateSubject() {
 
           <Grid item sm={8} marginTop={2}>
             <Stack direction="row" spacing={2}>
-              <Button variant="contained" onClick={validation}>
+              <Button
+                id="save-button-create-subject"
+                variant="contained"
+                onClick={validation}
+              >
                 Išsaugoti
               </Button>
 
               <Link to="/subjects">
-                <Button variant="contained">Grįžti</Button>
+                <Button id="back-button-create-subject" variant="contained">
+                  Grįžti
+                </Button>
               </Link>
             </Stack>
           </Grid>

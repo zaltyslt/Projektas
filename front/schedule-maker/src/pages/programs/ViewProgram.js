@@ -90,9 +90,9 @@ export function ViewProgram() {
           <Grid item sm={8}>
             <Stack direction="row" spacing={2} marginTop={2}>
               <Link to={`/update-program/${program.id}`}>
-                <Button variant="contained">Redaguoti</Button>
+                <Button id="edit-button-view-program" variant="contained">Redaguoti</Button>
               </Link>
-              <Button variant="contained" onClick={() => navigate(-1)}>
+              <Button id="back-button-view-program" variant="contained" onClick={() => navigate(-1)}>
                 Grįžti
               </Button>
             </Stack>
