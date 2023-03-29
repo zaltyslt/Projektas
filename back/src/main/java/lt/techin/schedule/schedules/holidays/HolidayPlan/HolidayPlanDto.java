@@ -4,7 +4,6 @@ import lt.techin.schedule.schedules.ScheduleEntityDto;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Objects;
 
 public class HolidayPlanDto {
 
@@ -52,6 +51,7 @@ public class HolidayPlanDto {
     public LocalDate getDateUntil() {
         return dateUntil;
     }
+
     public void setDateUntil(LocalDate dateUntil) {
         this.dateUntil = dateUntil;
     }
@@ -79,6 +79,4 @@ public class HolidayPlanDto {
     public void setSchedule(ScheduleEntityDto schedule) {
         this.schedule = schedule;
     }
-
-
 }

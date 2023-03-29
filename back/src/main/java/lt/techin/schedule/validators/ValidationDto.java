@@ -5,10 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 
 public class ValidationDto {
-
     private Boolean isValid;
     private Boolean passedValidation;
-
     private final List<String> databaseErrors;
     private final HashMap<String, String> validationErrors;
 

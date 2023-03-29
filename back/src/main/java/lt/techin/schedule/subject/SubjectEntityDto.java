@@ -8,13 +8,14 @@ import java.util.Objects;
 import java.util.Set;
 
 public class SubjectEntityDto extends SubjectDto {
-
     private Long id;
 
     public SubjectEntityDto() {
     }
 
-    public SubjectEntityDto(String name, String description, Module module, Set<Classroom> classRooms, LocalDateTime createdDate, LocalDateTime modifiedDate, Long id, Boolean deleted) {
+    public SubjectEntityDto(String name, String description, Module module,
+                            Set<Classroom> classRooms, LocalDateTime createdDate,
+                            LocalDateTime modifiedDate, Long id, Boolean deleted) {
         super(name, description, module, classRooms, createdDate, modifiedDate, deleted);
         this.id = id;
     }

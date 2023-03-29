@@ -1,10 +1,8 @@
 package lt.techin.schedule.exceptions;
 
 public class ValidationException extends RuntimeException {
-
     private String field;
     private String error;
-
     private String rejectedValue;
 
     public ValidationException() {

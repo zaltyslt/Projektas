@@ -1,10 +1,6 @@
 package lt.techin.schedule.teachers.contacts;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import java.io.Serializable;
-import java.util.List;
-import java.util.Objects;
 
 /**
  * A DTO for the {@link lt.techin.schedule.teachers.contacts.Contact} entity
@@ -46,5 +42,4 @@ public class ContactDto implements Serializable {
     public void setContactValue(String contactValue) {
         this.contactValue = contactValue;
     }
-
 }

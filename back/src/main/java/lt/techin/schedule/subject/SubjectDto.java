@@ -9,118 +9,119 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
-public class SubjectDto {
+public class SubjectDto{
+        private String name;
+        private String description;
+        private Module module;
+        private Boolean deleted;
+        private Set<Classroom> classRooms;
+        @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+        private LocalDateTime createdDate;
+        @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+        private LocalDateTime modifiedDate;
 
-    private String name;
+        public SubjectDto() {
+            classRooms = new HashSet<>();
+            deleted = false;
+        }
 
-    private String description;
+        public SubjectDto(String name, String description, Module module,
+                          Set<Classroom> classRooms, LocalDateTime createdDate,
+                          LocalDateTime modifiedDate, Boolean deleted) {
+            this.name = name;
+            this.description = description;
+            this.module = module;
+            this.classRooms = classRooms;
+            this.createdDate = createdDate;
+            this.modifiedDate = modifiedDate;
+            this.deleted = deleted;
+        }
 
-    private Module module;
+        public String getName() {
+            return name;
+        }
 
-    private Boolean deleted;
+        public void setName(String name) {
+            this.name = name;
+        }
 
-    private Set<Classroom> classRooms;
+        public String getDescription() {
+            return description;
+        }
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
-    private LocalDateTime createdDate;
+        public void setDescription(String description) {
+            this.description = description;
+        }
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
-    private LocalDateTime modifiedDate;
+        public Module getModule() {
+            return module;
+        }
 
-    public SubjectDto() {
-        classRooms = new HashSet<>();
-        deleted = false;
-    }
+        public void setModule(Module module) {
+            this.module = module;
+        }
 
-    public SubjectDto(String name, String description, Module module, Set<Classroom> classRooms, LocalDateTime createdDate, LocalDateTime modifiedDate, Boolean deleted) {
-        this.name = name;
-        this.description = description;
-        this.module = module;
-        this.classRooms = classRooms;
-        this.createdDate = createdDate;
-        this.modifiedDate = modifiedDate;
-        this.deleted = deleted;
-    }
+        public Set<Classroom> getClassRooms() {
+            return classRooms;
+        }
 
-    public String getName() {
-        return name;
-    }
+        public void setClassRooms(Set<Classroom> classRooms) {
+            this.classRooms = classRooms;
+        }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+        public LocalDateTime getCreatedDate() {
+            return createdDate;
+        }
 
-    public String getDescription() {
-        return description;
-    }
+        public void setCreatedDate(LocalDateTime createdDate) {
+            this.createdDate = createdDate;
+        }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+        public LocalDateTime getModifiedDate() {
+            return modifiedDate;
+        }
 
-    public Module getModule() {
-        return module;
-    }
+        public void setModifiedDate(LocalDateTime modifiedDate) {
+            this.modifiedDate = modifiedDate;
+        }
 
-    public void setModule(Module module) {
-        this.module = module;
-    }
+        public Boolean getDeleted() {
+            return deleted;
+        }
 
-    public Set<Classroom> getClassRooms() {
-        return classRooms;
-    }
+        public void setDeleted(Boolean deleted) {
+            this.deleted = deleted;
+        }
 
-    public void setClassRooms(Set<Classroom> classRooms) {
-        this.classRooms = classRooms;
-    }
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            SubjectDto that = (SubjectDto) o;
+            return Objects.equals(name, that.name)
+                    && Objects.equals(description, that.description)
+                    && Objects.equals(module, that.module)
+                    && Objects.equals(deleted, that.deleted)
+                    && Objects.equals(classRooms, that.classRooms)
+                    && Objects.equals(createdDate, that.createdDate)
+                    && Objects.equals(modifiedDate, that.modifiedDate);
+        }
 
-    public LocalDateTime getCreatedDate() {
-        return createdDate;
-    }
+        @Override
+        public int hashCode() {
+            return Objects.hash(name, description, module, deleted, classRooms, createdDate, modifiedDate);
+        }
 
-    public void setCreatedDate(LocalDateTime createdDate) {
-        this.createdDate = createdDate;
-    }
-
-    public LocalDateTime getModifiedDate() {
-        return modifiedDate;
-    }
-
-    public void setModifiedDate(LocalDateTime modifiedDate) {
-        this.modifiedDate = modifiedDate;
-    }
-
-    public Boolean getDeleted() {
-        return deleted;
-    }
-
-    public void setDeleted(Boolean deleted) {
-        this.deleted = deleted;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        SubjectDto that = (SubjectDto) o;
-        return Objects.equals(name, that.name) && Objects.equals(description, that.description) && Objects.equals(module, that.module) && Objects.equals(deleted, that.deleted) && Objects.equals(classRooms, that.classRooms) && Objects.equals(createdDate, that.createdDate) && Objects.equals(modifiedDate, that.modifiedDate);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(name, description, module, deleted, classRooms, createdDate, modifiedDate);
-    }
-
-    @Override
-    public String toString() {
-        return "SubjectDto{" +
-                "name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                ", module=" + module +
-                ", deleted=" + deleted +
-                ", classRooms=" + classRooms +
-                ", createdDate=" + createdDate +
-                ", modifiedDate=" + modifiedDate +
-                '}';
-    }
+        @Override
+        public String toString() {
+            return "SubjectDto{" +
+                    "name='" + name + '\'' +
+                    ", description='" + description + '\'' +
+                    ", module=" + module +
+                    ", deleted=" + deleted +
+                    ", classRooms=" + classRooms +
+                    ", createdDate=" + createdDate +
+                    ", modifiedDate=" + modifiedDate +
+                    '}';
+        }
 }

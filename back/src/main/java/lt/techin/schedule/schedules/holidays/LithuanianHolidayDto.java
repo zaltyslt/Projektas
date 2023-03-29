@@ -4,9 +4,7 @@ import java.time.LocalDate;
 import java.util.Objects;
 
 public class LithuanianHolidayDto {
-
     private String name;
-
     private LocalDate date;
 
     public LithuanianHolidayDto(String name, LocalDate date) {

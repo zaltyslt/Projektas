@@ -34,6 +34,7 @@ public class SubjectHours {
         createdDate = LocalDateTime.now();
         modifiedDate = LocalDateTime.now();
     }
+
     @PreUpdate
     public void preUpdate() {
         modifiedDate = LocalDateTime.now();

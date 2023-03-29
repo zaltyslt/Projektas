@@ -3,7 +3,6 @@ package lt.techin.schedule.teachers;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lt.techin.schedule.shift.ShiftDto;
 import lt.techin.schedule.teachers.contacts.ContactDto2;
-import lt.techin.schedule.teachers.helpers.TeacherShiftDto;
 import lt.techin.schedule.teachers.helpers.TeacherSubjectsDto;
 
 import java.io.Serializable;
@@ -38,8 +37,6 @@ public class TeacherDto implements Serializable {
         this.lName = lName;
         this.isActive = isActive;
     }
-/////////////////////////
-
 
     public Long getId() {
         return id;
@@ -126,12 +123,22 @@ public class TeacherDto implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         TeacherDto that = (TeacherDto) o;
-        return Objects.equals(id, that.id) && Objects.equals(fName, that.fName) && Objects.equals(lName, that.lName) && Objects.equals(subjectsList, that.subjectsList) && Objects.equals(contacts, that.contacts) && Objects.equals(selectedShift, that.selectedShift) && Objects.equals(workHoursPerWeek, that.workHoursPerWeek) && Objects.equals(isActive, that.isActive) && Objects.equals(dateCreated, that.dateCreated) && Objects.equals(dateModified, that.dateModified);
+        return Objects.equals(id, that.id)
+                && Objects.equals(fName, that.fName)
+                && Objects.equals(lName, that.lName)
+                && Objects.equals(subjectsList, that.subjectsList)
+                && Objects.equals(contacts, that.contacts)
+                && Objects.equals(selectedShift, that.selectedShift)
+                && Objects.equals(workHoursPerWeek, that.workHoursPerWeek)
+                && Objects.equals(isActive, that.isActive)
+                && Objects.equals(dateCreated, that.dateCreated)
+                && Objects.equals(dateModified, that.dateModified);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, fName, lName, subjectsList, contacts, selectedShift, workHoursPerWeek, isActive, dateCreated, dateModified);
+        return Objects.hash(id, fName, lName, subjectsList, contacts,
+                selectedShift, workHoursPerWeek, isActive, dateCreated, dateModified);
     }
 
     @Override

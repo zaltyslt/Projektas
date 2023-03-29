@@ -67,8 +67,8 @@ public class HolidayPlan {
     }
 
     public HolidayPlan(Long id, String holidayName, Schedule schedule,
-                   LocalDate dateFrom, LocalDate dateUntil, LocalDateTime createdDate,
-                   LocalDateTime modifiedDate) {
+                       LocalDate dateFrom, LocalDate dateUntil, LocalDateTime createdDate,
+                       LocalDateTime modifiedDate) {
         this.id = id;
         this.holidayName = holidayName;
         this.schedule = schedule;
@@ -128,7 +128,7 @@ public class HolidayPlan {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, holidayName,  dateFrom, dateUntil, createdDate, modifiedDate);
+        return Objects.hash(id, holidayName, dateFrom, dateUntil, createdDate, modifiedDate);
     }
 }
 

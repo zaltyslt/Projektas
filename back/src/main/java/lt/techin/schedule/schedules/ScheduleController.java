@@ -64,7 +64,7 @@ public class ScheduleController {
     @DeleteMapping("/delete-schedule/{scheduleId}")
     public ResponseEntity<Void> deleteSchedule(@PathVariable Long scheduleId) {
         boolean result = scheduleService.deleteSchedule(scheduleId);
-        logger.info("The schedule id {} was {} deleted: {}", scheduleId, result ? "": "not", result);
+        logger.info("The schedule id {} was {} deleted: {}", scheduleId, result ? "" : "not", result);
         return result
                 ? ResponseEntity.ok().build()
                 : ResponseEntity.badRequest().build();

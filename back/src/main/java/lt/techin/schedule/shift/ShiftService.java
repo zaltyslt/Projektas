@@ -3,12 +3,13 @@ package lt.techin.schedule.shift;
 
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 public class ShiftService {
-
     private final ShiftRepository shiftDatabase;
 
     public ShiftService(ShiftRepository shiftDatabase) {
@@ -23,7 +24,7 @@ public class ShiftService {
         return shiftDatabase.findAll().stream().filter(s -> s.getName().equalsIgnoreCase(name)).findFirst();
     }
 
-    private static ShiftDto setShiftDtoStringFields (ShiftDto shiftDto) {
+    private static ShiftDto setShiftDtoStringFields(ShiftDto shiftDto) {
         //These values are null, because client sets int enums only.
         if (shiftDto.getShiftStartingTime() == null || shiftDto.getShiftStartingTime().isEmpty()) {
             shiftDto.setShiftStartingTime(LessonTime.getLessonTimeByInt(shiftDto.getStartIntEnum()).getLessonStart());
@@ -35,10 +36,9 @@ public class ShiftService {
     }
 
     public String addUniqueShift(ShiftDto shiftDto) {
-        if(findShiftByName(shiftDto.getName()).isPresent()) {
+        if (findShiftByName(shiftDto.getName()).isPresent()) {
             return "Pamainos pavadinimas turi būti unikalus.";
-        }
-        else {
+        } else {
             Shift shiftToSave = ShiftMapper.dtoToShift(setShiftDtoStringFields(shiftDto));
             shiftDatabase.save(shiftToSave);
             return "";
@@ -48,11 +48,13 @@ public class ShiftService {
     private final Comparator<Shift> compareShiftByName = Comparator.comparing(o -> o.getName().toLowerCase());
 
     public List<Shift> getActiveShifts() {
-        return shiftDatabase.findAll().stream().filter(Shift::getIsActive).sorted(compareShiftByName).collect(Collectors.toList());
+        return shiftDatabase.findAll().stream().filter(Shift::getIsActive).
+                sorted(compareShiftByName).collect(Collectors.toList());
     }
 
     public List<Shift> getInactiveShifts() {
-        return shiftDatabase.findAll().stream().filter(s -> !s.getIsActive()).sorted(compareShiftByName).collect(Collectors.toList());
+        return shiftDatabase.findAll().stream().filter(s -> !s.getIsActive()).
+                sorted(compareShiftByName).collect(Collectors.toList());
     }
 
     public Shift getShiftByID(Long shiftID) {
@@ -69,7 +71,7 @@ public class ShiftService {
             (You can modify other shift fields leaving the name unchanged)
             If that name is not present in a database or this is the same shift it doesn't return string here
              */
-            if(foundShift.isPresent() && !foundShift.get().getId().equals(shiftID)) {
+            if (foundShift.isPresent() && !foundShift.get().getId().equals(shiftID)) {
                 return "Pamainos pavadinimas turi būti unikalus.";
             }
             if (shiftDto.getId() == null) {

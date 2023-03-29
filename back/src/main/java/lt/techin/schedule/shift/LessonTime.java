@@ -3,7 +3,6 @@ package lt.techin.schedule.shift;
 import java.text.DecimalFormat;
 
 public enum LessonTime {
-
     FIRST("1", new float[]{8.00f, 8.45f}), SECOND("2", new float[]{8.55f, 9.40f}),
     THIRD("3", new float[]{9.50f, 10.35f}), FOURTH("4", new float[]{10.45f, 11.30f}),
     FIFTH("5", new float[]{12.00f, 12.45f}), SIXTH("6", new float[]{12.55f, 13.40f}),
@@ -48,7 +47,7 @@ public enum LessonTime {
         return lessonEnd;
     }
 
-    public static LessonTime getLessonTimeByInt (int name) {
+    public static LessonTime getLessonTimeByInt(int name) {
         return switch (name) {
             case 1 -> FIRST;
             case 2 -> SECOND;

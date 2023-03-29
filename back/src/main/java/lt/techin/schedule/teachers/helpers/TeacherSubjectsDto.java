@@ -7,6 +7,7 @@ public class TeacherSubjectsDto {
 
     public TeacherSubjectsDto() {
     }
+
     public TeacherSubjectsDto(Long subjectId) {
         this.subjectId = subjectId;
     }
