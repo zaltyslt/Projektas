@@ -13,7 +13,6 @@ public class WorkDayConflictSolver {
 
     public static void solveTeacherConflicts (WorkDay workdayBeingChanged, ScheduleRepository scheduleRepository, WorkDayRepository workDayRepository) {
         Long originScheduleId = workdayBeingChanged.getSchedule().getId();
-
         Map<Long, String> teacherConflicts = workdayBeingChanged.getScheduleIdWithTeacherNameConflict();
 
         for (Map.Entry<Long, String> longStringEntry : teacherConflicts.entrySet()) {
@@ -51,7 +50,6 @@ public class WorkDayConflictSolver {
 
     public static void solveClassroomConflicts (WorkDay workdayBeingChanged, ScheduleRepository scheduleRepository, WorkDayRepository workDayRepository) {
         Long originScheduleId = workdayBeingChanged.getSchedule().getId();
-
         Map<Long, String> classroomConflicts = workdayBeingChanged.getScheduleIdWithClassroomNameConflict();
 
         for (Map.Entry<Long, String> longStringEntry : classroomConflicts.entrySet()) {
@@ -130,6 +128,74 @@ public class WorkDayConflictSolver {
 
             //Saves changes
             workDayRepository.save(conflictingWorkDay);
+        }
+    }
+
+    public static void setConflictsAsSolvedTeacher (WorkDay solvedWorkDay, ScheduleRepository scheduleRepository, WorkDayRepository workDayRepository) {
+        Long originScheduleId = solvedWorkDay.getSchedule().getId();
+        Map<Long, String> teacherConflicts = solvedWorkDay.getScheduleIdWithTeacherNameConflict();
+
+        for (Map.Entry<Long, String> longStringEntry : teacherConflicts.entrySet()) {
+            Long iteratedScheduleId = longStringEntry.getKey();
+            Optional<Schedule> foundSchedule = scheduleRepository.findById(iteratedScheduleId);
+
+            //Finds a workday by a conflicting schedule id - each schedule workdays has unique LocalDate
+            if (foundSchedule.isPresent()) {
+                Optional<WorkDay> foundWorkDay = foundSchedule.get().getWorkingDays().stream().filter(workDay ->
+                        workDay.getDate().equals(solvedWorkDay.getDate())).findAny();
+                if (foundWorkDay.isPresent()) {
+                    //Removing existing conflicts which were present with old teacher name, and are redundant with a new one
+                    if (!foundWorkDay.get().getScheduleIdWithTeacherNameConflict().isEmpty()) {
+                        foundWorkDay.get().removeTeacherConflictFromMap(originScheduleId);
+                    }
+                    if (!solvedWorkDay.getScheduleIdWithTeacherNameConflict().isEmpty()) {
+                        solvedWorkDay.removeTeacherConflictFromMap(iteratedScheduleId);
+                    }
+
+                    //Sets booleans
+                    if (foundWorkDay.get().getScheduleIdWithTeacherNameConflict().isEmpty()) {
+                        foundWorkDay.get().setHasTeacherConflict(false);
+                    }
+                    if (solvedWorkDay.getScheduleIdWithTeacherNameConflict().isEmpty()) {
+                        solvedWorkDay.setHasTeacherConflict(false);
+                    }
+                    workDayRepository.saveAll(List.of(foundWorkDay.get(), solvedWorkDay));
+                }
+            }
+        }
+    }
+
+    public static void setConflictsAsSolvedClassroom (WorkDay solvedWorkDay, ScheduleRepository scheduleRepository, WorkDayRepository workDayRepository) {
+        Long originScheduleId = solvedWorkDay.getSchedule().getId();
+        Map<Long, String> classroomConflicts = solvedWorkDay.getScheduleIdWithClassroomNameConflict();
+
+        for (Map.Entry<Long, String> longStringEntry : classroomConflicts.entrySet()) {
+            Long iteratedScheduleId = longStringEntry.getKey();
+            Optional<Schedule> foundSchedule = scheduleRepository.findById(iteratedScheduleId);
+
+            //Finds a workday by a conflicting schedule id - each schedule workdays has unique LocalDate
+            if (foundSchedule.isPresent()) {
+                Optional<WorkDay> foundWorkDay = foundSchedule.get().getWorkingDays().stream().filter(workDay ->
+                        workDay.getDate().equals(solvedWorkDay.getDate())).findAny();
+                if (foundWorkDay.isPresent()) {
+                    //Removing existing conflicts which were present with old classroom name, and are redundant with a new one
+                    if (!foundWorkDay.get().getScheduleIdWithClassroomNameConflict().isEmpty()) {
+                        foundWorkDay.get().removeClassroomConflictFromMap(originScheduleId);
+                    }
+                    if (!solvedWorkDay.getScheduleIdWithClassroomNameConflict().isEmpty()) {
+                        solvedWorkDay.removeClassroomConflictFromMap(iteratedScheduleId);
+                    }
+
+                    //Sets booleans
+                    if (foundWorkDay.get().getScheduleIdWithClassroomNameConflict().isEmpty()) {
+                        foundWorkDay.get().setHasClassroomConflict(false);
+                    }
+                    if (solvedWorkDay.getScheduleIdWithClassroomNameConflict().isEmpty()) {
+                        solvedWorkDay.setHasClassroomConflict(false);
+                    }
+                    workDayRepository.saveAll(List.of(foundWorkDay.get(), solvedWorkDay));
+                }
+            }
         }
     }
 }
