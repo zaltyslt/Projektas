@@ -252,7 +252,7 @@ public class PlannerService {
 
         Teacher teacherToChangeTo = toTeacherFromEntityDto(workDayDto.getTeacher());
         existingWorkDay.setTeacher(teacherToChangeTo);
-        
+
         //Teacher is changed, need to update conflicts if any are found
         if (teacherToChangeTo != null && !teacherToChangeTo.equals(existingWorkDay.getTeacher())) {
             //Sets teacher before conflicts logic

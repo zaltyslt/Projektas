@@ -1,22 +1,24 @@
 package lt.techin.schedule.schedules.holidays;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lt.techin.schedule.schedules.Schedule;
-import lt.techin.schedule.shift.ShiftService;
 import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
-import org.springframework.test.context.jdbc.Sql;
-import org.springframework.test.context.jdbc.SqlGroup;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
-import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.BEFORE_TEST_METHOD;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
+import java.util.List;
+
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -47,17 +49,47 @@ public class HolidayControllerTest {
     private MockMvc mockMvc;
 
     @Test
-    void testGetHolidaysController() throws Exception {
-
-    }
-
-    @Test
     void testGetHolidayController() throws Exception {
+        Holiday expectedHoliday = new Holiday();
 
+        expectedHoliday.setId(1L);
+        expectedHoliday.setHolidayName("Holiday");
+        expectedHoliday.setDate(LocalDate.now());
+
+        Schedule scheduleToAdd = new Schedule();
+        scheduleToAdd.setId(1L);
+
+        expectedHoliday.setSchedule(scheduleToAdd);
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());
+
+        when(holidayService.getHolidayById(1L)).thenReturn(expectedHoliday);
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/schedules/holiday/1"))
+                .andExpect(status().isOk())
+                .andExpect(content().json(
+                        """
+                                {
+                                  "id": 1,
+                                  "name": "Holiday",
+                                  "date": "2023-03-29",
+                                  "schedule": {
+                                    "id": 1
+                                  }
+                                }"""
+                ));
     }
 
-    @Test
-    void testCreateHolidayController() throws Exception {
 
+
+    @Test
+    void testDeleteHolidayController() throws Exception {
+        Long id = 1L;
+
+        when(holidayService.deleteHoliday(id)).thenReturn(true);
+
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/schedules/holidays/delete-holiday/1"))
+                .andExpect(status().isOk())
+                .andExpect(content().string("true"));
     }
 }
