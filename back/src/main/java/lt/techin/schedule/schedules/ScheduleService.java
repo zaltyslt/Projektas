@@ -9,6 +9,7 @@ import lt.techin.schedule.schedules.holidays.HolidayRepository;
 import lt.techin.schedule.schedules.holidays.LithuanianHolidaySetup;
 import lt.techin.schedule.schedules.planner.WorkDayRepository;
 import lt.techin.schedule.subject.SubjectRepository;
+import lt.techin.schedule.teachers.Teacher;
 import lt.techin.schedule.teachers.TeacherRepository;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +27,12 @@ public class ScheduleService {
 
     private final HolidayRepository holidayRepository;
     private final HolidayPlanRepository holidayPlanRepository;
+
+    private final SubjectRepository subjectRepository;
+
+    private final TeacherRepository teacherRepository;
+
+    private final WorkDayRepository workDayRepository;
 
     public ScheduleService(ScheduleRepository scheduleRepository,
                            GroupRepository groupRepository,

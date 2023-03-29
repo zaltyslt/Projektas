@@ -4,11 +4,14 @@ import jakarta.transaction.Transactional;
 import lt.techin.schedule.exceptions.ValidationException;
 import lt.techin.schedule.schedules.Schedule;
 import lt.techin.schedule.schedules.ScheduleRepository;
+import lt.techin.schedule.schedules.holidays.Holiday;
 import lt.techin.schedule.schedules.holidays.HolidayRepository;
+import lt.techin.schedule.schedules.holidays.SetupHolidaysSetForSchedule;
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class HolidayPlanService {
@@ -36,9 +39,11 @@ public class HolidayPlanService {
         if (existingSchedule == null) {
             return "Toks tvarkaraštis neegzistuoja.";
         } else {
-            //Checks if holidays being created are in range of specified schedule
-            boolean isBeforeOrEqual = (existingSchedule.getDateFrom().isEqual(holidayPlan.getDateFrom()) || existingSchedule.getDateFrom().isBefore(holidayPlan.getDateFrom()));
-            boolean isAfterOrEqual = (existingSchedule.getDateUntil().isEqual(holidayPlan.getDateUntil()) || existingSchedule.getDateUntil().isAfter(holidayPlan.getDateUntil()));
+            //Checks if holidays being created are in range of the specified schedule
+            boolean isBeforeOrEqual = (existingSchedule.getDateFrom().isEqual(holidayPlan.getDateFrom()) ||
+                    (existingSchedule.getDateFrom().isBefore(holidayPlan.getDateFrom()) && existingSchedule.getDateUntil().isAfter(holidayPlan.getDateFrom())));
+            boolean isAfterOrEqual = (existingSchedule.getDateUntil().isEqual(holidayPlan.getDateUntil()) ||
+                    (existingSchedule.getDateUntil().isAfter(holidayPlan.getDateUntil()) && existingSchedule.getDateFrom().isBefore(holidayPlan.getDateUntil())));
 
             //Both dates or one of the dates is valid
             if (isBeforeOrEqual || isAfterOrEqual) {
@@ -54,14 +59,26 @@ public class HolidayPlanService {
                     }
                 }
                 try {
+                    //Returns true if holiday is already in schedule with in that specific date range
+                    if (SetupHolidaysSetForSchedule.LookForHolidayDoublesByRange(holidayPlan.getDateFrom(), holidayPlan.getDateUntil(), existingSchedule.getHolidays())) {
+                        return "Tvarkaraštyje esančios atostogos sutampa su planuojamomis atostogomis.";
+                    }
+                    //Is it needed?
                     HolidayPlan holidayPlan1 = new HolidayPlan();
                     holidayPlan1.setHolidayName(holidayPlan.getHolidayName());
                     holidayPlan1.setDateFrom(holidayPlan.getDateFrom());
                     holidayPlan1.setDateUntil(holidayPlan.getDateUntil());
                     holidayPlan1.setSchedule(existingSchedule);
-                    HolidayPlan save = holidayPlanRepository.save(holidayPlan1);
+                    holidayPlanRepository.save(holidayPlan1);
+                    //Probably not
 
-                    //existingSchedule.addHoliday(holiday1);
+                    Set<Holiday> createdHolidays = SetupHolidaysSetForSchedule.AddHolidaysByPlan(holidayPlan1, existingSchedule);
+                    if (createdHolidays.isEmpty())
+                        return "Sukurta 0 atostogų dienų. Priežastį galite sužinoti debugindami.";
+
+                    existingSchedule.addHolidays(createdHolidays);
+                    scheduleRepository.save(existingSchedule);
+
                     return "";
                 } catch (Exception e) {
                     System.out.println(e.getLocalizedMessage());

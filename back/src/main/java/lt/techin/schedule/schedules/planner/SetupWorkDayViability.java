@@ -3,11 +3,11 @@ package lt.techin.schedule.schedules.planner;
 import lt.techin.schedule.schedules.Schedule;
 import lt.techin.schedule.schedules.ScheduleRepository;
 import lt.techin.schedule.schedules.holidays.Holiday;
+import lt.techin.schedule.schedules.holidays.LithuanianHolidaySetup;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.HashSet;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -62,13 +62,24 @@ public class SetupWorkDayViability {
         return workDay;
     }
 
-    public static boolean CheckIfLocalDateIsWorkable (LocalDate localDate, Set<Holiday> holidays) {
+    public static boolean CheckIfLocalDateIsWorkable (LocalDate localDate, Set<Holiday> holidays, Set<WorkDay> workDays) {
         //Returns false if a localDate checked is a weekend
         if (localDate.getDayOfWeek() == DayOfWeek.SATURDAY || localDate.getDayOfWeek() == DayOfWeek.SUNDAY) {
             return false;
         }
+        //Checks whether it's a Lithuanian holiday date
+        if (!LithuanianHolidaySetup.IsItNotAnLithuanianHolidayDate(localDate)) {
+            return false;
+        }
         //Checks whether localDate passed is a holiday, returns false if it is
-        return holidays.stream().noneMatch(h -> (h.getDate() == localDate));
+        if (holidays.stream().anyMatch(h -> (h.getDate().equals(localDate)))) {
+            return false;
+        }
+        //Checks whether localDate passed is already tagged as a workDay
+        if (!workDays.isEmpty()) {
+            return workDays.stream().noneMatch(h -> (h.getDate().equals(localDate)));
+        }
+        return true;
     }
 
 

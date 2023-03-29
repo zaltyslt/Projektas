@@ -1,7 +1,10 @@
 package lt.techin.schedule.schedules.planner;
 
 
+import lt.techin.schedule.schedules.holidays.Holiday;
 import lt.techin.schedule.schedules.holidays.HolidayDto;
+import lt.techin.schedule.schedules.holidays.HolidayMapper;
+import lt.techin.schedule.schedules.holidays.HolidayPlan.HolidayPlanMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -48,9 +51,10 @@ public class PlannerController {
         return plannerService.getWorkDays(scheduleId).stream().map(WorkDayMapper::toWorkDayDto).toList();
     }
 
-    @GetMapping("/{{scheduleId}/holidays")
-    public Set<HolidayDto> getHolidays(@PathVariable Long scheduleId) {
-        return plannerService.getHolidays(scheduleId).stream
+    @GetMapping("/{scheduleId}/holidays")
+    public List<HolidayDto> getHolidays(@PathVariable Long scheduleId) {
+        List<Holiday> stuff = plannerService.getHolidays(scheduleId).stream().toList();
+        return plannerService.getHolidays(scheduleId).stream().map(HolidayMapper::toHolidayDto).toList();
     }
 
 

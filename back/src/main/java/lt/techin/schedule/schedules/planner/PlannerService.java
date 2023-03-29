@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static lt.techin.schedule.classrooms.ClassroomMapper.toClassroomFromSmallDto;
 import static lt.techin.schedule.teachers.TeacherMapper.toTeacherFromEntityDto;
@@ -144,11 +145,22 @@ public class PlannerService {
 
         List<LocalDate> workableDates = new ArrayList<>();
         LocalDate date = plannerDto.getDateFrom();
+
+        //In case of the bug
+        int counter = 0;
         //Finding every possible workday
         for (int i = 0; i < workDaysRequired; i++) {
-            //If the date found is not workable, iterating it through
-            while (!SetupWorkDayViability.CheckIfLocalDateIsWorkable(date, existingSchedule.getHolidays())) {
+            //If the date found is not workable, iterating it through until viable date is found
+            while (!SetupWorkDayViability.CheckIfLocalDateIsWorkable(date, existingSchedule.getHolidays(), existingSchedule.getWorkingDays())) {
                 date = date.plusDays(1);
+                /*
+                If it loops for 100 times, something went wrong (most likely)
+                Yes, this is a stupid check, bite me
+                */
+                counter++;
+                if (counter == 100) {
+                    return "Plano sukurti nepavyko, nerasta galimų darbo dienų.";
+                }
             }
             workableDates.add(date);
             date = date.plusDays(1);
@@ -223,9 +235,9 @@ public class PlannerService {
         return workDayRepository.findWorkDaysByScheduleId(scheduleId);
     }
 
-    public Set<Holiday> getHolidays(Long scheduleId) {
+    public List<Holiday> getHolidays(Long scheduleId) {
         Schedule foundSchedule = scheduleRepository.findById(scheduleId).orElseThrow(() -> new ValidationException("Tvarkaraštis nerastas", "Schedule", "Does not exist", scheduleId.toString()));
-        return foundSchedule.getHolidays();
+        return new ArrayList<>(foundSchedule.getHolidays());
     }
     public Optional<WorkDay> getWorkDay(Long workDayId) {
         return workDayRepository.findById(workDayId);
