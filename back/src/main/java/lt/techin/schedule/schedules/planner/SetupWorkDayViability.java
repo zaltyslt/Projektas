@@ -26,7 +26,7 @@ public class SetupWorkDayViability {
                 for (WorkDay loopingWorkDay : workingDays) {
                     if (checkIfWorkdaysIntertwine(workDay, workDayDate, loopingWorkDay)) {
                         //Checks whether classrooms are the ones having conflict, sending values to original WorkDay
-                        if (workDay.getClassroom().equals(loopingWorkDay.getClassroom())) {
+                        if (workDay.getClassroom() != null && workDay.getClassroom().equals(loopingWorkDay.getClassroom())) {
                             //Setting current WorkDay
                             workDay.setHasClassroomConflict(true);
                             workDay.addClassroomConflict(schedule.getId(), workDay.getClassroom().getClassroomName());
@@ -39,7 +39,7 @@ public class SetupWorkDayViability {
                             schedulesWithConflicts.addAll(List.of(schedule, primarySchedule));
                         }
                         //Checks whether teachers are the ones having conflict, sending values to original WorkDay
-                        if (workDay.getTeacher().equals(loopingWorkDay.getTeacher())) {
+                        if (workDay.getTeacher() != null && workDay.getTeacher().equals(loopingWorkDay.getTeacher())) {
                             //Setting current WorkDay
                             workDay.setHasTeacherConflict(true);
                             workDay.addTeacherConflict(schedule.getId(), workDay.getTeacher().getfName() + " " + workDay.getTeacher().getlName());

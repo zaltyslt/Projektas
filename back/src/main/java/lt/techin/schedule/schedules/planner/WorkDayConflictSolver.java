@@ -2,6 +2,7 @@ package lt.techin.schedule.schedules.planner;
 
 import lt.techin.schedule.schedules.Schedule;
 import lt.techin.schedule.schedules.ScheduleRepository;
+import org.apache.poi.sl.draw.geom.GuideIf;
 
 import java.util.List;
 import java.util.Map;
@@ -40,6 +41,10 @@ public class WorkDayConflictSolver {
                     if (workdayBeingChanged.getScheduleIdWithTeacherNameConflict().isEmpty()) {
                         workdayBeingChanged.setHasTeacherConflict(false);
                     }
+                    //Checks whether all conflicts have been resolved
+                    checkIfAllConflictsAreResolved(originScheduleId, scheduleRepository);
+                    checkIfAllConflictsAreResolved(foundSchedule.get().getId(), scheduleRepository);
+
                     workDayRepository.saveAll(List.of(foundWorkDay.get(), workdayBeingChanged));
 
                     if (shouldLookForNewConflicts) {
@@ -80,6 +85,10 @@ public class WorkDayConflictSolver {
                     if (workdayBeingChanged.getScheduleIdWithClassroomNameConflict().isEmpty()) {
                         workdayBeingChanged.setHasClassroomConflict(false);
                     }
+                    //Checks whether all conflicts have been resolved
+                    checkIfAllConflictsAreResolved(originScheduleId, scheduleRepository);
+                    checkIfAllConflictsAreResolved(foundSchedule.get().getId(), scheduleRepository);
+
                     workDayRepository.saveAll(List.of(foundWorkDay.get(), workdayBeingChanged));
 
                     if (shouldLookForConflicts) {
@@ -96,6 +105,7 @@ public class WorkDayConflictSolver {
         Set<WorkDay> foundedNewConflictingWorkDays = workDayRepository.findAll().stream().filter(workDay ->
                         SetupWorkDayViability.checkIfWorkdaysIntertwine(workDay, changedWorkDay.getDate(), changedWorkDay) &&
                                 !workDay.getId().equals(changedWorkDay.getId()) &&
+                                workDay.getTeacher() != null &&
                                 workDay.getTeacher().equals(changedWorkDay.getTeacher()))
                 .collect(Collectors.toSet());
         //Loops through conflicting days
@@ -119,6 +129,7 @@ public class WorkDayConflictSolver {
         Set<WorkDay> foundedNewConflictingWorkDays = workDayRepository.findAll().stream().filter(workDay ->
                         SetupWorkDayViability.checkIfWorkdaysIntertwine(workDay, changedWorkDay.getDate(), changedWorkDay) &&
                                 !workDay.getId().equals(changedWorkDay.getId()) &&
+                                workDay.getClassroom() != null &&
                                 workDay.getClassroom().equals(changedWorkDay.getClassroom()))
                 .collect(Collectors.toSet());
         //Loops through conflicting days
@@ -134,6 +145,16 @@ public class WorkDayConflictSolver {
 
             //Saves changes
             workDayRepository.save(conflictingWorkDay);
+        }
+    }
+
+    public static void checkIfAllConflictsAreResolved (Long scheduleToCheck, ScheduleRepository scheduleRepository) {
+        Optional<Schedule> schedule = scheduleRepository.findById(scheduleToCheck);
+        if (schedule.isPresent()) {
+            boolean conflictsFound = schedule.get().getWorkingDays().stream().anyMatch(workDay ->
+                    workDay.isHasTeacherConflict() || workDay.isHasClassroomConflict());
+            schedule.get().setHasConflicts(conflictsFound);
+            scheduleRepository.save(schedule.get());
         }
     }
 }
