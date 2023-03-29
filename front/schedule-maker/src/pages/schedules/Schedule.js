@@ -170,7 +170,7 @@ export function Schedule() {
           `,
         start: schedule.date,
         allDay: true,
-        url: `api/v1/schedules/edit-lesson/${schedule.id}`,
+        url: `http://localhost:3000/schedule-maker#/schedules/edit-lesson/${schedule.id}`,
         color: color,
       };
     }),
@@ -179,7 +179,7 @@ export function Schedule() {
         title: `<b>${holiday.name}</b>`,
         start: holiday.date,
         allDay: true,
-        url: `api/v1/schedules/edit-holidays/${holiday.id}`,
+        url: `http://localhost:3000/schedule-maker#/schedules/edit-holidays/${holiday.id}`,
         color: "#cccccc",
       };
     })
