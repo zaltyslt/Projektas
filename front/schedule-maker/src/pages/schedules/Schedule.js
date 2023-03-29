@@ -53,7 +53,17 @@ export function Schedule() {
     "#c4f5f2",
     "#c4d3f5",
     "#d8c4f5",
-    "#f5c4e3",
+    "#d6fc9c",
+    "#d5bdf9",
+    "#ffcac6",
+    "#a3b4ff",
+    "#88f7a0",
+    "#f1fc8d",
+    "#ffc6e5",
+    "#81efed",
+    "#f49a97",
+    "#93c7ff",
+    "#f9bd84",
   ];
 
   const subjectColorMap = { index: 0 };
@@ -253,23 +263,27 @@ export function Schedule() {
               Planavimas
             </Button>
           </Link>
-          <Button
+          <Button id="print-button-schedule"
             variant="contained"
             onClick={() => handleClickPrint(params.id, true)}
           >
             SPAUSDINTI EXCEL
           </Button>
-          <Button
+          <Button id="edit-button-schedule"
             variant="contained"
             onClick={() => handleClickPrint(params.id, false)}
           >
             REDAGUOTI EXCEL
           </Button>
 
-          <div>
-            <Button variant="contained" onClick={handleClickOpen}>
+          <Link>
+            <Button id="check-button-schedule"
+            variant="contained" onClick={handleClickOpen}>
               Tikrinti konfliktus
             </Button>
+          </Link>
+          <Link to="/">
+            <Button id="back-button-schedule"variant="contained">Grįžti</Button>
           </Link>
         </Stack>
         <div>
