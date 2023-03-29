@@ -55,7 +55,9 @@ export function ModuleList() {
   };
 
   const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - filteredModules.length) : 0;
+    page > 0
+      ? Math.max(0, (1 + page) * rowsPerPage - filteredModules.length)
+      : 0;
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -113,7 +115,6 @@ export function ModuleList() {
       .then(fetchDeletedModules);
   };
 
-
   return (
     <div>
       <Container maxWidth="lg">
@@ -124,7 +125,9 @@ export function ModuleList() {
           <Grid item sm={2}>
             <Stack direction="row" justifyContent="flex-end">
               <Link to="/modules/create">
-                <Button id="create-new-module" variant="contained">Pridėti naują</Button>
+                <Button id="create-new-module" variant="contained">
+                  Pridėti naują
+                </Button>
               </Link>
             </Stack>
           </Grid>
@@ -142,7 +145,10 @@ export function ModuleList() {
         </Grid>
 
         <TableContainer component={Paper}>
-          <Table id="active-module-list-table" aria-label="custom pagination table">
+          <Table
+            id="active-module-list-table"
+            aria-label="custom pagination table"
+          >
             <TableHead>
               <TableRow>
                 <TableCell style={{ width: "500px" }}>Modulio kodas</TableCell>
@@ -214,7 +220,10 @@ export function ModuleList() {
 
         {isChecked && (
           <TableContainer component={Paper}>
-            <Table id="inactive-module-list-table" aria-label="custom pagination table">
+            <Table
+              id="inactive-module-list-table"
+              aria-label="custom pagination table"
+            >
               <TableHead>
                 <TableRow>
                   <TableCell style={{ width: "500px" }}>
@@ -244,6 +253,7 @@ export function ModuleList() {
                     </TableCell>
                     <TableCell align="center" className="activity">
                       <Button
+                        id="restore-button-list-module "
                         variant="contained"
                         onClick={() => handleRestore(module.id)}
                       >
