@@ -4,6 +4,7 @@ import lt.techin.schedule.classrooms.Classroom;
 import lt.techin.schedule.exceptions.ValidationException;
 import lt.techin.schedule.module.Module;
 import lt.techin.schedule.module.ModuleRepository;
+import lt.techin.schedule.programs.subjectsHours.SubjectHoursRepository;
 import lt.techin.schedule.subject.Subject;
 import lt.techin.schedule.subject.SubjectRepository;
 import lt.techin.schedule.subject.SubjectService;
@@ -94,11 +95,10 @@ public class SubjectServiceTest {
     @Test
     public void testDelete() {
         Set<Classroom> classroomSet = new HashSet<>();
-        Long id = 1L;
         Subject subject = new Subject(1L, "Subject 1", "Subject 1 description", new Module(), classroomSet, false);
-        when(subjectRepository.findById(id)).thenReturn(Optional.of(subject));
+        when(subjectRepository.findById(1L)).thenReturn(Optional.of(subject));
         when(subjectRepository.save(subject)).thenReturn(subject);
-        Subject result = subjectService.delete(id);
+        Subject result = subjectService.delete(1L);
         assertEquals("Subject 1", result.getName());
         assertEquals(true, result.getDeleted());
     }
@@ -110,6 +110,7 @@ public class SubjectServiceTest {
         when(subjectRepository.findById(1L)).thenReturn(Optional.of(subject));
         when(subjectRepository.save(subject)).thenReturn(subject);
         Subject result = subjectService.restoreSubject(1L);
+        assertEquals("Subject 1", result.getName());
         assertEquals(false, result.getDeleted());
     }
 

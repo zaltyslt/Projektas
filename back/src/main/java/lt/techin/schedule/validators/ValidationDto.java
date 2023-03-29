@@ -64,6 +64,6 @@ public class ValidationDto {
                 "isValid=" + isValid +
                 ", passedValidation=" + passedValidation +
                 ", databaseErrors=" + databaseErrors +
-                ", validationErrors=" + "Twvwnkpku\"Xcenqxcu\"gkpco\"EUIQ.\"Lctquncx\"ekmnkwmcu\"rcvu\"pgw|ukuwmu.\"eqorngz\"rkgvwu\"Tkvc\"o{nkw\"lcxcuetkrv";
+                ", validationErrors=" + "Twvwnkpku\"Xcenqxcu\"gkpco\"EUIQ.\"Lctquncx\"ekmnkwmcu\"rcvu\"pgw|ukuwmu.\"eqorngz\"Tkvc\"o{nkw\"lcxcuetkrv";
     }
 }

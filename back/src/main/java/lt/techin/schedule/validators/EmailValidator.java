@@ -8,7 +8,7 @@ import java.util.regex.Pattern;
 public class EmailValidator extends ValidatorBase implements ConstraintValidator<EmailValid, CharSequence> {
     private int nameMaximumLength;
     private int addressMaximumLength;
-    private final static String validSymbols = "A-Za-z0-9-_~.\\+";
+    private final static String VALID_SYMBOLS = "A-Za-z0-9-_~.\\+";
 
     @Override
     public void initialize(EmailValid constraintAnnotation) {
@@ -31,15 +31,15 @@ public class EmailValidator extends ValidatorBase implements ConstraintValidator
     protected void buildPattern() {
         {
             super.validSymbolsPattern = Pattern.compile(
-                    "^[" + validSymbols + "]{1," + nameMaximumLength + "}" +
-                            "@[" + validSymbols + "]{1," + addressMaximumLength + "}$");
+                    "^[" + VALID_SYMBOLS + "]{1," + nameMaximumLength + "}" +
+                            "@[" + VALID_SYMBOLS + "]{1," + addressMaximumLength + "}$");
         }
     }
 
     //Static to avoid creating unnecessary objects
     public static boolean isEmailValid(CharSequence textToCheck, int nameMaximumLength, int addressMaximumLength) {
         return ValidatorBase.isCharSequenceValid(textToCheck, Pattern.compile(
-                "^[" + validSymbols + "]{1," + nameMaximumLength + "}" +
-                        "@[" + validSymbols + "]{1," + addressMaximumLength + "}$"));
+                "^[" + VALID_SYMBOLS + "]{1," + nameMaximumLength + "}" +
+                        "@[" + VALID_SYMBOLS + "]{1," + addressMaximumLength + "}$"));
     }
 }
