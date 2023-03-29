@@ -96,6 +96,7 @@ public class WorkDayConflictSolver {
         Set<WorkDay> foundedNewConflictingWorkDays = workDayRepository.findAll().stream().filter(workDay ->
                         SetupWorkDayViability.checkIfWorkdaysIntertwine(workDay, changedWorkDay.getDate(), changedWorkDay) &&
                                 !workDay.getId().equals(changedWorkDay.getId()) &&
+                                workDay.getTeacher() != null &&
                                 workDay.getTeacher().equals(changedWorkDay.getTeacher()))
                 .collect(Collectors.toSet());
         //Loops through conflicting days
@@ -119,6 +120,7 @@ public class WorkDayConflictSolver {
         Set<WorkDay> foundedNewConflictingWorkDays = workDayRepository.findAll().stream().filter(workDay ->
                         SetupWorkDayViability.checkIfWorkdaysIntertwine(workDay, changedWorkDay.getDate(), changedWorkDay) &&
                                 !workDay.getId().equals(changedWorkDay.getId()) &&
+                                workDay.getClassroom() != null &&
                                 workDay.getClassroom().equals(changedWorkDay.getClassroom()))
                 .collect(Collectors.toSet());
         //Loops through conflicting days
