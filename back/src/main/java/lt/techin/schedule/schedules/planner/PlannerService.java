@@ -260,6 +260,7 @@ public class PlannerService {
         }
         else if (teacherToChangeTo == null) {
             existingWorkDay.setTeacher(null);
+            WorkDayConflictSolver.setConflictsAsSolvedTeacher(existingWorkDay, scheduleRepository, workDayRepository);
         }
 
         Classroom classroomToChangeTo = toClassroomFromSmallDto(workDayDto.getClassroom());
@@ -272,8 +273,8 @@ public class PlannerService {
         }
         else if (classroomToChangeTo == null) {
             existingWorkDay.setClassroom(null);
+            WorkDayConflictSolver.setConflictsAsSolvedClassroom(existingWorkDay, scheduleRepository, workDayRepository);
         }
-
         existingWorkDay.setOnline(workDayDto.getOnline());
 
         return workDayRepository.save(existingWorkDay);
