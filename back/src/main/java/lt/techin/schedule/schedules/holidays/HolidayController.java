@@ -54,8 +54,8 @@ public class HolidayController {
     }
 
     @PutMapping(value = "/holidays/update-holiday/{holidayId}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<HolidayDto> updateHoliday(@PathVariable Long holidayId, @RequestBody HolidayDto holidayDto) {
-        Holiday updatedHoliday = holidayService.update(holidayId, HolidayMapper.toHoliday(holidayDto));
+    public ResponseEntity<HolidayDto> updateHoliday(@PathVariable Long holidayId, @RequestBody String holidayName) {
+        Holiday updatedHoliday = holidayService.update(holidayId, holidayName);
         return ok(HolidayMapper.toHolidayDto(updatedHoliday));
     }
 

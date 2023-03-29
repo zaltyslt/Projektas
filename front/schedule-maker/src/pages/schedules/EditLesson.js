@@ -67,12 +67,17 @@ export function EditLesson() {
   };
 
   const handleRoomSelect = (value) => {
-    setClassRoom(value);
-    let classroom = {
-      id: value.id,
-      classroomName: value.classroomName,
-    };
-    setSelectedClassRoom(classroom);
+    if (value != "") {
+      setClassRoom(value);
+      let classroom = {
+        id: value.id,
+        classroomName: value.classroomName,
+      };
+      setSelectedClassRoom(classroom);
+    } else {
+      setClassRoom("");
+      setSelectedClassRoom("");
+    }
   };
 
   const updateLesson = () => {
@@ -172,6 +177,7 @@ export function EditLesson() {
                     setSelectedTeacher(e.target.value);
                   }}
                 >
+                  <MenuItem value="">-----</MenuItem>
                   {teachers.length === 0 && (
                     <MenuItem>
                       Nurodytai pamainai ir dalykui tinkamo mokytojo nerasta
@@ -197,6 +203,7 @@ export function EditLesson() {
                     handleRoomSelect(e.target.value);
                   }}
                 >
+                  <MenuItem value="">-----</MenuItem>
                   {classRooms.map((classroom) => (
                     <MenuItem key={classroom.id} value={classroom}>
                       {classroom.classroomName}

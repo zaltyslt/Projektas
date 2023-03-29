@@ -19,15 +19,10 @@ import { BAD_SYMBOLS } from "../../helpers/constants";
 
 export function EditHoliday() {
   const [name, setName] = useState("");
-  const [dateFrom, setDateFrom] = useState("");
-  const [dateUntil, setDateUntil] = useState("");
+  const [holiday, setHoliday] = useState("");
   const [scheduleId, setScheduleId] = useState("");
-  const [dateFromEmpty, setDateFromEmpty] = useState(false);
-  const [dateUntilEmpty, setDateUntilEmpty] = useState(false);
   const [nameEmpty, setNameEmpty] = useState(false);
   const [validName, setValidName] = useState(false);
-  const [errorMessageFrom, setErrorMessageFrom] = useState("");
-  const [errorMessageUntil, setErrorMessageUntil] = useState("");
   const [createMessage, setCreateMessage] = useState("");
   const [error, setError] = useState("");
   const [openPrompt, setOpenPrompt] = useState(false);
@@ -38,6 +33,7 @@ export function EditHoliday() {
     fetch(`api/v1/schedules/holiday/${params.id}`)
       .then((response) => response.json())
       .then((data) => {
+        setHoliday(data);
         setName(data.name);
         setScheduleId(data.schedule.id);
       });
@@ -50,37 +46,13 @@ export function EditHoliday() {
     isValid ? setValidName(true) : setValidName(false);
   };
 
-  const validateDateFrom = (value) => {
-    setDateFrom(dateToUtc(value));
-    if (value.length === 0) {
-      setDateFromEmpty(true);
-    } else {
-      setDateFromEmpty(false);
-      setErrorMessageFrom("");
-    }
-  };
-
-  const validateDateUntil = (value) => {
-    setDateUntil(dateToUtc(value));
-    if (value.length === 0) {
-      setDateUntilEmpty(true);
-    } else {
-      setDateUntilEmpty(false);
-      setErrorMessageUntil("");
-    }
-  };
-
   const updateHoliday = () => {
     fetch(`api/v1/schedules/holidays/update-holiday/${params.id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        name,
-        dateFrom: dateFrom.$d.toISOString().split("T")[0],
-        dateUntil: dateUntil.$d.toISOString().split("T")[0],
-      }),
+      body: name,
     }).then((response) => {
       let success = response.ok;
       response.json().then((response) => {
@@ -104,25 +76,7 @@ export function EditHoliday() {
     if (validName) {
       isValid = false;
     }
-    if (dateFrom === "" || dateFrom === "undefined") {
-      setDateFromEmpty(true);
-      setErrorMessageFrom("Privaloma pasirinkti pradžios datą.");
-      isValid = false;
-    } else {
-      setDateFromEmpty(false);
-    }
-    if (dateUntil === "" || dateUntil === "undefined") {
-      setDateUntilEmpty(true);
-      setErrorMessageUntil("Privaloma pasirinkti pabaigos datą.");
-      isValid = false;
-    } else {
-      setDateUntilEmpty(false);
-    }
-    if (dateFrom !== "" && dateUntil !== "" && dateFrom.isAfter(dateUntil)) {
-      setErrorMessageUntil("Diena iki negali būti anksčiau už dieną nuo.");
-      setDateUntilEmpty(true);
-      isValid = false;
-    }
+    
     if (isValid) {
       setCreateMessage("");
       updateHoliday();
@@ -156,7 +110,7 @@ export function EditHoliday() {
           aria-describedby="alert-dialog-slide-description"
         >
           <DialogTitle>
-            {"Ar tikrai norite ištrinti pasirinktas atostogas visam laikui?"}
+            {"Ar tikrai norite ištrinti pasirinktą atostogų dieną?"}
           </DialogTitle>
           <DialogActions>
             <Button onClick={handleClose}>Atšaukti</Button>
@@ -164,6 +118,7 @@ export function EditHoliday() {
           </DialogActions>
         </Dialog>
         <h3>Atostogų redagavimas</h3>
+        <h5>{holiday.date}</h5>
         <Grid container rowSpacing={2} spacing={2}>
           <Grid item sm={10}>
             <TextField
@@ -183,40 +138,6 @@ export function EditHoliday() {
                     : ""
               }
             ></TextField>
-          </Grid>
-          <Grid item sm={5}>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DatePicker
-                className="DatePicker"
-                label="Nuo"
-                format="YYYY/MM/DD"
-                value={dateFrom}
-                onChange={(e) => validateDateFrom(e)}
-                slotProps={{
-                  textField: {
-                    helperText: errorMessageFrom,
-                    error: dateFromEmpty,
-                  },
-                }}
-              ></DatePicker>
-            </LocalizationProvider>
-          </Grid>
-          <Grid item sm={5}>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DatePicker
-                className="DatePicker"
-                label="Iki"
-                format="YYYY/MM/DD"
-                value={dateUntil}
-                onChange={(e) => validateDateUntil(e)}
-                slotProps={{
-                  textField: {
-                    helperText: errorMessageUntil,
-                    error: dateUntilEmpty,
-                  },
-                }}
-              ></DatePicker>
-            </LocalizationProvider>
           </Grid>
           <Grid item sm={10}>
             {error && <Alert severity="warning">{error}</Alert>}
