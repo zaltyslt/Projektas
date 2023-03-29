@@ -13,7 +13,6 @@ import java.util.Objects;
 @Entity
 @Table(name = "ClassGroup")
 public class Group {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -44,9 +43,11 @@ public class Group {
     private LocalDateTime modifiedDate;
 
 
-    public Group() { }
+    public Group() {
+    }
 
-    public Group(Long id, String name, String schoolYear, int studentAmount, boolean isActive, Program program, Shift shift) {
+    public Group(Long id, String name, String schoolYear, int studentAmount,
+                 boolean isActive, Program program, Shift shift) {
         this.id = id;
         this.name = name;
         this.schoolYear = schoolYear;
@@ -56,7 +57,8 @@ public class Group {
         this.shift = shift;
     }
 
-    public Group(Long id, String name, String schoolYear, int studentAmount, boolean isActive, Program program, Shift shift, LocalDateTime createdDate, LocalDateTime modifiedDate) {
+    public Group(Long id, String name, String schoolYear, int studentAmount, boolean isActive,
+                 Program program, Shift shift, LocalDateTime createdDate, LocalDateTime modifiedDate) {
         this.id = id;
         this.name = name;
         this.schoolYear = schoolYear;
@@ -148,7 +150,12 @@ public class Group {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Group group)) return false;
-        return schoolYear == group.schoolYear && studentAmount == group.studentAmount && id.equals(group.id) && name.equals(group.name) && isActive.equals(group.isActive) && Objects.equals(program, group.program) && Objects.equals(shift, group.shift) && Objects.equals(createdDate, group.createdDate) && Objects.equals(modifiedDate, group.modifiedDate);
+        return schoolYear == group.schoolYear
+                && studentAmount == group.studentAmount
+                && id.equals(group.id) && name.equals(group.name)
+                && isActive.equals(group.isActive) && Objects.equals(program, group.program)
+                && Objects.equals(shift, group.shift) && Objects.equals(createdDate, group.createdDate)
+                && Objects.equals(modifiedDate, group.modifiedDate);
     }
 
     @Override

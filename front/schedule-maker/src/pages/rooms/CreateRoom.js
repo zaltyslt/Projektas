@@ -66,14 +66,10 @@ export function CreateRoom(props) {
     setErrorEmptyDesc(false);
     setErrorSymbolsDesc(false);
     setErrorBuilding(false);
-
-    if (
-      classroomName === "" &&
-      description === "" 
-    ) {
+    if (classroomName === "" && description === "") {
       setErrorEmptyName(true);
       setErrorEmptyDesc(true);
-    }else if (!classroomName) {
+    } else if (!classroomName) {
       setErrorEmptyName(true);
     } else if (
       classroomName.split("").some((char) => invalidSymbols.includes(char))
@@ -115,9 +111,8 @@ export function CreateRoom(props) {
           <Grid item sm={8}>
             <FormControl fullWidth required error={errorBuilding}>
               <InputLabel id="building-label">
-                {errorBuilding
-                  ? "Prašome pasirinkti pastatą."
-                  : "Pastatas"}</InputLabel>
+                {errorBuilding ? "Prašome pasirinkti pastatą." : "Pastatas"}
+              </InputLabel>
               <Select
                 required
                 variant="outlined"
@@ -136,15 +131,15 @@ export function CreateRoom(props) {
             <TextField
               fullWidth
               required
-              error={errorEmptyName || errorSymbolsName || errorLengthName }
+              error={errorEmptyName || errorSymbolsName || errorLengthName}
               helperText={
                 errorEmptyName
                   ? "Klasės pavadinimas yra privalomas."
                   : errorSymbolsName
-                    ? "Klasės pavadinimas turi neleidžiamų simbolių." 
+                    ? "Klasės pavadinimas turi neleidžiamų simbolių."
                     : errorLengthName
-                    ? "Klasės pavadinimas negali būti ilgesnis nei 200 simbolių"
-                    : ""
+                      ? "Klasės pavadinimas negali būti ilgesnis nei 200 simbolių"
+                      : ""
               }
               variant="outlined"
               id="classroomName"
@@ -159,7 +154,6 @@ export function CreateRoom(props) {
                 }
                 setClassroomName(input);
               }}
-              // onChange={(e) => setClassroomName(e.target.value)}
             />
           </Grid>
           <Grid item sm={8}>
@@ -174,8 +168,8 @@ export function CreateRoom(props) {
                   : errorSymbolsDesc
                     ? "Klasės aprašas turi neleidžiamų simbolių."
                     : errorLengthDesc
-                    ? "Klasės aprašas negali būti ilgesnis nei 2000 simbolių"
-                    : ""
+                      ? "Klasės aprašas negali būti ilgesnis nei 2000 simbolių"
+                      : ""
               }
               variant="outlined"
               label="Klasės aprašas"
@@ -190,15 +184,22 @@ export function CreateRoom(props) {
                 }
                 setDescription(input);
               }}
-              // onChange={(e) => setDescription(e.target.value)}
             ></TextField>
           </Grid>
           <Grid item sm={8} marginTop={2}>
             <Stack direction="row" spacing={2}>
-              <Button variant="contained" onClick={createClassroom}>
+              <Button
+                id="save-button-create-room "
+                variant="contained"
+                onClick={createClassroom}
+              >
                 Išsaugoti
               </Button>
-              <Button variant="contained" onClick={() => navigate(-1)}>
+              <Button
+                id="back-button-create-room "
+                variant="contained"
+                onClick={() => navigate(-1)}
+              >
                 Grįžti
               </Button>
             </Stack>

@@ -32,11 +32,9 @@ export function EditLesson() {
   const [classRoom, setClassRoom] = useState("");
   const [selectedClassRoom, setSelectedClassRoom] = useState("");
   const [online, setOnline] = useState(false);
-
   const [error, setError] = useState("");
   const [createMessage, setCreateMessage] = useState("");
   const [openPrompt, setOpenPrompt] = useState(false);
-
   const params = useParams();
   const calendarUrl = useHref(`/schedules/${scheduleId}`);
 
@@ -44,7 +42,6 @@ export function EditLesson() {
     fetch(`api/v1/schedules/lesson/${params.id}`)
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
         setWorkDay(data);
         setSubject(data.subject);
         setScheduleId(data.schedule.id);
@@ -70,12 +67,17 @@ export function EditLesson() {
   };
 
   const handleRoomSelect = (value) => {
-    setClassRoom(value);
-    let classroom = {
-      id: value.id,
-      classroomName: value.classroomName,
-    };
-    setSelectedClassRoom(classroom);
+    if (value != "") {
+      setClassRoom(value);
+      let classroom = {
+        id: value.id,
+        classroomName: value.classroomName,
+      };
+      setSelectedClassRoom(classroom);
+    } else {
+      setClassRoom("");
+      setSelectedClassRoom("");
+    }
   };
 
   const updateLesson = () => {
@@ -91,7 +93,6 @@ export function EditLesson() {
       }),
     }).then((response) => {
       let success = response.ok;
-
       response.json().then((response) => {
         if (!success) {
           setCreateMessage("");
@@ -123,7 +124,6 @@ export function EditLesson() {
     );
     const firstLesson = startLessons[0];
     const startint = firstLesson.value;
-
     const endLesson = lessonsWithTime.filter(
       (value) => value.label === workDay.lessonEnd
     );
@@ -177,6 +177,7 @@ export function EditLesson() {
                     setSelectedTeacher(e.target.value);
                   }}
                 >
+                  <MenuItem value="">-----</MenuItem>
                   {teachers.length === 0 && (
                     <MenuItem>
                       Nurodytai pamainai ir dalykui tinkamo mokytojo nerasta
@@ -190,7 +191,6 @@ export function EditLesson() {
                 </Select>
               </FormControl>
             </Grid>
-
             <Grid item sm={10}>
               <FormControl fullWidth>
                 <InputLabel id="classroom-label">Klasės pavadinimas</InputLabel>
@@ -203,6 +203,7 @@ export function EditLesson() {
                     handleRoomSelect(e.target.value);
                   }}
                 >
+                  <MenuItem value="">-----</MenuItem>
                   {classRooms.map((classroom) => (
                     <MenuItem key={classroom.id} value={classroom}>
                       {classroom.classroomName}
@@ -211,21 +212,18 @@ export function EditLesson() {
                 </Select>
               </FormControl>
             </Grid>
-
             <Grid item sm={10}>
               <FormControlLabel
                 label="Nuotolinės pamokos"
                 control={<Checkbox onChange={handleCheck}></Checkbox>}
               ></FormControlLabel>
             </Grid>
-
             <Grid item sm={10}>
               {error && <Alert severity="warning">{error}</Alert>}
               {createMessage && (
                 <Alert severity="success">{createMessage}</Alert>
               )}
             </Grid>
-
             <Grid item sm={10}>
               <Stack direction="row" spacing={2}>
                 <Button variant="contained" onClick={updateLesson}>

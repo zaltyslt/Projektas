@@ -1,7 +1,7 @@
 package lt.techin.schedule.programs.subjectsHours;
 
 public class SubjectHoursMapper {
-    public static SubjectHoursDto toSubjectHoursDto(SubjectHours subjectHours){
+    public static SubjectHoursDto toSubjectHoursDto(SubjectHours subjectHours) {
         var subjectHoursDto = new SubjectHoursDto();
         subjectHoursDto.setId(subjectHours.getId());
         subjectHoursDto.setSubjectName(subjectHours.getSubjectName());
@@ -13,7 +13,7 @@ public class SubjectHoursMapper {
         return subjectHoursDto;
     }
 
-    public static SubjectHours toSubjectHours(SubjectHoursDto subjectHoursDto){
+    public static SubjectHours toSubjectHours(SubjectHoursDto subjectHoursDto) {
         var subjectHours = new SubjectHours();
         subjectHours.setId(subjectHoursDto.getId());
         subjectHours.setSubjectName(subjectHoursDto.getSubjectName());

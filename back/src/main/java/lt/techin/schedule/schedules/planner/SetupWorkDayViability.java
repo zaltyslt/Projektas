@@ -12,7 +12,8 @@ import java.util.List;
 import java.util.Set;
 
 public class SetupWorkDayViability {
-    public static WorkDay SetupWorkDay(Long scheduleID, WorkDay workDay, ScheduleRepository scheduleRepository, WorkDayRepository workDayRepository, Schedule primarySchedule) {
+    public static WorkDay setupWorkDay (Long scheduleID, WorkDay workDay, ScheduleRepository scheduleRepository,
+                                        WorkDayRepository workDayRepository, Schedule primarySchedule) {
         //Assigned so workDay.getDate() method wouldn't be called unnecessarily
         LocalDate workDayDate = workDay.getDate();
 
@@ -23,14 +24,14 @@ public class SetupWorkDayViability {
             if (!schedule.getId().equals(scheduleID)) {
                 Set<WorkDay> workingDays = schedule.getWorkingDays();
                 for (WorkDay loopingWorkDay : workingDays) {
-                    if (CheckIfWorkdaysIntertwine(workDay, workDayDate, loopingWorkDay)) {
+                    if (checkIfWorkdaysIntertwine(workDay, workDayDate, loopingWorkDay)) {
                         //Checks whether classrooms are the ones having conflict, sending values to original WorkDay
                         if (workDay.getClassroom().equals(loopingWorkDay.getClassroom())) {
                             //Setting current WorkDay
                             workDay.setHasClassroomConflict(true);
                             workDay.addClassroomConflict(schedule.getId(), workDay.getClassroom().getClassroomName());
                             //Setting WorkDay which has conflicts
-                            loopingWorkDay.setHasTeacherConflict(true);
+                            loopingWorkDay.setHasClassroomConflict(true);
                             loopingWorkDay.addClassroomConflict(scheduleID, workDay.getClassroom().getClassroomName());
                             //Need to rewrite WorkDay which has conflicts with current WorkDay
                             workDayRepository.save(loopingWorkDay);
@@ -62,13 +63,13 @@ public class SetupWorkDayViability {
         return workDay;
     }
 
-    public static boolean CheckIfLocalDateIsWorkable (LocalDate localDate, Set<Holiday> holidays, Set<WorkDay> workDays) {
+    public static boolean checkIfLocalDateIsWorkable (LocalDate localDate, Set<Holiday> holidays, Set<WorkDay> workDays) {
         //Returns false if a localDate checked is a weekend
         if (localDate.getDayOfWeek() == DayOfWeek.SATURDAY || localDate.getDayOfWeek() == DayOfWeek.SUNDAY) {
             return false;
         }
         //Checks whether it's a Lithuanian holiday date
-        if (!LithuanianHolidaySetup.IsItNotAnLithuanianHolidayDate(localDate)) {
+        if (LithuanianHolidaySetup.isItNotAnLithuanianHolidayDate(localDate)) {
             return false;
         }
         //Checks whether localDate passed is a holiday, returns false if it is
@@ -83,7 +84,7 @@ public class SetupWorkDayViability {
     }
 
 
-    private static boolean CheckIfWorkdaysIntertwine (WorkDay currentWorkDay, LocalDate currentDate, WorkDay loopingWorkDay) {
+    public static boolean checkIfWorkdaysIntertwine (WorkDay currentWorkDay, LocalDate currentDate, WorkDay loopingWorkDay) {
         //Checks whether WorkDays are on the same date
         if (currentDate.isEqual(loopingWorkDay.getDate())) {
             //Returns true if a lesson happens at the same time

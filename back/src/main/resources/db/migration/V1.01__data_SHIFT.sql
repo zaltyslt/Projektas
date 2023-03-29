@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS  SHIFT
+CREATE TABLE IF NOT EXISTS SHIFT
 (
     ID                  BIGINT auto_increment
 --         not null

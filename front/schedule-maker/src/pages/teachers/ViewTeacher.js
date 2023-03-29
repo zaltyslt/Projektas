@@ -22,13 +22,11 @@ export function ViewTeacher() {
         setTeacher(data);
         setContacts(data.contacts);
         setTeacherSubjects(data.subjectsList);
-        // console.log(data);
       });
   };
 
   useEffect(() => {
     getTeacherData();
-    
   }, []);
 
   return (
@@ -38,33 +36,27 @@ export function ViewTeacher() {
           <Grid item sm={10} marginTop={4}>
             <header>
               <h1>{teacher.fName + " " + teacher.lName}</h1>
-             
               <span id="modified-date">
                 Paskutinį kartą redaguota: {teacher.dateModified}
               </span>
             </header>
           </Grid>
-
           <Grid item sm={12}>
             <h4>Kontaktinis telefonas</h4>
             <p>{contacts.phoneNumber ? contacts.phoneNumber : ""}</p>
           </Grid>
-
           <Grid item sm={12}>
             <h4>El. paštas</h4>
             <p>{contacts.directEmail ? contacts.directEmail : ""}</p>
           </Grid>
-
           <Grid item sm={12}>
             <h4>Teams vardas</h4>
             <p>{contacts.teamsName ? contacts.teamsName : ""}</p>
           </Grid>
-
           <Grid item sm={12}>
             <h4>Teams el. paštas</h4>
             <p>{contacts.teamsEmail ? contacts.teamsEmail : ""}</p>
           </Grid>
-
           <Grid item sm={12}>
             <h4>Valandos per savaitę</h4>
             <p>{teacher.workHoursPerWeek && teacher.workHoursPerWeek}</p>
@@ -77,15 +69,12 @@ export function ViewTeacher() {
                 : "Duomenys nepasiekiami"}
             </p>
           </Grid>
-
           <Grid item sm={12}>
             <h4>Dėstomi dalykai</h4>
-            {/* {teacher.subjectsDtoList && teacher.subjectsDtoList.length > 0 */}
             {teacherSubjects.map((subjectItem, index) => {
               return <p key={index}>{subjectItem.name}</p>;
             })}
           </Grid>
-
           <Grid item sm={12} marginBottom={10}>
             <Stack direction="row" spacing={2}>
               <Link to={`/teachers/edit/${teacher.id}`}>

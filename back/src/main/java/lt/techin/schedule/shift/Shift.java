@@ -2,12 +2,9 @@ package lt.techin.schedule.shift;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lt.techin.schedule.group.Group;
 import lt.techin.schedule.teachers.Teacher;
-import lt.techin.schedule.validators.TextValid;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -16,33 +13,22 @@ import java.util.Set;
 @Entity
 public class Shift {
     @Id
-//    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
-
     private String name;
-
     private String shiftStartingTime;
-
     private String shiftEndingTime;
-
-
     @OneToMany(mappedBy = "shift", fetch = FetchType.LAZY)
-//    @JsonBackReference
     @JsonBackReference
     private Set<Teacher> teachers;
-
     @OneToMany
     @JoinColumn(name = "shift_group")
     private Set<Group> groups;
-
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime createdDate;
-
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime modifiedDate;
-
     private int startIntEnum;
     private int endIntEnum;
     private boolean isActive;
@@ -50,7 +36,8 @@ public class Shift {
     public Shift() {
     }
 
-    public Shift(String name, String shiftStartingTime, String shiftEndingTime, boolean isActive, int startIntEnum, int endIntEnum) {
+    public Shift(String name, String shiftStartingTime, String shiftEndingTime,
+                 boolean isActive, int startIntEnum, int endIntEnum) {
         this.name = name;
         this.shiftStartingTime = shiftStartingTime;
         this.shiftEndingTime = shiftEndingTime;
@@ -146,7 +133,11 @@ public class Shift {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Shift shift)) return false;
-        return isActive == shift.isActive && id.equals(shift.id) && Objects.equals(name, shift.name) && Objects.equals(shiftStartingTime, shift.shiftStartingTime) && Objects.equals(shiftEndingTime, shift.shiftEndingTime);
+        return isActive == shift.isActive
+                && id.equals(shift.id)
+                && Objects.equals(name, shift.name)
+                && Objects.equals(shiftStartingTime, shift.shiftStartingTime)
+                && Objects.equals(shiftEndingTime, shift.shiftEndingTime);
     }
 
     @Override

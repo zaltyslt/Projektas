@@ -50,7 +50,8 @@ public class Module {
         this.deleted = deleted;
     }
 
-    public Module(Long id, String number, String name, LocalDateTime createdDate, LocalDateTime modifiedDate, boolean deleted) {
+    public Module(Long id, String number, String name, LocalDateTime createdDate,
+                  LocalDateTime modifiedDate, boolean deleted) {
         this.id = id;
         this.number = number;
         this.name = name;
@@ -65,7 +66,8 @@ public class Module {
         this.name = name;
     }
 
-    public Long getId() { return id;
+    public Long getId() {
+        return id;
     }
 
     public void setId(Long id) {
@@ -117,7 +119,12 @@ public class Module {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Module module = (Module) o;
-        return deleted == module.deleted && Objects.equals(id, module.id) && Objects.equals(number, module.number) && Objects.equals(name, module.name) && Objects.equals(createdDate, module.createdDate) && Objects.equals(modifiedDate, module.modifiedDate);
+        return deleted == module.deleted
+                && Objects.equals(id, module.id)
+                && Objects.equals(number, module.number)
+                && Objects.equals(name, module.name)
+                && Objects.equals(createdDate, module.createdDate)
+                && Objects.equals(modifiedDate, module.modifiedDate);
     }
 
     @Override

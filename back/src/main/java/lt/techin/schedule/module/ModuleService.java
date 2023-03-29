@@ -22,7 +22,7 @@ public class ModuleService {
     }
 
     public List<Module> getAll() {
-        return moduleRepository.findAll().stream().filter(module-> !module.isDeleted()).collect(Collectors.toList());
+        return moduleRepository.findAll().stream().filter(module -> !module.isDeleted()).collect(Collectors.toList());
     }
 
     public List<Module> getAllDeleted() {
@@ -46,8 +46,7 @@ public class ModuleService {
     public String create(Module module) {
         if (moduleRepository.findAll().stream().anyMatch(m -> m.getNumber().equalsIgnoreCase(module.getNumber()))) {
             return "Modulio numeris turi būti unikalus.";
-        }
-        else {
+        } else {
             moduleRepository.save(module);
             return "";
         }
@@ -56,7 +55,7 @@ public class ModuleService {
     public String updateModule(Long id, Module module) {
         if (moduleRepository.findById(id).isPresent()) {
             Optional<Module> foundModule = findModuleByNumber(module.getNumber());
-            if(foundModule.isPresent() && !foundModule.get().getId().equals(id)) {
+            if (foundModule.isPresent() && !foundModule.get().getId().equals(id)) {
                 return "Modulio numeris turi būti unikalus.";
             }
             module.setId(id);

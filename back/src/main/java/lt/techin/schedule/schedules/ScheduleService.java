@@ -1,19 +1,12 @@
 package lt.techin.schedule.schedules;
 
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.EntityTransaction;
-import jakarta.persistence.Persistence;
-import lt.techin.schedule.config.LithuanianHolidays;
 import lt.techin.schedule.exceptions.ValidationException;
 import lt.techin.schedule.group.GroupRepository;
 import lt.techin.schedule.schedules.holidays.Holiday;
-import lt.techin.schedule.schedules.holidays.HolidayPlan.HolidayPlanRepository;
 import lt.techin.schedule.schedules.holidays.HolidayRepository;
 import lt.techin.schedule.schedules.holidays.LithuanianHolidaySetup;
 import lt.techin.schedule.schedules.planner.WorkDayRepository;
 import lt.techin.schedule.subject.SubjectRepository;
-import lt.techin.schedule.teachers.Teacher;
 import lt.techin.schedule.teachers.TeacherRepository;
 import org.springframework.stereotype.Service;
 
@@ -30,7 +23,6 @@ public class ScheduleService {
     private final GroupRepository groupRepository;
 
     private final HolidayRepository holidayRepository;
-    private final HolidayPlanRepository holidayPlanRepository;
 
     private final SubjectRepository subjectRepository;
 
@@ -41,15 +33,13 @@ public class ScheduleService {
     public ScheduleService(ScheduleRepository scheduleRepository,
                            GroupRepository groupRepository,
                            SubjectRepository subjectRepository,
-                           TeacherRepository teacherRepository, WorkDayRepository workDayRepository, HolidayRepository holidayRepository,
-                           HolidayPlanRepository holidayPlanRepository) {
+                           TeacherRepository teacherRepository, WorkDayRepository workDayRepository, HolidayRepository holidayRepository) {
         this.scheduleRepository = scheduleRepository;
         this.groupRepository = groupRepository;
         this.subjectRepository = subjectRepository;
         this.teacherRepository = teacherRepository;
         this.workDayRepository = workDayRepository;
         this.holidayRepository = holidayRepository;
-        this.holidayPlanRepository = holidayPlanRepository;
     }
 
     public List<Schedule> getAll() {
@@ -81,7 +71,7 @@ public class ScheduleService {
             Schedule scheduleToSave = scheduleRepository.save(schedule);
 
             //Setting up predefined holidays for schedule which are in the range of this schedule
-            LinkedHashSet<Holiday> predefinedHolidays = LithuanianHolidaySetup.SetupHolidaysInRange(schedule.getDateFrom(), schedule.getDateUntil(), schedule);
+            LinkedHashSet<Holiday> predefinedHolidays = LithuanianHolidaySetup.setupHolidaysInRange(schedule.getDateFrom(), schedule.getDateUntil(), schedule);
             holidayRepository.saveAll(predefinedHolidays);
             scheduleToSave.addHolidays(predefinedHolidays);
 
@@ -109,20 +99,6 @@ public class ScheduleService {
 
     public boolean deleteSchedule(Long id) {
         Optional<Schedule> scheduleToDelete = scheduleRepository.findById(id);
-// obtain EntityManager instance
-//        EntityManagerFactory emf = Persistence.createEntityManagerFactory("persistenceUnitName");
-//        EntityManager em = emf.createEntityManager();
-//        EntityTransaction transaction = em.getTransaction();
-//        transaction.begin();
-//        em.getTransaction().begin();
-//
-//        Query query = em.createNativeQuery("DELETE FROM customer WHERE id = :id");
-//        query.setParameter("id", 1L);
-//        int deletedCount = query.executeUpdate();
-//
-//        em.getTransaction().commit();
-//        scheduleRepository.deleteClassGroupById(4L);
-
         if (scheduleToDelete.isPresent()) {
             try {
                 scheduleRepository.delete(scheduleToDelete.get());
@@ -132,6 +108,5 @@ public class ScheduleService {
             }
         }
         throw new ValidationException("Toks tvarkaraštis neegzistuoja","id","not found",id.toString());
-
     }
 }

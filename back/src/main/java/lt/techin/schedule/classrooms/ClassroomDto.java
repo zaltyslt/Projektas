@@ -1,7 +1,6 @@
 package lt.techin.schedule.classrooms;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import lt.techin.schedule.validators.TextValid;
 
 import java.time.LocalDateTime;
 import java.util.Objects;

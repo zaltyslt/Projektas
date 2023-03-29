@@ -1,37 +1,26 @@
 package lt.techin.schedule.shift;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lt.techin.schedule.config.DataFieldsLengthConstraints;
-import lt.techin.schedule.teachers.Teacher;
-import lt.techin.schedule.teachers.TeacherDto;
 import lt.techin.schedule.validators.TextValid;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
-import java.util.Set;
 
 public class ShiftDto {
-
     private Long id;
-
     @TextValid(textMaximumLength = DataFieldsLengthConstraints.TEXT_FIELD_MAXIMUM_LENGTH)
     private String name;
 
     private String shiftStartingTime;
-
     private String shiftEndingTime;
-
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime createdDate;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime modifiedDate;
-
     private Integer startIntEnum;
     private Integer endIntEnum;
     private Boolean isActive;
-
-//    private Set<TeacherDto> teachers = null;
 
     public ShiftDto() {
     }
@@ -108,14 +97,6 @@ public class ShiftDto {
         isActive = active;
     }
 
-//    public Set<TeacherDto> getTeachers() {
-//        return teachers;
-//}
-//
-//    public void setTeachers(Set<TeacherDto> teachers) {
-//        this.teachers = teachers;
-//    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -126,14 +107,13 @@ public class ShiftDto {
                 && Objects.equals(shiftEndingTime, that.shiftEndingTime)
                 && Objects.equals(createdDate, that.createdDate) && Objects.equals(modifiedDate, that.modifiedDate)
                 && Objects.equals(startIntEnum, that.startIntEnum) && Objects.equals(endIntEnum, that.endIntEnum)
-                && Objects.equals(isActive, that.isActive) ;
-//                && Objects.equals(teachers, that.teachers);
+                && Objects.equals(isActive, that.isActive);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, shiftStartingTime, shiftEndingTime, createdDate, modifiedDate, startIntEnum, endIntEnum, isActive
-//                ,teachers
+        return Objects.hash(id, name, shiftStartingTime, shiftEndingTime,
+                createdDate, modifiedDate, startIntEnum, endIntEnum, isActive
         );
     }
 
@@ -149,7 +129,6 @@ public class ShiftDto {
                 ", startIntEnum=" + startIntEnum +
                 ", endIntEnum=" + endIntEnum +
                 ", isActive=" + isActive +
-//                ", teachers=" + teachers +
                 '}';
     }
 }

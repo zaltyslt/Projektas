@@ -2,21 +2,14 @@ package lt.techin.schedule.group;
 
 
 import jakarta.validation.Valid;
-import lt.techin.schedule.shift.Shift;
-import lt.techin.schedule.shift.ShiftDto;
-import lt.techin.schedule.shift.ShiftMapper;
-import lt.techin.schedule.shift.ShiftService;
-import lt.techin.schedule.teachers.TeacherDto;
 import lt.techin.schedule.validators.ValidationDto;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -51,6 +44,7 @@ public class GroupController {
 
     @PatchMapping("/activate-group/{groupID}")
     public void activateShift(@PathVariable Long groupID) {
+
         groupService.changeActiveGroupStatusByID(groupID, true);
     }
 
@@ -58,9 +52,10 @@ public class GroupController {
     public void deactivateShift(@PathVariable Long groupID) {
         groupService.changeActiveGroupStatusByID(groupID, false);
     }
+
     @PostMapping(value = "/add-group", consumes = {MediaType.APPLICATION_JSON_VALUE})
-    public @ResponseBody ValidationDto addGroup (@RequestBody @Valid GroupDto groupToAddDto, BindingResult bindingResult) {
-       ValidationDto validationDto = new ValidationDto();
+    public @ResponseBody ValidationDto addGroup(@RequestBody @Valid GroupDto groupToAddDto, BindingResult bindingResult) {
+        ValidationDto validationDto = new ValidationDto();
         if (bindingResult.hasErrors()) {
             List<ObjectError> errors = bindingResult.getAllErrors();
             for (int x = 0; x < bindingResult.getAllErrors().size(); x++) {
@@ -70,11 +65,10 @@ public class GroupController {
             }
             validationDto.setPassedValidation(false);
             validationDto.setValid(false);
-        }
-        else {
+        } else {
             String addResponse = groupService.addUniqueGroup(groupToAddDto);
             validationDto.setPassedValidation(true);
-            if(addResponse == null || addResponse.isEmpty()) {
+            if (addResponse == null || addResponse.isEmpty()) {
                 validationDto.setValid(true);
             } else {
                 validationDto.setValid(false);
@@ -109,5 +103,4 @@ public class GroupController {
         }
         return validationDto;
     }
-
 }

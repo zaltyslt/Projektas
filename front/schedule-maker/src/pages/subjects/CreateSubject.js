@@ -116,9 +116,7 @@ export function CreateSubject() {
         classRooms,
       }),
     }).then((response) => {
-      // let statusCode = response.status;
       let success = response.ok;
-
       response.json().then((response) => {
         if (!success) {
           setCreateMessage("");
@@ -146,8 +144,8 @@ export function CreateSubject() {
                 nameError
                   ? "Dalyko pavadinimas yra privalomas"
                   : nameNotValid
-                  ? "Laukas turi negalimų simbolių. "
-                  : ""
+                    ? "Laukas turi negalimų simbolių. "
+                    : ""
               }
               variant="outlined"
               label="Dalyko pavadinimas"
@@ -157,19 +155,17 @@ export function CreateSubject() {
               onChange={(e) => setName(e.target.value)}
             ></TextField>
           </Grid>
-
           <Grid item sm={8}>
             <TextField
               fullWidth
               required
               multiline
-              // error={descriptionError || descriptionNotValid}
               helperText={
                 descriptionError
                   ? "Dalyko aprašas yra privalomas. "
                   : descriptionNotValid
-                  ? "Laukas turi negalimų simbolių. "
-                  : ""
+                    ? "Laukas turi negalimų simbolių. "
+                    : ""
               }
               variant="outlined"
               label="Dalyko aprašas"
@@ -178,7 +174,6 @@ export function CreateSubject() {
               onChange={(e) => setDescription(e.target.value)}
             ></TextField>
           </Grid>
-
           <Grid item sm={8}>
             <FormControl fullWidth required error={moduleError}>
               <InputLabel id="module-label">
@@ -203,7 +198,6 @@ export function CreateSubject() {
               </Select>
             </FormControl>
           </Grid>
-
           <Grid item sm={8}>
             <FormControl fullWidth required error={classRoomError}>
               <InputLabel id="room-label">
@@ -227,15 +221,19 @@ export function CreateSubject() {
               </Select>
             </FormControl>
           </Grid>
-
           <Grid item sm={8} marginTop={2}>
             <Stack direction="row" spacing={2}>
-              <Button variant="contained" onClick={validation}>
+              <Button
+                id="save-button-create-subject"
+                variant="contained"
+                onClick={validation}
+              >
                 Išsaugoti
               </Button>
-
               <Link to="/subjects">
-                <Button variant="contained">Grįžti</Button>
+                <Button id="back-button-create-subject" variant="contained">
+                  Grįžti
+                </Button>
               </Link>
             </Stack>
           </Grid>

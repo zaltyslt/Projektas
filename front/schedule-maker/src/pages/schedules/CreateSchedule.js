@@ -25,10 +25,8 @@ export function CreateSchedule() {
   const [semester, setSemester] = useState("");
   const [dateFrom, setDateFrom] = useState("");
   const [dateUntil, setDateUntil] = useState("");
-
   const [error, setError] = useState("");
   const [createMessage, setCreateMessage] = useState("");
-
   const [semesterEmpty, setSemesterEmpty] = useState(false);
   const [semesterValid, setSemesterValid] = useState(true);
   const [groupEmpty, setGroupEmpty] = useState(false);
@@ -36,12 +34,10 @@ export function CreateSchedule() {
   const [schoolYearValid, setSchoolYearValid] = useState(false);
   const [dateFromEmpty, setDateFromEmpty] = useState(false);
   const [dateUntilEmpty, setDateUntilEmpty] = useState(false);
-
   const [errorMessageFrom, setErrorMessageFrom] = useState("");
   const [errorMessageUntil, setErrorMessageUntil] = useState("");
   const [errorLengthName, setErrorLengthName] = useState(false);
   const [errorLengthYear, setErrorLengthYear] = useState(false);
-
   const badSymbols = "!@#$%^&*_+={}<>|~`\\'";
 
   useEffect(() => {
@@ -53,7 +49,6 @@ export function CreateSchedule() {
   const validateSemester = (value) => {
     setSemester(value);
     value.length === 0 ? setSemesterEmpty(true) : setSemesterEmpty(false);
-
     const isValid = value.split("").some((char) => badSymbols.includes(char));
     isValid ? setSemesterValid(false) : setSemesterValid(true);
   };
@@ -61,7 +56,6 @@ export function CreateSchedule() {
   const validateSchoolYear = (value) => {
     setSchoolYear(value);
     value.length === 0 ? setSchoolYearEmpty(true) : setSchoolYearEmpty(false);
-
     const isValid = /^[0-9\/-]+$/.test(value);
     isValid ? setSchoolYearValid(false) : setSchoolYearValid(true);
   };
@@ -97,21 +91,17 @@ export function CreateSchedule() {
       setGroupEmpty(true);
       isValid = false;
     }
-
     if (schoolYear === "" || schoolYear === "undefined") {
       setSchoolYearEmpty(true);
       isValid = false;
     }
-
     if (schoolYearValid) {
       isValid = false;
     }
-
     if (semester === "" || semester === "undefined") {
       setSemesterEmpty(true);
       isValid = false;
     }
-
     if (dateFrom === "" || dateFrom === "undefined") {
       setDateFromEmpty(true);
       setErrorMessageFrom("Privaloma pasirinkti pradžios datą.");
@@ -119,7 +109,6 @@ export function CreateSchedule() {
     } else {
       setDateFromEmpty(false);
     }
-
     if (dateUntil === "" || dateUntil === "undefined") {
       setDateUntilEmpty(true);
       setErrorMessageUntil("Privaloma pasirinkti pabaigos datą.");
@@ -127,18 +116,16 @@ export function CreateSchedule() {
     } else {
       setDateUntilEmpty(false);
     }
-
     if (dateFrom !== "" && dateUntil !== "" && dateFrom.isAfter(dateUntil)) {
       setErrorMessageUntil("Diena iki negali būti vėliau už dieną nuo.");
       setDateUntilEmpty(true);
       isValid = false;
     }
-
     if (
       dateFrom !== "" &&
       dateUntil !== "" &&
       dateFrom.$d.toISOString().split("T")[0] ===
-        dateUntil.$d.toISOString().split("T")[0]
+      dateUntil.$d.toISOString().split("T")[0]
     ) {
       setErrorMessageUntil(
         "Pradžios ir pabaigos data negali būti ta pati diena."
@@ -146,7 +133,6 @@ export function CreateSchedule() {
       setDateUntilEmpty(true);
       isValid = false;
     }
-
     if (isValid) {
       setCreateMessage("");
       createSchedule();
@@ -167,7 +153,6 @@ export function CreateSchedule() {
       }),
     }).then((response) => {
       let success = response.ok;
-
       response.json().then((response) => {
         if (!success) {
           setCreateMessage("");
@@ -223,7 +208,6 @@ export function CreateSchedule() {
                 )}
               </FormControl>
             </Grid>
-
             <Grid item sm={10}>
               <TextField
                 fullWidth
@@ -237,10 +221,10 @@ export function CreateSchedule() {
                   schoolYearValid
                     ? "Laukas gali susidėti iš skaičių bei - ar / simbolių."
                     : schoolYearEmpty
-                    ? "Mokslo metai yra privalomi."
-                    : errorLengthYear
-                    ? "Mokslo metai negali būti ilgesnis nei 200 simbolių."
-                    : ""
+                      ? "Mokslo metai yra privalomi."
+                      : errorLengthYear
+                        ? "Mokslo metai negali būti ilgesnis nei 200 simbolių."
+                        : ""
                 }
                 value={schoolYear}
                 onChange={(e) => {
@@ -254,7 +238,6 @@ export function CreateSchedule() {
                 }}
               ></TextField>
             </Grid>
-
             <Grid item sm={10}>
               <TextField
                 fullWidth
@@ -268,10 +251,10 @@ export function CreateSchedule() {
                   !semesterValid
                     ? "Pavadinimas turi neleidžiamų simbolių."
                     : semesterEmpty
-                    ? "Pavadinimas yra privalomas."
-                    : errorLengthName
-                    ? "Pavadinimas negali būti ilgesnis nei 200 simbolių."
-                    : ""
+                      ? "Pavadinimas yra privalomas."
+                      : errorLengthName
+                        ? "Pavadinimas negali būti ilgesnis nei 200 simbolių."
+                        : ""
                 }
                 value={semester}
                 onChange={(e) => {
@@ -285,7 +268,6 @@ export function CreateSchedule() {
                 }}
               ></TextField>
             </Grid>
-
             <Grid item sm={5}>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DatePicker
@@ -303,7 +285,6 @@ export function CreateSchedule() {
                 ></DatePicker>
               </LocalizationProvider>
             </Grid>
-
             <Grid item sm={5}>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DatePicker
@@ -321,10 +302,9 @@ export function CreateSchedule() {
                 ></DatePicker>
               </LocalizationProvider>
             </Grid>
-
             <Grid item sm={10}>
               <Stack direction="row" spacing={2}>
-              <Button
+                <Button
                   id="save-button-create-schedule"
                   variant="contained"
                   onClick={validation}
@@ -338,7 +318,6 @@ export function CreateSchedule() {
                 </Link>
               </Stack>
             </Grid>
-
             <Grid item sm={10}>
               {error && <Alert severity="warning">{error}</Alert>}
               {createMessage && (

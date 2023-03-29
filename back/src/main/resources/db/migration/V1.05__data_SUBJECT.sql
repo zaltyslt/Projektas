@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS  SUBJECT
+CREATE TABLE IF NOT EXISTS SUBJECT
 (
     ID            BIGINT auto_increment
         primary key,

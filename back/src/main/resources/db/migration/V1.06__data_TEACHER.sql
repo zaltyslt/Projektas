@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS  TEACHER
+CREATE TABLE IF NOT EXISTS TEACHER
 (
     TEACHER_ID             BIGINT auto_increment
         primary key,

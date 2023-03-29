@@ -12,17 +12,14 @@ export function CreateHoliday() {
   const [name, setName] = useState("");
   const [dateFrom, setDateFrom] = useState("");
   const [dateUntil, setDateUntil] = useState("");
-
   const [dateFromEmpty, setDateFromEmpty] = useState(false);
   const [dateUntilEmpty, setDateUntilEmpty] = useState(false);
   const [nameEmpty, setNameEmpty] = useState(false);
   const [validName, setValidName] = useState(false);
-
   const [errorMessageFrom, setErrorMessageFrom] = useState("");
   const [errorMessageUntil, setErrorMessageUntil] = useState("");
   const [createMessage, setCreateMessage] = useState("");
   const [error, setError] = useState("");
-
   const params = useParams();
 
   const createHoliday = () => {
@@ -38,7 +35,6 @@ export function CreateHoliday() {
       }),
     }).then((response) => {
       let success = response.ok;
-
       response.json().then((response) => {
         if (!success) {
           setCreateMessage("");
@@ -62,7 +58,6 @@ export function CreateHoliday() {
   const validateName = (value) => {
     setName(value);
     value.length === 0 ? setNameEmpty(true) : setNameEmpty(false);
-
     const isValid = value.split("").some((char) => BAD_SYMBOLS.includes(char));
     isValid ? setValidName(true) : setValidName(false);
   };
@@ -79,7 +74,6 @@ export function CreateHoliday() {
 
   const validateDateUntil = (value) => {
     setDateUntil(dateToUtc(value));
-
     if (value.length === 0) {
       setDateUntilEmpty(true);
     } else {
@@ -94,11 +88,9 @@ export function CreateHoliday() {
       setNameEmpty(true);
       isValid = false;
     }
-
     if (validName) {
       isValid = false;
     }
-
     if (dateFrom === "" || dateFrom === "undefined") {
       setDateFromEmpty(true);
       setErrorMessageFrom("Privaloma pasirinkti pradžios datą.");
@@ -106,7 +98,6 @@ export function CreateHoliday() {
     } else {
       setDateFromEmpty(false);
     }
-
     if (dateUntil === "" || dateUntil === "undefined") {
       setDateUntilEmpty(true);
       setErrorMessageUntil("Privaloma pasirinkti pabaigos datą.");
@@ -114,13 +105,11 @@ export function CreateHoliday() {
     } else {
       setDateUntilEmpty(false);
     }
-
     if (dateFrom !== "" && dateUntil !== "" && dateFrom.isAfter(dateUntil)) {
       setErrorMessageUntil("Diena iki negali būti anksčiau už dieną nuo.");
       setDateUntilEmpty(true);
       isValid = false;
     }
-
     if (isValid) {
       setCreateMessage("");
       createHoliday();
@@ -146,12 +135,11 @@ export function CreateHoliday() {
                 validName
                   ? "Laukas turi negalimų simbolių."
                   : nameEmpty
-                  ? "Pavadinimas yra privalomas."
-                  : ""
+                    ? "Pavadinimas yra privalomas."
+                    : ""
               }
             ></TextField>
           </Grid>
-
           <Grid item sm={5}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DatePicker
@@ -169,7 +157,6 @@ export function CreateHoliday() {
               ></DatePicker>
             </LocalizationProvider>
           </Grid>
-
           <Grid item sm={5}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DatePicker

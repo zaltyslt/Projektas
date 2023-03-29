@@ -163,15 +163,15 @@ public class Schedule {
         this.holidays = holidays;
     }
 
-    public void addWorkDay (WorkDay workDay) {
+    public void addWorkDay(WorkDay workDay) {
         workingDays.add(workDay);
     }
 
-    public void addHoliday (Holiday holiday) {
+    public void addHoliday(Holiday holiday) {
         holidays.add(holiday);
     }
 
-    public void addHolidays (Set<Holiday> holidays) {
+    public void addHolidays(Set<Holiday> holidays) {
         this.holidays.addAll(holidays);
     }
 

@@ -35,7 +35,6 @@ public class HolidayControllerTest {
         testSchedule.setId(1L);
     }
 
-
     @Test
     @Order(1)
     void testGetHolidaysController() throws Exception {
@@ -57,10 +56,9 @@ public class HolidayControllerTest {
 
     @Test
     void testCreateHolidayController() throws Exception {
-//        String requestBody = ("/api/v1/schedules/holidays/create-holiday/1")
         String requestBody = ("{\"id\":1,\"name\":\"Holiday name\",\"dateFrom\":\"2023-03-01\"," +
-                                "\"dateUntil\":\"2023-03-31\"}");
-                Long scheduleId = 1L;
+                "\"dateUntil\":\"2023-03-31\"}");
+        Long scheduleId = 1L;
         mvc.perform(post("/api/v1/schedules/create-schedule/{id}")
                         .param("scheduleId", scheduleId.toString())
                         .content(requestBody)

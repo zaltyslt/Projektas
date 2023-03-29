@@ -32,6 +32,7 @@ import { dateToUtc } from "../../helpers/helpers";
 const Transition = forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
+
 export function ScheduleList() {
   const [schedules, setSchedules] = useState([]);
   const [filter, setFilter] = useState("");
@@ -97,7 +98,6 @@ export function ScheduleList() {
           setErrorMessage(`Tvarkaraščio ištrinti nepavyko.`);
         }
       })
-
       .then(fetchSchedules);
     setidToDelete("");
     setOpen(false);
@@ -124,24 +124,19 @@ export function ScheduleList() {
     const groupMatches = String(schedule.groups.name)
       .toLowerCase()
       .includes(filter.toLowerCase());
-
-    // const shiftMaches = String(schedule.groups.shift.name)
-    //   .toLowerCase()
-    //   .includes(filter.toLowerCase());
-
+    const shiftMaches = String(schedule.groups.shift.name)
+      .toLowerCase()
+      .includes(filter.toLowerCase());
     const schoolYearMatches = String(schedule.schoolYear)
       .toLowerCase()
       .includes(filter.toLowerCase());
-
     const semesterMatches = String(schedule.semester)
       .toLowerCase()
       .includes(filter.toLowerCase());
-
     const isWithinDateRange = date
       ? new Date(schedule.dateFrom) <= date &&
       new Date(schedule.dateUntil) >= date
       : true;
-
     return (
       (groupMatches || shiftMaches || schoolYearMatches || semesterMatches) &&
       isWithinDateRange
@@ -164,29 +159,13 @@ export function ScheduleList() {
     pageNumbers.push(i);
   }
 
-  // const indexOfLastSchedule2 = currentPage2 * schedulesPerPage2;
-  // const indexOfFirstSchedule2 = indexOfLastSchedule2 - schedulesPerPage2;
-  // const currentSchedule2 = filteredDisabledSchedules.slice(
-  //   indexOfFirstSchedule2,
-  //   indexOfLastSchedule2
-  // );
-
-  // const pageNumbers2 = [];
-  // for (
-  //   let i = 1;
-  //   i <= Math.ceil(filteredDisabledSchedules.length / schedulesPerPage2);
-  //   i++
-  // ) {
-  //   pageNumbers2.push(i);
-  // }
-
   const handleChange = (newValue) => {
     isNaN(newValue) ? setDate(null) : setDate(newValue);
     clearMessages();
   };
 
   useEffect(() => {
-    setCurrentPage(1); // reset to first page
+    setCurrentPage(1);
   }, [filter, date]);
 
   const handleDate = (endDate) => {
@@ -220,7 +199,6 @@ export function ScheduleList() {
             <Button onClick={handleDelete}>Ištrinti</Button>
           </DialogActions>
         </Dialog>
-
         <Grid container rowSpacing={3}>
           <Grid item sm={10}>
             <h3>Tvarkaraščių sąrašas</h3>
@@ -235,7 +213,6 @@ export function ScheduleList() {
             </Stack>
           </Grid>
         </Grid>
-
         <Grid item sm={12}>
           <Grid container spacing={2}>
             <Grid item sm={12}>
@@ -244,7 +221,6 @@ export function ScheduleList() {
                 <Alert severity="success">{createMessage}</Alert>
               )}
             </Grid>
-
             <Grid item sm={8}>
               <TextField
                 fullWidth
@@ -257,7 +233,6 @@ export function ScheduleList() {
                 onFocus={clearMessages}
               ></TextField>
             </Grid>
-
             <Grid item sm={4}>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DatePicker
@@ -276,7 +251,6 @@ export function ScheduleList() {
             </Grid>
           </Grid>
         </Grid>
-
         <TableContainer component={Paper}>
           <Table aria-label="custom pagination table">
             <TableHead>
@@ -291,7 +265,6 @@ export function ScheduleList() {
                 <TableCell></TableCell>
               </TableRow>
             </TableHead>
-
             <TableBody>
               {filteredSchedules
                 .slice(
@@ -315,13 +288,11 @@ export function ScheduleList() {
                         <span>Nenurodytas</span>
                       )}
                     </TableCell>
-
                     <TableCell>
                       <Link to={`/schedules/${schedule.id}`}>
                         {schedule.schoolYear} m. {schedule.semester}
                       </Link>
                     </TableCell>
-
                     <TableCell component="th" scope="row">
                       {schedule.groups ? (
                         !schedule.groups.isActive ? (
@@ -337,15 +308,13 @@ export function ScheduleList() {
                         <span>Nenurodytas</span>
                       )}
                     </TableCell>
-
                     <TableCell>
                       {handleDate(schedule.dateUntil)
                         ? "Neaktualus"
                         : schedule.hasConflicts
-                        ? "Turi konfliktų"
-                        : "Suplanuotas"}
+                          ? "Turi konfliktų"
+                          : "Suplanuotas"}
                     </TableCell>
-
                     <TableCell className="action" align="center">
                       <Link to={`/planning/${schedule.id}`}>
                         <Button
@@ -356,12 +325,10 @@ export function ScheduleList() {
                         </Button>
                       </Link>
                     </TableCell>
-
                     <TableCell>
                       <Button
                         id="delete-button-list-schedule"
                         variant="contained"
-                        // startIcon={<DeleteIcon />}
                         onClick={() => handleClickOpen(schedule.id)}
                       >
                         Ištrinti

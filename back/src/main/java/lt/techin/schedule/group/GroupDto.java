@@ -2,11 +2,10 @@ package lt.techin.schedule.group;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lt.techin.schedule.config.DataFieldsLengthConstraints;
-
+import lt.techin.schedule.programs.ProgramDto;
 import lt.techin.schedule.shift.ShiftDto;
 import lt.techin.schedule.validators.SchoolYearValid;
 import lt.techin.schedule.validators.TextValid;
-import lt.techin.schedule.programs.ProgramDto;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -35,7 +34,8 @@ public class GroupDto {
     private LocalDateTime modifiedDate;
 
 
-    public GroupDto() {}
+    public GroupDto() {
+    }
 
     public GroupDto(Long id, String name, String schoolYear,
                     int studentAmount, boolean isActive, ProgramDto program,

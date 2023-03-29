@@ -17,20 +17,15 @@ import { lessons } from "../../helpers/constants";
 
 export function ModifyShift() {
   const params = useParams();
-
   const [currentShift, setCurrentShift] = useState([]);
-
   const [isValidName, setIsValidName] = useState(true);
   const [isNameEmpty, setIsNameEmpty] = useState(false);
   const [isNameTooLong, setIsNameTooLong] = useState(false);
-
   const [isValidShiftTime, setIsValidShiftTime] = useState(true);
-
   const [name, setName] = useState("");
   const [shiftStartingTime, setShiftStartingTime] = useState("1");
   const [shiftEndingTime, setShiftEndingTime] = useState("1");
   const [isActive, setIsActive] = useState("");
-
   const [successfulPost, setSuccessfulPost] = useState();
   const [isPostUsed, setIsPostUsed] = useState(false);
   const [shiftErrors, setShiftErrors] = useState();
@@ -114,10 +109,8 @@ export function ModifyShift() {
   const setNameAndCheck = (name) => {
     setName(name);
     name.length === 0 ? setIsNameEmpty(true) : setIsNameEmpty(false);
-
     const isValid = name.split("").some((char) => badSymbols.includes(char));
     isValid ? setIsValidName(false) : setIsValidName(true);
-
     name.length > maxShiftLength
       ? setIsNameTooLong(true)
       : setIsNameTooLong(false);
@@ -149,10 +142,10 @@ export function ModifyShift() {
                 !isValidName
                   ? "Pavadinimas turi neleidžiamų simbolių."
                   : isNameEmpty
-                  ? "Pavadinimas negali būti tuščias"
-                  : isNameTooLong
-                  ? `Pavadinimas negali būti ilgesnis nei ${maxShiftLength} simboliai`
-                  : null
+                    ? "Pavadinimas negali būti tuščias"
+                    : isNameTooLong
+                      ? `Pavadinimas negali būti ilgesnis nei ${maxShiftLength} simboliai`
+                      : null
               }
               variant="outlined"
               label="Pamainos pavadinimas"
@@ -162,7 +155,6 @@ export function ModifyShift() {
             ></TextField>
           </Grid>
         </Grid>
-
         <Grid container rowSpacing={2} marginTop={1}>
           <Grid item sm={3.75} id="grid-selector">
             <h5>Pamainos pradžia:</h5>
@@ -188,7 +180,6 @@ export function ModifyShift() {
               </FormHelperText>
             )}
           </Grid>
-
           <Grid item sm={3.75} id="grid-selector">
             <h5>Pamainos pabaiga:</h5>
             <Select
@@ -238,35 +229,35 @@ export function ModifyShift() {
           </Stack>
         </Grid>
         <Grid container rowSpacing={2} marginTop={1}>
-            <Grid item sm={8}>
-          {isPostUsed ? (
-            successfulPost ? (
-              <Alert severity="success">
-                Pamainos duomenys sėkmingai atnaujinti.
-              </Alert>
-            ) : (
-              <Grid>
-                <Alert severity="warning">
-                  Nepavyko pakeisti pamainos duomenų.
+          <Grid item sm={8}>
+            {isPostUsed ? (
+              successfulPost ? (
+                <Alert severity="success">
+                  Pamainos duomenys sėkmingai atnaujinti.
                 </Alert>
-                {shiftErrors.passedValidation
-                  ? shiftErrors.databaseErrors.map((databaseError, index) => (
+              ) : (
+                <Grid>
+                  <Alert severity="warning">
+                    Nepavyko pakeisti pamainos duomenų.
+                  </Alert>
+                  {shiftErrors.passedValidation
+                    ? shiftErrors.databaseErrors.map((databaseError, index) => (
                       <Alert key={index} severity="warning">
                         {databaseError}
                       </Alert>
                     ))
-                  : Object.keys(shiftErrors.validationErrors).map((key) => (
+                    : Object.keys(shiftErrors.validationErrors).map((key) => (
                       <Alert key={key} severity="warning">
                         {" "}
                         {shiftErrors.validationErrors[key]} {key} laukelyje.
                       </Alert>
                     ))}
-              </Grid>
-            )
-          ) : (
-            <div></div>
-          )}
-        </Grid>
+                </Grid>
+              )
+            ) : (
+              <div></div>
+            )}
+          </Grid>
         </Grid>
       </Container>
     </div>

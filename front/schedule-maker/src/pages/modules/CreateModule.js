@@ -13,49 +13,41 @@ import ".././pages.css";
 export function CreateModule() {
   const [number, setNumber] = useState("");
   const [name, setName] = useState("");
-
   const [nameError, setNameError] = useState(false);
   const [numberError, setNumberError] = useState(false);
-
   const [nameNotValid, setNameNotValid] = useState(false);
   const [numberNotValid, setNumberNotValid] = useState(false);
-
   const [error, setError] = useState("");
   const [createMessage, setCreateMessage] = useState("");
-
   const clear = () => {
     setNumber("");
     setName("");
-    };
+  };
 
-const validation = () => {
+  const validation = () => {
     setCreateMessage("");
     const badSymbols = "!@#$%^&*_+={}<>|~`\\'";
     let notValidName = name.split("").some((char) => badSymbols.includes(char));
     let notValidNumber = number
       .split("")
       .some((char) => badSymbols.includes(char));
-
-  if (
-    number === "" &&
-    name === ""
-  ) {
-    setNameError(true);
-    setNumberError(true);
-  } else if (name === "") {
-    setNameError(true);
-  } else if (notValidName) {
-    setNameError(false);
-    setNameNotValid(true);
-  } else if (number === "") {
-    setNumberError(true);
-  } else if (notValidNumber) {
-    setNumberError(false);
-    setNumberNotValid(true);
-  } else {
-    createModule();
-  }
-};
+    if (number === "" && name === "") {
+      setNameError(true);
+      setNumberError(true);
+    } else if (name === "") {
+      setNameError(true);
+    } else if (notValidName) {
+      setNameError(false);
+      setNameNotValid(true);
+    } else if (number === "") {
+      setNumberError(true);
+    } else if (notValidNumber) {
+      setNumberError(false);
+      setNumberNotValid(true);
+    } else {
+      createModule();
+    }
+  };
 
   const createModule = async () => {
     await fetch("api/v1/modules/create", {
@@ -69,7 +61,6 @@ const validation = () => {
       }),
     }).then((response) => {
       let success = response.ok;
-
       response.json().then((response) => {
         if (!success) {
           setCreateMessage("");
@@ -86,7 +77,7 @@ const validation = () => {
   return (
     <Container>
       <h3 className="create-header">Pridėti naują modulį</h3>
-      <form> 
+      <form>
         <Grid container rowSpacing={2}>
           <Grid item sm={8}>
             <TextField
@@ -98,8 +89,8 @@ const validation = () => {
                 numberError
                   ? "Modulio kodas yra privalomas"
                   : nameNotValid
-                  ? "Modulio kodas turi negalimų simbolių. "
-                  : ""
+                    ? "Modulio kodas turi negalimų simbolių. "
+                    : ""
               }
               label="Modulio kodas"
               id="number"
@@ -107,7 +98,6 @@ const validation = () => {
               onChange={(e) => setNumber(e.target.value)}
             ></TextField>
           </Grid>
-
           <Grid item sm={8}>
             <TextField
               fullWidth
@@ -118,8 +108,8 @@ const validation = () => {
                 nameError
                   ? "Modulio pavadinimas yra privalomas"
                   : nameNotValid
-                  ? "Laukas turi negalimų simbolių. "
-                  : ""
+                    ? "Laukas turi negalimų simbolių. "
+                    : ""
               }
               label="Modulio pavadinimas"
               id="name"
@@ -127,15 +117,19 @@ const validation = () => {
               onChange={(e) => setName(e.target.value)}
             ></TextField>
           </Grid>
-
           <Grid item sm={8} marginTop={2}>
             <Stack direction="row" spacing={2}>
-              <Button variant="contained" onClick={validation}>
+              <Button
+                id="save-button-create-module"
+                variant="contained"
+                onClick={validation}
+              >
                 Išsaugoti
               </Button>
-
               <Link to="/modules">
-                <Button variant="contained">Grįžti</Button>
+                <Button id="back-button-create-module" variant="contained">
+                  Grįžti
+                </Button>
               </Link>
             </Stack>
           </Grid>
@@ -147,4 +141,4 @@ const validation = () => {
       </form>
     </Container>
   );
-} 
+}

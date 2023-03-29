@@ -2,7 +2,8 @@ package lt.techin.schedule.module;
 
 import jakarta.validation.Valid;
 import lt.techin.schedule.validators.ValidationDto;
-import org.springframework.http.*;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
@@ -67,7 +68,8 @@ public class ModuleController {
     }
 
     @PutMapping("/update/{moduleId}")
-    public @ResponseBody ValidationDto updateModule(@PathVariable Long moduleId, @RequestBody @Valid ModuleDto moduleDto, BindingResult bindingResult) {
+    public @ResponseBody ValidationDto updateModule(
+            @PathVariable Long moduleId, @RequestBody @Valid ModuleDto moduleDto, BindingResult bindingResult) {
         ValidationDto validationDto = new ValidationDto();
         if (bindingResult.hasErrors()) {
             List<ObjectError> errors = bindingResult.getAllErrors();
@@ -108,7 +110,7 @@ public class ModuleController {
     }
 
     @PatchMapping("/restore/{moduleId}")
-    public ResponseEntity<ModuleDto>  restoreModule(@PathVariable Long moduleId) {
+    public ResponseEntity<ModuleDto> restoreModule(@PathVariable Long moduleId) {
         var restoredModule = moduleService.restoreModule(moduleId);
         return ok(toModuleDto(restoredModule));
     }
