@@ -28,7 +28,6 @@ export function ViewSubject() {
               </span>
             </header>
           </Grid>
-
           <Grid item sm={12}>
             <h4>Modulis</h4>
             {subject.module ? (
@@ -43,12 +42,10 @@ export function ViewSubject() {
               <p>Nenurodytas</p>
             )}
           </Grid>
-
           <Grid item sm={12}>
             <h4>Aprašymas</h4>
             <p>{subject.description}</p>
           </Grid>
-
           <Grid item sm={12}>
             <h4>Tinkamos klasės</h4>
             {subject.classRooms &&
@@ -61,7 +58,6 @@ export function ViewSubject() {
                 </p>
               ))}
           </Grid>
-
           <Grid item sm={12}>
             <Stack direction="row" spacing={2}>
               <Link to={"/subjects/edit/" + subject.id}>
@@ -69,7 +65,6 @@ export function ViewSubject() {
                   Redaguoti
                 </Button>
               </Link>
-
               <Link to="/subjects">
                 <Button id="back-button-view-subject" variant="contained">
                   Grįžti

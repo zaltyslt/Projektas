@@ -49,17 +49,14 @@ export function ViewModule() {
               </span>
             </header>
           </Grid>
-
           <Grid item sm={12}>
             <h4>Modulio kodas</h4>
             <p>{module.number}</p>
           </Grid>
-
           <Grid item sm={12}>
             <h4>Modulio pavadinimas</h4>
             <p>{module.name}</p>
           </Grid>
-
           <Grid item sm={10}>
             <h4>Priskirti dalykai</h4>
           </Grid>
@@ -96,7 +93,6 @@ export function ViewModule() {
               </Table>
             </TableContainer>
           </Grid>
-
           <Grid item sm={12} marginTop={2} marginBottom={10}>
             <Stack direction="row" spacing={2}>
               <Link to={"/modules/edit/" + module.id}>
@@ -104,7 +100,6 @@ export function ViewModule() {
                   Redaguoti
                 </Button>
               </Link>
-
               <Link to="/modules">
                 <Button id="back-button-view-module " variant="contained">
                   Grįžti

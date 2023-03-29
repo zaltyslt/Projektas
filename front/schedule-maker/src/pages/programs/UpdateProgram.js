@@ -229,10 +229,10 @@ export function UpdateProgram() {
                   errorEmptyName
                     ? "Programos pavadinimas yra privalomas."
                     : errorSymbolsName
-                    ? "Programos pavadinimas turi neleidžiamų simbolių."
-                    : errorLengthName
-                    ? "Programos pavadinimas negali būti ilgesnis nei 200 simbolių"
-                    : ""
+                      ? "Programos pavadinimas turi neleidžiamų simbolių."
+                      : errorLengthName
+                        ? "Programos pavadinimas negali būti ilgesnis nei 200 simbolių"
+                        : ""
                 }
                 variant="outlined"
                 id="programName"
@@ -259,10 +259,10 @@ export function UpdateProgram() {
                   errorEmptyDesc
                     ? "Programos aprašas yra privalomas."
                     : errorSymbolsDesc
-                    ? "Programos aprašas turi neleidžiamų simbolių."
-                    : errorLengthDesc
-                    ? "Programos aprašas negali būti ilgesnis nei 2000 simbolių"
-                    : ""
+                      ? "Programos aprašas turi neleidžiamų simbolių."
+                      : errorLengthDesc
+                        ? "Programos aprašas negali būti ilgesnis nei 2000 simbolių"
+                        : ""
                 }
                 variant="outlined"
                 label="Programos aprašas"
@@ -277,7 +277,6 @@ export function UpdateProgram() {
                   }
                   setDescription(input);
                 }}
-                // onChange={(e) => setDescription(e.target.value)}
               ></TextField>
             </Grid>
             <Grid item sm={8}>
@@ -333,8 +332,8 @@ export function UpdateProgram() {
                             errorHours
                               ? "Leidžiami tik skaičių simboliai."
                               : errorHoursNumber
-                              ? "Dalykas negali viršyti 1000 valandų."
-                              : ""
+                                ? "Dalykas negali viršyti 1000 valandų."
+                                : ""
                           }
                           variant="outlined"
                           id="hours"
@@ -366,7 +365,6 @@ export function UpdateProgram() {
                 })}
               </Grid>
             </Grid>
-          
             <Grid item sm={8}>
               <Stack direction="row" spacing={2} marginTop={1}>
                 <Button
@@ -413,7 +411,6 @@ export function UpdateProgram() {
                 </Link>
               </Stack>
             </Grid>
-            
             <Grid item sm={8}>
               {" "}
               <legend>{params.programName}</legend>

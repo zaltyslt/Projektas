@@ -6,7 +6,7 @@ import team1 from "./images/team1.jpg";
 export function App2() {
   const [serverResponse, setServerResponse] = useState([]);
   const [showText, setShowText] = useState(false);
-  const [smt, setSmt] = useState(  JSON.parse(window.localStorage.getItem("active")) || 0 );
+  const [smt, setSmt] = useState(JSON.parse(window.localStorage.getItem("active")) || 0);
 
   useEffect(() => {
     setSmt(JSON.parse(window.localStorage.getItem("active")));
@@ -23,11 +23,9 @@ export function App2() {
         if (serverResponse.answer) {
           console.log(serverResponse);
           setShowText(true);
-          // window.alert(serverResponse.answer);
         } else {
           console.log(serverResponse);
           setShowText(false);
-          // window.alert('No connection !!!');
         }
       }, 1000);
     } else {

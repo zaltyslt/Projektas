@@ -13,16 +13,12 @@ import ".././pages.css";
 export function CreateModule() {
   const [number, setNumber] = useState("");
   const [name, setName] = useState("");
-
   const [nameError, setNameError] = useState(false);
   const [numberError, setNumberError] = useState(false);
-
   const [nameNotValid, setNameNotValid] = useState(false);
   const [numberNotValid, setNumberNotValid] = useState(false);
-
   const [error, setError] = useState("");
   const [createMessage, setCreateMessage] = useState("");
-
   const clear = () => {
     setNumber("");
     setName("");
@@ -35,7 +31,6 @@ export function CreateModule() {
     let notValidNumber = number
       .split("")
       .some((char) => badSymbols.includes(char));
-
     if (number === "" && name === "") {
       setNameError(true);
       setNumberError(true);
@@ -66,7 +61,6 @@ export function CreateModule() {
       }),
     }).then((response) => {
       let success = response.ok;
-
       response.json().then((response) => {
         if (!success) {
           setCreateMessage("");
@@ -95,8 +89,8 @@ export function CreateModule() {
                 numberError
                   ? "Modulio kodas yra privalomas"
                   : nameNotValid
-                  ? "Modulio kodas turi negalimų simbolių. "
-                  : ""
+                    ? "Modulio kodas turi negalimų simbolių. "
+                    : ""
               }
               label="Modulio kodas"
               id="number"
@@ -104,7 +98,6 @@ export function CreateModule() {
               onChange={(e) => setNumber(e.target.value)}
             ></TextField>
           </Grid>
-
           <Grid item sm={8}>
             <TextField
               fullWidth
@@ -115,8 +108,8 @@ export function CreateModule() {
                 nameError
                   ? "Modulio pavadinimas yra privalomas"
                   : nameNotValid
-                  ? "Laukas turi negalimų simbolių. "
-                  : ""
+                    ? "Laukas turi negalimų simbolių. "
+                    : ""
               }
               label="Modulio pavadinimas"
               id="name"
@@ -124,7 +117,6 @@ export function CreateModule() {
               onChange={(e) => setName(e.target.value)}
             ></TextField>
           </Grid>
-
           <Grid item sm={8} marginTop={2}>
             <Stack direction="row" spacing={2}>
               <Button
@@ -134,7 +126,6 @@ export function CreateModule() {
               >
                 Išsaugoti
               </Button>
-
               <Link to="/modules">
                 <Button id="back-button-create-module" variant="contained">
                   Grįžti
