@@ -35,7 +35,6 @@ export function ProgramList() {
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
   const paginate2 = (pageNumber2) => setCurrentPage2(pageNumber2);
   const [isChecked, setChecked] = useState(false);
-
   const fetchPrograms = () => {
     fetch("api/v1/programs")
       .then((responce) => responce.json())
@@ -117,11 +116,11 @@ export function ProgramList() {
   };
 
   useEffect(() => {
-    setCurrentPage(1); // reset to first page
+    setCurrentPage(1);
   }, [filter]);
 
   useEffect(() => {
-    setCurrentPage2(1); // reset to first page
+    setCurrentPage2(1);
   }, [filter]);
 
   return (

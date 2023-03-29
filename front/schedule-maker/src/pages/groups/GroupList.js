@@ -24,7 +24,6 @@ export function GroupList() {
   const [deletedGroups, setDeletedGroups] = useState([]);
   const [filteredGroups, setFilteredGroups] = useState([]);
   const [filteredDeletedGroups, setFilteredDeletedGroups] = useState([]);
-
   const [page, setPage] = useState(0);
   const [pageInDeleted, setPageInDeleted] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -80,10 +79,10 @@ export function GroupList() {
   const emptyRowsInDeleted =
     pageInDeleted > 0
       ? Math.max(
-          0,
-          (1 + pageInDeleted) * rowsPerPageInDeleted -
-            filteredDeletedGroups.length
-        )
+        0,
+        (1 + pageInDeleted) * rowsPerPageInDeleted -
+        filteredDeletedGroups.length
+      )
       : 0;
 
   const handleChangePageInDeleted = (event, newPage) => {
@@ -107,32 +106,27 @@ export function GroupList() {
     } else {
       let groupsCurrent = undefined;
       let deletedGroupsCurrent = undefined;
-
       let groupsTempByName = groups.filter((group) =>
         group.name.toLowerCase().includes(filterString.toLowerCase())
       );
       let deletedTempByName = deletedGroups.filter((group) =>
         group.name.toLowerCase().includes(filterString.toLowerCase())
       );
-
       if (groupsTempByName.length != 0) {
         groupsCurrent = groupsTempByName;
       }
       if (deletedTempByName.length != 0) {
         deletedGroupsCurrent = deletedTempByName;
       }
-
       let groupsTempBySchoolYear = groups.filter((group) =>
         group.schoolYear.includes(filterString)
       );
       let deletedGroupsTempBySchoolYear = deletedGroups.filter((group) =>
         group.schoolYear.includes(filterString)
       );
-
       if (groupsTempBySchoolYear.length != 0) {
         if (groupsCurrent !== undefined) {
           const newGroupsCurrent = [...groupsCurrent];
-
           groupsTempBySchoolYear.forEach(function (element) {
             const isPresent = groupsCurrent.some(
               (array) => JSON.stringify(array) === JSON.stringify(element)
@@ -149,7 +143,6 @@ export function GroupList() {
       if (deletedGroupsTempBySchoolYear.length != 0) {
         if (deletedGroupsCurrent !== undefined) {
           const newDeletedGroupsCurrent = [...deletedGroupsCurrent];
-
           deletedGroupsTempBySchoolYear.forEach(function (element) {
             const isPresent = deletedGroupsCurrent.some(
               (array) => JSON.stringify(array) === JSON.stringify(element)
@@ -163,7 +156,6 @@ export function GroupList() {
           deletedGroupsCurrent = deletedGroupsTempBySchoolYear;
         }
       }
-
       let groupsTempByProgram = groups.filter((group) =>
         group.program.programName
           .toLowerCase()
@@ -174,11 +166,9 @@ export function GroupList() {
           .toLowerCase()
           .includes(filterString.toLowerCase())
       );
-
       if (groupsTempByProgram.length != 0) {
         if (groupsCurrent !== undefined) {
           const newGroupsCurrent = [...groupsCurrent];
-
           groupsTempByProgram.forEach(function (element) {
             const isPresent = groupsCurrent.some(
               (programs) => JSON.stringify(programs) === JSON.stringify(element)
@@ -187,7 +177,6 @@ export function GroupList() {
               newGroupsCurrent.push(element);
             }
           });
-
           groupsCurrent = newGroupsCurrent;
         } else {
           groupsCurrent = groupsTempByProgram;
@@ -196,7 +185,6 @@ export function GroupList() {
       if (deletedGroupsTempByProgram.length != 0) {
         if (deletedGroupsCurrent !== undefined) {
           const newDeletedGroupsCurrent = [...deletedGroupsCurrent];
-
           deletedGroupsTempByProgram.forEach(function (element) {
             const isPresent = deletedGroupsCurrent.some(
               (programs) => JSON.stringify(programs) === JSON.stringify(element)
@@ -205,19 +193,16 @@ export function GroupList() {
               newDeletedGroupsCurrent.push(element);
             }
           });
-
           deletedGroupsCurrent = newDeletedGroupsCurrent;
         } else {
           deletedGroupsCurrent = deletedGroupsTempByProgram;
         }
       }
-
       if (groupsCurrent !== undefined) {
         setFilteredGroups(groupsCurrent);
       } else {
         setFilteredGroups([]);
       }
-
       if (deletedGroupsCurrent !== undefined) {
         setFilteredDeletedGroups(deletedGroupsCurrent);
       } else {
@@ -244,7 +229,6 @@ export function GroupList() {
               </Stack>
             </Link>
           </Grid>
-
           <Grid item sm={12}>
             <TextField
               fullWidth
@@ -256,7 +240,6 @@ export function GroupList() {
             ></TextField>
           </Grid>
         </Grid>
-
         <TableContainer component={Paper}>
           <Table
             id="active-group-list-table"
@@ -273,9 +256,9 @@ export function GroupList() {
             <TableBody>
               {(rowsPerPage > 0
                 ? filteredGroups.slice(
-                    page * rowsPerPage,
-                    page * rowsPerPage + rowsPerPage
-                  )
+                  page * rowsPerPage,
+                  page * rowsPerPage + rowsPerPage
+                )
                 : filteredGroups
               ).map((group) => (
                 <TableRow key={group.id}>
@@ -287,7 +270,6 @@ export function GroupList() {
                   <TableCell>{group.studentAmount}</TableCell>
                 </TableRow>
               ))}
-
               {emptyRows > 0 && (
                 <TableRow style={{ height: 53 * emptyRows }}>
                   <TableCell colSpan={6} />
@@ -318,7 +300,6 @@ export function GroupList() {
             </TableFooter>
           </Table>
         </TableContainer>
-
         <FormGroup>
           <FormControlLabel
             control={<Checkbox />}
@@ -328,7 +309,6 @@ export function GroupList() {
             }
           />
         </FormGroup>
-
         {isChecked && (
           <TableContainer component={Paper}>
             <Table
@@ -347,10 +327,10 @@ export function GroupList() {
               <TableBody>
                 {(rowsPerPageInDeleted > 0
                   ? filteredDeletedGroups.slice(
-                      pageInDeleted * rowsPerPageInDeleted,
-                      pageInDeleted * rowsPerPageInDeleted +
-                        rowsPerPageInDeleted
-                    )
+                    pageInDeleted * rowsPerPageInDeleted,
+                    pageInDeleted * rowsPerPageInDeleted +
+                    rowsPerPageInDeleted
+                  )
                   : filteredDeletedGroups
                 ).map((group) => (
                   <TableRow key={group.id}>
@@ -371,14 +351,12 @@ export function GroupList() {
                     </TableCell>
                   </TableRow>
                 ))}
-
                 {emptyRowsInDeleted > 0 && (
                   <TableRow style={{ height: 53 * emptyRowsInDeleted }}>
                     <TableCell colSpan={6} />
                   </TableRow>
                 )}
               </TableBody>
-
               <TableFooter>
                 <TableRow>
                   <TablePagination

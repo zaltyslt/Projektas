@@ -23,7 +23,6 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Link, useHref } from "react-router-dom";
 import { width } from "@mui/system";
-
 import {
   validateText,
   validateEmail,
@@ -39,28 +38,13 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
   const [subject, setSubject] = useState([]);
   const [chosenSubjects, setChosenSubjects] = useState([]);
   const [freeSubjects, setFreeSubjects] = useState([]);
-  const [showSubjSelect, setShowSubjSelect] = useState(false); //show/hide
-
+  const [showSubjSelect, setShowSubjSelect] = useState(false);
   const [teacher, setTeacher] = useState({});
   const [currentTacherName, setCurrentTeacherName] = useState("");
-
-  // const [id, setid] = useState("");
-  // const [fName, setFName] = useState("");
-  // const [lName, setLName] = useState("");
-
-  // const [phoneNumber, setPhoneNumber] = useState("");
-  // const [directEmail, setDirectEmail] = useState("");
-  // const [teamsName, setTeamsName] = useState("");
-  // const [teamsEmail, setTeamsEmail] = useState("");
-  // const [contacts, setContacts] = useState("");
-
-  // const [workHours, setWorkHours] = useState(0);
   const [shifts, setShifts] = useState([]);
   const [shift, setShift] = useState("");
-
   const [errorMessage, setErrorMessage] = useState("");
   const [createMessage, setCreateMessage] = useState("");
-
   const errorObject = { state: false };
   const [errorFname, setErrorFname] = useState(errorObject);
   const [errorLname, setErrorLname] = useState(errorObject);
@@ -87,9 +71,7 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
 
   function preCreateCheck() {
     let isCorrect = true;
-    // console.log(teacher);
     if (!teacher.fName || teacher.fName === "") {
-      // setErrorMessage("Įveskite/pataisykite vardą !");
       setErrorFname({ error: true, text: "Mokytojo vardas privalomas." });
       isCorrect = false;
     }
@@ -117,10 +99,8 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
         error: true,
         text: "Elektroninio pašto adresas privalomas.",
       });
-      // console.log(teacher);
       isCorrect = false;
     }
-
     if (
       !teacher.selectedShift ||
       !teacher.selectedShift.id ||
@@ -129,7 +109,6 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
       setErrorShift({ error: true, text: "Pasirinkite pamainą." });
       isCorrect = false;
     }
-
     if (!teacher.subjectsList || teacher.subjectsList.length < 1) {
       setErrorSubjectsList({
         error: true,
@@ -137,13 +116,11 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
       });
       isCorrect = false;
     }
-
     isCorrect && createTeacher();
   }
 
   useEffect(() => {
     fetchData();
-
     if (mode === "update") {
       fetchTeacherData();
     }
@@ -155,13 +132,11 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
         setSubjects(data);
         setFreeSubjects(data);
       } else {
-        //console.log("data");
         setSubjects([]);
         setFreeSubjects([]);
         setErrorMessage("Nepavyko parsiųsti duomenų iš serverio. (Subject)");
       }
     });
-
     getDataFrom("api/v1/shift/get-active", (data) => {
       if (data) {
         setShifts(data);
@@ -175,7 +150,6 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
   async function fetchTeacherData() {
     getDataFrom("api/v1/teachers/view?tid=" + teacherId, (data) => {
       if (data) {
-        // console.log(data);
         setTeacher(data);
         setShift(data.selectedShift);
         setChosenSubjects(data.subjectsList);
@@ -192,20 +166,8 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
     setErrorMessage("");
   }
 
-  // useEffect(() => {
-  //   const timer = setTimeout(() => {
-  //     setCreateMessage("");
-  //     setErrorMessage("");
-  //   }, 5000);
-
-  //   return () => {
-  //     clearTimeout(timer);
-  //   };
-  // }, [createMessage, errorMessage]);
-
   function handleChange(event) {
     clearErrorMessages();
-
     const { id, value } = event.target;
     const prefix = id.split(".");
     if (prefix[0] === "contacts") {
@@ -226,15 +188,12 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
     teacherModifier(teacher);
   };
 
-  // async
   function deleteTeacher() {
     onSave(teacher.id);
     window.location = listUrl;
   }
 
   function applyResult(result) {
-    // console.log(result);
-
     if (result.status > 299) {
       setCreateMessage("");
       setErrorMessage(result.message);
@@ -253,19 +212,7 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
     setCreateMessage("");
     setErrorMessage("");
   }
-
   const clear = () => {
-    // setFName("");
-    // setLName("");
-
-    // setPhoneNumber("");
-    // setDirectEmail("");
-    // setTeamsEmail("");
-    // setTeamsName("");
-
-    // setShift("");
-    // setWorkHours("");
-    // setSubjects("");
     setTeacher({});
   };
 
@@ -299,12 +246,10 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
   };
 
   const handleRemoveChosen = (subjectRem) => {
-    //patikrinti ar subjects neturi tokio dalyko
     console.log(freeSubjects);
     const moved = freeSubjects.filter(
       (subject) => subject.subjectId != subjectRem.subjectId
     );
-
     const removed = chosenSubjects.filter(
       (subject) => subject.subjectId != subjectRem.subjectId
     );
@@ -316,22 +261,11 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
 
   const handleShiftChange = (shiftId) => {
     const tempShift = shifts.find((shift) => shift.id === shiftId);
-
     handleChange({ target: { id: "selectedShift", value: tempShift } });
     handleChange({ target: { id: "active", value: true } });
     setErrorShift({ error: false });
     setShift(tempShift);
   };
-
-  // async function showInfo() {
-  //   console.log("s "+subjects);
-  //   console.log("f "+freeSubjects);
-  //   console.log("c "+chosenSubjects);
-  // }
-
-  // function showCurrent(){
-  //   console.log(currentTacherName);
-  // }
 
   return (
     <Container>
@@ -341,18 +275,15 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
         </h3>
         {mode === "update" && (
           <Grid>
-            {/* <h2>{teacher && (teacher.fName +" "+teacher.lName)}</h2> */}
             <h3>{currentTacherName}</h3>
             <p>Paskutinį kartą redaguota: {teacher && teacher.dateModified}</p>
           </Grid>
         )}
-
         <Grid container rowSpacing={2}>
           <Grid item sm={8}>
             {errorMessage && <Alert severity="warning">{errorMessage}</Alert>}
             {createMessage && <Alert severity="success">{createMessage}</Alert>}
           </Grid>
-
           <Grid item sm={8}>
             <TextField
               error={errorFname.error}
@@ -372,11 +303,9 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
                   value: e.target.value,
                 });
                 errorMessage && setErrorMessage("");
-                // setTeacher(e.target.value);
               }}
             ></TextField>
           </Grid>
-
           <Grid item sm={8}>
             <TextField
               error={errorLname.error}
@@ -395,11 +324,9 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
                   value: e.target.value,
                 });
                 handleChange(e);
-                // setLName(e.target.value);
               }}
             ></TextField>
           </Grid>
-
           <Grid item sm={8}>
             <TextField
               error={errorPhoneNumber.error}
@@ -423,7 +350,6 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
               }}
             ></TextField>
           </Grid>
-
           <Grid item sm={8}>
             <TextField
               error={errorDirectMail.error}
@@ -447,13 +373,11 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
               }}
             ></TextField>
           </Grid>
-
           <Grid item sm={8}>
             <TextField
               error={errorTeamsName.error}
               helperText={errorTeamsName.text}
               fullWidth
-              // required
               variant="outlined"
               label="Teams vardas"
               id="contacts.teamsName"
@@ -474,7 +398,6 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
               error={errorTeamsMail.error}
               helperText={errorTeamsMail.text}
               fullWidth
-              // required
               variant="outlined"
               label="Teams el. paštas"
               id="contacts.teamsEmail"
@@ -497,7 +420,6 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
               error={errorHours.error}
               helperText={errorHours.text}
               fullWidth
-              // required
               variant="outlined"
               label="Valandos per savaitę"
               id="workHoursPerWeek"
@@ -511,7 +433,6 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
                 })
               }
               onChange={(e) => {
-                // setWorkHours(e.target.value);
                 handleChange(e);
               }}
             ></TextField>
@@ -549,7 +470,6 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
               )}
             </FormControl>
           </Grid>
-
           {showSubjSelect && (
             <Grid item sm={8}>
               <FormControl fullWidth>
@@ -558,8 +478,7 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
                   label="Dalyko pavadinimas"
                   labelId="subject-label"
                   id="subject"
-                  // value={freeSubjects[0] || ""} //not dangerous for life
-                  value={""} //not dangerous for life
+                  value={""}
                   defaultOpen={true}
                   onChange={(e) => {
                     handleAddChosen(e.target.value);
@@ -568,7 +487,7 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
                   {freeSubjects &&
                     freeSubjects.map(
                       (
-                        subject //map <======
+                        subject
                       ) => (
                         <MenuItem
                           key={"1131" + subject.subjectId}
@@ -586,11 +505,6 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
 
           <Grid item sm={8}>
             <TableContainer component={Paper} style={{ width: "100%" }}>
-              {/* {true && (
-                  <Typography color="error">
-                    There is an error with the data.
-                  </Typography> 
-                )} */}
               <Table
                 style={{ tableLayout: "fixed" }}
                 aria-label="custom pagination table"
@@ -598,7 +512,6 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
                 <TableHead>
                   <TableRow>
                     <TableCell align="left">Dėstomi dalykai</TableCell>
-                    {/* <TableCell align="center">Moduliai </TableCell> */}
                     <TableCell align="right">
                       <Button
                         id="add-subject-create-teacher"
@@ -610,7 +523,6 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
                     </TableCell>
                   </TableRow>
                 </TableHead>
-
                 <TableBody>
                   {chosenSubjects &&
                     chosenSubjects.map((subject) => (
@@ -642,7 +554,6 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
               </Alert>
             )}
           </Grid>
-
           <Grid item sm={12}>
             <Stack direction="row" spacing={2}>
               <Button
@@ -661,7 +572,6 @@ export function Teacher({ mode, teacherId, onSave, handleSave }) {
                   Ištrinti
                 </Button>
               )}
-
               <Button
                 id="back-button-teacher"
                 variant="contained"

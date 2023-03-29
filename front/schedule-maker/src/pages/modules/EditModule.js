@@ -7,26 +7,20 @@ export function EditModule() {
   const [module, setModule] = useState({});
   const [number, setNumber] = useState("");
   const [name, setName] = useState("");
-
   const [isValidNumber, setIsValidNumber] = useState(true);
   const [isNumberEmpty, setIsNumberEmpty] = useState(false);
   const [isNumberTooLong, setIsNumberTooLong] = useState(false);
-
   const [isValidName, setIsValidName] = useState(true);
   const [isNameEmpty, setIsNameEmpty] = useState(false);
   const [isNameTooLong, setIsNameTooLong] = useState(false);
-
   const [successfulPost, setSuccessfulPost] = useState();
   const [isPostUsed, setIsPostUsed] = useState(false);
   const [moduleErrors, setModuleErrors] = useState();
-
   const listUrl = useHref("/modules");
-
   const params = useParams({
     number: "",
     name: "",
   });
-
   const badSymbols = "!@#$%^&*_+={}<>|~`\\'";
   const moduleNumberLength = 200;
   const moduleNameLength = 200;
@@ -82,10 +76,8 @@ export function EditModule() {
 
   useEffect(() => {
     number.length === 0 ? setIsNumberEmpty(true) : setIsNumberEmpty(false);
-
     const isValid = number.split("").some((char) => badSymbols.includes(char));
     isValid ? setIsValidNumber(false) : setIsValidNumber(true);
-
     number.length > moduleNumberLength
       ? setIsNumberTooLong(true)
       : setIsNumberTooLong(false);
@@ -93,10 +85,8 @@ export function EditModule() {
 
   useEffect(() => {
     name.length === 0 ? setIsNameEmpty(true) : setIsNameEmpty(false);
-
     const isValid = name.split("").some((char) => badSymbols.includes(char));
     isValid ? setIsValidName(false) : setIsValidName(true);
-
     name.length > moduleNameLength
       ? setIsNameTooLong(true)
       : setIsNameTooLong(false);
@@ -131,10 +121,10 @@ export function EditModule() {
                 !isValidNumber
                   ? "Modulio kodas turi neleidžiamų simbolių."
                   : isNumberEmpty
-                  ? "Modulio kodas negali būti tuščias"
-                  : isNumberTooLong
-                  ? `Modulio kodas negali būti ilgesnis nei ${moduleNumberLength} simbolių`
-                  : null
+                    ? "Modulio kodas negali būti tuščias"
+                    : isNumberTooLong
+                      ? `Modulio kodas negali būti ilgesnis nei ${moduleNumberLength} simbolių`
+                      : null
               }
               label="Modulio kodas"
               id="number"
@@ -142,7 +132,6 @@ export function EditModule() {
               onChange={(e) => setNumber(e.target.value)}
             ></TextField>
           </Grid>
-
           <Grid item sm={8}>
             <TextField
               fullWidth
@@ -154,10 +143,10 @@ export function EditModule() {
                 !isValidName
                   ? "Modulio pavadinimas turi neleidžiamų simbolių."
                   : isNameEmpty
-                  ? "Modulio pavadinimas negali būti tuščias"
-                  : isNameTooLong
-                  ? `Modulio pavadinimas negali būti ilgesnis nei ${moduleNameLength} simbolių`
-                  : null
+                    ? "Modulio pavadinimas negali būti tuščias"
+                    : isNameTooLong
+                      ? `Modulio pavadinimas negali būti ilgesnis nei ${moduleNameLength} simbolių`
+                      : null
               }
               label="Modulio pavadinimas"
               id="name"
@@ -165,7 +154,6 @@ export function EditModule() {
               onChange={(e) => setName(e.target.value)}
             ></TextField>
           </Grid>
-
           <Grid item sm={8}>
             <Stack direction="row" spacing={2}>
               <Button
@@ -175,7 +163,6 @@ export function EditModule() {
               >
                 Išsaugoti
               </Button>
-
               <Button
                 id="delete-button-edit-module"
                 variant="contained"
@@ -183,7 +170,6 @@ export function EditModule() {
               >
                 Ištrinti
               </Button>
-
               <Link to="/modules">
                 <Button id="back-button-edit-module" variant="contained">
                   Grįžti
@@ -191,7 +177,6 @@ export function EditModule() {
               </Link>
             </Stack>
           </Grid>
-
           <Grid item sm={8}>
             {isPostUsed ? (
               successfulPost ? (
@@ -203,18 +188,18 @@ export function EditModule() {
                   <Alert severity="warning">Nepavyko pakeisti modulio.</Alert>
                   {moduleErrors.passedValidation
                     ? moduleErrors.databaseErrors.map(
-                        (databaseError, index) => (
-                          <Alert key={index} severity="warning">
-                            {databaseError}
-                          </Alert>
-                        )
-                      )
-                    : Object.keys(moduleErrors.validationErrors).map((key) => (
-                        <Alert key={key} severity="warning">
-                          {" "}
-                          {moduleErrors.validationErrors[key]} {key} laukelyje.
+                      (databaseError, index) => (
+                        <Alert key={index} severity="warning">
+                          {databaseError}
                         </Alert>
-                      ))}
+                      )
+                    )
+                    : Object.keys(moduleErrors.validationErrors).map((key) => (
+                      <Alert key={key} severity="warning">
+                        {" "}
+                        {moduleErrors.validationErrors[key]} {key} laukelyje.
+                      </Alert>
+                    ))}
                 </Grid>
               )
             ) : (

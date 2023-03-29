@@ -66,7 +66,6 @@ export function CreateRoom(props) {
     setErrorEmptyDesc(false);
     setErrorSymbolsDesc(false);
     setErrorBuilding(false);
-
     if (classroomName === "" && description === "") {
       setErrorEmptyName(true);
       setErrorEmptyDesc(true);
@@ -137,10 +136,10 @@ export function CreateRoom(props) {
                 errorEmptyName
                   ? "Klasės pavadinimas yra privalomas."
                   : errorSymbolsName
-                  ? "Klasės pavadinimas turi neleidžiamų simbolių."
-                  : errorLengthName
-                  ? "Klasės pavadinimas negali būti ilgesnis nei 200 simbolių"
-                  : ""
+                    ? "Klasės pavadinimas turi neleidžiamų simbolių."
+                    : errorLengthName
+                      ? "Klasės pavadinimas negali būti ilgesnis nei 200 simbolių"
+                      : ""
               }
               variant="outlined"
               id="classroomName"
@@ -155,7 +154,6 @@ export function CreateRoom(props) {
                 }
                 setClassroomName(input);
               }}
-              // onChange={(e) => setClassroomName(e.target.value)}
             />
           </Grid>
           <Grid item sm={8}>
@@ -168,10 +166,10 @@ export function CreateRoom(props) {
                 errorEmptyDesc
                   ? "Klasės aprašas yra privalomas."
                   : errorSymbolsDesc
-                  ? "Klasės aprašas turi neleidžiamų simbolių."
-                  : errorLengthDesc
-                  ? "Klasės aprašas negali būti ilgesnis nei 2000 simbolių"
-                  : ""
+                    ? "Klasės aprašas turi neleidžiamų simbolių."
+                    : errorLengthDesc
+                      ? "Klasės aprašas negali būti ilgesnis nei 2000 simbolių"
+                      : ""
               }
               variant="outlined"
               label="Klasės aprašas"
@@ -186,7 +184,6 @@ export function CreateRoom(props) {
                 }
                 setDescription(input);
               }}
-              // onChange={(e) => setDescription(e.target.value)}
             ></TextField>
           </Grid>
           <Grid item sm={8} marginTop={2}>

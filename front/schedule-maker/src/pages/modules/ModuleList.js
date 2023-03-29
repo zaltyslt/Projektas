@@ -66,9 +66,9 @@ export function ModuleList() {
   const emptyRowsInDeleted =
     pageInDeleted > 0
       ? Math.max(
-          0,
-          (1 + pageInDeleted) * rowsPerPageInDeleted - deletedModules.length
-        )
+        0,
+        (1 + pageInDeleted) * rowsPerPageInDeleted - deletedModules.length
+      )
       : 0;
 
   const handleChangeRowsPerPage = (event) => {
@@ -131,7 +131,6 @@ export function ModuleList() {
               </Link>
             </Stack>
           </Grid>
-
           <Grid item sm={12}>
             <TextField
               fullWidth
@@ -143,7 +142,6 @@ export function ModuleList() {
             ></TextField>
           </Grid>
         </Grid>
-
         <TableContainer component={Paper}>
           <Table
             id="active-module-list-table"
@@ -156,13 +154,12 @@ export function ModuleList() {
                 <TableCell></TableCell>
               </TableRow>
             </TableHead>
-
             <TableBody>
               {(rowsPerPage > 0
                 ? filteredModules.slice(
-                    page * rowsPerPage,
-                    page * rowsPerPage + rowsPerPage
-                  )
+                  page * rowsPerPage,
+                  page * rowsPerPage + rowsPerPage
+                )
                 : filteredModules
               ).map((module) => (
                 <TableRow key={module.id}>
@@ -175,7 +172,6 @@ export function ModuleList() {
                   <TableCell></TableCell>
                 </TableRow>
               ))}
-
               {emptyRows > 0 && (
                 <TableRow style={{ height: 53 * emptyRows }}>
                   <TableCell colSpan={6} />
@@ -207,7 +203,6 @@ export function ModuleList() {
             </TableFooter>
           </Table>
         </TableContainer>
-
         <FormGroup>
           <FormControlLabel
             control={<Checkbox />}
@@ -217,7 +212,6 @@ export function ModuleList() {
             }
           />
         </FormGroup>
-
         {isChecked && (
           <TableContainer component={Paper}>
             <Table
@@ -238,10 +232,10 @@ export function ModuleList() {
               <TableBody>
                 {(rowsPerPage > 0
                   ? deletedModules.slice(
-                      pageInDeleted * rowsPerPageInDeleted,
-                      pageInDeleted * rowsPerPageInDeleted +
-                        rowsPerPageInDeleted
-                    )
+                    pageInDeleted * rowsPerPageInDeleted,
+                    pageInDeleted * rowsPerPageInDeleted +
+                    rowsPerPageInDeleted
+                  )
                   : deletedModules
                 ).map((module) => (
                   <TableRow key={module.id}>
@@ -262,7 +256,6 @@ export function ModuleList() {
                     </TableCell>
                   </TableRow>
                 ))}
-
                 {emptyRowsInDeleted > 0 && (
                   <TableRow style={{ height: 53 * emptyRowsInDeleted }}>
                     <TableCell colSpan={6} />

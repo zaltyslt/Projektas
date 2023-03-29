@@ -108,6 +108,7 @@ export function RoomList() {
   ) {
     pageNumbers.push(i);
   }
+
   const indexOfLastClassroom2 = currentPage2 * classroomsPerPage2;
   const indexOfFirstClassroom2 = indexOfLastClassroom2 - classroomsPerPage2;
   const currentClassrooms2 = filteredDisabledClassrooms.slice(
@@ -166,7 +167,6 @@ export function RoomList() {
               </Link>
             </Stack>
           </Grid>
-
           <Grid item sm={12}>
             <Grid container spacing={2}>
               <Grid item sm={8}>
@@ -201,7 +201,6 @@ export function RoomList() {
             </Grid>
           </Grid>
         </Grid>
-
         <TableContainer component={Paper}>
           <Table
             id="active-room-list-table"
@@ -215,7 +214,6 @@ export function RoomList() {
                 <TableCell>Pastatas</TableCell>
               </TableRow>
             </TableHead>
-
             <TableBody>
               {filteredClassrooms
                 .slice(
@@ -308,7 +306,6 @@ export function RoomList() {
                     </TableRow>
                   ))}
               </TableBody>
-
               <TableFooter>
                 <TableRow>
                   <TablePagination

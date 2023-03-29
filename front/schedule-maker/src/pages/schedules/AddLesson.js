@@ -31,7 +31,6 @@ export function AddLesson() {
   const [lessonStartingTime, setLessonStartingTime] = useState("1");
   const [lessonEndTime, setLessonEndTime] = useState("1");
   const [online, setOnline] = useState(false);
-
   const [error, setError] = useState("");
   const [errorMessageFrom, setErrorMessageFrom] = useState("");
   const [createMessage, setCreateMessage] = useState("");
@@ -42,19 +41,17 @@ export function AddLesson() {
   const [shiftEndEmpty, setShiftEndEmpty] = useState(false);
   const [isValidShiftTime, setIsValidShiftTime] = useState(true);
   const [shiftTooLong, setShiftTooLong] = useState(false);
-
   const params = useParams();
   const data = useLocation();
   const scheduleId = data.state.schedule.schedule.id;
   const hours = data.state.subject.subject.hours;
   const unplannedHours =
     data.state.subject.subject.id in
-    data.state.schedule.schedule.subjectIdWithUnassignedTime
+      data.state.schedule.schedule.subjectIdWithUnassignedTime
       ? data.state.schedule.schedule.subjectIdWithUnassignedTime[
-          data.state.subject.subject.id
-        ]
+      data.state.subject.subject.id
+      ]
       : data.state.subject.subject.hours;
-
   const shiftId = data.state.schedule.schedule.groups.shift.id;
   const shift = data.state.schedule.schedule.groups.shift.name;
 
@@ -111,7 +108,6 @@ export function AddLesson() {
       }
     ).then((response) => {
       let success = response.ok;
-
       response.json().then((response) => {
         if (!success) {
           setCreateMessage("");
@@ -132,7 +128,6 @@ export function AddLesson() {
   const validateHours = (value) => {
     setPlannedHours(value);
     value.length === 0 ? setHoursEmpty(true) : setHoursEmpty(false);
-
     const isValidHourString = /^[0-9]+$/.test(value);
     isValidHourString ? setHoursNotValid(false) : setHoursNotValid(true);
   };
@@ -149,7 +144,6 @@ export function AddLesson() {
 
   const validation = () => {
     let isValid = true;
-
     if (dateFrom === "" || dateFrom === "Undifined") {
       setDateFromEmpty(true);
       setErrorMessageFrom("Privaloma pasirinkti pradžios datą.");
@@ -157,27 +151,22 @@ export function AddLesson() {
     } else {
       setDateFromEmpty(false);
     }
-
     if (plannedHours === "" || plannedHours === "undefined") {
       setHoursEmpty(true);
       isValid = false;
     }
-
     if (lessonStartingTime === "" || lessonStartingTime === "undefined") {
       setShiftStartEmpty(true);
       isValid = false;
     }
-
     if (lessonEndTime === "" || lessonEndTime === "undefined") {
       setShiftEndEmpty(true);
       isValid = false;
     }
-
     if (lessonEndTime - lessonStartingTime > 8) {
       setShiftTooLong(true);
       isValid = false;
     }
-
     if (isValid) {
       createLesson();
     }
@@ -215,7 +204,6 @@ export function AddLesson() {
                 </Select>
               </FormControl>
             </Grid>
-
             <Grid item sm={10}>
               <FormControl fullWidth>
                 <InputLabel id="classroom-label">Klasės pavadinimas</InputLabel>
@@ -236,14 +224,12 @@ export function AddLesson() {
                 </Select>
               </FormControl>
             </Grid>
-
             <Grid item sm={10}>
               <FormControlLabel
                 label="Nuotolinės pamokos"
                 control={<Checkbox onChange={handleCheck}></Checkbox>}
               ></FormControlLabel>
             </Grid>
-
             <Grid item sm={10}>
               <TextField
                 fullWidth
@@ -255,7 +241,6 @@ export function AddLesson() {
                 value={hours}
               ></TextField>
             </Grid>
-
             <Grid item sm={10}>
               <TextField
                 fullWidth
@@ -267,7 +252,6 @@ export function AddLesson() {
                 value={unplannedHours}
               ></TextField>
             </Grid>
-
             <Grid item sm={5}>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DatePicker
@@ -285,7 +269,6 @@ export function AddLesson() {
                 ></DatePicker>
               </LocalizationProvider>
             </Grid>
-
             <Grid item sm={5}>
               <TextField
                 fullWidth
@@ -295,8 +278,8 @@ export function AddLesson() {
                   hoursEmpty
                     ? "Privaloma pasirinkti planuojamų valandų skaičių"
                     : hoursNotValid
-                    ? "Laukas turi susidėti iš skaičių"
-                    : ""
+                      ? "Laukas turi susidėti iš skaičių"
+                      : ""
                 }
                 variant="outlined"
                 label="Planuojamų valandų skaičius: "
@@ -306,7 +289,6 @@ export function AddLesson() {
                 onChange={(e) => validateHours(e.target.value)}
               ></TextField>
             </Grid>
-
             <Grid item sm={5}>
               <InputLabel id="lessons-start-label">Pamoka nuo:</InputLabel>
               <Select
@@ -335,7 +317,6 @@ export function AddLesson() {
                 </FormHelperText>
               )}
             </Grid>
-
             <Grid item sm={5}>
               <InputLabel id="lesson-end-label">
                 Pamoka iki (imtinai):
@@ -371,7 +352,6 @@ export function AddLesson() {
                 </FormHelperText>
               )}
             </Grid>
-
             <Grid item sm={10}>
               <Stack direction="row" spacing={2}>
                 <Button
@@ -393,7 +373,6 @@ export function AddLesson() {
                 </Link>
               </Stack>
             </Grid>
-            
             <Grid item sm={10}>
               {error && <Alert severity="warning">{error}</Alert>}
               {createMessage && (
