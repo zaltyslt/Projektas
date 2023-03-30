@@ -47,7 +47,7 @@ public class SubjectPageTest extends BaseTest {
 
         WebElement alertMessage = subjectCreateNewPage.getAlertMessage();
         assertTrue(alertMessage.isDisplayed(), "Alert not visible");
-        assertEquals("Sėkmingai sukurta.", alertMessage.getText(), "Error while creating room");
+        assertEquals("Dalykas sėkmingai sukurtas.", alertMessage.getText(), "Error while creating room");
         subjectCreateNewPage.clickOnBackButton();
 
         WaitUtils.waitPageToLoad(driver);
@@ -83,7 +83,7 @@ public class SubjectPageTest extends BaseTest {
 
         WebElement alertMessage = subjectEditPage.getAlertMessage();
         assertTrue(alertMessage.isDisplayed(), "Alert not visible");
-        assertEquals("Sėkmingai atnaujinta.", alertMessage.getText(), "Error while creating room");
+        assertEquals("Dalyko duomenys sėkmingai atnaujinti.", alertMessage.getText(), "Error while creating room");
         subjectEditPage.clickBackButton();
 
         subjectListPage.getSubjects();

@@ -1,6 +1,7 @@
 package lt.techin.schedule.module;
 
 import jakarta.validation.Valid;
+import lt.techin.schedule.classrooms.ClassroomController;
 import lt.techin.schedule.validators.ValidationDto;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.logging.Logger;
 
 import static java.util.stream.Collectors.toList;
 import static lt.techin.schedule.module.ModuleMapper.toModule;
@@ -19,7 +21,6 @@ import static org.springframework.http.ResponseEntity.ok;
 @RestController
 @RequestMapping("/api/v1/modules")
 public class ModuleController {
-
     private final ModuleService moduleService;
 
     public ModuleController(ModuleService moduleService) {

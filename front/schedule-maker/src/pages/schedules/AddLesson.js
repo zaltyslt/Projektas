@@ -46,10 +46,10 @@ export function AddLesson() {
   const scheduleId = data.state.schedule.schedule.id;
   const hours = data.state.subject.subject.hours;
   const unplannedHours =
-    data.state.subject.subject.id in
+    data.state.subject.subject.subject in
       data.state.schedule.schedule.subjectIdWithUnassignedTime
       ? data.state.schedule.schedule.subjectIdWithUnassignedTime[
-      data.state.subject.subject.id
+      data.state.subject.subject.subject
       ]
       : data.state.subject.subject.hours;
   const shiftId = data.state.schedule.schedule.groups.shift.id;
@@ -163,7 +163,7 @@ export function AddLesson() {
       setShiftEndEmpty(true);
       isValid = false;
     }
-    if (lessonEndTime - lessonStartingTime > 8) {
+    if (lessonEndTime - lessonStartingTime >= 8) {
       setShiftTooLong(true);
       isValid = false;
     }

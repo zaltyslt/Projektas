@@ -105,11 +105,6 @@ export function CreateHoliday() {
     } else {
       setDateUntilEmpty(false);
     }
-    if (dateFrom !== "" && dateUntil !== "" && dateFrom.isAfter(dateUntil)) {
-      setErrorMessageUntil("Diena iki negali būti anksčiau už dieną nuo.");
-      setDateUntilEmpty(true);
-      isValid = false;
-    }
     if (isValid) {
       setCreateMessage("");
       createHoliday();
