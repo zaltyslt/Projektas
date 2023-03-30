@@ -130,9 +130,7 @@ export function EditSubject() {
         classRooms,
       }),
     }).then((response) => {
-      // let statusCode = response.status;
       let success = response.ok;
-
       response.json().then((response) => {
         if (!success) {
           setCreateMessage("");
@@ -166,15 +164,14 @@ export function EditSubject() {
               nameError
                 ? "Dalyko pavadinimas yra privalomas"
                 : nameNotValid
-                ? "Laukas turi negalimų simbolių. "
-                : ""
+                  ? "Laukas turi negalimų simbolių. "
+                  : ""
             }
             id="name"
             value={name}
             onChange={(e) => setName(e.target.value)}
           ></TextField>
         </Grid>
-
         <Grid item sm={8}>
           <TextField
             fullWidth
@@ -186,8 +183,8 @@ export function EditSubject() {
               descriptionError
                 ? "Dalyko aprašas yra privalomas. "
                 : descriptionNotValid
-                ? "Laukas turi negalimų simbolių. "
-                : ""
+                  ? "Laukas turi negalimų simbolių. "
+                  : ""
             }
             label="Dalyko aprašas"
             id="description"
@@ -195,7 +192,6 @@ export function EditSubject() {
             onChange={(e) => setDescription(e.target.value)}
           ></TextField>
         </Grid>
-
         <Grid item sm={8}>
           <FormControl fullWidth required error={moduleError}>
             <InputLabel id="module-label">
@@ -218,7 +214,6 @@ export function EditSubject() {
             </Select>
           </FormControl>
         </Grid>
-
         <Grid item sm={8}>
           <FormControl fullWidth required error={classRoomError}>
             <InputLabel id="room-label">
@@ -251,7 +246,6 @@ export function EditSubject() {
             >
               Išsaugoti
             </Button>
-
             <Button
               id="delete-button-edit-subject"
               variant="contained"
@@ -259,7 +253,6 @@ export function EditSubject() {
             >
               Ištrinti
             </Button>
-
             <Link to="/subjects">
               <Button id="back-button-edit-subject" variant="contained">
                 Grįžti

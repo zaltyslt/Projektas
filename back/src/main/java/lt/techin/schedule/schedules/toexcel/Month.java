@@ -1,15 +1,12 @@
 package lt.techin.schedule.schedules.toexcel;
 
-import lt.techin.schedule.group.Group;
 import lt.techin.schedule.schedules.planner.WorkDay;
-import org.hibernate.boot.registry.classloading.spi.ClassLoaderService;
 
 import java.time.LocalDate;
 import java.util.List;
 
 public class Month {
     private int index;
-    private LocalDate date;
     private String group;
     private List<WorkDay> workDays;
 
@@ -21,28 +18,28 @@ public class Month {
         this.index = index;
     }
 
-    public LocalDate getDate() {
-       if(!workDays.isEmpty()){
-         this.date = workDays.get(0).getDate();
-       }
+    public LocalDate getFirstDay() {
+        if (!workDays.isEmpty()) {
+            return workDays.get(0).getDate();
 
-        return date;
+        }
+        return null;
     }
 
-    public void setDate(LocalDate date) {
-        this.date = date;
+    public LocalDate getLastDay() {
+        if (!workDays.isEmpty()) {
+            return workDays.get(workDays.size() - 1).getDate();
+        }
+return null;
     }
 
     public String getGroup() {
-        if(!workDays.isEmpty()){
+        if (!workDays.isEmpty()) {
             this.group = workDays.stream()
                     .filter(obj -> obj.getSchedule() != null)
                     .findFirst()
                     .map(obj -> obj.getSchedule().getGroups().getName())
                     .orElse(null);
-
-
-//                    .getGroups().getName();
         }
         return group;
     }
@@ -59,12 +56,11 @@ public class Month {
         this.workDays = workDays;
     }
 
-
     @Override
     public String toString() {
         return "Month{" +
                 "index=" + index +
-                ", date=" + date +
+                ", date=" + getFirstDay() + " - " + getLastDay() +
                 ", group='" + group + '\'' +
                 ", workDays=" + workDays +
                 '}';

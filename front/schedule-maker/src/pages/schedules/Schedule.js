@@ -12,15 +12,14 @@ import { Button, Grid } from "@mui/material";
 import adaptivePlugin from "@fullcalendar/adaptive";
 import { render } from "preact/compat";
 import { eachDayOfInterval } from "date-fns";
-
-import Dialog from '@mui/material/Dialog';
-import DialogTitle from '@mui/material/DialogTitle';
-import DialogContent from '@mui/material/DialogContent';
-import DialogActions from '@mui/material/DialogActions';
-import CloseIcon from '@mui/icons-material/Close';
-import { useTheme } from '@mui/material/styles';
-import useMediaQuery from '@mui/material/useMediaQuery';
-import DialogContentText from '@mui/material/DialogContentText';
+import Dialog from "@mui/material/Dialog";
+import DialogTitle from "@mui/material/DialogTitle";
+import DialogContent from "@mui/material/DialogContent";
+import DialogActions from "@mui/material/DialogActions";
+import CloseIcon from "@mui/icons-material/Close";
+import { useTheme } from "@mui/material/styles";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import DialogContentText from "@mui/material/DialogContentText";
 
 export function Schedule() {
   const [weekendsVisible, setWeekendsVisible] = useState(true);
@@ -30,19 +29,13 @@ export function Schedule() {
   const params = useParams();
   const [open, setOpen] = React.useState(false);
   const theme = useTheme();
-  const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
-  const [maxWidth, setMaxWidth] = React.useState('md');
+  const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
+  const [maxWidth, setMaxWidth] = React.useState("md");
   const [fullWidth, setFullWidth] = React.useState(true);
-  const [conflictDates, setConflictDates] = useState([])
+  const [conflictDates, setConflictDates] = useState([]);
 
   const handleClickOpen = () => {
-    console.log("Dog says woof");
-    console.log(holiday);
-    holiday.map((holiday) => {
-     
-    })
-    console.log(schedule);
-    
+    holiday.map((holiday) => {});
     setOpen(true);
   };
 
@@ -59,7 +52,17 @@ export function Schedule() {
     "#c4f5f2",
     "#c4d3f5",
     "#d8c4f5",
-    "#f5c4e3",
+    "#d6fc9c",
+    "#d5bdf9",
+    "#ffcac6",
+    "#a3b4ff",
+    "#88f7a0",
+    "#f1fc8d",
+    "#ffc6e5",
+    "#81efed",
+    "#f49a97",
+    "#93c7ff",
+    "#f9bd84",
   ];
 
   const subjectColorMap = { index: 0 };
@@ -99,23 +102,37 @@ export function Schedule() {
   const checkConflictsOnClick = async () => {
     const promises = [];
     const seenKeys = new Set();
-
     schedule.forEach((item) => {
       if (item.hasTeacherConflict && item.scheduleIdWithTeacherNameConflict) {
-        Object.entries(item.scheduleIdWithTeacherNameConflict).forEach(([key, value]) => {
-          if (!seenKeys.has(key)) {
-            promises.push(fetch(`api/v1/schedules/schedule/${key}`).then((response) => response.json()));
-            seenKeys.add(key);
+        Object.entries(item.scheduleIdWithTeacherNameConflict).forEach(
+          ([key, value]) => {
+            if (!seenKeys.has(key)) {
+              promises.push(
+                fetch(`api/v1/schedules/schedule/${key}`).then((response) =>
+                  response.json()
+                )
+              );
+              seenKeys.add(key);
+            }
           }
-        });
+        );
       }
-      if (item.hasClassroomConflict && item.scheduleIdWithClassroomNameConflict) {
-        Object.entries(item.scheduleIdWithClassroomNameConflict).forEach(([key, value]) => {
-          if (!seenKeys.has(key)) {
-            promises.push(fetch(`api/v1/schedules/schedule/${key}`).then((response) => response.json()));
-            seenKeys.add(key);
+      if (
+        item.hasClassroomConflict &&
+        item.scheduleIdWithClassroomNameConflict
+      ) {
+        Object.entries(item.scheduleIdWithClassroomNameConflict).forEach(
+          ([key, value]) => {
+            if (!seenKeys.has(key)) {
+              promises.push(
+                fetch(`api/v1/schedules/schedule/${key}`).then((response) =>
+                  response.json()
+                )
+              );
+              seenKeys.add(key);
+            }
           }
-        });
+        );
       }
     });
     const results = await Promise.all(promises);
@@ -160,12 +177,16 @@ export function Schedule() {
           <br />
           ${schedule.lessonStart} - ${schedule.lessonEnd}
           <br />
-          ${schedule.teacher ? schedule.teacher.lName : ""} ${schedule.teacher ? schedule.teacher.fName : "nepasirinktas"
-          }
+          ${schedule.teacher ? schedule.teacher.lName : ""} ${
+          schedule.teacher ? schedule.teacher.fName : "nepasirinktas"
+        }
           <br />
-          ${schedule.online
-            ? "Nuotolinė pamoka"
-            : schedule.classroom ? schedule.classroom.classroomName : ""
+          ${
+            schedule.online
+              ? "Nuotolinė pamoka"
+              : schedule.classroom
+              ? schedule.classroom.classroomName
+              : ""
           }<br />
           `,
         start: schedule.date,
@@ -182,7 +203,7 @@ export function Schedule() {
         url: `http://localhost:3000/schedule-maker#/schedules/edit-holidays/${holiday.id}`,
         color: "#cccccc",
       };
-    })
+    }),
   ];
 
   const renderEventContent = (eventInfo) => (
@@ -199,7 +220,6 @@ export function Schedule() {
       />
     </>
   );
-
 
   return (
     <div className="maincontainer">
@@ -242,31 +262,45 @@ export function Schedule() {
               Planavimas
             </Button>
           </Link>
-          <Button
+          <Button id="print-button-schedule"
             variant="contained"
             onClick={() => handleClickPrint(params.id, true)}
           >
             SPAUSDINTI EXCEL
           </Button>
-          <div>
-            <Button variant="outlined" onClick={handleClickOpen}>
+          <Button id="edit-button-schedule"
+            variant="contained"
+            onClick={() => handleClickPrint(params.id, false)}
+          >
+            REDAGUOTI EXCEL
+          </Button>
+
+          <Link>
+            <Button id="check-button-schedule"
+            variant="contained" onClick={handleClickOpen}>
               Tikrinti konfliktus
             </Button>
-            <Dialog
-              fullScreen={fullScreen}
-              open={open}
-              onClose={handleClose}
-              maxWidth={maxWidth}
-              fullWidth={fullWidth}
-              aria-labelledby="responsive-dialog-title"
-            >
-              <DialogTitle id="responsive-dialog-title">
-                {"Rasti konfliktai:"}
-              </DialogTitle>
-              <DialogContent>
-                <DialogContentText>
-                  {schedule && schedule.length > 0 ? (
-                    schedule
+          </Link>
+          <Link to="/">
+            <Button id="back-button-schedule"variant="contained">Grįžti</Button>
+          </Link>
+        </Stack>
+        <div>
+          <Dialog
+            fullScreen={fullScreen}
+            open={open}
+            onClose={handleClose}
+            maxWidth={maxWidth}
+            fullWidth={fullWidth}
+            aria-labelledby="responsive-dialog-title"
+          >
+            <DialogTitle id="responsive-dialog-title">
+              {"Rasti konfliktai:"}
+            </DialogTitle>
+            <DialogContent>
+              <DialogContentText>
+                {schedule && schedule.length > 0 ? (
+                  schedule
                     .filter(
                       (item) =>
                         (item.hasTeacherConflict &&
@@ -274,63 +308,91 @@ export function Schedule() {
                         (item.hasClassroomConflict &&
                           item.scheduleIdWithClassroomNameConflict)
                     )
-                    .map((item) => (
-                      <div key={item.id}>
-                        <h3>Diena: {item.date}</h3>
-                        {item.hasTeacherConflict &&
-                          item.scheduleIdWithTeacherNameConflict && (
-                            <div>
-                              {Object.entries(
-                                item.scheduleIdWithTeacherNameConflict
-                              ).map(([key, value]) => (
-                                <div key={key}>
-                                  <p>Mokytojas: {value}</p>
-                                  {schedules
-                                    .filter(
-                                      (scheduleItem) =>
-                                        item.scheduleIdWithTeacherNameConflict[scheduleItem.id]
-                                    )
-                                    .map((scheduleItem) => (
-                                      <p key={scheduleItem.id}>{`Mokslo metai: ${scheduleItem.schoolYear}, pavadinimas: ${scheduleItem.semester}, laikotarpis ${scheduleItem.dateFrom} — ${scheduleItem.dateUntil}`}</p>
-                                    ))}
-                                </div>
-                              ))}
-                            </div>
-                          )}
-                        {item.hasClassroomConflict &&
-                          item.scheduleIdWithClassroomNameConflict && (
-                            <div>
-                              {Object.entries(
-                                item.scheduleIdWithClassroomNameConflict
-                              ).map(([key, value]) => (
-                                <div key={key}>
-                                  <p>Klasė: {value}</p>
-                                  {schedules
-                                    .filter(
-                                      (scheduleItem) =>
-                                        item.scheduleIdWithClassroomNameConflict[scheduleItem.id]
-                                    )
-                                    .map((scheduleItem) => (
-                                      <p key={scheduleItem.id}>{`Mokslo metai: ${scheduleItem.schoolYear}, pavadinimas: ${scheduleItem.semester}, laikotarpis ${scheduleItem.dateFrom} — ${scheduleItem.dateUntil}`}</p>
-                                    ))}
-                                </div>
-                              ))}
-                            </div>
-                          )}
-                      </div>
-                    ))) : (
+                    .some(
+                      (item) =>
+                        (item.hasTeacherConflict &&
+                          item.scheduleIdWithTeacherNameConflict) ||
+                        (item.hasClassroomConflict &&
+                          item.scheduleIdWithClassroomNameConflict)
+                    ) ? (
+                    schedule
+                      .filter(
+                        (item) =>
+                          (item.hasTeacherConflict &&
+                            item.scheduleIdWithTeacherNameConflict) ||
+                          (item.hasClassroomConflict &&
+                            item.scheduleIdWithClassroomNameConflict)
+                      )
+                      .map((item) => (
+                        <div key={item.id}>
+                          <h3>Diena: {item.date}</h3>
+                          {item.hasTeacherConflict &&
+                            item.scheduleIdWithTeacherNameConflict && (
+                              <div>
+                                {Object.entries(
+                                  item.scheduleIdWithTeacherNameConflict
+                                ).map(([key, value]) => (
+                                  <div key={key}>
+                                    <p>Mokytojas: {value}</p>
+                                    {schedules
+                                      .filter(
+                                        (scheduleItem) =>
+                                          item
+                                            .scheduleIdWithTeacherNameConflict[
+                                            scheduleItem.id
+                                          ]
+                                      )
+                                      .map((scheduleItem) => (
+                                        <p
+                                          key={scheduleItem.id}
+                                        >{`Mokslo metai: ${scheduleItem.schoolYear}, pavadinimas: ${scheduleItem.semester}, laikotarpis ${scheduleItem.dateFrom} — ${scheduleItem.dateUntil}`}</p>
+                                      ))}
+                                  </div>
+                                ))}
+                              </div>
+                            )}
+                          {item.hasClassroomConflict &&
+                            item.scheduleIdWithClassroomNameConflict && (
+                              <div>
+                                {Object.entries(
+                                  item.scheduleIdWithClassroomNameConflict
+                                ).map(([key, value]) => (
+                                  <div key={key}>
+                                    <p>Klasė: {value}</p>
+                                    {schedules
+                                      .filter(
+                                        (scheduleItem) =>
+                                          item
+                                            .scheduleIdWithClassroomNameConflict[
+                                            scheduleItem.id
+                                          ]
+                                      )
+                                      .map((scheduleItem) => (
+                                        <p
+                                          key={scheduleItem.id}
+                                        >{`Mokslo metai: ${scheduleItem.schoolYear}, pavadinimas: ${scheduleItem.semester}, laikotarpis ${scheduleItem.dateFrom} — ${scheduleItem.dateUntil}`}</p>
+                                      ))}
+                                  </div>
+                                ))}
+                              </div>
+                            )}
+                        </div>
+                      ))
+                  ) : (
                     <p>Konfliktų nėra.</p>
-                  )}
-                </DialogContentText>
-              </DialogContent>
-              <DialogActions>
-                <Button variant="outlined" onClick={handleClose} autoFocus>
-                  Uždaryti
-                </Button>
-              </DialogActions>
-            </Dialog>
-          </div>
-        </Stack>
+                  )
+                ) : (
+                  <p>Konfliktų nėra.</p>
+                )}
+              </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+              <Button variant="outlined" onClick={handleClose} autoFocus>
+                Uždaryti
+              </Button>
+            </DialogActions>
+          </Dialog>
+        </div>
       </Grid>
     </div>
   );

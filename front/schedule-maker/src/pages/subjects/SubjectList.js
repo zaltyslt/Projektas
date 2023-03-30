@@ -18,7 +18,6 @@ import {
 } from "@mui/material";
 import { Container } from "@mui/system";
 import "./Subject.css";
-
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
@@ -26,7 +25,6 @@ export function SubjectList() {
   const [subjects, setSubjects] = useState([]);
   const [filteredSubjects, setFilteredSubjects] = useState([]);
   const [deletedSubjects, setDeletedSubjects] = useState([]);
-
   const [page, setPage] = useState(0);
   const [pageInDeleted, setPageInDeleted] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -59,13 +57,18 @@ export function SubjectList() {
 
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - subjects.length) : 0;
-  
+
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
 
   const emptyRowsInDeleted =
-    pageInDeleted > 0 ? Math.max(0, (1 + pageInDeleted) * rowsPerPageInDeleted - deletedSubjects.length) : 0;
+    pageInDeleted > 0
+      ? Math.max(
+        0,
+        (1 + pageInDeleted) * rowsPerPageInDeleted - deletedSubjects.length
+      )
+      : 0;
 
   const handleChangePageInDeleted = (event, newPage) => {
     setPageInDeleted(newPage);
@@ -125,11 +128,12 @@ export function SubjectList() {
           <Grid item sm={2}>
             <Link to="/subjects/create">
               <Stack direction="row" justifyContent="flex-end">
-                <Button id="create-new-subject" variant="contained">Pridėti naują</Button>
+                <Button id="create-new-subject" variant="contained">
+                  Pridėti naują
+                </Button>
               </Stack>
             </Link>
           </Grid>
-
           <Grid item sm={12}>
             <TextField
               fullWidth
@@ -141,21 +145,25 @@ export function SubjectList() {
             ></TextField>
           </Grid>
         </Grid>
-
         <TableContainer component={Paper}>
-          <Table id="active-subject-list-table" aria-label="custom pagination table">
+          <Table
+            id="active-subject-list-table"
+            aria-label="custom pagination table"
+          >
             <TableHead>
               <TableRow>
-                <TableCell style={{ width: "500px" }} >Dalyko pavadinimas</TableCell>
-                <TableCell >Modulio pavadinimas</TableCell>
+                <TableCell style={{ width: "500px" }}>
+                  Dalyko pavadinimas
+                </TableCell>
+                <TableCell>Modulio pavadinimas</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {(rowsPerPage > 0
                 ? filteredSubjects.slice(
-                    page * rowsPerPage,
-                    page * rowsPerPage + rowsPerPage
-                  )
+                  page * rowsPerPage,
+                  page * rowsPerPage + rowsPerPage
+                )
                 : filteredSubjects
               ).map((subject) => (
                 <TableRow key={subject.id}>
@@ -167,9 +175,7 @@ export function SubjectList() {
                   <TableCell>
                     {subject.module ? (
                       subject.module.deleted ? (
-                        <span className="Deleted">
-                          {subject.module.name}
-                        </span>
+                        <span className="Deleted">{subject.module.name}</span>
                       ) : (
                         subject.module.name
                       )
@@ -179,7 +185,6 @@ export function SubjectList() {
                   </TableCell>
                 </TableRow>
               ))}
-
               {emptyRows > 0 && (
                 <TableRow style={{ height: 53 * emptyRows }}>
                   <TableCell colSpan={6} />
@@ -211,7 +216,6 @@ export function SubjectList() {
             </TableFooter>
           </Table>
         </TableContainer>
-
         <FormGroup>
           <FormControlLabel
             control={<Checkbox />}
@@ -223,20 +227,28 @@ export function SubjectList() {
         </FormGroup>
         {isChecked && (
           <TableContainer component={Paper}>
-            <Table id="inactive-subject-list-table" aria-label="custom pagination table">
+            <Table
+              id="inactive-subject-list-table"
+              aria-label="custom pagination table"
+            >
               <TableHead>
                 <TableRow>
-                  <TableCell style={{ width: "500px" }}>Dalyko pavadinimas</TableCell>
-                  <TableCell style={{ width: "500px" }}>Modulio pavadinimas</TableCell>
-                  <TableCell ></TableCell>
+                  <TableCell style={{ width: "500px" }}>
+                    Dalyko pavadinimas
+                  </TableCell>
+                  <TableCell style={{ width: "500px" }}>
+                    Modulio pavadinimas
+                  </TableCell>
+                  <TableCell></TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
                 {(rowsPerPageInDeleted > 0
                   ? deletedSubjects.slice(
-                      pageInDeleted * rowsPerPageInDeleted,
-                      pageInDeleted * rowsPerPageInDeleted + rowsPerPageInDeleted
-                    )
+                    pageInDeleted * rowsPerPageInDeleted,
+                    pageInDeleted * rowsPerPageInDeleted +
+                    rowsPerPageInDeleted
+                  )
                   : deletedSubjects
                 ).map((subject) => (
                   <TableRow key={subject.id}>
@@ -246,9 +258,7 @@ export function SubjectList() {
                     <TableCell>
                       {subject.module ? (
                         subject.module.deleted ? (
-                          <span className="Deleted">
-                            {subject.module.name}
-                          </span>
+                          <span className="Deleted">{subject.module.name}</span>
                         ) : (
                           subject.module.name
                         )
@@ -258,6 +268,7 @@ export function SubjectList() {
                     </TableCell>
                     <TableCell align="center" className="activity">
                       <Button
+                        id="restore-button-list-subject"
                         variant="contained"
                         onClick={() => handleRestore(subject.id)}
                       >
@@ -266,7 +277,6 @@ export function SubjectList() {
                     </TableCell>
                   </TableRow>
                 ))}
-
                 {emptyRowsInDeleted > 0 && (
                   <TableRow style={{ height: 53 * emptyRowsInDeleted }}>
                     <TableCell colSpan={6} />

@@ -1,15 +1,12 @@
 package lt.techin.schedule.schedules;
 
-import lt.techin.schedule.config.LithuanianHolidays;
 import lt.techin.schedule.exceptions.ValidationException;
 import lt.techin.schedule.group.GroupRepository;
 import lt.techin.schedule.schedules.holidays.Holiday;
-import lt.techin.schedule.schedules.holidays.HolidayPlan.HolidayPlanRepository;
 import lt.techin.schedule.schedules.holidays.HolidayRepository;
 import lt.techin.schedule.schedules.holidays.LithuanianHolidaySetup;
 import lt.techin.schedule.schedules.planner.WorkDayRepository;
 import lt.techin.schedule.subject.SubjectRepository;
-import lt.techin.schedule.teachers.Teacher;
 import lt.techin.schedule.teachers.TeacherRepository;
 import org.springframework.stereotype.Service;
 
@@ -26,7 +23,6 @@ public class ScheduleService {
     private final GroupRepository groupRepository;
 
     private final HolidayRepository holidayRepository;
-    private final HolidayPlanRepository holidayPlanRepository;
 
     private final SubjectRepository subjectRepository;
 
@@ -37,15 +33,13 @@ public class ScheduleService {
     public ScheduleService(ScheduleRepository scheduleRepository,
                            GroupRepository groupRepository,
                            SubjectRepository subjectRepository,
-                           TeacherRepository teacherRepository, WorkDayRepository workDayRepository, HolidayRepository holidayRepository,
-                           HolidayPlanRepository holidayPlanRepository) {
+                           TeacherRepository teacherRepository, WorkDayRepository workDayRepository, HolidayRepository holidayRepository) {
         this.scheduleRepository = scheduleRepository;
         this.groupRepository = groupRepository;
         this.subjectRepository = subjectRepository;
         this.teacherRepository = teacherRepository;
         this.workDayRepository = workDayRepository;
         this.holidayRepository = holidayRepository;
-        this.holidayPlanRepository = holidayPlanRepository;
     }
 
     public List<Schedule> getAll() {
@@ -77,7 +71,7 @@ public class ScheduleService {
             Schedule scheduleToSave = scheduleRepository.save(schedule);
 
             //Setting up predefined holidays for schedule which are in the range of this schedule
-            LinkedHashSet<Holiday> predefinedHolidays = LithuanianHolidaySetup.SetupHolidaysInRange(schedule.getDateFrom(), schedule.getDateUntil(), schedule);
+            LinkedHashSet<Holiday> predefinedHolidays = LithuanianHolidaySetup.setupHolidaysInRange(schedule.getDateFrom(), schedule.getDateUntil(), schedule);
             holidayRepository.saveAll(predefinedHolidays);
             scheduleToSave.addHolidays(predefinedHolidays);
 

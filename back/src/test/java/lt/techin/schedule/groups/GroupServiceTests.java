@@ -11,7 +11,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -22,10 +21,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
 public class GroupServiceTests {
-
     @InjectMocks
     private GroupService groupService;
-
     @Mock
     private GroupRepository groupRepository;
 
@@ -40,10 +37,9 @@ public class GroupServiceTests {
         program.setProgramName("Program");
         program.setDescription("Description");
         program.setActive(true);
-
         Group group = new Group(1L, "Group", "2018", 15, true, program,
                 new Shift("Shift", "8:00", "16:00", true, 1, 8)
-        , LocalDateTime.now(), LocalDateTime.now());
+                , LocalDateTime.now(), LocalDateTime.now());
         String result = groupService.addUniqueGroup(GroupMapper.groupToDto(group));
         assertEquals("", result);
     }
@@ -54,17 +50,13 @@ public class GroupServiceTests {
         program.setProgramName("Program");
         program.setDescription("Description");
         program.setActive(true);
-
         Group group1 = new Group(1L, "Group", "2018", 15, true, program,
                 new Shift("Shift", "8:00", "16:00", true, 1, 8)
                 , LocalDateTime.now(), LocalDateTime.now());
-
         Group group2 = new Group(2L, "Group", "2018", 15, true, program,
                 new Shift("Shift", "8:00", "16:00", true, 1, 8)
                 , LocalDateTime.now(), LocalDateTime.now());
-
         when(groupRepository.findAll()).thenReturn(List.of(group1));
-
         String result = groupService.addUniqueGroup(GroupMapper.groupToDto(group2));
         assertEquals("Grupės pavadinimas turi būti unikalus.", result);
     }
@@ -75,19 +67,14 @@ public class GroupServiceTests {
         program.setProgramName("Program");
         program.setDescription("Description");
         program.setActive(true);
-
         Group group1 = new Group(1L, "Group1", "2018", 15, true, program,
                 new Shift("Shift", "8:00", "16:00", true, 1, 8)
                 , LocalDateTime.now(), LocalDateTime.now());
-
         Group group2 = new Group(2L, "Group2", "2018", 15, true, program,
                 new Shift("Shift", "8:00", "16:00", true, 1, 8)
                 , LocalDateTime.now(), LocalDateTime.now());
-
         when(groupRepository.findAll()).thenReturn(Arrays.asList(group1, group2));
-
         List<Group> activeGroups = groupService.getActiveGroups();
-
         assertEquals(Arrays.asList(group1, group2), activeGroups);
     }
 
@@ -97,20 +84,14 @@ public class GroupServiceTests {
         program.setProgramName("Program");
         program.setDescription("Description");
         program.setActive(true);
-
         Group group1 = new Group(1L, "Group1", "2018", 15, false, program,
                 new Shift("Shift", "8:00", "16:00", true, 1, 8)
                 , LocalDateTime.now(), LocalDateTime.now());
-
         Group group2 = new Group(2L, "Group2", "2018", 15, false, program,
                 new Shift("Shift", "8:00", "16:00", true, 1, 8)
                 , LocalDateTime.now(), LocalDateTime.now());
-
-
         when(groupRepository.findAll()).thenReturn(Arrays.asList(group1, group2));
-
         List<Group> inactiveGroups = groupService.getInactiveGroups();
-
         assertEquals(Arrays.asList(group1, group2), inactiveGroups);
     }
 
@@ -120,15 +101,11 @@ public class GroupServiceTests {
         program.setProgramName("Program");
         program.setDescription("Description");
         program.setActive(true);
-
         Group group = new Group(1L, "Group1", "2018", 15, true, program,
                 new Shift("Shift", "8:00", "16:00", true, 1, 8)
                 , LocalDateTime.now(), LocalDateTime.now());
-
         group.setId(100L);
-
         when(groupRepository.findById(group.getId())).thenReturn(Optional.of(group));
-
         Group foundGroup = groupService.getGroupByID(100L);
         assertEquals(group, foundGroup);
     }
@@ -139,26 +116,20 @@ public class GroupServiceTests {
         program.setProgramName("Program");
         program.setDescription("Description");
         program.setActive(true);
-
         Group group1 = new Group(1L, "Group1", "2018", 15, true, program,
                 new Shift("Shift", "8:00", "16:00", true, 1, 8)
                 , LocalDateTime.now(), LocalDateTime.now());
-
         Group group2 = new Group(2L, "Group2", "2018", 15, true, program,
                 new Shift("Shift", "8:00", "16:00", true, 1, 8)
                 , LocalDateTime.now(), LocalDateTime.now());
-
         Group group3 = new Group(2L, "Group3", "2018", 15, true, program,
                 new Shift("Shift", "8:00", "16:00", true, 1, 8)
                 , LocalDateTime.now(), LocalDateTime.now());
-
         group1.setId(200L);
         group2.setId(100L);
         group3.setId(100L);
-
         when(groupRepository.findById(group2.getId())).thenReturn(Optional.of(group2));
         when(groupRepository.findAll()).thenReturn(Arrays.asList(group1, group2));
-
         String result = groupService.modifyExistingGroup(group3.getId(), GroupMapper.groupToDto(group3));
         assertEquals("", result);
     }
@@ -169,26 +140,20 @@ public class GroupServiceTests {
         program.setProgramName("Program");
         program.setDescription("Description");
         program.setActive(true);
-
         Group group1 = new Group(1L, "Group", "2018", 15, true, program,
                 new Shift("Shift", "8:00", "16:00", true, 1, 8)
                 , LocalDateTime.now(), LocalDateTime.now());
-
         Group group2 = new Group(2L, "Group", "2018", 15, true, program,
                 new Shift("Shift", "8:00", "16:00", true, 1, 8)
                 , LocalDateTime.now(), LocalDateTime.now());
-
         Group group3 = new Group(2L, "Group", "2018", 15, true, program,
                 new Shift("Shift", "8:00", "16:00", true, 1, 8)
                 , LocalDateTime.now(), LocalDateTime.now());
-
         group1.setId(200L);
         group2.setId(100L);
         group3.setId(100L);
-
         when(groupRepository.findById(group2.getId())).thenReturn(Optional.of(group2));
         when(groupRepository.findAll()).thenReturn(Arrays.asList(group1, group2));
-
         String result = groupService.modifyExistingGroup(group3.getId(), GroupMapper.groupToDto(group3));
         assertEquals("Grupės pavadinimas turi būti unikalus.", result);
     }

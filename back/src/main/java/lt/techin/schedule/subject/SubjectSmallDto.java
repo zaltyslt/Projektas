@@ -3,9 +3,7 @@ package lt.techin.schedule.subject;
 import java.util.Objects;
 
 public class SubjectSmallDto {
-
     private Long id;
-
     private String name;
 
     public SubjectSmallDto() {

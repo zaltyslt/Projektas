@@ -25,7 +25,6 @@ export function ViewGroup() {
               </span>
             </header>
           </Grid>
-
           <Grid item sm={12}>
             <h4>Programa</h4>
             <p>{group.program && group.program.programName}</p>
@@ -42,15 +41,17 @@ export function ViewGroup() {
             <h4>Studentų kiekis</h4>
             <p>{group.studentAmount}</p>
           </Grid>
-
           <Grid item sm={12}>
             <Stack direction="row" spacing={2}>
               <Link to={"/groups/edit/" + group.id}>
-                <Button variant="contained">Redaguoti</Button>
+                <Button id="edit-button-view-group " variant="contained">
+                  Redaguoti
+                </Button>
               </Link>
-
               <Link to="/groups">
-                <Button variant="contained">Grįžti</Button>
+                <Button id="back-button-view-group " variant="contained">
+                  Grįžti
+                </Button>
               </Link>
             </Stack>
           </Grid>

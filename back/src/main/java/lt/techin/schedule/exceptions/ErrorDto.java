@@ -3,11 +3,9 @@ package lt.techin.schedule.exceptions;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Objects;
 
 public class ErrorDto {
-
     private String url;
     private String message;
     private Integer status;
@@ -83,7 +81,12 @@ public class ErrorDto {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ErrorDto errorDto = (ErrorDto) o;
-        return Objects.equals(url, errorDto.url) && Objects.equals(message, errorDto.message) && Objects.equals(status, errorDto.status) && Objects.equals(error, errorDto.error) && Objects.equals(path, errorDto.path) && Objects.equals(timestamp, errorDto.timestamp);
+        return Objects.equals(url, errorDto.url)
+                && Objects.equals(message, errorDto.message)
+                && Objects.equals(status, errorDto.status)
+                && Objects.equals(error, errorDto.error)
+                && Objects.equals(path, errorDto.path)
+                && Objects.equals(timestamp, errorDto.timestamp);
     }
 
     @Override
@@ -93,7 +96,7 @@ public class ErrorDto {
 
     @Override
     public String toString() {
-        return "ErrorDto{" + "url='" + url + '\'' + ", message='" + message + '\'' + ", status=" + status + ", error='" + error + '\'' + ", path='" + path + '\'' + ", timestamp=" + timestamp + '}';
+        return "ErrorDto{" + "url='" + url + '\'' + ", message='" + message + '\'' + ", status=" + status + ", " +
+                "error='" + error + '\'' + ", path='" + path + '\'' + ", timestamp=" + timestamp + '}';
     }
-
 }

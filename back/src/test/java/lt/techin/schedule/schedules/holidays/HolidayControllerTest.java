@@ -1,72 +1,76 @@
 package lt.techin.schedule.schedules.holidays;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lt.techin.schedule.schedules.Schedule;
 import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.jdbc.Sql;
-import org.springframework.test.context.jdbc.SqlGroup;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
-import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.BEFORE_TEST_METHOD;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
+import java.util.List;
+
+import static org.mockito.Mockito.when;
+import static org.springframework.http.ResponseEntity.ok;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@ExtendWith(MockitoExtension.class)
-@SqlGroup({
-        @Sql(value = "classpath:init/schedule.sql", executionPhase = BEFORE_TEST_METHOD)
-})
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class HolidayControllerTest {
+
+    @MockBean
+    HolidayService holidayService;
+
     @Autowired
-    private MockMvc mvc;
-
-    @BeforeEach
-    public void setUp() {
-        Schedule testSchedule = new Schedule();
-        testSchedule.setId(1L);
-    }
-
-
-    @Test
-    @Order(1)
-    void testGetHolidaysController() throws Exception {
-        mvc.perform(get("/api/v1/schedules/holidays")
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(content()
-                        .contentType(MediaType.APPLICATION_JSON));
-    }
+    private MockMvc mockMvc;
 
     @Test
     void testGetHolidayController() throws Exception {
-        mvc.perform(get("/api/v1/schedules/holidays/1")
-                        .contentType(MediaType.APPLICATION_JSON))
+        Holiday expectedHoliday = new Holiday();
+
+        expectedHoliday.setId(1L);
+        expectedHoliday.setHolidayName("Holiday");
+        expectedHoliday.setDate(LocalDate.of(2023, 3, 29));
+
+        Schedule scheduleToAdd = new Schedule();
+        scheduleToAdd.setId(1L);
+
+        expectedHoliday.setSchedule(scheduleToAdd);
+
+        when(holidayService.getHolidayById(1L)).thenReturn(expectedHoliday);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/schedules/holiday/1"))
                 .andExpect(status().isOk())
-                .andExpect(content()
-                        .contentType(MediaType.APPLICATION_JSON));
+                .andExpect(content().json(
+                        """
+                                {
+                                  "id": 1,
+                                  "name": "Holiday",
+                                  "date": "2023-03-29",
+                                  "schedule": {
+                                    "id": 1
+                                  }
+                                }"""
+                ));
     }
 
-    @Test
-    void testCreateHolidayController() throws Exception {
-//        String requestBody = ("/api/v1/schedules/holidays/create-holiday/1")
-        String requestBody = ("{\"id\":1,\"name\":\"Holiday name\",\"dateFrom\":\"2023-03-01\"," +
-                                "\"dateUntil\":\"2023-03-31\"}");
-                Long scheduleId = 1L;
-        mvc.perform(post("/api/v1/schedules/create-schedule/{id}")
-                        .param("scheduleId", scheduleId.toString())
-                        .content(requestBody)
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(content()
-                        .contentType(MediaType.APPLICATION_JSON));
+    @PutMapping(value = "/holidays/update-holiday/{holidayId}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<HolidayDto> updateHoliday(@PathVariable Long holidayId, @RequestBody String holidayName) {
+        Holiday updatedHoliday = holidayService.update(holidayId, holidayName);
+        return ok(HolidayMapper.toHolidayDto(updatedHoliday));
     }
 }

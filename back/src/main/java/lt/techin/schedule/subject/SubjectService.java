@@ -16,16 +16,11 @@ import static lt.techin.schedule.subject.SubjectMapper.toSubjectDto;
 
 @Service
 public class SubjectService {
-
     private final SubjectRepository subjectRepository;
-
     private final ModuleRepository moduleRepository;
-
     private final ClassroomRepository classroomRepository;
-
     @Autowired
     private SubjectHoursRepository subjectHours;
-
     @Autowired
     private EntityManager entityManager;
 
@@ -39,7 +34,8 @@ public class SubjectService {
 
 
     public List<Subject> getAll() {
-        return subjectRepository.findAll().stream().filter(subject -> !subject.getDeleted()).collect(Collectors.toList());
+        return subjectRepository.findAll().stream().filter(subject ->
+                !subject.getDeleted()).collect(Collectors.toList());
     }
 
     public List<Subject> getAllDeleted() {
@@ -58,8 +54,8 @@ public class SubjectService {
                 .collect(Collectors.toList());
         if (existing.size() > 0) {
             var subjectDto = toSubjectDto(subject);
-
-            throw new ValidationException("Dalykas su tokiu pavadinimu, aprašu ir moduliu jau sukurtas.", "Subject", "Not unique", subjectDto.toString());
+            throw new ValidationException("Dalykas su tokiu pavadinimu, aprašu ir moduliu jau sukurtas.",
+                    "Subject", "Not unique", subjectDto.toString());
         } else {
             return subjectRepository.save(subject);
         }
@@ -68,72 +64,41 @@ public class SubjectService {
     public Subject delete(Long subjectId) {
         var existingSubject = subjectRepository.findById(subjectId).orElseThrow();
         existingSubject.setDeleted(true);
-
-
-        var existingsubjecthours = subjectHours.findBySubject(subjectId).orElse(null);
-        if (existingsubjecthours != null) {
-            existingsubjecthours.setDeleted(true);
-            subjectHours.save(existingsubjecthours);
+        if (subjectHours != null) {
+            var existingsubjecthours = subjectHours.findBySubject(subjectId).orElse(null);
+            if (existingsubjecthours != null) {
+                existingsubjecthours.setDeleted(true);
+                subjectHours.save(existingsubjecthours);
+            }
         }
-
-
         return subjectRepository.save(existingSubject);
     }
 
     public Subject updateSubject(Long subjectId, Subject subject) {
         var existingSubject = subjectRepository.findById(subjectId).orElseThrow();
         var existingModule = moduleRepository.findById(subject.getModule().getId()).orElseThrow();
-
         existingSubject.setName(subject.getName());
         existingSubject.setDescription(subject.getDescription());
         existingSubject.setModule(existingModule);
         existingSubject.setClassRooms(subject.getClassRooms());
-
         return subjectRepository.save(existingSubject);
     }
 
     public Subject restoreSubject(Long id) {
         var subject = subjectRepository.findById(id).orElseThrow();
         subject.setDeleted(false);
-
-        var existingsubjecthours = subjectHours.findBySubject(id).orElse(null);
-        if (existingsubjecthours != null) {
-            existingsubjecthours.setDeleted(false);
-            subjectHours.save(existingsubjecthours);
+        if (subjectHours != null) {
+            var existingsubjecthours = subjectHours.findBySubject(id).orElse(null);
+            if (existingsubjecthours != null) {
+                existingsubjecthours.setDeleted(false);
+                subjectHours.save(existingsubjecthours);
+            }
         }
-
         return subjectRepository.save(subject);
     }
 
     public List<Subject> findAllByModuleId(Long moduleId) {
-        return subjectRepository.findSubjectsByModuleId(moduleId).stream().filter(subject -> !subject.getDeleted()).collect(Collectors.toList());
+        return subjectRepository.findSubjectsByModuleId(moduleId).stream().filter(subject ->
+                !subject.getDeleted()).collect(Collectors.toList());
     }
-
-    //Not used
-//    public boolean deleteById(Long id) {
-//        try {
-//            subjectRepository.deleteById(id);
-//            return true;
-//        } catch (EmptyResultDataAccessException exception) {
-//            return false;
-//        }
-//    }
-
-    //Not used (pagination done only from frontend)
-//    private Pageable pageable(int page, int pageSize, String sortField, Sort.Direction sortDirection) {
-//        return PageRequest.of(page, pageSize, sortDirection, sortField);
-//    }
-
-    //Not used
-//    public Page<Subject> findAllPaged(int page, int pageSize, boolean isDeleted) {
-//
-//        Pageable pageable = PageRequest.of(page, pageSize);
-//
-//        Session session = entityManager.unwrap(Session.class);
-//        Filter filter = session.enableFilter("deletedSubjectFilter");
-//        filter.setParameter("isDeleted", isDeleted);
-//        Page<Subject> subjects =  subjectRepository.findAll(pageable);
-//        session.disableFilter("deletedSubjectFilter");
-//        return subjects;
-//    }
 }

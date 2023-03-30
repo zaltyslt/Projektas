@@ -24,6 +24,7 @@ public class ProgramServiceTest {
     private SubjectHoursService subjectHoursService;
     @InjectMocks
     private ProgramService programService;
+
     private ProgramRepository verify(ProgramRepository programRepository, VerificationMode times) {
         return programRepository;
     }
@@ -84,7 +85,6 @@ public class ProgramServiceTest {
         Program result = programService.createWithSubjectList(program);
         assertEquals(program, result);
         verify(programRepository, times(1)).findByProgramName(program.getProgramName());
-//        verify(subjectHoursService, times(1)).create(program.getSubjectHoursList());
         verify(programRepository, times(1)).save(program);
     }
 
@@ -105,7 +105,6 @@ public class ProgramServiceTest {
         Program result = programService.createWithSubjectList(program);
         assertNull(result);
         verify(programRepository, times(1)).findByProgramName(program.getProgramName());
-//        verify(subjectHoursService, never()).create(program.getSubjectHoursList());
         verify(programRepository, never()).save(program);
     }
 
@@ -182,6 +181,7 @@ public class ProgramServiceTest {
         verify(programRepository, times(1)).findById(id);
         verify(programRepository, never()).save(any());
     }
+
     @Test
     public void testFinById() {
         Long id = 1L;

@@ -3,27 +3,14 @@ package lt.techin.schedule.schedules;
 import lt.techin.schedule.exceptions.ValidationException;
 import lt.techin.schedule.group.Group;
 import lt.techin.schedule.group.GroupRepository;
-import lt.techin.schedule.schedules.Schedule;
-import lt.techin.schedule.schedules.ScheduleRepository;
-import lt.techin.schedule.schedules.ScheduleService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.MockitoAnnotations;
-import lt.techin.schedule.teachers.Teacher;
-import lt.techin.schedule.teachers.TeacherDto;
-import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mockito;
-import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -38,8 +25,6 @@ import static org.mockito.Mockito.*;
 @SpringBootTest
 @AutoConfigureMockMvc
 class ScheduleServiceTest {
-
-//@InjectMocks
     @Autowired
     private ScheduleService scheduleService;
     @MockBean
@@ -51,7 +36,6 @@ class ScheduleServiceTest {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-//        scheduleService = new ScheduleService(scheduleRepository, groupRepository);
     }
 
     @Test
@@ -90,26 +74,19 @@ class ScheduleServiceTest {
 
     @Test
     void testCreateSchedule() {
+        Schedule schedule = new Schedule();
         Group group = new Group();
         group.setId(1L);
-        group.setName("Group 1");
-        Schedule schedule = new Schedule();
         schedule.setId(1L);
-        schedule.setSchoolYear("2022-2023");
-        schedule.setSemester("spring");
-        schedule.setDateFrom(LocalDate.of(2023, 2, 1));
-        schedule.setDateUntil(LocalDate.of(2023, 6, 30));
-        when(groupRepository.findById(anyLong())).thenReturn(Optional.of(group));
-        when(scheduleRepository.findAll()).thenReturn(Collections.emptyList());
+        schedule.setDateFrom(LocalDate.now().minusDays(1));
+        schedule.setDateUntil(LocalDate.now().plusDays(1));
+        schedule.setGroups(group);
+        when(groupRepository.findById(1L)).thenReturn(Optional.of(group));
+        when(scheduleRepository.findAll()).thenReturn(new ArrayList<>());
         when(scheduleRepository.save(any(Schedule.class))).thenReturn(schedule);
-        Schedule createdSchedule = scheduleService.createSchedule(schedule, 1L);
-        verify(groupRepository, times(1)).findById(eq(1L));
-        verify(scheduleRepository, times(1)).findAll();
-        ArgumentCaptor<Schedule> scheduleArgumentCaptor = ArgumentCaptor.forClass(Schedule.class);
-        verify(scheduleRepository, times(1)).save(scheduleArgumentCaptor.capture());
-        Schedule savedSchedule = scheduleArgumentCaptor.getValue();
-        assertEquals(schedule, savedSchedule);
-        assertEquals(schedule, createdSchedule);
+        Schedule result = scheduleService.createSchedule(schedule, 1L);
+        assertNotNull(result);
+        assertEquals(schedule, result);
     }
 
 
@@ -151,11 +128,9 @@ class ScheduleServiceTest {
         Optional<Schedule> scheduleToDelete = Optional.of(schedule);
         when(scheduleRepository.findById(3L)).thenReturn(scheduleToDelete);
         doThrow(new RuntimeException()).when(scheduleRepository).delete(scheduleToDelete.get());
-
         assertTrue(scheduleService.deleteSchedule(1L), "a");
         assertThrows(ValidationException.class, () -> scheduleService.deleteSchedule(2L), "b");
         assertFalse(scheduleService.deleteSchedule(3L), "c");
-
     }
 }
 

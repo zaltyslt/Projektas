@@ -164,7 +164,6 @@ export function CreateProgram(props) {
   const handleFormChange = (event, index) => {
     console.log(event.target.value);
     let data = [...subjectHoursList];
-
     if (event.target.name == "subjectName") {
       data[index][event.target.name] = event.target.value.name;
       data[index]["deleted"] = event.target.value.deleted;
@@ -172,7 +171,6 @@ export function CreateProgram(props) {
     } else {
       data[index][event.target.name] = event.target.value;
     }
-
     setsubjectHoursList(data);
   };
 
@@ -210,10 +208,10 @@ export function CreateProgram(props) {
                   errorEmptyName
                     ? "Programos pavadinimas yra privalomas."
                     : errorSymbolsName
-                    ? "Programos pavadinimas turi neleidžiamų simbolių."
-                    : errorLengthName
-                    ? "Programos pavadinimas negali būti ilgesnis nei 200 simbolių"
-                    : ""
+                      ? "Programos pavadinimas turi neleidžiamų simbolių."
+                      : errorLengthName
+                        ? "Programos pavadinimas negali būti ilgesnis nei 200 simbolių"
+                        : ""
                 }
                 variant="outlined"
                 id="programName"
@@ -228,7 +226,6 @@ export function CreateProgram(props) {
                   }
                   setProgramName(input);
                 }}
-                // onChange={(e) => setProgramName(e.target.value)}
               ></TextField>
             </Grid>
             <Grid item sm={8}>
@@ -241,10 +238,10 @@ export function CreateProgram(props) {
                   errorEmptyDesc
                     ? "Programos aprašas yra privalomas."
                     : errorSymbolsDesc
-                    ? "Programos aprašas turi neleidžiamų simbolių."
-                    : errorLengthDesc
-                    ? "Programos aprašas negali būti ilgesnis nei 2000 simbolių"
-                    : ""
+                      ? "Programos aprašas turi neleidžiamų simbolių."
+                      : errorLengthDesc
+                        ? "Programos aprašas negali būti ilgesnis nei 2000 simbolių"
+                        : ""
                 }
                 variant="outlined"
                 label="Programos aprašas"
@@ -259,9 +256,10 @@ export function CreateProgram(props) {
                   }
                   setDescription(input);
                 }}
-                // onChange={(e) => setDescription(e.target.value)}
               ></TextField>
             </Grid>
+
+            
             <Grid item sm={8}>
               <Grid container direction="row" justifyContent="space-between">
                 {subjectHoursList.map((form, index) => {
@@ -314,8 +312,8 @@ export function CreateProgram(props) {
                             errorHours
                               ? "Leidžiami tik skaičių simboliai."
                               : errorHoursNumber
-                              ? "Dalykas negali viršyti 1000 valandų."
-                              : ""
+                                ? "Dalykas negali viršyti 1000 valandų."
+                                : ""
                           }
                           variant="outlined"
                           id="hours"

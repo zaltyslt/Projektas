@@ -10,35 +10,20 @@ import java.util.Map;
 import java.util.Objects;
 
 public class WorkDayDto {
-
     private Long id;
-
     private LocalDate date;
-
     private String lessonStart;
-
     private String lessonEnd;
-
     private int startIntEnum;
-
     private int endIntEnum;
-
     private Boolean online;
-
     private TeacherEntityDto teacher;
-
     private SubjectSmallDto subject;
-
     private ClassroomSmallDto classroom;
-
     private ScheduleEntityDto schedule;
-
     private Map<Long, String> scheduleIdWithClassroomNameConflict;
-
     private Map<Long, String> scheduleIdWithTeacherNameConflict;
-
     private boolean hasTeacherConflict;
-
     private boolean hasClassroomConflict;
 
     public Map<Long, String> getScheduleIdWithClassroomNameConflict() {
@@ -76,7 +61,11 @@ public class WorkDayDto {
     public WorkDayDto() {
     }
 
-    public WorkDayDto(Long id, LocalDate date, String lessonStart, String lessonEnd, Boolean online, TeacherEntityDto teacher, SubjectSmallDto subject, ClassroomSmallDto classroom, ScheduleEntityDto schedule) {
+    public WorkDayDto(Long id, LocalDate date,
+                      String lessonStart, String lessonEnd,
+                      Boolean online, TeacherEntityDto teacher,
+                      SubjectSmallDto subject, ClassroomSmallDto classroom,
+                      ScheduleEntityDto schedule) {
         this.id = id;
         this.date = date;
         this.lessonStart = lessonStart;
@@ -181,7 +170,15 @@ public class WorkDayDto {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         WorkDayDto that = (WorkDayDto) o;
-        return Objects.equals(id, that.id) && Objects.equals(date, that.date) && Objects.equals(lessonStart, that.lessonStart) && Objects.equals(lessonEnd, that.lessonEnd) && Objects.equals(online, that.online) && Objects.equals(teacher, that.teacher) && Objects.equals(subject, that.subject) && Objects.equals(classroom, that.classroom) && Objects.equals(schedule, that.schedule);
+        return Objects.equals(id, that.id)
+                && Objects.equals(date, that.date)
+                && Objects.equals(lessonStart, that.lessonStart)
+                && Objects.equals(lessonEnd, that.lessonEnd)
+                && Objects.equals(online, that.online)
+                && Objects.equals(teacher, that.teacher)
+                && Objects.equals(subject, that.subject)
+                && Objects.equals(classroom, that.classroom)
+                && Objects.equals(schedule, that.schedule);
     }
 
     @Override

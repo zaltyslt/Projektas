@@ -6,9 +6,8 @@ import jakarta.validation.ConstraintValidatorContext;
 import java.util.regex.Pattern;
 
 public class PhoneNumberValidator extends ValidatorBase implements ConstraintValidator<PhoneNumberValid, CharSequence> {
-
     private int maximumLength;
-    private final static String validSymbols = "0-9+)(\\s";
+    private final static String VALID_SYMBOLS = "0-9+)(\\s";
 
     @Override
     public void initialize(PhoneNumberValid constraintAnnotation) {
@@ -20,17 +19,19 @@ public class PhoneNumberValidator extends ValidatorBase implements ConstraintVal
     public boolean isValid(CharSequence charSequence, ConstraintValidatorContext constraintValidatorContext) {
         return super.isValid(charSequence, constraintValidatorContext);
     }
+
     /*
     The pattern matches strings that contain only numbers, pluses, parentheses, spaces
     and doesn't exceed length (int maximumLength)
     */
     @Override
     protected void buildPattern() {
-        super.validSymbolsPattern = Pattern.compile("^[" + validSymbols + "]{1," + maximumLength + "}$");
+        super.validSymbolsPattern = Pattern.compile("^[" + VALID_SYMBOLS + "]{1," + maximumLength + "}$");
     }
 
     //Static to avoid creating unnecessary objects
-    public static boolean isPhoneNumberValid (CharSequence textToCheck, int maximumLength) {
-        return ValidatorBase.isCharSequenceValid(textToCheck, Pattern.compile("^[" + validSymbols + "]{1," + maximumLength + "}$"));
+    public static boolean isPhoneNumberValid(CharSequence textToCheck, int maximumLength) {
+        return ValidatorBase.isCharSequenceValid(textToCheck,
+                Pattern.compile("^[" + VALID_SYMBOLS + "]{1," + maximumLength + "}$"));
     }
 }

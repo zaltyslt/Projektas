@@ -57,10 +57,8 @@ export function RoomList() {
     fetchClassrooms();
   }, []);
 
-  
   const filteredClassrooms = classrooms.filter((classroom) => {
     if (building === "All") {
-      
       return (
         String(classroom.classroomName)
           .toLowerCase()
@@ -110,6 +108,7 @@ export function RoomList() {
   ) {
     pageNumbers.push(i);
   }
+
   const indexOfLastClassroom2 = currentPage2 * classroomsPerPage2;
   const indexOfFirstClassroom2 = indexOfLastClassroom2 - classroomsPerPage2;
   const currentClassrooms2 = filteredDisabledClassrooms.slice(
@@ -126,7 +125,6 @@ export function RoomList() {
     pageNumbers2.push(i);
   }
 
-
   const handleChange = (event: SelectChangeEvent) => {
     setBuilding(event.target.value);
   };
@@ -138,7 +136,6 @@ export function RoomList() {
     setCurrentPage(newPage);
   };
 
-  
   const handleRowsPerPageChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
@@ -153,10 +150,7 @@ export function RoomList() {
   useEffect(() => {
     setCurrentPage2(1);
   }, [filter, building]);
-  
 
-
-  
   return (
     <div>
       <Container maxWidth="lg">
@@ -167,11 +161,12 @@ export function RoomList() {
           <Grid item sm={2}>
             <Stack direction="row" justifyContent="flex-end">
               <Link to="/create-classroom">
-                <Button id="create-new-room" variant="contained">Pridėti naują</Button>
+                <Button id="create-new-room" variant="contained">
+                  Pridėti naują
+                </Button>
               </Link>
             </Stack>
           </Grid>
-
           <Grid item sm={12}>
             <Grid container spacing={2}>
               <Grid item sm={8}>
@@ -206,16 +201,19 @@ export function RoomList() {
             </Grid>
           </Grid>
         </Grid>
-
         <TableContainer component={Paper}>
-          <Table id="active-room-list-table" aria-label="custom pagination table">
+          <Table
+            id="active-room-list-table"
+            aria-label="custom pagination table"
+          >
             <TableHead>
               <TableRow>
-                <TableCell style={{ width: "500px" }} >Klasės pavadinimas</TableCell>
+                <TableCell style={{ width: "500px" }}>
+                  Klasės pavadinimas
+                </TableCell>
                 <TableCell>Pastatas</TableCell>
               </TableRow>
             </TableHead>
-
             <TableBody>
               {filteredClassrooms
                 .slice(
@@ -237,7 +235,11 @@ export function RoomList() {
               <TableRow>
                 <TablePagination
                   labelRowsPerPage="Rodyti po"
-                  rowsPerPageOptions={[10, 20, { label: "Visi", value: filteredClassrooms.length }]}
+                  rowsPerPageOptions={[
+                    10,
+                    20,
+                    { label: "Visi", value: filteredClassrooms.length },
+                  ]}
                   labelDisplayedRows={({ from, to, count }) =>
                     `${from}-${to} iš ${count}`
                   }
@@ -264,11 +266,16 @@ export function RoomList() {
         </FormGroup>
         {isChecked && (
           <TableContainer component={Paper}>
-            <Table id="inactive-room-list-table" aria-label="custom pagination table">
+            <Table
+              id="inactive-room-list-table"
+              aria-label="custom pagination table"
+            >
               <TableHead>
                 <TableRow>
-                  <TableCell style={{ width: "500px" }} >Klasės pavadinimas</TableCell>
-                  <TableCell style={{ width: "500px" }} >Pastatas</TableCell>
+                  <TableCell style={{ width: "500px" }}>
+                    Klasės pavadinimas
+                  </TableCell>
+                  <TableCell style={{ width: "500px" }}>Pastatas</TableCell>
                   <TableCell></TableCell>
                 </TableRow>
               </TableHead>
@@ -286,6 +293,7 @@ export function RoomList() {
                       <TableCell>{classroom.building}</TableCell>
                       <TableCell>
                         <Button
+                          id="restore-button-list-room "
                           variant="contained"
                           value={classroom}
                           onClick={(e) => {
@@ -298,7 +306,6 @@ export function RoomList() {
                     </TableRow>
                   ))}
               </TableBody>
-              
               <TableFooter>
                 <TableRow>
                   <TablePagination
@@ -307,7 +314,9 @@ export function RoomList() {
                       10,
                       20,
                       {
-                        label: "Visi", value: filteredDisabledClassrooms.length },
+                        label: "Visi",
+                        value: filteredDisabledClassrooms.length,
+                      },
                     ]}
                     labelDisplayedRows={({ from, to, count }) =>
                       `${from}-${to} iš ${count}`

@@ -8,7 +8,6 @@ import java.io.Serializable;
 public class ContactDto2 implements Serializable {
     private Long teacherId;
     private String phoneNumber;
-
     private String directEmail;
     private String teamsEmail;
     private String teamsName;

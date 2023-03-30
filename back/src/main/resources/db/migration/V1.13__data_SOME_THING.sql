@@ -1,7 +1,7 @@
-create table SOME_THING
+CREATE TABLE IF NOT EXISTS SOME_THING
 (
     ID             BIGINT  auto_increment not null
-        primary key,
+    primary key,
     CREATED_DATE   TIMESTAMP,
     IS_ACTIVE      BOOLEAN,
     MODIFIED_DATE  TIMESTAMP,
@@ -11,10 +11,9 @@ create table SOME_THING
     PROGRAM_GROUP  BIGINT,
     SHIFT_GROUP    BIGINT,
     constraint FK2OFC6VRD8XPAYCXPYJDTEDYA2
-        foreign key (SHIFT_GROUP) references SHIFT,
+    foreign key (SHIFT_GROUP) references SHIFT,
     constraint FKSV36YD8W4RNVPGRV5DRYK002E
-        foreign key (PROGRAM_GROUP) references PROGRAM
-);
+    foreign key (PROGRAM_GROUP) references PROGRAM
+    );
 
 INSERT INTO PUBLIC.SOME_THING (IS_ACTIVE , MODIFIED_DATE, NAME, SCHOOL_YEAR, STUDENT_AMOUNT,PROGRAM_GROUP,SHIFT_GROUP) VALUES (TRUE, '2023-03-10 06:13:45.331908', 'Grupė 1', '2023', 50, 1, 1);
-

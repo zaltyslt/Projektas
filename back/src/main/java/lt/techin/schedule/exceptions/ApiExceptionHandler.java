@@ -16,14 +16,14 @@ public class ApiExceptionHandler {
     private static final Logger logger = LoggerFactory.getLogger(ApiExceptionHandler.class);
 
     @ExceptionHandler(ConstraintViolationException.class)
-    public ResponseEntity<ErrorDto> handleConstraintViolationException(HttpServletRequest request, ConstraintViolationException constraintViolationException) {
-        logger.error("constraintViolationException: {}, cause: {}", constraintViolationException.getMessage(), constraintViolationException.getCause());
-
+    public ResponseEntity<ErrorDto> handleConstraintViolationException(
+            HttpServletRequest request, ConstraintViolationException constraintViolationException) {
+        logger.error("constraintViolationException: {}, cause: {}",
+                constraintViolationException.getMessage(), constraintViolationException.getCause());
         var errorStatus = HttpStatus.BAD_REQUEST;
-
         var errorDto = new ErrorDto(
                 request.getRequestURL().toString(),
-               "Sukurti nepavyko. Neužpildyti privalomi laukai. ",
+                "Sukurti nepavyko. Neužpildyti privalomi laukai. ",
                 errorStatus.value(),
                 errorStatus.getReasonPhrase(),
                 request.getRequestURL().toString(),
@@ -33,11 +33,11 @@ public class ApiExceptionHandler {
     }
 
     @ExceptionHandler(ValidationException.class)
-    public ResponseEntity<ErrorDto> handleSubjectValidationException(HttpServletRequest request, ValidationException validationException) {
-        logger.error("validationException: {}, for field: {}", validationException.getMessage(), validationException.getField());
-
+    public ResponseEntity<ErrorDto> handleSubjectValidationException(HttpServletRequest request,
+                                                                     ValidationException validationException) {
+        logger.error("validationException: {}, for field: {}", validationException.getMessage(),
+                validationException.getField());
         var errorStatus = HttpStatus.BAD_REQUEST;
-
         var errorDto = new ErrorDto(request.getRequestURL().toString(),
                 validationException.getMessage(),
                 errorStatus.value(),
@@ -48,14 +48,12 @@ public class ApiExceptionHandler {
     }
 
     @ExceptionHandler(TeacherException.class)
-    public ResponseEntity<ErrorDto> handleTeacherException(HttpServletRequest request, TeacherException teacherException) {
+    public ResponseEntity<ErrorDto> handleTeacherException(HttpServletRequest request,
+                                                           TeacherException teacherException) {
         logger.error("TeacherException: {}, for field: {}",
                 teacherException.getMessage(),
                 teacherException.getCause());
-
-//        var errorStatus = HttpStatus.BAD_REQUEST;
         var errorStatus = teacherException.getStatus();
-
         var errorDto = new ErrorDto(
                 request.getRequestURL().toString(),
                 teacherException.getMessage(),
@@ -65,5 +63,4 @@ public class ApiExceptionHandler {
                 LocalDateTime.now());
         return ResponseEntity.badRequest().body(errorDto);
     }
-
 }

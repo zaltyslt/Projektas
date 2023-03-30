@@ -1,7 +1,10 @@
 package lt.techin.schedule.groups;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lt.techin.schedule.group.*;
+import lt.techin.schedule.group.Group;
+import lt.techin.schedule.group.GroupDto;
+import lt.techin.schedule.group.GroupMapper;
+import lt.techin.schedule.group.GroupService;
 import lt.techin.schedule.programs.Program;
 import lt.techin.schedule.shift.Shift;
 import lt.techin.schedule.subject.SubjectRepository;
@@ -26,13 +29,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 public class GroupControllerTests {
-
     @MockBean
     GroupService groupService;
-
     @Autowired
     private MockMvc mockMvc;
-
     @Autowired
     private SubjectRepository subjectRepository;
 
@@ -42,18 +42,14 @@ public class GroupControllerTests {
         program.setProgramName("Program");
         program.setDescription("Description");
         program.setActive(true);
-
         Group group1 = new Group(1L, "Group1", "2018", 15, true, program,
                 new Shift("Shift", "8:00", "16:00", true, 1, 8)
                 , LocalDateTime.now(), LocalDateTime.now());
-
         Group group2 = new Group(2L, "Group2", "2020", 10, true, program,
                 new Shift("Shift", "8:00", "16:00", true, 1, 8)
                 , LocalDateTime.now(), LocalDateTime.now());
-
         List<Group> expectedGroups = List.of(group1, group2);
         when(groupService.getActiveGroups()).thenReturn(expectedGroups);
-
         mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/group/get-active"))
                 .andExpect(status().isOk())
                 .andExpect(content().json("[" +
@@ -69,20 +65,15 @@ public class GroupControllerTests {
         program.setProgramName("Program");
         program.setDescription("Description");
         program.setActive(true);
-
         Group group1 = new Group(1L, "Group1", "2018", 15, false, program,
                 new Shift("Shift", "8:00", "16:00", true, 1, 8)
                 , LocalDateTime.now(), LocalDateTime.now());
-
         Group group2 = new Group(2L, "Group2", "2020", 10, false, program,
                 new Shift("Shift", "8:00", "16:00", true, 1, 8)
                 , LocalDateTime.now(), LocalDateTime.now());
-
         List<Group> expectedGroups = List.of(group1, group2);
         when(groupService.getInactiveGroups()).thenReturn(expectedGroups);
-
         mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/group/get-inactive")).andDo(print());
-
         mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/group/get-inactive"))
                 .andExpect(status().isOk())
                 .andExpect(content().json("[" +
@@ -108,10 +99,8 @@ public class GroupControllerTests {
         Group groupToAdd = new Group(1L, "Group1", "2018", 15, false, new Program(),
                 new Shift());
         GroupDto groupDto = GroupMapper.groupToDto(groupToAdd);
-
         String response = "";
         when(groupService.addUniqueGroup(groupDto)).thenReturn(response);
-
         mockMvc.perform(post("/api/v1/group/add-group")
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .content(new ObjectMapper().writeValueAsString(groupDto)))
@@ -123,10 +112,8 @@ public class GroupControllerTests {
     public void testModifyGroup() throws Exception {
         Group groupToAdd = new Group(1L, "Group1", "2018", 15, false, new Program(),
                 new Shift());
-
         GroupDto groupDto = GroupMapper.groupToDto(groupToAdd);
         when(groupService.modifyExistingGroup(1L, groupDto)).thenReturn("");
-
         mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/group/modify-group/1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new ObjectMapper().writeValueAsString(groupDto)))

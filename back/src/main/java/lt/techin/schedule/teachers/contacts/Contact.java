@@ -1,7 +1,6 @@
 package lt.techin.schedule.teachers.contacts;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lt.techin.schedule.teachers.Teacher;
 import org.hibernate.annotations.OnDelete;
@@ -10,44 +9,34 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
 import java.util.Objects;
-import java.util.Set;
 
 @Entity
 @Table(name = "contact")
 public class Contact implements Serializable {
-//contact table
-// PK = {teacher_id {FK} | type}
-// id | teacher_id | type | contact_body
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "contact_id", nullable = false) //nurodau stulpo name, kad zinot
+    @Column(name = "contact_id", nullable = false)
     private Long id;
-
     @Column(name = "type", nullable = false)
     private ContactType contactType;
     @Column(name = "contact_body")
     private String contactValue;
-
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "teacher_id", nullable = true) //nurodau, kad sitas Teacher DB laukas bus foreign key
-    @OnDelete(action = OnDeleteAction.CASCADE) //will delete all contacts on teacher deletion
+    @JoinColumn(name = "teacher_id", nullable = true)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonBackReference
     private Teacher teacher;
 
-
     public static final Logger logger = LoggerFactory.getLogger(Contact.class);
+
     @PrePersist
     public void prePersist() {
-//     logger.error("Just message: contact PrePersist ");
     }
-
 
     public Contact() {
-//        logger.error("contact 0 constructor ");
     }
+
     public Contact(Teacher teacher) {
         this.teacher = teacher;
     }
@@ -95,7 +84,10 @@ public class Contact implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Contact contact = (Contact) o;
-        return Objects.equals(id, contact.id) && contactType == contact.contactType && Objects.equals(contactValue, contact.contactValue) && Objects.equals(teacher, contact.teacher);
+        return Objects.equals(id, contact.id)
+                && contactType == contact.contactType
+                && Objects.equals(contactValue, contact.contactValue)
+                && Objects.equals(teacher, contact.teacher);
     }
 
     @Override
