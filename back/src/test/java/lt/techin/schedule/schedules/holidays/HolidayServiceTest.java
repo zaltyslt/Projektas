@@ -118,4 +118,18 @@ public class HolidayServiceTest {
         holidayPlanDto.setDateUntil(LocalDate.of(2023, 4, 15));
         assertEquals("Tvarkaraštyje esančios atostogos sutampa su planuojamomis atostogomis.", holidayService.create(holidayPlanDto,1L));
     }
+
+    @Test
+    public void testCreateHolidaySuccessful() {
+        Schedule schedule = new Schedule();
+        schedule.setDateFrom(LocalDate.of(2023, 3, 1));
+        schedule.setDateUntil(LocalDate.of(2023, 5, 1));
+
+        when(scheduleRepository.findById(1L)).thenReturn(Optional.of(schedule));
+
+        HolidayPlanDto holidayPlanDto = new HolidayPlanDto();
+        holidayPlanDto.setDateFrom(LocalDate.of(2023, 4, 1));
+        holidayPlanDto.setDateUntil(LocalDate.of(2023, 4, 15));
+        assertEquals("", holidayService.create(holidayPlanDto,1L));
+    }
 }
