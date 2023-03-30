@@ -42,7 +42,7 @@ public class RoomPageTest extends BaseTest {
 
         WebElement alertMessage = roomCreateNewPage.getAlertMessage();
         assertTrue(alertMessage.isDisplayed(), "Alert not visible");
-        assertEquals("Sėkmingai sukurta.", alertMessage.getText(), "Error while creating room");
+        assertEquals("Klasė sėkmingai sukurta.", alertMessage.getText(), "Error while creating room");
         roomCreateNewPage.clickOnBackButton();
 
         roomListPage.setFilterValue(roomName);
@@ -71,7 +71,7 @@ public class RoomPageTest extends BaseTest {
 
         WebElement alertMessage = roomEditPage.getAlertMessage();
         assertTrue(alertMessage.isDisplayed(), "Alert not visible");
-        assertEquals("Sėkmingai atnaujinote!", alertMessage.getText(), "Error while creating room");
+        assertEquals("Klasės duomenys sėkmingai atnaujinti.", alertMessage.getText(), "Error while creating room");
         roomEditPage.clickBackButton();
 
         roomListPage.setFilterValue(roomName);
