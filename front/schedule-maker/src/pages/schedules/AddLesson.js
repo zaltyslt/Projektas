@@ -163,7 +163,7 @@ export function AddLesson() {
       setShiftEndEmpty(true);
       isValid = false;
     }
-    if (lessonEndTime - lessonStartingTime > 8) {
+    if (lessonEndTime - lessonStartingTime >= 8) {
       setShiftTooLong(true);
       isValid = false;
     }
