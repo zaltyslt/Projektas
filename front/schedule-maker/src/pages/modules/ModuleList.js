@@ -89,6 +89,7 @@ export function ModuleList() {
   const handleSearch = (event) => {
     if (event.length === 0) {
       setFilteredModules(modules);
+      setDeletedModules(deletedModules);
     } else {
       const filtered = modules.filter((module) => {
         const moduleName = module.name.toLowerCase();
@@ -104,6 +105,7 @@ export function ModuleList() {
       setDeletedModules(deletedFiltered);
     }
   };
+  
 
   const handleRestore = async (id) => {
     await fetch("api/v1/modules/restore/" + id, {
