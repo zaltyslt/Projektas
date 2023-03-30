@@ -44,7 +44,7 @@ public class ProgramPageTest extends BaseTest {
 
         WebElement alertMessage = programCreateNewPage.getAlertMessage();
         assertTrue(alertMessage.isDisplayed(), "Alert not visible");
-        assertEquals("Sėkmingai pridėta!", alertMessage.getText(), "Error while creating program");
+        assertEquals("Programa sėkmingai sukurta.", alertMessage.getText(), "Error while creating program");
     }
 
     @Test
@@ -67,7 +67,7 @@ public class ProgramPageTest extends BaseTest {
 
         WebElement alertMessage = programEditPage.getAlertMessage();
         assertTrue(alertMessage.isDisplayed(), "Alert not visible");
-        assertEquals("Sėkmingai atnaujinote!", alertMessage.getText(), "Error while creating program");
+        assertEquals("Programos duomenys sėkmingai atnaujinti.", alertMessage.getText(), "Error while creating program");
     }
 
     @Test
