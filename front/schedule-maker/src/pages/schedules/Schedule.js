@@ -36,7 +36,6 @@ export function Schedule() {
 
   const handleClickOpen = () => {
     holiday.map((holiday) => {});
-    console.log(schedule);
     setOpen(true);
   };
 
