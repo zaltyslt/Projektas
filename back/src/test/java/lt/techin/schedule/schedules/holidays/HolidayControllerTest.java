@@ -54,7 +54,7 @@ public class HolidayControllerTest {
 
         expectedHoliday.setId(1L);
         expectedHoliday.setHolidayName("Holiday");
-        expectedHoliday.setDate(LocalDate.now());
+        expectedHoliday.setDate(LocalDate.of(2023, 3, 29));
 
         Schedule scheduleToAdd = new Schedule();
         scheduleToAdd.setId(1L);
@@ -79,8 +79,6 @@ public class HolidayControllerTest {
                                 }"""
                 ));
     }
-
-
 
     @Test
     void testDeleteHolidayController() throws Exception {

@@ -3,6 +3,8 @@ package lt.techin.schedule.schedules.planner;
 import lt.techin.schedule.schedules.Schedule;
 import lt.techin.schedule.schedules.ScheduleRepository;
 import org.apache.poi.sl.draw.geom.GuideIf;
+import org.hibernate.jdbc.Work;
+import org.springframework.context.annotation.ScannedGenericBeanDefinition;
 
 import java.util.List;
 import java.util.Map;
@@ -16,6 +18,12 @@ public class WorkDayConflictSolver {
                                               WorkDayRepository workDayRepository, boolean shouldLookForNewConflicts) {
         Long originScheduleId = workdayBeingChanged.getSchedule().getId();
         Map<Long, String> teacherConflicts = workdayBeingChanged.getScheduleIdWithTeacherNameConflict();
+
+        //If this is the first conflict found for this WorkDay
+        if (teacherConflicts.isEmpty()) {
+            setupNewTeacherConflicts(workdayBeingChanged, workDayRepository, scheduleRepository, originScheduleId);
+            return;
+        }
 
         for (Map.Entry<Long, String> longStringEntry : teacherConflicts.entrySet()) {
             Long iteratedScheduleId = longStringEntry.getKey();
@@ -49,7 +57,7 @@ public class WorkDayConflictSolver {
 
                     if (shouldLookForNewConflicts) {
                         //Solves new conflicts
-                        setupNewTeacherConflicts(workdayBeingChanged, workDayRepository, originScheduleId);
+                        setupNewTeacherConflicts(workdayBeingChanged, workDayRepository, scheduleRepository, originScheduleId);
                     }
                 }
             }
@@ -60,6 +68,12 @@ public class WorkDayConflictSolver {
                                                 WorkDayRepository workDayRepository, boolean shouldLookForConflicts) {
         Long originScheduleId = workdayBeingChanged.getSchedule().getId();
         Map<Long, String> classroomConflicts = workdayBeingChanged.getScheduleIdWithClassroomNameConflict();
+
+        //If this is the first conflict found for this classroom
+        if (classroomConflicts.isEmpty()) {
+            setupNewClassroomConflicts(workdayBeingChanged, workDayRepository, scheduleRepository, originScheduleId);
+            return;
+        }
 
         for (Map.Entry<Long, String> longStringEntry : classroomConflicts.entrySet()) {
             Long iteratedScheduleId = longStringEntry.getKey();
@@ -93,20 +107,22 @@ public class WorkDayConflictSolver {
 
                     if (shouldLookForConflicts) {
                         //Solves new conflicts
-                        setupNewClassroomConflicts(workdayBeingChanged, workDayRepository, originScheduleId);
+                        setupNewClassroomConflicts(workdayBeingChanged, workDayRepository, scheduleRepository, originScheduleId);
                     }
                 }
             }
         }
     }
 
-    public static void setupNewTeacherConflicts (WorkDay changedWorkDay, WorkDayRepository workDayRepository, long originScheduleId) {
+    public static void setupNewTeacherConflicts (WorkDay changedWorkDay, WorkDayRepository workDayRepository, ScheduleRepository scheduleRepository, long originScheduleId) {
         //Finds all WorkDays which happen simultaneously (date and lesson times) and has the same teacher
         Set<WorkDay> foundedNewConflictingWorkDays = workDayRepository.findAll().stream().filter(workDay ->
-                        SetupWorkDayViability.checkIfWorkdaysIntertwine(workDay, changedWorkDay.getDate(), changedWorkDay) &&
+                        SetupWorkDayViability.checkIfWorkdaysIntertwine(workDay, workDay.getDate(), changedWorkDay) &&
                                 !workDay.getId().equals(changedWorkDay.getId()) &&
                                 workDay.getTeacher() != null &&
-                                workDay.getTeacher().equals(changedWorkDay.getTeacher()))
+                                workDay.getTeacher().getfName().equals(changedWorkDay.getTeacher().getfName()) &&
+                                workDay.getTeacher().getlName().equals(changedWorkDay.getTeacher().getlName())
+                        )
                 .collect(Collectors.toSet());
         //Loops through conflicting days
         for (WorkDay conflictingWorkDay : foundedNewConflictingWorkDays) {
@@ -119,18 +135,29 @@ public class WorkDayConflictSolver {
             conflictingWorkDay.addTeacherConflict(originScheduleId, changedWorkDay.getTeacher().getfName() + " " + changedWorkDay.getTeacher().getlName());
             changedWorkDay.addTeacherConflict(conflictingWorkDay.getSchedule().getId(), changedWorkDay.getTeacher().getfName() + " " + changedWorkDay.getTeacher().getlName());
 
+            Optional<Schedule> originSchedule = scheduleRepository.findById(originScheduleId);
+            Optional<Schedule> conflictingSchedule = scheduleRepository.findById(conflictingWorkDay.getSchedule().getId());
+
+            if (originSchedule.isPresent() && conflictingSchedule.isPresent()) {
+                originSchedule.get().setHasConflicts(true);
+                conflictingSchedule.get().setHasConflicts(true);
+
+                //Saves changes
+                scheduleRepository.saveAll(List.of(originSchedule.get(), conflictingSchedule.get()));
+            }
             //Saves changes
             workDayRepository.save(conflictingWorkDay);
+            scheduleRepository.saveAll(List.of(originSchedule.get(), conflictingSchedule.get()));
         }
     }
 
-    public static void setupNewClassroomConflicts(WorkDay changedWorkDay, WorkDayRepository workDayRepository, long originScheduleId) {
+    public static void setupNewClassroomConflicts(WorkDay changedWorkDay, WorkDayRepository workDayRepository, ScheduleRepository scheduleRepository, long originScheduleId) {
         //Finds all WorkDays which happen simultaneously (date and lesson times) and has the same classroom
         Set<WorkDay> foundedNewConflictingWorkDays = workDayRepository.findAll().stream().filter(workDay ->
-                        SetupWorkDayViability.checkIfWorkdaysIntertwine(workDay, changedWorkDay.getDate(), changedWorkDay) &&
+                        SetupWorkDayViability.checkIfWorkdaysIntertwine(workDay, workDay.getDate(), changedWorkDay) &&
                                 !workDay.getId().equals(changedWorkDay.getId()) &&
                                 workDay.getClassroom() != null &&
-                                workDay.getClassroom().equals(changedWorkDay.getClassroom()))
+                                workDay.getClassroom().getClassroomName().equals(changedWorkDay.getClassroom().getClassroomName()))
                 .collect(Collectors.toSet());
         //Loops through conflicting days
         for (WorkDay conflictingWorkDay : foundedNewConflictingWorkDays) {
@@ -143,6 +170,17 @@ public class WorkDayConflictSolver {
             conflictingWorkDay.addClassroomConflict(originScheduleId, changedWorkDay.getClassroom().getClassroomName());
             changedWorkDay.addClassroomConflict(conflictingWorkDay.getSchedule().getId(), changedWorkDay.getClassroom().getClassroomName());
 
+            Optional<Schedule> originSchedule = scheduleRepository.findById(originScheduleId);
+            Optional<Schedule> conflictingSchedule = scheduleRepository.findById(conflictingWorkDay.getSchedule().getId());
+
+            if (originSchedule.isPresent() && conflictingSchedule.isPresent()) {
+                originSchedule.get().setHasConflicts(true);
+                conflictingSchedule.get().setHasConflicts(true);
+
+                //Saves changes
+                scheduleRepository.saveAll(List.of(originSchedule.get(), conflictingSchedule.get()));
+            }
+
             //Saves changes
             workDayRepository.save(conflictingWorkDay);
         }
@@ -154,7 +192,69 @@ public class WorkDayConflictSolver {
             boolean conflictsFound = schedule.get().getWorkingDays().stream().anyMatch(workDay ->
                     workDay.isHasTeacherConflict() || workDay.isHasClassroomConflict());
             schedule.get().setHasConflicts(conflictsFound);
+            //Saves changes
             scheduleRepository.save(schedule.get());
+        }
+    }
+
+    public static void checkIfAllConflictsAreResolved (Schedule schedule, ScheduleRepository scheduleRepository) {
+        boolean conflictsFound = schedule.getWorkingDays().stream().anyMatch(workDay ->
+                workDay.isHasTeacherConflict() || workDay.isHasClassroomConflict());
+        schedule.setHasConflicts(conflictsFound);
+        //Saves changes
+        scheduleRepository.save(schedule);
+    }
+
+    public static void fixConflictsOnDeletion(WorkDay existingWorkDay, ScheduleRepository scheduleRepository, WorkDayRepository workDayRepository,
+                                              long currentScheduleId) {
+        if (existingWorkDay.isHasTeacherConflict()) {
+            Map<Long, String> conflicts = existingWorkDay.getScheduleIdWithTeacherNameConflict();
+            for (Map.Entry<Long, String> longStringEntry : conflicts.entrySet()) {
+                Optional<Schedule> conflictingSchedule = scheduleRepository.findById(longStringEntry.getKey());
+                if (conflictingSchedule.isPresent()) {
+                    Optional<WorkDay> conflictingWorkDayOpt = conflictingSchedule.get().getWorkingDays().stream().filter(workDay ->
+                            workDay.getDate().equals(existingWorkDay.getDate())).findFirst();
+                    if (conflictingWorkDayOpt.isPresent()) {
+                        WorkDay conflictingWorkDay = conflictingWorkDayOpt.get();
+                        try {
+                            conflictingWorkDay.removeTeacherConflictFromMap(currentScheduleId);
+                        } catch (Exception ignored) {}
+                        if (conflictingWorkDay.getScheduleIdWithTeacherNameConflict().isEmpty()) {
+                            conflictingWorkDay.setHasTeacherConflict(false);
+                        }
+                        //Changes are saved in method
+                        checkIfAllConflictsAreResolved(conflictingSchedule.get(), scheduleRepository);
+
+                        //Saves changes
+                        workDayRepository.save(conflictingWorkDay);
+                    }
+                }
+            }
+        }
+        if (existingWorkDay.isHasClassroomConflict()) {
+            Map<Long, String> conflicts = existingWorkDay.getScheduleIdWithClassroomNameConflict();
+            for (Map.Entry<Long, String> longStringEntry : conflicts.entrySet()) {
+                Optional<Schedule> conflictingSchedule = scheduleRepository.findById(longStringEntry.getKey());
+                if (conflictingSchedule.isPresent()) {
+                    Optional<WorkDay> conflictingWorkDayOpt = conflictingSchedule.get().getWorkingDays().stream().filter(workDay ->
+                            workDay.getDate().equals(existingWorkDay.getDate())).findFirst();
+                    if (conflictingWorkDayOpt.isPresent()) {
+                        WorkDay conflictingWorkDay = conflictingWorkDayOpt.get();
+                        try {
+                            conflictingWorkDay.removeClassroomConflictFromMap(currentScheduleId);
+                        }
+                        catch (Exception ignored) {}
+                        if (conflictingWorkDay.getScheduleIdWithClassroomNameConflict().isEmpty()) {
+                            conflictingWorkDay.setHasClassroomConflict(false);
+                        }
+                        //Changes are saved in method
+                        checkIfAllConflictsAreResolved(conflictingSchedule.get(), scheduleRepository);
+
+                        //Saves changes
+                        workDayRepository.save(conflictingWorkDay);
+                    }
+                }
+            }
         }
     }
 }
