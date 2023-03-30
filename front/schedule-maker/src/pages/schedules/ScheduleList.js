@@ -160,7 +160,7 @@ export function ScheduleList() {
   }
 
   const handleChange = (newValue) => {
-    isNaN(newValue) ? setDate(null) : setDate(newValue);
+    isNaN(newValue) ? setDate(null) : setDate(dateToUtc(newValue));
     clearMessages();
   };
 
@@ -243,7 +243,8 @@ export function ScheduleList() {
                   format="YYYY/MM/DD"
                   id="date-form"
                   name="date-form"
-                  value={date || ""}
+                  // value={date || ""}
+                  value={date}
                   onChange={handleChange}
                   TextFieldComponent={TextField}
                 ></DatePicker>
