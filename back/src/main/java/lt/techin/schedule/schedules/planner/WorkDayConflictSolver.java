@@ -6,10 +6,7 @@ import org.apache.poi.sl.draw.geom.GuideIf;
 import org.hibernate.jdbc.Work;
 import org.springframework.context.annotation.ScannedGenericBeanDefinition;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class WorkDayConflictSolver {
@@ -17,9 +14,9 @@ public class WorkDayConflictSolver {
     public static void solveTeacherConflicts (WorkDay workdayBeingChanged, ScheduleRepository scheduleRepository,
                                               WorkDayRepository workDayRepository, boolean shouldLookForNewConflicts) {
         Long originScheduleId = workdayBeingChanged.getSchedule().getId();
-        Map<Long, String> teacherConflicts = workdayBeingChanged.getScheduleIdWithTeacherNameConflict();
+        //New object created for concurrent modification exception
+        Map<Long, String> teacherConflicts = new HashMap<>(workdayBeingChanged.getScheduleIdWithTeacherNameConflict());
 
-        //If this is the first conflict found for this WorkDay
         if (teacherConflicts.isEmpty()) {
             setupNewTeacherConflicts(workdayBeingChanged, workDayRepository, scheduleRepository, originScheduleId);
             return;
@@ -67,7 +64,8 @@ public class WorkDayConflictSolver {
     public static void solveClassroomConflicts (WorkDay workdayBeingChanged, ScheduleRepository scheduleRepository,
                                                 WorkDayRepository workDayRepository, boolean shouldLookForConflicts) {
         Long originScheduleId = workdayBeingChanged.getSchedule().getId();
-        Map<Long, String> classroomConflicts = workdayBeingChanged.getScheduleIdWithClassroomNameConflict();
+        //New object created for concurrent modification exception
+        Map<Long, String> classroomConflicts = new HashMap<>(workdayBeingChanged.getScheduleIdWithClassroomNameConflict());
 
         //If this is the first conflict found for this classroom
         if (classroomConflicts.isEmpty()) {
