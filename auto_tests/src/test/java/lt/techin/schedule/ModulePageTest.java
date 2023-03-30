@@ -53,7 +53,7 @@ public class ModulePageTest extends BaseTest {
 
         WebElement alertMessage = moduleCreateNewPage.getAlertMessage();
         assertTrue(alertMessage.isDisplayed(), "Alert not visible");
-        assertEquals("Sėkmingai sukurta.", alertMessage.getText(), "Error while creating module");
+        assertEquals("Modulis sėkmingai sukurtas.", alertMessage.getText(), "Error while creating module");
     }
 
 
