@@ -31,6 +31,7 @@ export function ModuleList() {
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [rowsPerPageInDeleted, setRowsPerPageInDeleted] = useState(10);
   const [isChecked, setChecked] = useState(false);
+  
   useEffect(() => {
     fetchModules();
   }, []);
@@ -88,6 +89,7 @@ export function ModuleList() {
   const handleSearch = (event) => {
     if (event.length === 0) {
       setFilteredModules(modules);
+      setDeletedModules(deletedModules);
     } else {
       const filtered = modules.filter((module) => {
         const moduleName = module.name.toLowerCase();
@@ -103,6 +105,7 @@ export function ModuleList() {
       setDeletedModules(deletedFiltered);
     }
   };
+  
 
   const handleRestore = async (id) => {
     await fetch("api/v1/modules/restore/" + id, {
@@ -230,28 +233,26 @@ export function ModuleList() {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {(rowsPerPage > 0
+                {(rowsPerPageInDeleted > 0
                   ? deletedModules.slice(
                     pageInDeleted * rowsPerPageInDeleted,
-                    pageInDeleted * rowsPerPageInDeleted +
-                    rowsPerPageInDeleted
+                    pageInDeleted * rowsPerPageInDeleted + rowsPerPageInDeleted
                   )
                   : deletedModules
                 ).map((module) => (
                   <TableRow key={module.id}>
                     <TableCell component="th" scope="row">
-                      {module.number}
+                      <Link to={"/modules/view/" + module.id}>
+                        {module.number}
+                      </Link>
                     </TableCell>
-                    <TableCell component="th" scope="row">
-                      {module.name}
-                    </TableCell>
-                    <TableCell align="center" className="activity">
+                    <TableCell>{module.name}</TableCell>
+                    <TableCell>
                       <Button
-                        id="restore-button-list-module "
                         variant="contained"
                         onClick={() => handleRestore(module.id)}
                       >
-                        Atstatyti
+                        Atkurti
                       </Button>
                     </TableCell>
                   </TableRow>
