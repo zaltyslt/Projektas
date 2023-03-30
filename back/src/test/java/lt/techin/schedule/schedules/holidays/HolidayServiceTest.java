@@ -1,5 +1,6 @@
 package lt.techin.schedule.schedules.holidays;
 
+import lt.techin.schedule.schedules.Schedule;
 import lt.techin.schedule.schedules.ScheduleRepository;
 import lt.techin.schedule.shift.Shift;
 import lt.techin.schedule.shift.ShiftMapper;
@@ -14,6 +15,7 @@ import org.springframework.dao.OptimisticLockingFailureException;
 
 import java.time.LocalDate;
 import java.util.Optional;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -83,10 +85,37 @@ public class HolidayServiceTest {
     }
 
     @Test
-    public void testCreateHoliday() {
+    public void testCreateHolidayWrongDataRange() {
+        Schedule schedule = new Schedule();
+        schedule.setDateFrom(LocalDate.of(2023, 4, 2));
+        schedule.setDateUntil(LocalDate.of(2023, 4, 14));
+
+        when(scheduleRepository.findById(1L)).thenReturn(Optional.of(schedule));
+
         HolidayPlanDto holidayPlanDto = new HolidayPlanDto();
         holidayPlanDto.setDateFrom(LocalDate.of(2023, 4, 1));
         holidayPlanDto.setDateUntil(LocalDate.of(2023, 4, 15));
-        assertEquals("Toks tvarkaraštis neegzistuoja.", holidayService.create(new HolidayPlanDto(),1L));
+        assertEquals("Atostogų datos nesutampa su tvarkaraščio datomis. Tvarkaraštis prasideda/pasibaigia: 2023-04-02/2023-04-14. " +
+               "Atostogos prasideda/pasibaigia: 2023-04-01/2023-04-15." , holidayService.create(holidayPlanDto,1L));
+    }
+
+    @Test
+    public void testCreateHoidayHoidaysAlreadyInRange() {
+        Schedule schedule = new Schedule();
+        schedule.setDateFrom(LocalDate.of(2023, 3, 1));
+        schedule.setDateUntil(LocalDate.of(2023, 5, 1));
+
+        Holiday holiday = new Holiday();
+        holiday.setHolidayName("Holiday");
+        holiday.setDate(LocalDate.of(2023, 4, 12));
+
+        schedule.setHolidays(Set.of(holiday));
+
+        when(scheduleRepository.findById(1L)).thenReturn(Optional.of(schedule));
+
+        HolidayPlanDto holidayPlanDto = new HolidayPlanDto();
+        holidayPlanDto.setDateFrom(LocalDate.of(2023, 4, 1));
+        holidayPlanDto.setDateUntil(LocalDate.of(2023, 4, 15));
+        assertEquals("Tvarkaraštyje esančios atostogos sutampa su planuojamomis atostogomis.", holidayService.create(holidayPlanDto,1L));
     }
 }
