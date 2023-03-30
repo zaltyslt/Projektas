@@ -191,7 +191,7 @@ export function Schedule() {
           `,
         start: schedule.date,
         allDay: true,
-        url: `http://localhost:3000/schedule-maker#/schedules/edit-lesson/${schedule.id}`,
+        url: `https://schedule-maker-production.up.railway.app/schedule-maker#/schedules/edit-lesson/${schedule.id}`,
         color: color,
       };
     }),
@@ -200,7 +200,7 @@ export function Schedule() {
         title: `<b>${holiday.name}</b>`,
         start: holiday.date,
         allDay: true,
-        url: `http://localhost:3000/schedule-maker#/schedules/edit-holidays/${holiday.id}`,
+        url: `https://schedule-maker-production.up.railway.app/schedule-maker#/schedules/edit-holidays/${holiday.id}`,
         color: "#cccccc",
       };
     }),
