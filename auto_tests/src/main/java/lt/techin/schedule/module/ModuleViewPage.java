@@ -19,14 +19,14 @@ public class ModuleViewPage extends AbstractPage {
     public ModuleViewPage(WebDriver driver) {super(driver);}
 
     public void scrollToEditButton() {scrollToElement(editButton);
-        new WebDriverWait(driver, Duration.ofSeconds(2)).until(ExpectedConditions.elementToBeClickable(editButton));}
+        //new WebDriverWait(driver, Duration.ofSeconds(2)).until(ExpectedConditions.elementToBeClickable(editButton));
+        }
 
 
     public void clickEditButton() {
         editButton.click();
     }
 
-    //back mygtukas
     public void clickBackButton() {
         backButton.click();
     }

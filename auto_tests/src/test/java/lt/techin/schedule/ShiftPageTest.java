@@ -35,7 +35,7 @@ public class ShiftPageTest extends BaseTest{
     shiftCreate.saveButton();
     WebElement alert = shiftCreate.getAlertMessage();
     assertTrue(alert.isDisplayed(), "Alert not visible");
-    assertEquals("Pamaina sėkmingai pridėta.", alert.getText(), "Error while creating shift");
+    assertEquals("Pamaina sėkmingai sukurta.", alert.getText(), "Error while creating shift");
     shiftCreate.backButton();
     WaitUtils.waitPageToLoad(driver);
     listPage.setFilterValue(shiftName);
