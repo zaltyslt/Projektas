@@ -276,14 +276,12 @@ public class PlannerService {
             WorkDayConflictSolver.solveClassroomConflicts(existingWorkDay, scheduleRepository, workDayRepository, false);
         }
 
-        WorkDayConflictSolver.checkIfAllConflictsAreResolved(existingWorkDay.getSchedule().getId(), scheduleRepository);
-
         existingWorkDay.setOnline(workDayDto.getOnline());
 
         return workDayRepository.save(existingWorkDay);
     }
 
-    @Transactional
+
     public boolean deleteWorkDay(Long workDayId, WorkDayDto workDayDto) {
         WorkDay existingWorkDay = workDayRepository.findById(workDayId).orElseThrow(() ->
                 new ValidationException("Nurodyta darbo diena neegzistuoja", "WorkDay", "Does not exist", workDayId.toString()));
@@ -294,8 +292,20 @@ public class PlannerService {
         var end = workDayDto.getEndIntEnum();
         int interval = end - start + INTERVAL_CONSTANT;
 
-        workDayRepository.deleteById(workDayId);
+        //Remove conflicts upon deletion
+        Long currentId = existingWorkDay.getSchedule().getId();
+
         schedule.replaceUnassignedTime(existingWorkDay.getSubject().getId(), unassignedHours + interval);
+        WorkDayConflictSolver.fixConflictsOnDeletion(existingWorkDay, scheduleRepository, workDayRepository, currentId);
+
+        //Do Not Put This Bellow - .checkIfAllConflictsAreResolved!
+        workDayRepository.deleteById(workDayId);
+        /*
+        If you are wondering why I can't have @Transactional here and check both schedules with first method, prior to workday save, don't worry, you are not alone!
+        Black magic! whoosh
+        */
+        WorkDayConflictSolver.checkIfAllConflictsAreResolved(schedule, scheduleRepository);
+
         scheduleRepository.save(schedule);
         return true;
     }
