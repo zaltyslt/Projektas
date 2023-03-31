@@ -151,22 +151,39 @@ export function Schedule() {
     })
       .then((response) => {
         if (response.ok) {
+          // return response;
+          
+            console.log("Processing response")
+            const filename = response.headers
+           
+              .get("Content-Disposition")
+              .split("filename=")[1];
+            response.blob().then((blob) => {
+              let url = window.URL.createObjectURL(blob);
+              let a = document.createElement("a");
+              a.href = url;
+              a.download = filename;
+              a.click();
+            });
+          
         } else {
+          console.log("Response not OK")
         }
-        return response;
-      })
-      .then((response) => {
-        const filename = response.headers
-          .get("Content-Disposition")
-          .split("filename=")[1];
-        response.blob().then((blob) => {
-          let url = window.URL.createObjectURL(blob);
-          let a = document.createElement("a");
-          a.href = url;
-          a.download = filename;
-          a.click();
-        });
       });
+      // .then((response) => {
+      //   console.log("Processing response")
+      //   const filename = response.headers
+       
+      //     .get("Content-Disposition")
+      //     .split("filename=")[1];
+      //   response.blob().then((blob) => {
+      //     let url = window.URL.createObjectURL(blob);
+      //     let a = document.createElement("a");
+      //     a.href = url;
+      //     a.download = filename;
+      //     a.click();
+      //   });
+      // });
   };
 
   const events = [

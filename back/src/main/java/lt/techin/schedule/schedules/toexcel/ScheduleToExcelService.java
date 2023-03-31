@@ -1,11 +1,15 @@
 package lt.techin.schedule.schedules.toexcel;
 
 import lt.techin.schedule.exceptions.ValidationException;
+import lt.techin.schedule.schedules.Schedule;
+import lt.techin.schedule.schedules.ScheduleRepository;
 import lt.techin.schedule.schedules.holidays.Holiday;
 import lt.techin.schedule.schedules.holidays.HolidayRepository;
+import lt.techin.schedule.schedules.holidays.LithuanianHolidaySetup;
 import lt.techin.schedule.schedules.planner.PlannerService;
 import lt.techin.schedule.schedules.planner.WorkDay;
 import lt.techin.schedule.subject.Subject;
+import org.apache.poi.sl.draw.geom.GuideIf;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.ss.util.RegionUtil;
@@ -29,6 +33,7 @@ import java.util.stream.Collectors;
 public class ScheduleToExcelService {
     private final PlannerService plannerService;
     private final HolidayRepository holidayRepository;
+    private final ScheduleRepository scheduleRepository;
     private static final Logger logger = LoggerFactory.getLogger(ScheduleToExcelService.class);
 
     private static final String[] days = {
@@ -37,9 +42,10 @@ public class ScheduleToExcelService {
 //        , "Šeštadienis", "Sekmadienis"
     };
 
-    public ScheduleToExcelService(PlannerService plannerService, HolidayRepository holidayRepository) {
+    public ScheduleToExcelService(PlannerService plannerService, HolidayRepository holidayRepository, ScheduleRepository scheduleRepository) {
         this.plannerService = plannerService;
         this.holidayRepository = holidayRepository;
+        this.scheduleRepository = scheduleRepository;
     }
 
     public List<WorkDay> addHolidays(List<WorkDay> workDays, List<Holiday> holidays) {
@@ -64,9 +70,11 @@ public class ScheduleToExcelService {
                 .toList();
     }
 
-    public List<WorkDay> addEmptyDays(List<WorkDay> sortedDays) {
-        var firstDay = sortedDays.get(0).getDate();
-        var lastDay = sortedDays.get(sortedDays.size() - 1).getDate();
+    public List<WorkDay> addEmptyDays(Schedule schedule, List<WorkDay> sortedDays) {
+//        var firstDay = sortedDays.get(0).getDate();
+//        var lastDay = sortedDays.get(sortedDays.size() - 1).getDate();
+        var firstDay = schedule.getDateFrom();
+        var lastDay = schedule.getDateUntil();
         LocalDate startOfMonth = firstDay.with(TemporalAdjusters.firstDayOfMonth());
         LocalDate lastOfMonth = lastDay.with(TemporalAdjusters.lastDayOfMonth()).plusDays(1L);
         LocalDate pointerDate = startOfMonth;
@@ -95,16 +103,27 @@ public class ScheduleToExcelService {
     }
 
     public byte[] toExcel(Long id, boolean paged) {
+
+        Schedule schedule = scheduleRepository.findById(id).orElseThrow(() ->
+                new ValidationException("Toks tvarkaraštis nerastas.", "", "Schedule not found", id.toString()));
+
         List<WorkDay> workDays = plannerService.getWorkDays(id);
         List<Holiday> holidays = holidayRepository.findByScheduleId(id);
+//        var ltHolidays = LithuanianHolidaySetup.setupHolidaysInRange(
+//                schedule.getDateFrom(), //neiesko, jei metai nesutampa su esamais
+//                schedule.getDateUntil(),
+//                schedule
+//        );
 
         List<WorkDay> mixedDays = addHolidays(workDays, holidays);
-        mixedDays = addEmptyDays(mixedDays);
+
+        mixedDays = addEmptyDays(schedule, mixedDays);
+
 
         if (paged) {
-            return drawCalendar(toMonths(mixedDays), paged);
+            return drawCalendar(schedule, toMonths(mixedDays), paged);
         } else {
-            return drawCalendar(toWeeks(mixedDays), paged);
+            return drawCalendar(schedule, toWeeks(mixedDays), paged);
         }
     }
 
@@ -144,9 +163,9 @@ public class ScheduleToExcelService {
 //    }
 
     public static String getWeekTitle(LocalDate date) {
-       LocalDate monday = date.with(java.time.DayOfWeek.MONDAY);
-       LocalDate friday = monday.plusDays(4);
-       DateTimeFormatter MMdd = DateTimeFormatter.ofPattern("MM.dd");
+        LocalDate monday = date.with(java.time.DayOfWeek.MONDAY);
+        LocalDate friday = monday.plusDays(4);
+        DateTimeFormatter MMdd = DateTimeFormatter.ofPattern("MM.dd");
 
         return monday.format(MMdd) + "-" + friday.format(MMdd);
     }
@@ -196,7 +215,7 @@ public class ScheduleToExcelService {
         }
     }
 
-    public byte[] drawCalendar(Map<Integer, List<WorkDay>> workDayList, boolean paged) {
+    public byte[] drawCalendar(Schedule schedule, Map<Integer, List<WorkDay>> workDayList, boolean paged) {
 
 //        boolean xlsx = true;
         Calendar calendar = LocaleUtil.getLocaleCalendar();
@@ -241,7 +260,7 @@ public class ScheduleToExcelService {
                 headerRow.setHeightInPoints(40);
                 Cell titleCell = headerRow.createCell(0);
 
-                titleCell.setCellValue(month.getGroup() + ", " + getTitleYears(month.getWorkDays()) + " m.");
+                titleCell.setCellValue(schedule.getGroups().getName() + ", " + getTitleYears(month.getWorkDays()) + " m.");
                 titleCell.setCellStyle(styles.get("title"));
                 sheet.addMergedRegion(CellRangeAddress.valueOf("$A$" + (sheet.getLastRowNum() + 1) + ":$F$" + (sheet.getLastRowNum() + 1)));
 
@@ -293,12 +312,18 @@ public class ScheduleToExcelService {
                                         : "");
                                 sheet.getRow(actualRow + 2).getCell(d).setCellValue(current.getTeacher() != null
                                         ? current.getTeacher().getfName() + " " + current.getTeacher().getlName()
-                                        : "");
+                                        : "Mokytojas nepasirinktas");
                                 if (current.getOnline()) {
                                     sheet.getRow(actualRow + 3).getCell(d).setCellValue("Nuotolinė pamoka");
                                     sheet.getRow(actualRow + 3).getCell(d).setCellStyle(styles.get("remote"));
                                 } else {
-                                    sheet.getRow(actualRow + 3).getCell(d).setCellValue("Klasė: " + current.getClassroom().getClassroomName());
+
+                                    sheet.getRow(actualRow + 3).getCell(d).setCellValue(
+                                            current.getClassroom() != null
+                                                    ? "Klasė: " + current.getClassroom().getClassroomName()
+                                                    : "Klasė nepasirinkta"
+                                    );
+
                                 }
                                 //paint subject name
                                 subjectStyling(wb, colors, current);
