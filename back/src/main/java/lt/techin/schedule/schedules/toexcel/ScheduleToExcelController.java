@@ -35,6 +35,7 @@ public class ScheduleToExcelController {
             headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
             headers.setContentLength(workBook.length);
             headers.setContentDispositionFormData("attachment", "workBook.xlsx");
+           // headers.setContentDisposition();
             // Return a 200 OK
             return ResponseEntity
                     .status(HttpStatus.OK)
